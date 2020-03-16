@@ -30,7 +30,7 @@ public class DBConfiguration {
 
         logger.info("init started");
 
-        try (InputStream inputStream = new FileInputStream("./src/main/resources/db.properties")) {
+        try (InputStream inputStream = new FileInputStream("./connectionPoolForDataBase/src/main/resources/db.properties")) {
 
             Properties properties = new Properties();
             properties.load(inputStream);
