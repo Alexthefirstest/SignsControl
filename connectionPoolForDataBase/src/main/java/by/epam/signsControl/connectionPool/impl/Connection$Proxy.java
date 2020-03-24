@@ -7,7 +7,7 @@ import java.util.concurrent.Executor;
 
 public class Connection$Proxy implements Connection, Comparable {
 
-    private Connection connection;
+    private final Connection connection;
 
     public Connection$Proxy(Connection connection) {
         this.connection = connection;
@@ -58,13 +58,13 @@ public class Connection$Proxy implements Connection, Comparable {
     }
 
     @Override
-    public void close() throws SQLException {
+    public void close() {
         ConnectionPool.getConnectionPoolInstance().releaseConnection(this);  //was changed
     }
 
     @Override
     public boolean isClosed() throws SQLException {
-        return connection.isClosed();//ConnectionPool.getConnectionPoolInstance().//was changed    ИСПРАВИТЬ, тут может быть конкретный класс?
+        return connection.isClosed();
     }
 
     @Override

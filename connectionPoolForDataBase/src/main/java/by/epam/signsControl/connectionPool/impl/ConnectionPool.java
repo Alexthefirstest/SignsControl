@@ -15,6 +15,8 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ConnectionPool implements IConnectionPool {
 
@@ -26,7 +28,8 @@ public class ConnectionPool implements IConnectionPool {
     private final BlockingQueue<Connection> availableConnections = new ArrayBlockingQueue<>(dbConfigs.getMaxPoolSize());
     private final Queue<Connection> takenConnections = new PriorityQueue<>(dbConfigs.getMaxPoolSize());
 
-    private boolean isDestroyed = false;
+    private Lock retrieveLocker = new ReentrantLock();
+    private Lock releaseLocker = new ReentrantLock();
 
     private ConnectionPool() {
 
@@ -78,10 +81,6 @@ public class ConnectionPool implements IConnectionPool {
 
         logger.info("started create new connection");
 
-        if (isDestroyed) {
-            throw new ConnectionPoolException("connection pool destroyed");
-        }
-
         try {
 
             Connection connection = new Connection$Proxy
@@ -101,11 +100,13 @@ public class ConnectionPool implements IConnectionPool {
     @Override
     public Connection retrieveConnection() {
 
+        retrieveLocker.lock();
+
         Connection connection;
 
-        while ((connection = availableConnections.poll()) == null) {
+        while ((connection = availableConnections.poll()) == null && !releaseLocker.tryLock()) ;
 
-            logger.debug("need more connections for retrieve");
+        if (connection == null) {
 
             int increaseStep = dbConfigs.getPoolIncreaseStep();
             int i = 0;
@@ -124,33 +125,31 @@ public class ConnectionPool implements IConnectionPool {
                 i++;
             }
 
-            logger.debug("try to get connection again");
+            releaseLocker.unlock();
 
-        }
+            try {
+                connection = availableConnections.take();
+            } catch (InterruptedException ex) {
+                logger.info("waiting for connection force interrupted " + ex);
+                return null;
+            }
 
-        if (takenConnections.offer(connection) == false) {
-            logger.error("can't add connection to takenConnections  " + toString());
-            shutDownConnection(connection);
-            return retrieveConnection();
+        }//if
 
-        } else {
-            logger.info("add connection to takenConnections successfully");
-            return connection;
-        }
+        logger.info("add connection to takenConnections: " + takenConnections.offer(connection) + " " + toString());
 
+        retrieveLocker.unlock();
+
+        return connection;
 
     }
-
-//    static boolean isTakenConnectionContainConnection(Connection connection){  //один положил, другой взял - true, должно быть false, ИСПРАВИТЬ
-//        return ConnectionPool.getConnectionPoolInstance().takenConnections.contains(connection);
-//    }
-
 
     @Override
     public boolean releaseConnection(Connection connection) {
 
-        logger.info("try to release connection");
+        releaseLocker.lock();
 
+        logger.info("try to release connection");
 
         boolean isRemoved = takenConnections.remove(connection);
 
@@ -158,20 +157,27 @@ public class ConnectionPool implements IConnectionPool {
 
             if (availableConnections.offer(connection)) {
                 logger.info("release connection successfully");
-                return true;
+
+            } else {
+
+                logger.error("can't release connection, can't add it to available connections " + toString());
+                if (!availableConnections.contains(connection)) {
+                    shutDownConnection(connection);
+                }
             }
 
-            logger.error("can't release connection, can't add it to available connections " + toString());
-            shutDownConnection(connection);
-
-            return true;
-
         } else {
+
             logger.warn("can't release connection, takenConnections do not contain it" + toString());
-            shutDownConnection(connection);
-            return true;
+            if (!availableConnections.contains(connection)) {
+                shutDownConnection(connection);
+            }
+
         }
 
+        releaseLocker.unlock();
+
+        return true;
     }
 
 
@@ -184,7 +190,8 @@ public class ConnectionPool implements IConnectionPool {
 
         logger.info("destroying connection pool started");
 
-        isDestroyed = true;
+        releaseLocker.lock();
+        retrieveLocker.lock();
 
         while (availableConnections.size() > 0 || takenConnections.size() > 0) {
             shutDownConnection(availableConnections.poll());
@@ -209,6 +216,5 @@ public class ConnectionPool implements IConnectionPool {
         sb.append('}');
         return sb.toString();
     }
-
 
 }
