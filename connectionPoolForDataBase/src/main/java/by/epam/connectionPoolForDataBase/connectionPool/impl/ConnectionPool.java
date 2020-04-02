@@ -1,9 +1,9 @@
-package by.epam.signsControl.connectionPool.impl;
+package by.epam.connectionPoolForDataBase.connectionPool.impl;
 
 
-import by.epam.signsControl.config.DBConfiguration;
-import by.epam.signsControl.connectionPool.exceptions.ConnectionPoolException;
-import by.epam.signsControl.connectionPool.IConnectionPool;
+import by.epam.connectionPoolForDataBase.config.DBConfiguration;
+import by.epam.connectionPoolForDataBase.connectionPool.exceptions.ConnectionPoolException;
+import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

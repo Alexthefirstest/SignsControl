@@ -1,4 +1,4 @@
-package by.epam.signsControl.config;
+package by.epam.connectionPoolForDataBase.config;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

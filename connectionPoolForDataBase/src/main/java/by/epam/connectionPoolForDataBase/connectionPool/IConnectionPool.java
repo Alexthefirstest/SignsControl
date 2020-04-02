@@ -1,4 +1,4 @@
-package by.epam.signsControl.connectionPool;
+package by.epam.connectionPoolForDataBase.connectionPool;
 
 import java.sql.Connection;
 

@@ -1,4 +1,4 @@
-package by.epam.signsControl.connectionPool.exceptions;
+package by.epam.connectionPoolForDataBase.connectionPool.exceptions;
 
 public class ConnectionPoolException extends Exception {
 
