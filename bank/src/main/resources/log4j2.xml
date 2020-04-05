@@ -6,7 +6,7 @@
     <Appenders>
 
         <RollingFile name="rollingFile"
-                     fileName="logs/bankLog4j2.log"
+                     fileName="logs/Log4j2.log"
                      filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
 
             <PatternLayout pattern="%d{MM-dd-yyyy HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n "/>
@@ -21,10 +21,6 @@
 
 
     <Loggers>
-
-        <Logger name="myLogger" level="info" additivity="true">
-            <AppenderRef ref="rollingFile"/>
-        </Logger>
 
         <!-- Root Logger -->
         <Root level="info">

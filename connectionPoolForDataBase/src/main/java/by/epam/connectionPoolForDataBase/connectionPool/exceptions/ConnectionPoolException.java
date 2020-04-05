@@ -6,8 +6,4 @@ public class ConnectionPoolException extends Exception {
         super(message, ex);
     }
 
-    public ConnectionPoolException(String message) {
-        super(message);
-    }
-
 }

@@ -1,8 +1,9 @@
 
 module bank {
 
-    requires org.apache.logging.log4j;
+    requires connectionPoolForDataBase;
 
-    requires  connectionPoolForDataBase;
+    requires org.apache.logging.log4j;
+    requires java.sql;
 
 }
