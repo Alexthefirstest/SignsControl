@@ -36,8 +36,14 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
             "SELECT info FROM bank_accounts WHERE organisation_id = ?";
     private static final String SQL_SELECT_BALANCE =
             "SELECT balance FROM bank_accounts WHERE organisation_id = ?";
+    private static final String SQL_SELECT_MIN_ALLOWED_BALANCE =
+            "SELECT balance FROM bank_accounts WHERE organisation_id = ?";
+    private static final String SQL_SET_MIN_ALLOWED_BALANCE =
+            "UPDATE bank_accounts SET min_allowed_balance = ? WHERE (organisation_id = ?)";
     private static final String SQL_SELECT_ACCOUNT =
-            "SELECT * FROM bank_accounts WHERE organisation_id = ?";
+            "SELECT name, organisation_id, balance, min_allowed_balance, ba.is_blocked, ba.info " +
+                    "FROM bank_accounts as ba join organisations " +
+                    "on id=organisation_id where organisation_id=?";
 
     /*
      *
@@ -46,31 +52,31 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
      *
      */
     @Override
-    public boolean createBankAccount(int organizationID) throws DAOException {
+    public boolean createBankAccount(int organisationID) throws DAOException {
 
         Connection connection = CONNECTION_POOL.retrieveConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(SQL_INSERT)) {
-            ps.setInt(1, organizationID);
+            ps.setInt(1, organisationID);
             ps.execute();
 
         } catch (SQLIntegrityConstraintViolationException ex) {
 
             if ((Pattern.matches("Duplicate entry.*", ex.getMessage()))) {
-                logger.info("create bank account fail: organization ID: " + organizationID, ex);
+                logger.info("create bank account fail: organization ID: " + organisationID, ex);
                 return false;
             }
 
             if ((Pattern.matches(".*a foreign key constraint fails.*", ex.getMessage()))) {
-                logger.info("create bank account fail: organization ID: " + organizationID, ex);
+                logger.info("create bank account fail: organization ID: " + organisationID, ex);
                 throw new DAOValidationException("organization with this ID do not exist");
             }
 
-            logger.warn("create bank account fail: organization ID: " + organizationID, ex);
+            logger.warn("create bank account fail: organization ID: " + organisationID, ex);
             throw new DAOException(ex);
 
         } catch (SQLException ex) {
-            logger.warn("create bank account fail: organization ID: " + organizationID, ex);
+            logger.warn("create bank account fail: organization ID: " + organisationID, ex);
             throw new DAOException(ex);
 
         } finally {
@@ -85,20 +91,20 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
      *return false - if user don't exist
      *
      */
-    private boolean setBlock(int organizationID, boolean blockToSet) throws DAOException {
+    private boolean setBlock(int organisationID, boolean blockToSet) throws DAOException {
 
         Connection connection = CONNECTION_POOL.retrieveConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(SQL_SET_BLOCK)) {
             ps.setBoolean(1, blockToSet);
-            ps.setInt(2, organizationID);
+            ps.setInt(2, organisationID);
 
             if (ps.executeUpdate() == 0) {
                 return false;
             }
 
         } catch (SQLException ex) {
-            logger.warn("set block fail: organization ID: " + organizationID, ex);
+            logger.warn("set block fail: organization ID: " + organisationID, ex);
             throw new DAOException(ex);
 
         } finally {
@@ -109,32 +115,32 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
     }
 
     @Override
-    public boolean blockBankAccounts(int organizationID) throws DAOException {
+    public boolean blockBankAccounts(int organisationID) throws DAOException {
 
-        return setBlock(organizationID, true);
+        return setBlock(organisationID, true);
     }
 
     @Override
-    public boolean unblockBankAccounts(int organizationID) throws DAOException {
-        return setBlock(organizationID, false);
+    public boolean unblockBankAccounts(int organisationID) throws DAOException {
+        return setBlock(organisationID, false);
     }
 
 
     @Override
-    public boolean isBlock(int organizationID) throws DAOException {
+    public boolean isBlock(int organisationID) throws DAOException {
 
         ResultSet rs = null;
 
         Connection connection = CONNECTION_POOL.retrieveConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(SQL_SELECT_IS_BLOCKED)) {
-            ps.setInt(1, organizationID);
+            ps.setInt(1, organisationID);
 
             rs = ps.executeQuery();
 
             if (!rs.next()) {
 
-                logger.info("isBlock fail: organization ID(organisation do not exist): " + organizationID);
+                logger.info("isBlock fail: organization ID(organisation do not exist): " + organisationID);
                 throw new DAOValidationException("organisation with this ID do not exist");
             }
 
@@ -142,7 +148,7 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
 
 
         } catch (SQLException ex) {
-            logger.warn("isBlock fail: organization ID: " + organizationID, ex);
+            logger.warn("isBlock fail: organization ID: " + organisationID, ex);
             throw new DAOException(ex);
 
         } finally {
@@ -153,7 +159,7 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
                 try {
                     rs.close();
                 } catch (SQLException ex) {
-                    logger.warn(organizationID, ex);
+                    logger.warn(organisationID, ex);
                     CONNECTION_POOL.releaseConnection(connection);
                     throw new DAOException("isBlock fail " + ex);
                 }
@@ -166,7 +172,7 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
     }
 
     @Override
-    public boolean isExist(int organizationID) throws DAOException {
+    public boolean isExist(int organisationID) throws DAOException {
 
         ResultSet rs = null;
 
@@ -174,7 +180,7 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
 
         try (PreparedStatement ps = connection.prepareStatement(SQL_SELECT_IS_BLOCKED)) {
 
-            ps.setInt(1, organizationID);
+            ps.setInt(1, organisationID);
 
             rs = ps.executeQuery();
 
@@ -182,7 +188,7 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
 
 
         } catch (SQLException ex) {
-            logger.warn("isExist fail: organization ID: " + organizationID, ex);
+            logger.warn("isExist fail: organization ID: " + organisationID, ex);
             throw new DAOException(ex);
 
         } finally {
@@ -192,7 +198,7 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
                 try {
                     rs.close();
                 } catch (SQLException ex) {
-                    logger.warn(organizationID, ex);
+                    logger.warn(organisationID, ex);
                     CONNECTION_POOL.releaseConnection(connection);
                     throw new DAOException("isExist fail", ex);
                 }
@@ -209,21 +215,21 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
      *
      */
     @Override
-    public boolean setInfo(int organizationID, String info) throws DAOException {
+    public boolean setInfo(int organisationID, String info) throws DAOException {
 
         Connection connection = CONNECTION_POOL.retrieveConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(SQL_SET_INFO)) {
             ps.setString(1, info);
-            ps.setInt(2, organizationID);
+            ps.setInt(2, organisationID);
 
             if (ps.executeUpdate() == 0) {
-                logger.info("setInfo fail: organization ID(organisation do not exist): " + organizationID);
+                logger.info("setInfo fail: organization ID(organisation do not exist): " + organisationID);
                 return false;
             }
 
         } catch (SQLException ex) {
-            logger.warn("setInfo fail: organization ID: " + organizationID, ex);
+            logger.warn("setInfo fail: organization ID: " + organisationID, ex);
             throw new DAOException(ex);
 
         } finally {
@@ -235,19 +241,19 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
 
 
     @Override
-    public String getInfo(int organizationID) throws DAOException {
+    public String getInfo(int organisationID) throws DAOException {
         ResultSet rs = null;
 
         Connection connection = CONNECTION_POOL.retrieveConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(SQL_SELECT_INFO)) {
-            ps.setInt(1, organizationID);
+            ps.setInt(1, organisationID);
 
             rs = ps.executeQuery();
 
             if (!rs.next()) {
 
-                logger.info("getInfo fail: organization ID(organisation do not exist): " + organizationID);
+                logger.info("getInfo fail: organization ID(organisation do not exist): " + organisationID);
                 throw new DAOValidationException("organization with this ID do not exist");
             }
 
@@ -255,7 +261,7 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
 
 
         } catch (SQLException ex) {
-            logger.warn("getInfo fail: organization ID: " + organizationID, ex);
+            logger.warn("getInfo fail: organization ID: " + organisationID, ex);
             throw new DAOException(ex);
 
         } finally {
@@ -266,7 +272,7 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
                 try {
                     rs.close();
                 } catch (SQLException ex) {
-                    logger.warn(organizationID, ex);
+                    logger.warn(organisationID, ex);
                     CONNECTION_POOL.releaseConnection(connection);
                     throw new DAOException(ex);
                 }
@@ -278,29 +284,27 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
 
     }
 
-    @Override
-    public long getBalance(int organizationID) throws DAOException {
-
+    private double selectBanceOrMinAllowedBalance(int organisationID, String select) throws DAOException {
         ResultSet rs = null;
 
         Connection connection = CONNECTION_POOL.retrieveConnection();
 
-        try (PreparedStatement ps = connection.prepareStatement(SQL_SELECT_BALANCE)) {
-            ps.setInt(1, organizationID);
+        try (PreparedStatement ps = connection.prepareStatement(select)) {
+            ps.setInt(1, organisationID);
 
             rs = ps.executeQuery();
 
             if (!rs.next()) {
 
-                logger.info("getBalance fail: organization ID(organisation do not exist): " + organizationID);
+                logger.info(select + " fail: organization ID(organisation do not exist): " + organisationID);
                 throw new DAOValidationException("organization with this ID do not exist");
             }
 
-            return rs.getLong(1);
+            return rs.getDouble(1);
 
 
         } catch (SQLException ex) {
-            logger.warn("getBalance fail: organization ID: " + organizationID, ex);
+            logger.warn("getBalance fail: organization ID: " + organisationID, ex);
             throw new DAOException(ex);
 
         } finally {
@@ -311,7 +315,7 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
                 try {
                     rs.close();
                 } catch (SQLException ex) {
-                    logger.warn(organizationID, ex);
+                    logger.warn(organisationID, ex);
                     CONNECTION_POOL.releaseConnection(connection);
                     throw new DAOException(ex);
                 }
@@ -320,8 +324,45 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
 
             CONNECTION_POOL.releaseConnection(connection);
         }
+    }
+
+    @Override
+    public double getBalance(int organisationID) throws DAOException {
+
+        return selectBanceOrMinAllowedBalance(organisationID, SQL_SELECT_BALANCE);
 
     }
+
+    @Override
+    public double getMinAllowedBalance(int organisationID) throws DAOException {
+        return selectBanceOrMinAllowedBalance(organisationID, SQL_SELECT_MIN_ALLOWED_BALANCE);
+    }
+
+
+    @Override
+    public boolean setMinAllowedBalance(int organisationID, double minAllowedBalance) throws DAOException {
+        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(SQL_SET_MIN_ALLOWED_BALANCE)) {
+            ps.setDouble(1, minAllowedBalance);
+            ps.setInt(2, organisationID);
+
+            if (ps.executeUpdate() == 0) {
+                logger.info("setMinAllowedBalance fail: organization ID(organisation do not exist): " + organisationID);
+                return false;
+            }
+
+        } catch (SQLException ex) {
+            logger.warn("setMinAllowedBalance fail: organization ID: " + organisationID, ex);
+            throw new DAOException(ex);
+
+        } finally {
+            CONNECTION_POOL.releaseConnection(connection);
+        }
+
+        return true;
+    }
+
 
     /*
      *
@@ -329,28 +370,28 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
      *
      */
     @Override
-    public BankAccount getBankAccount(int organizationID) throws DAOException {
+    public BankAccount getBankAccount(int organisationID) throws DAOException {
         ResultSet rs = null;
 
         Connection connection = CONNECTION_POOL.retrieveConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(SQL_SELECT_ACCOUNT)) {
-            ps.setInt(1, organizationID);
+            ps.setInt(1, organisationID);
 
             rs = ps.executeQuery();
 
             if (!rs.next()) {
 
-                logger.info("getBankAccount fail: organization ID(organisation do not exist): " + organizationID);
+                logger.info("getBankAccount fail: organization ID(organisation do not exist): " + organisationID);
                 return null;
             }
 
-            return new BankAccount(rs.getInt(1), rs.getLong(2),
-                    rs.getBoolean(3), rs.getString(4));
+            return new BankAccount(rs.getString(1), rs.getInt(2), rs.getDouble(3),
+                    rs.getDouble(4), rs.getBoolean(5), rs.getString(6));
 
 
         } catch (SQLException ex) {
-            logger.warn("getBankAccount fail: organization ID: " + organizationID, ex);
+            logger.warn("getBankAccount fail: organization ID: " + organisationID, ex);
             throw new DAOException(ex);
 
         } finally {
@@ -361,7 +402,7 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
                 try {
                     rs.close();
                 } catch (SQLException ex) {
-                    logger.warn(organizationID, ex);
+                    logger.warn(organisationID, ex);
                     CONNECTION_POOL.releaseConnection(connection);
                     throw new DAOException(ex);
                 }

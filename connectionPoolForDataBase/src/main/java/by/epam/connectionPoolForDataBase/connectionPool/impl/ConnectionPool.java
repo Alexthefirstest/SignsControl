@@ -147,6 +147,15 @@ public class ConnectionPool implements IConnectionPool {
     @Override
     public boolean releaseConnection(Connection connection) {
 
+
+        try {
+            if (connection != null) {
+                connection.setAutoCommit(true);
+            }
+        } catch (SQLException ex) {
+            logger.warn("setAutoCommitWarn" + ex);
+        }
+
         releaseLocker.lock();
 
         logger.info("try to release connection");
