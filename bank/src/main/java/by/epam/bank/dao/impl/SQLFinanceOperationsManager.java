@@ -96,7 +96,7 @@ public class SQLFinanceOperationsManager implements IFinanceOperationsManager {
     }
 
     @Override
-    public boolean addMoney(int organisationID, double money) {
+    public boolean addMoney(int organisationID, double money) throws DAOException {
 
         Connection connection = connectionPool.retrieveConnection();
 
@@ -109,6 +109,7 @@ public class SQLFinanceOperationsManager implements IFinanceOperationsManager {
 
         } catch (SQLException ex) {
             logger.warn("addMoney fail " + ex);
+            throw new DAOException("transaction fail" + ex);
         } finally {
             connectionPool.releaseConnection(connection);
         }

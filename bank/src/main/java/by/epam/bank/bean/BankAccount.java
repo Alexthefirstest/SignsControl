@@ -67,7 +67,7 @@ public class BankAccount implements Serializable {
     }
 
     public String getInfo() {
-        return info;
+        return info==null? "":info;
     }
 
     public void setInfo(String info) {
@@ -112,7 +112,7 @@ public class BankAccount implements Serializable {
         sb.append(", balance=").append(balance);
         sb.append(", minAllowedBalance=").append(minAllowedBalance);
         sb.append(", isBlocked=").append(isBlocked);
-        sb.append(", info='").append(info).append('\'');
+        sb.append(", info='").append(info==null? "":info).append('\'');
         sb.append('}');
         return sb.toString();
     }

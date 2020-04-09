@@ -160,8 +160,6 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
                     rs.close();
                 } catch (SQLException ex) {
                     logger.warn(organisationID, ex);
-                    CONNECTION_POOL.releaseConnection(connection);
-                    throw new DAOException("isBlock fail " + ex);
                 }
 
             }
@@ -199,8 +197,6 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
                     rs.close();
                 } catch (SQLException ex) {
                     logger.warn(organisationID, ex);
-                    CONNECTION_POOL.releaseConnection(connection);
-                    throw new DAOException("isExist fail", ex);
                 }
 
             }
@@ -273,8 +269,6 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
                     rs.close();
                 } catch (SQLException ex) {
                     logger.warn(organisationID, ex);
-                    CONNECTION_POOL.releaseConnection(connection);
-                    throw new DAOException(ex);
                 }
 
             }
@@ -316,8 +310,7 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
                     rs.close();
                 } catch (SQLException ex) {
                     logger.warn(organisationID, ex);
-                    CONNECTION_POOL.releaseConnection(connection);
-                    throw new DAOException(ex);
+
                 }
 
             }
@@ -403,8 +396,6 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
                     rs.close();
                 } catch (SQLException ex) {
                     logger.warn(organisationID, ex);
-                    CONNECTION_POOL.releaseConnection(connection);
-                    throw new DAOException(ex);
                 }
 
             }
