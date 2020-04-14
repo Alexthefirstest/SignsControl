@@ -51,7 +51,7 @@ public class BankAccountsDeliver {
 
         } catch (SQLException ex) {
 
-            logger.warn("executeRequest fail " + ex);
+            logger.warn("executeRequest fail ", ex);
             throw new DAOException(ex);
 
         } finally {

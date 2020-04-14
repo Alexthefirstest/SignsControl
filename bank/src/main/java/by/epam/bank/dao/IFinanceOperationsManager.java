@@ -4,7 +4,7 @@ import by.epam.bank.dao.exceptions.DAOException;
 
 public interface IFinanceOperationsManager {
 
-    boolean transferMoney(int organisationIDFrom, int organisationIDTo, double money) throws DAOException;
+    int transferMoney(int organisationIDFrom, int organisationIDTo, double money) throws DAOException;
 
     boolean addMoney(int organisationID, double money) throws DAOException;
 }
