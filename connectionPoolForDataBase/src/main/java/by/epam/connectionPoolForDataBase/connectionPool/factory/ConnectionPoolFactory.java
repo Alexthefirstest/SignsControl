@@ -8,7 +8,7 @@ public class ConnectionPoolFactory {
     private ConnectionPoolFactory() {
     }
 
-    static final ConnectionPoolFactory INSTANCE = new ConnectionPoolFactory();
+    private static final ConnectionPoolFactory INSTANCE = new ConnectionPoolFactory();
 
     private final IConnectionPool connectionPoolInstance= ConnectionPool.getConnectionPoolInstance();
 

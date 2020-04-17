@@ -11,6 +11,7 @@
     <modules>
         <module>connectionPoolForDataBase</module>
         <module>bank</module>
+        <module>signsControl</module>
     </modules>
 
 
