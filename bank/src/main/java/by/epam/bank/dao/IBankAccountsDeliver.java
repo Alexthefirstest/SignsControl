@@ -1,20 +1,12 @@
 package by.epam.bank.dao;
 
 import by.epam.bank.bean.BankAccount;
+import by.epam.bank.dao.exceptions.DAOException;
+import by.epam.bank.dao.impl.bankAccountsDeliverRequest.Request;
 
 public interface IBankAccountsDeliver {
 
-//    BankAccount[] getAllBankAccountsSortByOrganisationName(boolean desc, boolean unlocked, boolean blocked);
-//
-//    BankAccount[] getAllBankAccountsSortByBalance(boolean desc, boolean unlocked, boolean blocked);
-//
-//    BankAccount[] getAllBankAccountsSortByBlocked(boolean desc);
-//
-//
-//    BankAccount[] getBankAccountsWithNegativeBalance(boolean desc, boolean unlocked, boolean blocked);
-//
-//    BankAccount[] getBankAccountsWithPositiveBalance(boolean desc, boolean unlocked, boolean blocked);
-
+    BankAccount[] executeRequest(Request request) throws DAOException;
 
 
 }

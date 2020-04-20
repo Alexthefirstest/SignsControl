@@ -8,13 +8,13 @@ import java.sql.Date;
 public interface ITransactionsDeliver {
 
 
-    public Transaction[] getTransactions() throws DAOException;
+    Transaction[] getTransactions() throws DAOException;
 
-    public Transaction[] findTransaction(int id) throws DAOException;
+    Transaction[] findTransaction(int id) throws DAOException;
 
-    public Transaction[] findTransactionsByFrom(int idFrom) throws DAOException;
+    Transaction[] findTransactionsByFrom(int idFrom) throws DAOException;
 
-    public Transaction[] findTransactionsByFromAndTo(int idFrom, int idTo) throws DAOException;
+    Transaction[] findTransactionsByFromAndTo(int idFrom, int idTo) throws DAOException;
 
-    public Transaction[] findTransactionsByDate(int idFrom, String dateFrom, String dateTo) throws DAOException;
+    Transaction[] findTransactionsByDate(int idFrom, String dateFrom, String dateTo) throws DAOException;
 }
