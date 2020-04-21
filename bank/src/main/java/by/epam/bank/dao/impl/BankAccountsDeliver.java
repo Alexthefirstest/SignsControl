@@ -2,6 +2,7 @@ package by.epam.bank.dao.impl;
 
 import by.epam.bank.bean.BankAccount;
 import by.epam.bank.dao.IBankAccountsDeliver;
+import by.epam.bank.dao.IRequest;
 import by.epam.bank.dao.exceptions.DAOException;
 import by.epam.bank.dao.exceptions.DAOValidationException;
 import by.epam.bank.dao.impl.bankAccountsDeliverRequest.Request;
@@ -28,7 +29,7 @@ public class BankAccountsDeliver implements IBankAccountsDeliver {
     private static final IConnectionPool CONNECTION_POOL = ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
 
 
-    public BankAccount[] executeRequest(Request selectRequestHolder) throws DAOException {
+    public BankAccount[] executeRequest(IRequest selectRequestHolder) throws DAOException {
 
         Connection connection = CONNECTION_POOL.retrieveConnection();
 
