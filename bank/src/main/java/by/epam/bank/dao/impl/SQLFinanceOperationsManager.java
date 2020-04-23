@@ -32,6 +32,7 @@ public class SQLFinanceOperationsManager implements IFinanceOperationsManager {
     private static final IConnectionPool connectionPool = ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
 
 
+    //return transaction id
     @Override
     public int transferMoney(int organisationIDFrom, int organisationIDTo, double money) throws DAOException {
 

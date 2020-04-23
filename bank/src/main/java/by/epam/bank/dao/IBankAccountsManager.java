@@ -5,7 +5,7 @@ import by.epam.bank.dao.exceptions.DAOException;
 
 public interface IBankAccountsManager {
 
-    boolean createBankAccount(int organisationID) throws DAOException;
+    BankAccount createBankAccount(int organisationID) throws DAOException;
 
     boolean blockBankAccounts(int organisationID) throws DAOException;
 

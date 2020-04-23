@@ -24,26 +24,15 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
 
     private static final IConnectionPool CONNECTION_POOL = ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
 
-    private static final String SQL_INSERT
-            = "INSERT INTO bank_accounts (organisation_id) VALUES (?)";
-    private static final String SQL_SET_BLOCK =
-            "UPDATE bank_accounts SET is_blocked = ? WHERE (organisation_id = ?)";
-    private static final String SQL_SELECT_IS_BLOCKED =
-            "SELECT is_blocked FROM bank_accounts WHERE organisation_id = ?";
-    private static final String SQL_SET_INFO =
-            "UPDATE bank_accounts SET info = ? WHERE (organisation_id = ?)";
-    private static final String SQL_SELECT_INFO =
-            "SELECT info FROM bank_accounts WHERE organisation_id = ?";
-    private static final String SQL_SELECT_BALANCE =
-            "SELECT balance FROM bank_accounts WHERE organisation_id = ?";
-    private static final String SQL_SELECT_MIN_ALLOWED_BALANCE =
-            "SELECT balance FROM bank_accounts WHERE organisation_id = ?";
-    private static final String SQL_SET_MIN_ALLOWED_BALANCE =
-            "UPDATE bank_accounts SET min_allowed_balance = ? WHERE (organisation_id = ?)";
-    private static final String SQL_SELECT_ACCOUNT =
-            "SELECT name, organisation_id, balance, min_allowed_balance, ba.is_blocked, ba.info " +
-                    "FROM bank_accounts as ba join organisations " +
-                    "on id=organisation_id where organisation_id=?";
+    private static final String SQL_INSERT = "INSERT INTO bank_accounts (organisation_id) VALUES (?)";
+    private static final String SQL_SET_BLOCK = "UPDATE bank_accounts SET is_blocked = ? WHERE (organisation_id = ?)";
+    private static final String SQL_SELECT_IS_BLOCKED = "SELECT is_blocked FROM bank_accounts WHERE organisation_id = ?";
+    private static final String SQL_SET_INFO = "UPDATE bank_accounts SET info = ? WHERE (organisation_id = ?)";
+    private static final String SQL_SELECT_INFO = "SELECT info FROM bank_accounts WHERE organisation_id = ?";
+    private static final String SQL_SELECT_BALANCE = "SELECT balance FROM bank_accounts WHERE organisation_id = ?";
+    private static final String SQL_SELECT_MIN_ALLOWED_BALANCE = "SELECT balance FROM bank_accounts WHERE organisation_id = ?";
+    private static final String SQL_SET_MIN_ALLOWED_BALANCE = "UPDATE bank_accounts SET min_allowed_balance = ? WHERE (organisation_id = ?)";
+    private static final String SQL_SELECT_ACCOUNT = "SELECT name, organisation_id, balance, min_allowed_balance, ba.is_blocked, ba.info FROM bank_accounts as ba join organisations on id=organisation_id where organisation_id=?";
 
     /*
      *
@@ -52,19 +41,36 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
      *
      */
     @Override
-    public boolean createBankAccount(int organisationID) throws DAOException {
+    public BankAccount createBankAccount(int organisationID) throws DAOException {
 
         Connection connection = CONNECTION_POOL.retrieveConnection();
 
-        try (PreparedStatement ps = connection.prepareStatement(SQL_INSERT)) {
+        ResultSet rs = null;
+
+        try (PreparedStatement ps = connection.prepareStatement(SQL_INSERT); PreparedStatement psS = connection.prepareStatement(SQL_SELECT_ACCOUNT) ) {
             ps.setInt(1, organisationID);
             ps.execute();
+
+            psS.setInt(1, organisationID);
+
+            rs = psS.executeQuery();
+
+            if (!rs.next()) {
+
+                logger.info("createBankAccount fail: organization ID(organisation do not exist): " + organisationID);
+                return null;
+            }
+
+            return new BankAccount(rs.getString(1), rs.getInt(2), rs.getDouble(3),
+                    rs.getDouble(4), rs.getBoolean(5), rs.getString(6));
+
+
 
         } catch (SQLIntegrityConstraintViolationException ex) {
 
             if ((Pattern.matches("Duplicate entry.*", ex.getMessage()))) {
-                logger.info("create bank account fail: organization ID: " + organisationID, ex);
-                return false;
+                logger.info("create bank account fail, duplicate entry: organization ID: " + organisationID, ex);
+                return null;
             }
 
             if ((Pattern.matches(".*a foreign key constraint fails.*", ex.getMessage()))) {
@@ -80,10 +86,20 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
             throw new DAOException(ex);
 
         } finally {
+
+            if (rs != null) {
+
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    logger.warn(organisationID, ex);
+                }
+
+            }
+
             CONNECTION_POOL.releaseConnection(connection);
         }
 
-        return true;
     }
 
     /*
@@ -278,7 +294,7 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
 
     }
 
-    private double selectBanceOrMinAllowedBalance(int organisationID, String select) throws DAOException {
+    private double selectBalanceOrMinAllowedBalance(int organisationID, String select) throws DAOException {
         ResultSet rs = null;
 
         Connection connection = CONNECTION_POOL.retrieveConnection();
@@ -322,13 +338,13 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
     @Override
     public double getBalance(int organisationID) throws DAOException {
 
-        return selectBanceOrMinAllowedBalance(organisationID, SQL_SELECT_BALANCE);
+        return selectBalanceOrMinAllowedBalance(organisationID, SQL_SELECT_BALANCE);
 
     }
 
     @Override
     public double getMinAllowedBalance(int organisationID) throws DAOException {
-        return selectBanceOrMinAllowedBalance(organisationID, SQL_SELECT_MIN_ALLOWED_BALANCE);
+        return selectBalanceOrMinAllowedBalance(organisationID, SQL_SELECT_MIN_ALLOWED_BALANCE);
     }
 
 
