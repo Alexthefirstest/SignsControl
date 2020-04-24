@@ -2,7 +2,7 @@ package by.epam.signsControl.bean;
 
 import java.io.Serializable;
 
-public class Sign implements Serializable {
+public class Sign implements Serializable, SignsStaff{
 
     private static final long serialVersionUID = 750945877308718374L;
 
@@ -85,4 +85,5 @@ public class Sign implements Serializable {
         sb.append('}');
         return sb.toString();
     }
+
 }

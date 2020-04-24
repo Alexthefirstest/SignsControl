@@ -4,9 +4,9 @@ import by.epam.signsControl.bean.Sign;
 
 public interface IPDDSignsControl {
 
-    boolean addSign(int section, int number, int kind);
+    Sign addSign(int section, int number, int kind);
 
-    boolean addSign(int section, int number);
+    Sign addSign(int section, int number);
 
     boolean removeSign(int section, int number, int kind);
 

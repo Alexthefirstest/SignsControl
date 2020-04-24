@@ -2,7 +2,7 @@ package by.epam.signsControl.bean;
 
 import java.io.Serializable;
 
-public class StandardSize implements Serializable {
+public class StandardSize implements Serializable, SignsStaff {
 
     public StandardSize() {
     }
