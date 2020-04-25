@@ -74,6 +74,33 @@ class RequestExecutor {
 
     }
 
+    static SignsStaff createFieldWithExistingCheck(String sqlInsert, String sqlSelect, SignsStaff signsStaff, int... parameters) throws SQLException {
+
+        ResultSet rs = null;
+
+        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        try (PreparedStatement psInsert = connection.prepareStatement(sqlInsert); PreparedStatement psSelect = connection.prepareStatement(sqlSelect)) {
+
+            intParametersInsideRequest(parameters, psInsert);
+
+            if (psInsert.executeUpdate() == 0) {
+                logger.info("duplicate entry: " + signsStaff.getClass());
+                return null;
+            }
+
+            rs = psSelect.executeQuery();
+
+            return signsControlFactory.createSignStaff(rs, signsStaff);
+
+
+        } finally {
+            closeResultSetAndReturnConnection(rs, connection);
+        }
+
+    }
+
+
     static boolean setField(String request, int id, String info) throws SQLException {
 
         Connection connection = CONNECTION_POOL.retrieveConnection();
@@ -81,6 +108,28 @@ class RequestExecutor {
         try (PreparedStatement ps = connection.prepareStatement(request)) {
 
             ps.setString(1, info);
+            ps.setInt(2, id);
+
+            if (ps.executeUpdate() == 0) {
+                logger.info(" wrong id ");
+                return false;
+            }
+
+            return true;
+
+        } finally {
+            CONNECTION_POOL.releaseConnection(connection);
+        }
+
+    }
+
+    static boolean setField(String request, int id, int parameter) throws SQLException {
+
+        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(request)) {
+
+            ps.setInt(1, parameter);
             ps.setInt(2, id);
 
             if (ps.executeUpdate() == 0) {
@@ -116,13 +165,15 @@ class RequestExecutor {
 
     }
 
-    static SignsStaff[] getSignsStaff(String request, SignsStaff signsStaff) throws SQLException {
+    static SignsStaff[] getSignsStaff(String request, SignsStaff signsStaff, int... parameters) throws SQLException {
 
         ResultSet rs = null;
 
         Connection connection = CONNECTION_POOL.retrieveConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(request)) {
+
+            intParametersInsideRequest(parameters, ps);
 
             rs = ps.executeQuery();
 
@@ -134,6 +185,5 @@ class RequestExecutor {
         }
 
     }
-
 
 }

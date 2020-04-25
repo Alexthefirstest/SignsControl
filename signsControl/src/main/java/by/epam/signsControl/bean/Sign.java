@@ -1,8 +1,9 @@
 package by.epam.signsControl.bean;
 
 import java.io.Serializable;
+import java.sql.Blob;
 
-public class Sign implements Serializable, SignsStaff{
+public class Sign implements Serializable, SignsStaff {
 
     private static final long serialVersionUID = 750945877308718374L;
 
@@ -19,6 +20,7 @@ public class Sign implements Serializable, SignsStaff{
         this.section = section;
         this.sign = sign;
         this.kind = kind;
+
     }
 
     public int getId() {

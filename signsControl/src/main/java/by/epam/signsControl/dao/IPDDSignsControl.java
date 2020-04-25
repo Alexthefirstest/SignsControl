@@ -1,30 +1,30 @@
 package by.epam.signsControl.dao;
 
 import by.epam.signsControl.bean.Sign;
+import by.epam.signsControl.dao.exceptions.DAOException;
 
 public interface IPDDSignsControl {
 
-    Sign addSign(int section, int number, int kind);
+    Sign addSign(int section, int number, int kind) throws DAOException;
 
-    Sign addSign(int section, int number);
+    Sign addSign(int section, int number) throws DAOException;
 
-    boolean removeSign(int section, int number, int kind);
+    Sign removeSign(int id) throws DAOException;
 
-    boolean removeSign(int section, int number);
+    boolean updateSection(int id, int section) throws DAOException;
 
-    boolean removeSign(int id);
+    boolean updateNumber(int id, int number) throws DAOException;
 
-    boolean updateSection(int id);
+    boolean updateKind(int id, int kind) throws DAOException;
 
-    boolean updateNumber(int id);
+    boolean setPicture(int id, Byte[] bytes);
 
-    boolean updateKind(int id);
+    Byte[] getPicture(int id);
 
-    Sign[] getPddSigns();
+    Sign[] getPddSigns() throws DAOException;
 
-    Sign[] getPddSigns(int section);
+    Sign[] getPddSigns(int section) throws DAOException;
 
-    Sign[] getPddSigns(int section, int number);
+    Sign[] getPddSigns(int section, int number) throws DAOException;
 
-// BLOB
 }

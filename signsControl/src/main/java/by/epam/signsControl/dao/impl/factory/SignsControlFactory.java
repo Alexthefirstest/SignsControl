@@ -6,6 +6,7 @@ import by.epam.signsControl.bean.StandardSize;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,7 +28,14 @@ public class SignsControlFactory {
         }
 
         if (signsStaff instanceof Sign) {
-            return null;
+
+            Sign sign = (Sign) signsStaff;
+            sign.setId(rs.getInt(1));
+            sign.setSection(rs.getInt(2));
+            sign.setSign(rs.getInt(3));
+            sign.setKind(rs.getInt(4));
+
+            return sign;
         }
 
         if (signsStaff instanceof StandardSize) {
@@ -47,7 +55,14 @@ public class SignsControlFactory {
     public SignsStaff[] createSignStaffArr(ResultSet rs, SignsStaff signsStaff) throws SQLException {
 
         if (signsStaff instanceof Sign) {
-            return null;
+            ArrayList<SignsStaff> signsStaffArr = new ArrayList<>();
+
+            while (rs.next()) {
+
+                signsStaffArr.add(new Sign(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4)));
+            }
+
+            return signsStaffArr.toArray(new Sign[0]);
         }
 
         if (signsStaff instanceof StandardSize) {
@@ -58,6 +73,7 @@ public class SignsControlFactory {
 
                 signsStaffArr.add(new StandardSize(rs.getInt(1), rs.getString(2)));
             }
+
 
             return signsStaffArr.toArray(new StandardSize[0]);
         }
