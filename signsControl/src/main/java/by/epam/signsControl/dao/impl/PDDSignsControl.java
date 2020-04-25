@@ -1,17 +1,24 @@
 package by.epam.signsControl.dao.impl;
 
+import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
+import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
 import by.epam.signsControl.bean.Sign;
 import by.epam.signsControl.dao.IPDDSignsControl;
 import by.epam.signsControl.dao.exceptions.DAOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PDDSignsControl implements IPDDSignsControl {
 
 
     private static Logger logger = LogManager.getLogger(PDDSignsControl.class);
+    private static final IConnectionPool CONNECTION_POOL = ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
 
     private static final String SQL_SELECT_USE_LAST_INSERT_ID = "SELECT * FROM `pdd_signs` where id=LAST_INSERT_ID();";
     private static final String SQL_INSERT_UNIQUE = "INSERT INTO `pdd_signs` (`pdd_section`, `pdd_sign`, `pdd_kind`) " +
@@ -25,6 +32,9 @@ public class PDDSignsControl implements IPDDSignsControl {
     private static final String SQL_SELECT_ALL = "SELECT * FROM pdd_signs order by pdd_section, pdd_sign, pdd_kind";
     private static final String SQL_SELECT_BY_SECTION = "SELECT * FROM pdd_signs WHERE pdd_section=? order by pdd_section, pdd_sign, pdd_kind";
     private static final String SQL_SELECT_BY_SECTION_AND_SIGN = "SELECT * FROM pdd_signs WHERE pdd_section=? AND pdd_sign=? order by pdd_section, pdd_sign, pdd_kind";
+    private static final String SQL_INSERT_PICTURE = "UPDATE `pdd_signs` SET `picture` = ? WHERE (`id` = ?);";
+    private static final String SQL_SELECT_PICTURE = "SELECT picture from pdd_signs where id=?";
+
 
     //private static final String SQL_SELECT_BY_SECTION_SIGN_KIND = "SELECT id FROM `pdd_signs` where pdd_section=? AND pdd_sign=? AND pdd_kind=?";
 
@@ -109,16 +119,67 @@ public class PDDSignsControl implements IPDDSignsControl {
     }
 
     @Override
-    public boolean setPicture(int id, Byte[] bytes) {
-        return false;
+    public boolean setPicture(int id, InputStream inputStream) throws DAOException {
+
+        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(SQL_INSERT_PICTURE)) {
+
+            ps.setBlob(1, inputStream);
+
+            ps.setInt(2, id);
+
+            return ps.executeUpdate() == 0 ? false : true;
+
+        } catch (SQLException ex) {
+
+            logger.warn("updatePicture fail: id: " + id + "inputStream: " + inputStream, ex);
+            throw new DAOException(ex);
+        } finally {
+            CONNECTION_POOL.releaseConnection(connection);
+        }
+
     }
 
     @Override
-    public Byte[] getPicture(int id) {
-        return new Byte[0];
+    public byte[] getPicture(int id) throws DAOException {
+
+        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        ResultSet rs = null;
+
+        try (PreparedStatement ps = connection.prepareStatement(SQL_SELECT_PICTURE)) {
+
+            ps.setInt(1, id);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getBytes(1);
+            }
+
+            return null;
+
+        } catch (SQLException ex) {
+
+            logger.warn("return picture fail fail: id: " + id, ex);
+            throw new DAOException(ex);
+
+        } finally {
+
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    logger.warn("return picture rs close fail ", ex);
+                }
+            }
+
+            CONNECTION_POOL.releaseConnection(connection);
+        }
     }
 
-    private Sign[] getPddSignsDef(String sql, int...parameters) throws DAOException {
+    private Sign[] getPddSignsDef(String sql, int... parameters) throws DAOException {
         try {
 
             return (Sign[]) RequestExecutor.getSignsStaff(sql, new Sign(), parameters);
@@ -134,7 +195,7 @@ public class PDDSignsControl implements IPDDSignsControl {
     @Override
     public Sign[] getPddSigns() throws DAOException {
 
-       return getPddSignsDef(SQL_SELECT_ALL);
+        return getPddSignsDef(SQL_SELECT_ALL);
     }
 
     @Override
@@ -146,8 +207,6 @@ public class PDDSignsControl implements IPDDSignsControl {
     public Sign[] getPddSigns(int section, int number) throws DAOException {
         return getPddSignsDef(SQL_SELECT_BY_SECTION_AND_SIGN, section, number);
     }
-
-// private static final String SQL_SELECT_LAST_INSERT_ID = "SELECT LAST_INSERT_ID() FROM standard_sizes where number=LAST_INSERT_ID();";
 
 
 }

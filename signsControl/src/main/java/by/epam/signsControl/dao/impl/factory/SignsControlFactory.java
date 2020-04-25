@@ -34,6 +34,7 @@ public class SignsControlFactory {
             sign.setSection(rs.getInt(2));
             sign.setSign(rs.getInt(3));
             sign.setKind(rs.getInt(4));
+            sign.setPicture(rs.getBytes(5));
 
             return sign;
         }
@@ -59,7 +60,9 @@ public class SignsControlFactory {
 
             while (rs.next()) {
 
-                signsStaffArr.add(new Sign(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4)));
+                signsStaffArr.add
+                        (new Sign(rs.getInt(1), rs.getInt(2), rs.getInt(3),
+                                rs.getInt(4), rs.getBytes(5)));
             }
 
             return signsStaffArr.toArray(new Sign[0]);

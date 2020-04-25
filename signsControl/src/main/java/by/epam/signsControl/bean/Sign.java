@@ -2,6 +2,7 @@ package by.epam.signsControl.bean;
 
 import java.io.Serializable;
 import java.sql.Blob;
+import java.util.Arrays;
 
 public class Sign implements Serializable, SignsStaff {
 
@@ -14,13 +15,23 @@ public class Sign implements Serializable, SignsStaff {
     int section;
     int sign;
     int kind;
+    byte[] picture;
 
-    public Sign(int id, int section, int sign, int kind) {
+    public Sign(int id, int section, int sign, int kind, byte[] picture) {
         this.id = id;
         this.section = section;
         this.sign = sign;
         this.kind = kind;
+        this.picture=picture;
 
+    }
+
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
     }
 
     public int getId() {
@@ -62,7 +73,6 @@ public class Sign implements Serializable, SignsStaff {
 
         Sign sign1 = (Sign) o;
 
-        if (id != sign1.id) return false;
         if (section != sign1.section) return false;
         if (sign != sign1.sign) return false;
         return kind == sign1.kind;
@@ -70,8 +80,7 @@ public class Sign implements Serializable, SignsStaff {
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + section;
+        int result = section;
         result = 31 * result + sign;
         result = 31 * result + kind;
         return result;
@@ -84,8 +93,8 @@ public class Sign implements Serializable, SignsStaff {
         sb.append(", section=").append(section);
         sb.append(", sign=").append(sign);
         sb.append(", kind=").append(kind);
+        sb.append(", picture=").append(Arrays.toString(picture));
         sb.append('}');
         return sb.toString();
     }
-
 }

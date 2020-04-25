@@ -3,6 +3,8 @@ package by.epam.signsControl.dao;
 import by.epam.signsControl.bean.Sign;
 import by.epam.signsControl.dao.exceptions.DAOException;
 
+import java.io.InputStream;
+
 public interface IPDDSignsControl {
 
     Sign addSign(int section, int number, int kind) throws DAOException;
@@ -17,9 +19,9 @@ public interface IPDDSignsControl {
 
     boolean updateKind(int id, int kind) throws DAOException;
 
-    boolean setPicture(int id, Byte[] bytes);
+    boolean setPicture(int id, InputStream inputStream) throws DAOException;
 
-    Byte[] getPicture(int id);
+    byte[] getPicture(int id) throws DAOException;
 
     Sign[] getPddSigns() throws DAOException;
 
