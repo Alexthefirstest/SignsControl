@@ -35,6 +35,15 @@ class RequestExecutor {
         return ps;
     }
 
+    private static PreparedStatement stringParametersInsideRequest(String[] parameters, PreparedStatement ps) throws SQLException {
+
+        for (int i = 0; i < parameters.length; i++) {
+            ps.setString(i + 1, parameters[i]);
+        }
+
+        return ps;
+    }
+
     public static void closeResultSetAndReturnConnection(ResultSet rs, Connection connection) {
 
         if (rs != null) {
@@ -61,6 +70,28 @@ class RequestExecutor {
 
             intParametersInsideRequest(parameters, psInsert);
 
+            psInsert.executeUpdate();
+
+            rs = psSelect.executeQuery();
+
+            return signsControlFactory.createSignStaff(rs, signsStaff);
+
+
+        } finally {
+            closeResultSetAndReturnConnection(rs, connection);
+        }
+
+    }
+
+    static SignsStaff createField(String sqlInsert, String sqlSelect, SignsStaff signsStaff, String... parameters) throws SQLException {
+
+        ResultSet rs = null;
+
+        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        try (PreparedStatement psInsert = connection.prepareStatement(sqlInsert); PreparedStatement psSelect = connection.prepareStatement(sqlSelect)) {
+
+            stringParametersInsideRequest(parameters, psInsert);
             psInsert.executeUpdate();
 
             rs = psSelect.executeQuery();
@@ -178,6 +209,28 @@ class RequestExecutor {
             rs = ps.executeQuery();
 
             return signsControlFactory.createSignStaffArr(rs, signsStaff);
+
+
+        } finally {
+            closeResultSetAndReturnConnection(rs, connection);
+        }
+
+    }
+
+    static SignsStaff getOneSignsStaff(String request, SignsStaff signsStaff, String... parameters) throws SQLException {
+
+        ResultSet rs = null;
+
+        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(request) ) {
+
+            stringParametersInsideRequest(parameters, ps);
+
+
+            rs = ps.executeQuery();
+
+            return signsControlFactory.createSignStaff(rs, signsStaff);
 
 
         } finally {

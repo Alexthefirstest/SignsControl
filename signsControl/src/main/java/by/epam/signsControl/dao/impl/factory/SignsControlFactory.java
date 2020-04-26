@@ -1,12 +1,12 @@
 package by.epam.signsControl.dao.impl.factory;
 
+import by.epam.signsControl.bean.MapPoint;
 import by.epam.signsControl.bean.Sign;
 import by.epam.signsControl.bean.SignsStaff;
 import by.epam.signsControl.bean.StandardSize;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,8 +22,9 @@ public class SignsControlFactory {
 
     public SignsStaff createSignStaff(ResultSet rs, SignsStaff signsStaff) throws SQLException {
 
+
         if (!rs.next()) {
-            logger.warn("rs.next = false");
+            logger.info("rs.next = false");
             return null;
         }
 
@@ -37,6 +38,25 @@ public class SignsControlFactory {
             sign.setPicture(rs.getBytes(5));
 
             return sign;
+        }
+
+        if (signsStaff instanceof MapPoint) {
+
+            MapPoint mapPoint = (MapPoint) signsStaff;
+
+            mapPoint.setCoordinates(rs.getString(1));
+
+            mapPoint.addAddress(rs.getString(2));
+            mapPoint.addSignsList(rs.getInt(3));
+            mapPoint.addAnnotation(rs.getString(4));
+
+            while (rs.next()) {
+                mapPoint.addAddress(rs.getString(2));
+                mapPoint.addSignsList(rs.getInt(3));
+                mapPoint.addAnnotation(rs.getString(4));
+            }
+
+            return mapPoint;
         }
 
         if (signsStaff instanceof StandardSize) {
@@ -79,6 +99,39 @@ public class SignsControlFactory {
 
 
             return signsStaffArr.toArray(new StandardSize[0]);
+        }
+
+        if (signsStaff instanceof MapPoint) {
+
+            MapPoint mapPoint;
+
+            ArrayList<MapPoint> mapPoints = new ArrayList<>();
+
+            boolean stillNext = rs.next();
+
+            while (stillNext) {
+
+                mapPoint = new MapPoint();
+
+                mapPoint.setCoordinates(rs.getString(1));
+                mapPoint.addAddress(rs.getString(2));
+                mapPoint.addSignsList(rs.getInt(3));
+                mapPoint.addAnnotation(rs.getString(4));
+
+
+                while ((stillNext = rs.next()) && rs.getString(1).equals(mapPoint.getCoordinates())) {
+
+                    mapPoint.addAddress(rs.getString(2));
+                    mapPoint.addSignsList(rs.getInt(3));
+                    mapPoint.addAnnotation(rs.getString(4));
+
+                }
+
+
+                mapPoints.add(mapPoint);
+
+            }
+            return mapPoints.toArray(new MapPoint[0]);
         }
 
         logger.warn("did't find if: createSignsStaff[] method, signStaff class: " + signsStaff.getClass());
