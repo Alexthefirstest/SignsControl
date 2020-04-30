@@ -28,6 +28,7 @@ public class UsersController implements IUsersController {
     private static final String SQL_SELECT_ALL = "SELECT u.id, login, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation order by u.organisation, ui.surname, ui.name";
     private static final String SQL_SELECT_USE_ORGANISATION = "SELECT u.id, login, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation where u.organisation=? order by ui.surname, ui.name";
     private static final String SQL_SELECT_USER = "SELECT u.id, login, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation  where u.id=?";
+    private static final String SQL_SELECT_USER_BY_LOGIN_PASSWORD = "SELECT u.id, login, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation  where u.login=? AND u.password=?";
 
     private static final String SQL_GET_BLOCK = "SELECT is_blocked FROM users WHERE (`id` = ?);";
 
@@ -144,7 +145,7 @@ public class UsersController implements IUsersController {
             ps.setString(3, newLoginOrPassword);
             ps.setInt(4, id);
 
-            return ps.executeUpdate() == 0 ? false : true;
+            return ps.executeUpdate() != 0;
 
 
         } catch (SQLException ex) {
@@ -164,8 +165,17 @@ public class UsersController implements IUsersController {
     }
 
     @Override
-    public boolean checkLoginPassword(String login, String password) {
-        return false;
+    public User checkLoginPassword(String login, String password) throws DAOException {
+        try {
+
+
+            return (User) RequestExecutor.getOneSignsStaff(SQL_SELECT_USER_BY_LOGIN_PASSWORD, new User(), login, password);
+        } catch (SQLException ex) {
+
+            logger.warn("check login_password");
+            throw new DAOException("check login_password");
+
+        }
     }
 
     @Override
@@ -242,7 +252,7 @@ public class UsersController implements IUsersController {
             return (User) RequestExecutor.getOneSignsStaff(SQL_SELECT_USER, new User(), id);
         } catch (SQLException ex) {
 
-            logger.warn("select all fail,  name: ");
+            logger.warn("select user fail, ");
             throw new DAOException(ex);
 
         }

@@ -12,7 +12,7 @@ public interface IUsersController {
 
     boolean setBlock(int id, boolean block) throws DAOException;
 
-    boolean checkLoginPassword(String login, String password);
+    User checkLoginPassword(String login, String password) throws DAOException;
 
     boolean setLogin(int id, String login, String password, String newLogin) throws DAOException;
 

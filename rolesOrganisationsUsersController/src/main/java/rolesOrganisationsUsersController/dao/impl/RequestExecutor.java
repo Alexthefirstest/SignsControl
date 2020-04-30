@@ -342,4 +342,26 @@ class RequestExecutor {
 
     }
 
+    static FactoryType getOneSignsStaff(String request, FactoryType signsStaff, String... parameters) throws SQLException {
+
+        ResultSet rs = null;
+
+        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(request)) {
+
+            stringParametersInsideRequest(parameters, ps);
+
+
+            rs = ps.executeQuery();
+
+            return signsControlFactory.createSignStaff(rs, signsStaff);
+
+
+        } finally {
+            closeResultSetAndReturnConnection(rs, connection);
+        }
+
+    }
+
 }
