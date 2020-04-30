@@ -22,4 +22,4 @@
 
 
 
-модули: connectionPoolForDataBase, bank, ...
+модули: connectionPoolForDataBase, bank, organisationsRoles, signsControl, ordersManager, view
