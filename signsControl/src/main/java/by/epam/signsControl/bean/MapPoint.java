@@ -3,24 +3,26 @@ package by.epam.signsControl.bean;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MapPoint implements SignsStaff, Serializable {
+public class MapPoint implements FactoryType, Serializable {
 
     private static final long serialVersionUID = -2559001946431331274L;
 
     public MapPoint() {
     }
 
-    public MapPoint(String coordinates, ArrayList<String> addresses, ArrayList<Integer> signsLists, ArrayList<String> annotations) {
+    public MapPoint(String coordinates, ArrayList<String> addresses, ArrayList<Integer> signsLists, ArrayList<Integer> angles, ArrayList<String> annotations) {
         this.coordinates = coordinates;
         this.addresses = addresses;
         this.signsLists = signsLists;
+        this.angles = angles;
         this.annotations = annotations;
     }
 
-    String coordinates;
-    ArrayList<String> addresses = new ArrayList<>();
-    ArrayList<Integer> signsLists = new ArrayList<>();
-    ArrayList<String> annotations = new ArrayList<>();
+    private String coordinates;
+    private ArrayList<String> addresses = new ArrayList<>();
+    private ArrayList<Integer> signsLists = new ArrayList<>();
+    private ArrayList<Integer> angles = new ArrayList<>();
+    private ArrayList<String> annotations = new ArrayList<>();
 
     public void addAddress(String addresses) {
         this.addresses.add(addresses);
@@ -32,6 +34,10 @@ public class MapPoint implements SignsStaff, Serializable {
 
     public void addAnnotation(String annotation) {
         this.annotations.add(annotation);
+    }
+
+    public void addAngle(int angle) {
+        this.angles.add(angle);
     }
 
     public String getCoordinates() {
@@ -67,6 +73,15 @@ public class MapPoint implements SignsStaff, Serializable {
         this.annotations = annotations;
     }
 
+    public ArrayList<Integer> getAngles() {
+
+        return new ArrayList<Integer>(angles);
+    }
+
+    public void setAngles(ArrayList<Integer> angles) {
+        this.angles = angles;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -78,6 +93,7 @@ public class MapPoint implements SignsStaff, Serializable {
             return false;
         if (addresses != null ? !addresses.equals(mapPoint.addresses) : mapPoint.addresses != null) return false;
         if (signsLists != null ? !signsLists.equals(mapPoint.signsLists) : mapPoint.signsLists != null) return false;
+        if (angles != null ? !angles.equals(mapPoint.angles) : mapPoint.angles != null) return false;
         return annotations != null ? annotations.equals(mapPoint.annotations) : mapPoint.annotations == null;
     }
 
@@ -86,6 +102,7 @@ public class MapPoint implements SignsStaff, Serializable {
         int result = coordinates != null ? coordinates.hashCode() : 0;
         result = 31 * result + (addresses != null ? addresses.hashCode() : 0);
         result = 31 * result + (signsLists != null ? signsLists.hashCode() : 0);
+        result = 31 * result + (angles != null ? angles.hashCode() : 0);
         result = 31 * result + (annotations != null ? annotations.hashCode() : 0);
         return result;
     }
@@ -95,7 +112,8 @@ public class MapPoint implements SignsStaff, Serializable {
         final StringBuilder sb = new StringBuilder("MapPoint{");
         sb.append("coordinates='").append(coordinates).append('\'');
         sb.append(", addresses=").append(addresses);
-        sb.append(", SignsLists=").append(signsLists);
+        sb.append(", signsLists=").append(signsLists);
+        sb.append(", angles=").append(angles);
         sb.append(", annotations=").append(annotations);
         sb.append('}');
         return sb.toString();

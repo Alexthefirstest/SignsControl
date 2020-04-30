@@ -35,9 +35,6 @@ public class PDDSignsControl implements IPDDSignsControl {
     private static final String SQL_INSERT_PICTURE = "UPDATE `pdd_signs` SET `picture` = ? WHERE (`id` = ?);";
     private static final String SQL_SELECT_PICTURE = "SELECT picture from pdd_signs where id=?";
 
-
-    //private static final String SQL_SELECT_BY_SECTION_SIGN_KIND = "SELECT id FROM `pdd_signs` where pdd_section=? AND pdd_sign=? AND pdd_kind=?";
-
     @Override
     public Sign addSign(int section, int number, int kind) throws DAOException {
 

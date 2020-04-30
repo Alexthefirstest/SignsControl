@@ -3,7 +3,7 @@ package by.epam.signsControl.dao.impl;
 import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
 import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
 
-import by.epam.signsControl.bean.SignsStaff;
+import by.epam.signsControl.bean.FactoryType;
 
 import by.epam.signsControl.dao.impl.factory.SignsControlFactory;
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +13,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 
 class RequestExecutor {
@@ -26,19 +28,33 @@ class RequestExecutor {
     }
 
 
-    private static PreparedStatement intParametersInsideRequest(int[] parameters, PreparedStatement ps) throws SQLException {
+    private static void intParametersInsideRequest(int[] parameters, PreparedStatement ps) throws SQLException {
 
         for (int i = 0; i < parameters.length; i++) {
             ps.setInt(i + 1, parameters[i]);
         }
 
-        return ps;
     }
 
-    private static PreparedStatement stringParametersInsideRequest(String[] parameters, PreparedStatement ps) throws SQLException {
+    private static void stringParametersInsideRequest(String[] parameters, PreparedStatement ps) throws SQLException {
 
         for (int i = 0; i < parameters.length; i++) {
             ps.setString(i + 1, parameters[i]);
+        }
+
+    }
+
+    /*work with integer, string*/
+    private static PreparedStatement differentParametersInsideRequest(Object[] parameters, PreparedStatement ps) throws SQLException {
+
+        for (int i = 0; i < parameters.length; i++) {
+
+            if (parameters[i] instanceof Integer) {
+                ps.setInt(i + 1, (Integer) parameters[i]);
+            }
+            if (parameters[i] instanceof String) {
+                ps.setString(i + 1, (String) parameters[i]);
+            }
         }
 
         return ps;
@@ -60,7 +76,7 @@ class RequestExecutor {
     }
 
 
-    static SignsStaff createField(String sqlInsert, String sqlSelect, SignsStaff signsStaff, int... parameters) throws SQLException {
+    static FactoryType createField(String sqlInsert, String sqlSelect, FactoryType signsStaff, int... parameters) throws SQLException {
 
         ResultSet rs = null;
 
@@ -83,7 +99,8 @@ class RequestExecutor {
 
     }
 
-    static SignsStaff createField(String sqlInsert, String sqlSelect, SignsStaff signsStaff, String... parameters) throws SQLException {
+
+    static FactoryType createFieldUseDifferentParameters(String sqlInsert, String sqlSelect, FactoryType signsStaff, Object... parameters) throws SQLException {
 
         ResultSet rs = null;
 
@@ -91,7 +108,7 @@ class RequestExecutor {
 
         try (PreparedStatement psInsert = connection.prepareStatement(sqlInsert); PreparedStatement psSelect = connection.prepareStatement(sqlSelect)) {
 
-            stringParametersInsideRequest(parameters, psInsert);
+            differentParametersInsideRequest(parameters, psInsert);
             psInsert.executeUpdate();
 
             rs = psSelect.executeQuery();
@@ -105,7 +122,33 @@ class RequestExecutor {
 
     }
 
-    static SignsStaff createFieldWithExistingCheck(String sqlInsert, String sqlSelect, SignsStaff signsStaff, int... parameters) throws SQLException {
+    static FactoryType createFieldWithExistingCheckUseDifferentParameters(String sqlInsert, String sqlSelect, FactoryType signsStaff, Object... parameters) throws SQLException {
+
+        ResultSet rs = null;
+
+        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        try (PreparedStatement psInsert = connection.prepareStatement(sqlInsert); PreparedStatement psSelect = connection.prepareStatement(sqlSelect)) {
+
+            differentParametersInsideRequest(parameters, psInsert);
+
+            if (psInsert.executeUpdate() == 0) {
+                logger.info("duplicate entry: " + signsStaff.getClass());
+                return null;
+            }
+
+            rs = psSelect.executeQuery();
+
+            return signsControlFactory.createSignStaff(rs, signsStaff);
+
+
+        } finally {
+            closeResultSetAndReturnConnection(rs, connection);
+        }
+
+    }
+
+    static FactoryType createFieldWithExistingCheck(String sqlInsert, String sqlSelect, FactoryType signsStaff, int... parameters) throws SQLException {
 
         ResultSet rs = null;
 
@@ -176,6 +219,52 @@ class RequestExecutor {
 
     }
 
+    static boolean setField(String request, int id, Timestamp parameter) throws SQLException {
+
+        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(request)) {
+
+            ps.setTimestamp(1, parameter);
+            ps.setInt(2, id);
+
+
+            if (ps.executeUpdate() == 0) {
+                logger.info(" wrong id ");
+                return false;
+            }
+
+            return true;
+
+        } finally {
+            CONNECTION_POOL.releaseConnection(connection);
+        }
+
+    }
+
+    static boolean setField(String request, int id, Date parameter) throws SQLException {
+
+        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(request)) {
+
+            ps.setDate(1, parameter);
+            ps.setInt(2, id);
+
+
+            if (ps.executeUpdate() == 0) {
+                logger.info(" wrong id ");
+                return false;
+            }
+
+            return true;
+
+        } finally {
+            CONNECTION_POOL.releaseConnection(connection);
+        }
+
+    }
+
     static String getString(String request, int id) throws SQLException {
 
         ResultSet rs = null;
@@ -196,7 +285,7 @@ class RequestExecutor {
 
     }
 
-    static SignsStaff[] getSignsStaff(String request, SignsStaff signsStaff, int... parameters) throws SQLException {
+    static FactoryType[] getSignsStaff(String request, FactoryType signsStaff, int... parameters) throws SQLException {
 
         ResultSet rs = null;
 
@@ -217,13 +306,34 @@ class RequestExecutor {
 
     }
 
-    static SignsStaff getOneSignsStaff(String request, SignsStaff signsStaff, String... parameters) throws SQLException {
+    static FactoryType[] getSignsStaffWithDifferentParameters(String request, FactoryType signsStaff, Object... parameters) throws SQLException {
 
         ResultSet rs = null;
 
         Connection connection = CONNECTION_POOL.retrieveConnection();
 
-        try (PreparedStatement ps = connection.prepareStatement(request) ) {
+        try (PreparedStatement ps = connection.prepareStatement(request)) {
+
+            differentParametersInsideRequest(parameters, ps);
+
+            rs = ps.executeQuery();
+
+            return signsControlFactory.createSignStaffArr(rs, signsStaff);
+
+
+        } finally {
+            closeResultSetAndReturnConnection(rs, connection);
+        }
+
+    }
+
+    static FactoryType getOneSignsStaff(String request, FactoryType signsStaff, String... parameters) throws SQLException {
+
+        ResultSet rs = null;
+
+        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(request)) {
 
             stringParametersInsideRequest(parameters, ps);
 

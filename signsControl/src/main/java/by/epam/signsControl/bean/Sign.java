@@ -1,21 +1,20 @@
 package by.epam.signsControl.bean;
 
 import java.io.Serializable;
-import java.sql.Blob;
 import java.util.Arrays;
 
-public class Sign implements Serializable, SignsStaff {
+public class Sign implements Serializable, FactoryType {
 
     private static final long serialVersionUID = 750945877308718374L;
 
     public Sign() {
     }
 
-    int id;
-    int section;
-    int sign;
-    int kind;
-    byte[] picture;
+    private int id;
+    private int section;
+    private int sign;
+    private  int kind;
+    private  byte[] picture;
 
     public Sign(int id, int section, int sign, int kind, byte[] picture) {
         this.id = id;
@@ -88,7 +87,7 @@ public class Sign implements Serializable, SignsStaff {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder(getClass().getName());
+        final StringBuilder sb = new StringBuilder("Sign");
         sb.append("{id=").append(id);
         sb.append(", section=").append(section);
         sb.append(", sign=").append(sign);

@@ -1,5 +1,5 @@
 package by.epam.signsControl.bean;
 
-public interface SignsStaff {
+public interface FactoryType {
 
 }

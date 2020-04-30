@@ -2,7 +2,7 @@ package by.epam.signsControl.bean;
 
 import java.io.Serializable;
 
-public class StandardSize implements Serializable, SignsStaff {
+public class StandardSize implements Serializable, FactoryType {
 
     public StandardSize() {
     }
@@ -14,8 +14,8 @@ public class StandardSize implements Serializable, SignsStaff {
 
     private static final long serialVersionUID = -6583064798614414700L;
 
-    int size;
-    String info;
+    private int size;
+    private String info;
 
     public int getSize() {
         return size;
