@@ -82,7 +82,7 @@ public class UsersController implements IUsersController {
 
             if ((Pattern.matches(".*a foreign key constraint fails.*", ex.getMessage()))) {
                 logger.info("add fail, wrong organisation: " + organisation, ex);
-                return null;
+                throw new DAOValidationException("wrong organisation: " + organisation);
             }
 
             try {
