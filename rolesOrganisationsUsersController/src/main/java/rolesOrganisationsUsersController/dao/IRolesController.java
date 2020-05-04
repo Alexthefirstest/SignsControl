@@ -7,7 +7,7 @@ public interface IRolesController {
 
     Role addRole(String name) throws DAOException;
 
-    Role deleteRole(int id) throws DAOException;
+    boolean deleteRole(int id) throws DAOException;
 
     Role[] getRoles() throws DAOException;
 

@@ -75,7 +75,7 @@ class RequestExecutor {
     }
 
 
-    static FactoryType createField(String sqlInsert, String sqlSelect, FactoryType signsStaff, int... parameters) throws SQLException {
+    static FactoryType createField(String sqlInsert, String sqlSelect, FactoryType signsStaff, int... parameters) throws SQLException, DAOValidationException {
 
         ResultSet rs = null;
 
@@ -98,7 +98,7 @@ class RequestExecutor {
 
     }
 
-    static FactoryType createField(String sqlInsert, String sqlSelect, FactoryType signsStaff, String... parameters) throws SQLException {
+    static FactoryType createField(String sqlInsert, String sqlSelect, FactoryType signsStaff, String... parameters) throws SQLException, DAOValidationException {
 
         ResultSet rs = null;
 
@@ -120,7 +120,7 @@ class RequestExecutor {
 
     }
 
-    static FactoryType createFieldUseDifferentParam(String sqlInsert, String sqlSelect, FactoryType signsStaff, Object... parameters) throws SQLException {
+    static FactoryType createFieldUseDifferentParam(String sqlInsert, String sqlSelect, FactoryType signsStaff, Object... parameters) throws SQLException, DAOValidationException {
 
         ResultSet rs = null;
 
@@ -143,7 +143,7 @@ class RequestExecutor {
 
     }
 
-    static FactoryType createFieldWithTwoInserts(String sqlInsert, String sqlInsert2, String sqlSelect, FactoryType signsStaff, Object... parameters) throws SQLException {
+    static FactoryType createFieldWithTwoInserts(String sqlInsert, String sqlInsert2, String sqlSelect, FactoryType signsStaff, Object... parameters) throws SQLException, DAOValidationException {
 
         ResultSet rs = null;
 
@@ -320,7 +320,7 @@ class RequestExecutor {
 
     }
 
-    static FactoryType getOneSignsStaff(String request, FactoryType signsStaff, int... parameters) throws SQLException {
+    static FactoryType getOneSignsStaff(String request, FactoryType signsStaff, int... parameters) throws SQLException, DAOValidationException {
 
         ResultSet rs = null;
 
@@ -342,7 +342,7 @@ class RequestExecutor {
 
     }
 
-    static FactoryType getOneSignsStaff(String request, FactoryType signsStaff, String... parameters) throws SQLException {
+    static FactoryType getOneSignsStaff(String request, FactoryType signsStaff, String... parameters) throws SQLException, DAOValidationException {
 
         ResultSet rs = null;
 

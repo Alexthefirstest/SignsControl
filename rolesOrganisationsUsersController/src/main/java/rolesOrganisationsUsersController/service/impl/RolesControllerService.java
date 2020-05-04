@@ -11,7 +11,7 @@ import rolesOrganisationsUsersController.service.exceptions.ServiceValidationExc
 
 public class RolesControllerService implements IRolesControllerService {
 
-    private static final IRolesController rolesController = DaoFactory.getINSTANCE().getRolesController();
+    private final IRolesController rolesController = DaoFactory.getINSTANCE().getRolesController();
 
 
     @Override
@@ -33,7 +33,7 @@ public class RolesControllerService implements IRolesControllerService {
     public boolean deleteRole(int id) throws ServiceException {
         try {
 
-            return rolesController.deleteRole(id) == null;
+            return rolesController.deleteRole(id);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

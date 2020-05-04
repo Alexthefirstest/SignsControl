@@ -11,7 +11,7 @@ import rolesOrganisationsUsersController.service.exceptions.ServiceValidationExc
 
 public class OrganisationsControllerService implements IOrganisationsControllerService {
 
-    private static final IOrganisationsController organisationsController = DaoFactory.getINSTANCE().getOrganisationsController();
+    private final IOrganisationsController organisationsController = DaoFactory.getINSTANCE().getOrganisationsController();
 
 
     @Override

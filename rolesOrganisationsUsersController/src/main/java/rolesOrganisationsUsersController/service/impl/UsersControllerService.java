@@ -11,7 +11,7 @@ import rolesOrganisationsUsersController.service.exceptions.ServiceValidationExc
 
 public class UsersControllerService implements IUsersControllerService {
 
-    private static final IUsersController usersController = DaoFactory.getINSTANCE().getUsersController();
+    private final IUsersController usersController = DaoFactory.getINSTANCE().getUsersController();
 
     @Override
     public User addUser(String login, String password, int organisation, String name, String surname) throws ServiceException {

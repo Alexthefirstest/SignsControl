@@ -18,6 +18,7 @@ public class RolesController implements IRolesController {
     private static final String SQL_INSERT = "INSERT INTO `organisation_roles` (`role`) VALUES (?);";
     private static final String SQL_DELETE = "DELETE FROM `road_signs_control`.`organisation_roles` WHERE (`id` = ?);";
     private static final String SQL_SELECT_USE_LAST_INSERT_ID = "SELECT * FROM `organisation_roles` where id=LAST_INSERT_ID();";
+    private static final String SQL_SELECT_USE_ID = "SELECT * FROM `organisation_roles` where id=";
     private static final String SQL_SELECT_ALL = "SELECT * FROM `organisation_roles` order by role";
     private static final String SQL_SET_NAME = "UPDATE `organisation_roles` SET `role` = ? WHERE (`id` = ?);";
 
@@ -31,7 +32,7 @@ public class RolesController implements IRolesController {
 
             if ((Pattern.matches("Duplicate entry.*", ex.getMessage()))) {
                 logger.info("add fail, duplicate entry: name: " + name, ex);
-                return null;
+                throw new DAOValidationException("this role already exist");
             }
 
             logger.warn("add fail, name: " + name, ex);
@@ -41,11 +42,13 @@ public class RolesController implements IRolesController {
     }
 
     @Override
-    public Role deleteRole(int id) throws DAOException {
+    public boolean deleteRole(int id) throws DAOException {
         try {
 
-            return (Role) RequestExecutor.createField(SQL_DELETE, SQL_SELECT_USE_LAST_INSERT_ID, new Role(), id);
-
+            RequestExecutor.createField(SQL_DELETE, SQL_SELECT_USE_ID + id, new Role(), id);
+            return false;
+        } catch (DAOValidationException ex) {
+            return true;
         } catch (SQLException ex) {
 
             logger.warn("delete fail: name: " + id, ex);

@@ -37,7 +37,7 @@ public class OrganisationsController implements IOrganisationsController {
 
             if ((Pattern.matches("Duplicate entry.*", ex.getMessage()))) {
                 logger.info("add fail, duplicate entry: name: " + name, ex);
-                return null;
+                throw new DAOValidationException("this organisation are already exist");
             }
             if ((Pattern.matches("No value specified for parameter 1.*", ex.getMessage()))) {
                 logger.info("add fail, no parameters specified: name: " + name);

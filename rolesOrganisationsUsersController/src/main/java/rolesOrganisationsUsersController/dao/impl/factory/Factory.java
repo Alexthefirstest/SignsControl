@@ -7,6 +7,8 @@ import rolesOrganisationsUsersController.bean.FactoryType;
 import rolesOrganisationsUsersController.bean.Organisation;
 import rolesOrganisationsUsersController.bean.Role;
 import rolesOrganisationsUsersController.bean.User;
+import rolesOrganisationsUsersController.dao.exceptions.DAOException;
+import rolesOrganisationsUsersController.dao.exceptions.DAOValidationException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,12 +23,12 @@ public class Factory {
 
     private static final Factory INSTANCE = new Factory();
 
-    public FactoryType createSignStaff(ResultSet rs, FactoryType signsStaff) throws SQLException {
+    public FactoryType createSignStaff(ResultSet rs, FactoryType signsStaff) throws SQLException, DAOValidationException {
 
 
         if (!rs.next()) {
-            logger.info("rs.next = false");
-            return null;
+            logger.warn("rs.next = false: "+signsStaff);
+            throw new DAOValidationException("cant find new object or it's wasn't created");
         }
 
 
@@ -115,7 +117,7 @@ public class Factory {
 
 
         logger.warn("did't find if: createSignsStaff[] method, signStaff class: " + signsStaff.getClass());
-        return null;
+       return null;
 
     }
 
