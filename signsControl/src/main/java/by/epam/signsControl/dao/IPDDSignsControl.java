@@ -11,7 +11,7 @@ public interface IPDDSignsControl {
 
     Sign addSign(int section, int number) throws DAOException;
 
-    Sign removeSign(int id) throws DAOException;
+    boolean removeSign(int id) throws DAOException;
 
     boolean updateSection(int id, int section) throws DAOException;
 

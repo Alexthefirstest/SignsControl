@@ -11,7 +11,7 @@ public interface ILocalSignsControl {
 
     LocalSign addSign(int signListId, int pddSignId, int standardSize, String annotation) throws DAOException;
 
-    LocalSign deleteSign(int signId) throws DAOException;
+    boolean deleteSign(int signId) throws DAOException;
 
 
     LocalSign[] getActualSigns(int signsListID) throws DAOException;

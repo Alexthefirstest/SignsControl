@@ -4,6 +4,7 @@ import by.epam.signsControl.bean.StandardSize;
 import by.epam.signsControl.dao.IStandardSizesControl;
 import by.epam.signsControl.dao.exceptions.DAOException;
 
+import by.epam.signsControl.dao.exceptions.DAOValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,13 +47,15 @@ public class StandardSizesControl implements IStandardSizesControl {
 
 
     @Override
-    public StandardSize removeStandardSize(int size) throws DAOException {
+    public boolean removeStandardSize(int size) throws DAOException {
 
         try {
 
-            return (StandardSize) RequestExecutor.createField(SQL_DELETE, SQL_SELECT_USE_ID + size, new StandardSize(), size);
+            RequestExecutor.createField(SQL_DELETE, SQL_SELECT_USE_ID + size, new StandardSize(), size);
+            return false;
 
-
+        } catch (DAOValidationException e) {
+            return true;
         } catch (SQLException ex) {
 
             logger.warn("delete size fail: size: " + size, ex);

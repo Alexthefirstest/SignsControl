@@ -3,6 +3,7 @@ package by.epam.signsControl.dao.impl;
 import by.epam.signsControl.bean.MapPoint;
 import by.epam.signsControl.dao.IMapPointsControl;
 import by.epam.signsControl.dao.exceptions.DAOException;
+import by.epam.signsControl.dao.exceptions.DAOValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -93,12 +94,14 @@ public class MapPointsControl implements IMapPointsControl {
     }
 
     @Override
-    public MapPoint removeMapPoint(int signsList) throws DAOException {
+    public boolean removeMapPoint(int signsList) throws DAOException {
         try {
 
-            return (MapPoint) RequestExecutor.createField
+            RequestExecutor.createField
                     (SQL_DELETE, SQL_FIND_BY_SINGS_LIST + signsList, new MapPoint(), signsList);
-
+            return false;
+        } catch (DAOValidationException e) {
+            return true;
         } catch (SQLException ex) {
 
             logger.warn("remove mapPoint fail: signsList: " + signsList, ex);

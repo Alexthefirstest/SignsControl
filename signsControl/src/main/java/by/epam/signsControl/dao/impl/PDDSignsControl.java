@@ -5,6 +5,7 @@ import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFa
 import by.epam.signsControl.bean.Sign;
 import by.epam.signsControl.dao.IPDDSignsControl;
 import by.epam.signsControl.dao.exceptions.DAOException;
+import by.epam.signsControl.dao.exceptions.DAOValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -58,12 +59,14 @@ public class PDDSignsControl implements IPDDSignsControl {
     }
 
     @Override
-    public Sign removeSign(int id) throws DAOException {
+    public boolean removeSign(int id) throws DAOException {
         try {
 
-            return (Sign) RequestExecutor.createField
+            RequestExecutor.createField
                     (SQL_DELETE, SQL_FIND_BY_ID + id, new Sign(), id);
-
+            return false;
+        } catch (DAOValidationException e) {
+            return true;
         } catch (SQLException ex) {
 
             logger.warn("remove sign fail: id: " + id, ex);

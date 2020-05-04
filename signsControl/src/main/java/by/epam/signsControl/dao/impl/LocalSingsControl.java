@@ -110,13 +110,16 @@ public class LocalSingsControl implements ILocalSignsControl {
     }
 
     @Override
-    public LocalSign deleteSign(int signId) throws DAOException {
+    public boolean deleteSign(int signId) throws DAOException {
         try {
 
-            return (LocalSign) RequestExecutor.createFieldUseDifferentParameters
+            RequestExecutor.createFieldUseDifferentParameters
                     (SQL_DELETE, SQL_SELECT_USE_LAST_INSERT_ID, new LocalSign(), signId);
 
+            return false;
 
+        } catch (DAOValidationException e) {
+            return true;
         } catch (SQLException ex) {
 
             logger.warn("delete fail", ex);

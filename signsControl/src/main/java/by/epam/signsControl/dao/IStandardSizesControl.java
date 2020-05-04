@@ -7,7 +7,7 @@ public interface IStandardSizesControl {
 
     StandardSize addStandardSize(int size) throws DAOException;
 
-    StandardSize removeStandardSize(int size) throws DAOException;
+    boolean removeStandardSize(int size) throws DAOException;
 
     boolean setInfo(int id, String info) throws DAOException;
 

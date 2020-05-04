@@ -5,6 +5,7 @@ import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFa
 
 import by.epam.signsControl.bean.FactoryType;
 
+import by.epam.signsControl.dao.exceptions.DAOValidationException;
 import by.epam.signsControl.dao.impl.factory.SignsControlFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -76,7 +77,7 @@ class RequestExecutor {
     }
 
 
-    static FactoryType createField(String sqlInsert, String sqlSelect, FactoryType signsStaff, int... parameters) throws SQLException {
+    static FactoryType createField(String sqlInsert, String sqlSelect, FactoryType signsStaff, int... parameters) throws SQLException, DAOValidationException {
 
         ResultSet rs = null;
 
@@ -100,7 +101,7 @@ class RequestExecutor {
     }
 
 
-    static FactoryType createFieldUseDifferentParameters(String sqlInsert, String sqlSelect, FactoryType signsStaff, Object... parameters) throws SQLException {
+    static FactoryType createFieldUseDifferentParameters(String sqlInsert, String sqlSelect, FactoryType signsStaff, Object... parameters) throws SQLException, DAOValidationException {
 
         ResultSet rs = null;
 
@@ -122,7 +123,7 @@ class RequestExecutor {
 
     }
 
-    static FactoryType createFieldWithExistingCheckUseDifferentParameters(String sqlInsert, String sqlSelect, FactoryType signsStaff, Object... parameters) throws SQLException {
+    static FactoryType createFieldWithExistingCheckUseDifferentParameters(String sqlInsert, String sqlSelect, FactoryType signsStaff, Object... parameters) throws SQLException, DAOValidationException {
 
         ResultSet rs = null;
 
@@ -148,7 +149,7 @@ class RequestExecutor {
 
     }
 
-    static FactoryType createFieldWithExistingCheck(String sqlInsert, String sqlSelect, FactoryType signsStaff, int... parameters) throws SQLException {
+    static FactoryType createFieldWithExistingCheck(String sqlInsert, String sqlSelect, FactoryType signsStaff, int... parameters) throws SQLException, DAOValidationException {
 
         ResultSet rs = null;
 
@@ -327,7 +328,7 @@ class RequestExecutor {
 
     }
 
-    static FactoryType getOneSignsStaff(String request, FactoryType signsStaff, String... parameters) throws SQLException {
+    static FactoryType getOneSignsStaff(String request, FactoryType signsStaff, String... parameters) throws SQLException, DAOValidationException {
 
         ResultSet rs = null;
 

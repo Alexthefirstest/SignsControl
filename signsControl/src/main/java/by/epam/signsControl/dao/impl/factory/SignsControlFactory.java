@@ -5,6 +5,7 @@ import by.epam.signsControl.bean.MapPoint;
 import by.epam.signsControl.bean.Sign;
 import by.epam.signsControl.bean.FactoryType;
 import by.epam.signsControl.bean.StandardSize;
+import by.epam.signsControl.dao.exceptions.DAOValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,12 +22,12 @@ public class SignsControlFactory {
 
     private static final SignsControlFactory INSTANCE = new SignsControlFactory();
 
-    public FactoryType createSignStaff(ResultSet rs, FactoryType signsStaff) throws SQLException {
+    public FactoryType createSignStaff(ResultSet rs, FactoryType signsStaff) throws SQLException, DAOValidationException {
 
 
         if (!rs.next()) {
             logger.info("rs.next = false");
-            return null;
+            throw new DAOValidationException("cant find new object or it's wasn't created");
         }
 
         if (signsStaff instanceof LocalSign) {
