@@ -12,7 +12,7 @@
             <PatternLayout pattern="%d{MM-dd-yyyy HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n "/>
 
             <Policies>
-                <SizeBasedTriggeringPolicy size="1000 MB"/>
+                <SizeBasedTriggeringPolicy size="250 MB"/>
             </Policies>
 
         </RollingFile>

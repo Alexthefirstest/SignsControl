@@ -10,7 +10,7 @@ public class LocalSign extends Sign implements Serializable, FactoryType {
 
     public LocalSign(int localSignId, int signListId, int pddSignId, int section, int sign, int kind, byte[] picture, int standardSize, Date dateOfAdd, Date dateOfRemove, String annotation) {
         super(pddSignId, section, sign, kind, picture);
-        this.id = localSignId;
+        this.localSignId = localSignId;
         this.signListId = signListId;
         this.standardSize = standardSize;
         this.dateOfAdd = dateOfAdd;
@@ -20,7 +20,7 @@ public class LocalSign extends Sign implements Serializable, FactoryType {
 
     private static final long serialVersionUID = 4513518075537237951L;
 
-    private int id;
+    private int localSignId;
     private int signListId;
     private int standardSize;
     private Date dateOfAdd;
@@ -30,12 +30,12 @@ public class LocalSign extends Sign implements Serializable, FactoryType {
 
 
     public int getLocalSignId() {
-        return id;
+        return localSignId;
     }
 
 
     public void setLocalSignId(int id) {
-        this.id = id;
+        this.localSignId = id;
     }
 
     public int getSignListId() {
@@ -86,7 +86,7 @@ public class LocalSign extends Sign implements Serializable, FactoryType {
 
         LocalSign localSign = (LocalSign) o;
 
-        if (id != localSign.id) return false;
+        if (localSignId != localSign.localSignId) return false;
         if (signListId != localSign.signListId) return false;
         if (standardSize != localSign.standardSize) return false;
         if (dateOfAdd != null ? !dateOfAdd.equals(localSign.dateOfAdd) : localSign.dateOfAdd != null) return false;
@@ -98,7 +98,7 @@ public class LocalSign extends Sign implements Serializable, FactoryType {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + id;
+        result = 31 * result + localSignId;
         result = 31 * result + signListId;
         result = 31 * result + standardSize;
         result = 31 * result + (dateOfAdd != null ? dateOfAdd.hashCode() : 0);
@@ -110,7 +110,7 @@ public class LocalSign extends Sign implements Serializable, FactoryType {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("LocalSign{");
-        sb.append("id=").append(id);
+        sb.append("id=").append(localSignId);
         sb.append(", signListId=").append(signListId);
         sb.append(", ").append(super.toString());
         sb.append(", standardSize=").append(standardSize);
