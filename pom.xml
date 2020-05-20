@@ -12,8 +12,6 @@
         <module>connectionPoolForDataBase</module>
         <module>bank</module>
         <module>signsControl</module>
-        <module>OrganisationsRolesUsersController</module>
-        <module>OrganisationsRolesUsersController</module>
         <module>rolesOrganisationsUsersController</module>
     </modules>
 
