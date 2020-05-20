@@ -13,6 +13,7 @@
         <module>bank</module>
         <module>signsControl</module>
         <module>rolesOrganisationsUsersController</module>
+        <module>webView</module>
     </modules>
 
 
