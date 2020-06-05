@@ -28,7 +28,8 @@ public class UsersController implements IUsersController {
     private static final String SQL_SELECT_ALL = "SELECT u.id, login, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation order by u.organisation, ui.surname, ui.name";
     private static final String SQL_SELECT_USE_ORGANISATION = "SELECT u.id, login, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation where u.organisation=? order by ui.surname, ui.name";
     private static final String SQL_SELECT_USER = "SELECT u.id, login, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation  where u.id=?";
-    private static final String SQL_SELECT_USER_BY_LOGIN_PASSWORD = "SELECT u.id, login, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation  where u.login=? AND u.password=?";
+    private static final String SQL_SELECT_USER_LOGIN = "SELECT u.id, login, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation  where u.login=?";
+    //private static final String SQL_SELECT_USER_BY_LOGIN_PASSWORD = "SELECT u.id, login, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation  where u.login=? AND u.password=?";
 
     private static final String SQL_GET_BLOCK = "SELECT is_blocked FROM users WHERE (`id` = ?);";
 
@@ -39,8 +40,11 @@ public class UsersController implements IUsersController {
     private static final String SQL_GET_ORGANISATION = "SELECT organisation FROM users WHERE (`id` = ?);";
     private static final String SQL_SET_NAME = "UPDATE `user_info` SET name = ? WHERE (`id` = ?);";
     private static final String SQL_SET_SURNAME = "UPDATE `user_info` SET surname = ? WHERE (`id` = ?);";
-    private static final String SQL_SET_LOGIN = "UPDATE users SET login = if(?=login AND ?=password, ?, null) where id=?";
-    private static final String SQL_SET_PASSWORD = "UPDATE users SET password = if(?=login AND ?=password, ?, null) where id=?";
+    // private static final String SQL_SET_LOGIN = "UPDATE users SET login = if(?=login AND ?=password, ?, null) where id=?";
+    private static final String SQL_SET_LOGIN = "UPDATE users SET login = ? where id=?";
+    //private static final String SQL_SET_PASSWORD = "UPDATE users SET password = if(?=login AND ?=password, ?, null) where id=?";
+    private static final String SQL_SET_PASSWORD = "UPDATE users SET password = ? where id=?";
+    private static final String SQL_GET_PASSWORD = "SELECT password FROM users WHERE login=?";
 
 
     @Override
@@ -74,6 +78,11 @@ public class UsersController implements IUsersController {
 
         } catch (SQLException ex) {
 
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+            logger.warn("rollBackFail", ex);
+            }
 
             if ((Pattern.matches("Duplicate entry.+?login.*", ex.getMessage()))) {
                 logger.info("add fail, duplicate entry: login: " + name, ex);
@@ -135,57 +144,53 @@ public class UsersController implements IUsersController {
         }
     }
 
-    private boolean setLoginOrPassword(int id, String login, String password, String newLoginOrPassword, String sql_request) throws DAOException {
-
-        Connection connection = CONNECTION_POOL.retrieveConnection();
-
-        try (PreparedStatement ps = connection.prepareStatement(sql_request)) {
-            ps.setString(1, login);
-            ps.setString(2, password);
-            ps.setString(3, newLoginOrPassword);
-            ps.setInt(4, id);
-
-            return ps.executeUpdate() != 0;
-
-
-        } catch (SQLException ex) {
-
-            if ((Pattern.matches(".*cannot be null.*", ex.getMessage()))) {
-                logger.info("wrong login or password ");
-                throw new DAOValidationException("wrong login or password");
-            }
-            if ((Pattern.matches("Duplicate entry.*", ex.getMessage()))) {
-                logger.info("user with this login already exist ");
-                throw new DAOValidationException("user with this login already exist ");
-            }
-            logger.warn("set login or password fail: " + login);
-            throw new DAOException("set login or password fail");
-        }
-
-    }
-
     @Override
-    public User checkLoginPassword(String login, String password) throws DAOException {
+    public boolean setLogin(int id, String login) throws DAOException {
+
         try {
 
+            return RequestExecutor.setField(SQL_SET_LOGIN, id, login);
 
-            return (User) RequestExecutor.getOneSignsStaff(SQL_SELECT_USER_BY_LOGIN_PASSWORD, new User(), login, password);
         } catch (SQLException ex) {
 
-            logger.warn("check login_password");
-            throw new DAOException("check login_password");
+            if ((Pattern.matches("Duplicate entry.+?login.*", ex.getMessage()))) {
+                logger.info("add fail, duplicate entry: login: " + login, ex);
+                throw new DAOValidationException("duplicate login: " + login);
+            }
+
+            logger.warn("set login fail: " + login, ex);
+            throw new DAOException(ex);
 
         }
     }
 
     @Override
-    public boolean setLogin(int id, String login, String password, String newLogin) throws DAOException {
-        return setLoginOrPassword(id, login, password, newLogin, SQL_SET_LOGIN);
+    public boolean setPassword(int id, String password) throws DAOException {
+
+        try {
+
+            return RequestExecutor.setField(SQL_SET_PASSWORD, id, password);
+
+        } catch (SQLException ex) {
+
+            logger.warn("set password fail: " + password, ex);
+            throw new DAOException(ex);
+
+        }
     }
 
     @Override
-    public boolean setPassword(int id, String login, String password, String newPassword) throws DAOException {
-        return setLoginOrPassword(id, login, password, newPassword, SQL_SET_PASSWORD);
+    public String getPassword(String login) throws DAOException {
+        try {
+
+            return RequestExecutor.getString(SQL_GET_PASSWORD, login);
+
+        } catch (SQLException ex) {
+
+            logger.warn("get password fail, id: ", ex);
+            throw new DAOException(ex);
+
+        }
     }
 
     @Override
@@ -250,6 +255,20 @@ public class UsersController implements IUsersController {
 
 
             return (User) RequestExecutor.getOneSignsStaff(SQL_SELECT_USER, new User(), id);
+        } catch (SQLException ex) {
+
+            logger.warn("select user fail, ");
+            throw new DAOException(ex);
+
+        }
+    }
+
+    @Override
+    public User getUser(String login) throws DAOException {
+        try {
+
+
+            return (User) RequestExecutor.getOneSignsStaff(SQL_SELECT_USER_LOGIN, new User(), login);
         } catch (SQLException ex) {
 
             logger.warn("select user fail, ");

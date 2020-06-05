@@ -253,6 +253,26 @@ class RequestExecutor {
 
     }
 
+    static String getString(String request, String info) throws SQLException {
+
+        ResultSet rs = null;
+
+        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(request)) {
+
+            ps.setString(1, info);
+
+            rs = ps.executeQuery();
+
+            return rs.next() ? rs.getString(1) : null;
+
+        } finally {
+            closeResultSetAndReturnConnection(rs, connection);
+        }
+
+    }
+
     static int getInt(String request, int id) throws SQLException {
 
         ResultSet rs = null;

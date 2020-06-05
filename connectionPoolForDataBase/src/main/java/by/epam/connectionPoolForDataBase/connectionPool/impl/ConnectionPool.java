@@ -85,7 +85,6 @@ public class ConnectionPool implements IConnectionPool {
 
             Connection connection = new Connection$Proxy
                     (DriverManager.getConnection(dbConfigs.getDbUrl(), dbConfigs.getDbUser(), dbConfigs.getDbPassword()));
-
             logger.info("connection created successfully");
 
             return connection;

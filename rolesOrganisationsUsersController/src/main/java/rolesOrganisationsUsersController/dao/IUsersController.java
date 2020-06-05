@@ -12,11 +12,11 @@ public interface IUsersController {
 
     boolean setBlock(int id, boolean block) throws DAOException;
 
-    User checkLoginPassword(String login, String password) throws DAOException;
+    boolean setLogin(int id, String login) throws DAOException;
 
-    boolean setLogin(int id, String login, String password, String newLogin) throws DAOException;
+    boolean setPassword(int id, String password) throws DAOException;
 
-    boolean setPassword(int id, String login, String password, String newPassword) throws DAOException;
+    String getPassword(String login) throws DAOException;
 
     boolean setOrganisation(int id, int organisation) throws DAOException;
 
@@ -27,6 +27,8 @@ public interface IUsersController {
     User[] getUsers(int organisation) throws DAOException;
 
     User getUser(int id) throws DAOException;
+
+    User getUser(String login) throws DAOException;
 
     boolean setInfo(int id, String info) throws DAOException;
 

@@ -1,5 +1,6 @@
 package rolesOrganisationsUsersController.service.impl;
 
+import org.mindrot.jbcrypt.BCrypt;
 import rolesOrganisationsUsersController.bean.User;
 import rolesOrganisationsUsersController.dao.IUsersController;
 import rolesOrganisationsUsersController.dao.exceptions.DAOException;
@@ -13,6 +14,16 @@ public class UsersControllerService implements IUsersControllerService {
 
     private final IUsersController usersController = DaoFactory.getINSTANCE().getUsersController();
 
+    private boolean checkPassword() {
+
+        return false;
+    }
+
+    private String hashPassword() {
+
+        return null;
+    }
+
     @Override
     public User addUser(String login, String password, int organisation, String name, String surname) throws ServiceException {
         InputValidation.nullAndSymbolsCheck(login);
@@ -23,7 +34,7 @@ public class UsersControllerService implements IUsersControllerService {
 
         try {
 
-            return usersController.addUser(login, password, organisation, name, surname);
+            return usersController.addUser(login, BCrypt.hashpw(password, BCrypt.gensalt(8)), organisation, name, surname);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -62,7 +73,9 @@ public class UsersControllerService implements IUsersControllerService {
         InputValidation.nullAndSymbolsCheck(password);
 
         try {
-            return usersController.checkLoginPassword(login, password);
+
+            return BCrypt.checkpw(password, usersController.getPassword(login)) ? usersController.getUser(login) : null;
+
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -79,7 +92,13 @@ public class UsersControllerService implements IUsersControllerService {
 
         try {
 
-            return usersController.setLogin(id, login, password, newLogin);
+            String oldPassword =  usersController.getPassword(login);
+
+            if(oldPassword==null){
+                return false;
+            }
+
+            return BCrypt.checkpw(password, oldPassword) && usersController.setLogin(id, newLogin);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -94,9 +113,17 @@ public class UsersControllerService implements IUsersControllerService {
         InputValidation.nullAndSymbolsCheck(password);
         InputValidation.nullAndSymbolsCheck(newPassword);
 
+
+
         try {
 
-            return usersController.setPassword(id, login, password, newPassword);
+            String oldPassword =  usersController.getPassword(login);
+
+            if(oldPassword==null){
+                return false;
+            }
+
+            return BCrypt.checkpw(password, oldPassword) && usersController.setPassword(id, BCrypt.hashpw(newPassword, BCrypt.gensalt(8)));
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
