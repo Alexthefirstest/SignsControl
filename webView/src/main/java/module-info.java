@@ -1,9 +1,9 @@
 module webView {
 
-    requires signsControl;
-    requires rolesOrganisationsUsersController;
+   requires connectionPoolForDataBase;
 
     requires org.apache.logging.log4j;
     requires java.sql;
+    requires javax.servlet.api;
 
 }

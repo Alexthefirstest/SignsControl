@@ -12,7 +12,6 @@
     <artifactId>connectionPoolForDataBase</artifactId>
 
 
-
     <properties>
         <maven.compiler.source>1.9</maven.compiler.source>
         <maven.compiler.target>1.9</maven.compiler.target>
@@ -29,5 +28,7 @@
 
 
     </dependencies>
+
+
 
 </project>

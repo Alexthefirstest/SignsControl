@@ -44,6 +44,7 @@ public class ConnectionPool implements IConnectionPool {
 
             if (connection != null) {
                 ((Connection$Proxy) connection).shutDown();
+                logger.warn("shut down connection successfully ");
             }
 
         } catch (SQLException ex) {
@@ -58,10 +59,14 @@ public class ConnectionPool implements IConnectionPool {
 
         try {
 
+            Class.forName("com.mysql.jdbc.Driver");
+
             for (int i = 0; i < dbConfigs.getInitPoolSize(); i++) {
                 availableConnections.offer(createConnection());
             }
 
+        } catch (ClassNotFoundException e) {
+            logger.error("jdbc driver problem",e);
         } catch (ConnectionPoolException ex) {
 
             logger.error("can't create connections for initialisation connection pool", ex);

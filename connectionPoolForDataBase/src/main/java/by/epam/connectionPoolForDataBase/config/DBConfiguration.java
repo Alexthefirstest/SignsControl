@@ -3,7 +3,6 @@ package by.epam.connectionPoolForDataBase.config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -30,9 +29,14 @@ public class DBConfiguration {
 
         logger.info("init started");
 
-        try (InputStream inputStream = new FileInputStream("./connectionPoolForDataBase/src/main/resources/db.properties")) {
+        try (InputStream inputStream = DBConfiguration.class.getResourceAsStream("/db.properties")) {
 
             Properties properties = new Properties();
+
+            if (inputStream == null) {
+                throw new Error("Can't find db.properties");
+            }
+
             properties.load(inputStream);
 
             dbUrl = properties.getProperty("dbUrl");
@@ -60,7 +64,7 @@ public class DBConfiguration {
             logger.info("init finished");
 
         } catch (IOException ex) {
-            logger.error("error during initialisation db properties");
+            logger.error("error during initialisation db properties", ex);
             throw new Error("Properties has not been loaded", ex);
         }
 
