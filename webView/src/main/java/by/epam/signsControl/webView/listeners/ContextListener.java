@@ -17,7 +17,7 @@ public class ContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         logger.info("context listener initialized start");
         ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
-        logger.info("context listener finish");
+        logger.info("context listener init finish");
     }
 
     @Override

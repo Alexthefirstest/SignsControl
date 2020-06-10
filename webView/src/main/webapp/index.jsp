@@ -1,5 +1,8 @@
+<!DOCTYPE html>
 <html>
+
 <body>
-<h2>Here we go again!</h2>
+<jsp:forward page="WEB-INF/jsp/main.jsp"/>
 </body>
+
 </html>
