@@ -1,13 +1,23 @@
 'use strict';
+let myMap;
+let script;
 
-ymaps.ready(init);
+function init(ymaps) {
 
-function init() {
-
-    let myMap = new ymaps.Map("map", {
+    myMap = new ymaps.Map("map", {
         center: [53.90, 27.56], zoom: 12,
         controls: ['rulerControl', 'searchControl', 'typeSelector', 'zoomControl', 'geolocationControl', 'fullscreenControl']
     });
+
+    //---------поиск на карте - начало, добавляет организации - удалить из массива сверху searchControl, работает, мб не нужен
+    // let searchControl = new ymaps.control.SearchControl({
+    //     options: {
+    //         provider: 'yandex#search'
+    //     }
+    // });
+    //
+    // myMap.controls.add(searchControl);
+    //---------поиск на карте - конец
 
     //-----------------------------сохранение положения карты ---- начало
 
@@ -61,7 +71,7 @@ function init() {
 
     // ----------------------- список городов - начало
 
-     let ListBoxLayout = ymaps.templateLayoutFactory.createClass(
+    let ListBoxLayout = ymaps.templateLayoutFactory.createClass(
         "<button id='my-listbox-header' class='btn btn-success dropdown-toggle' data-toggle='dropdown'>" +
         "{{data.title}} <span class='caret'></span>" +
         "</button>" +
@@ -121,35 +131,35 @@ function init() {
                     center: [53.90, 27.56],
                     zoom: 12
                 }
-            }),     new ymaps.control.ListBoxItem({
+            }), new ymaps.control.ListBoxItem({
                 data: {
                     content: 'Брест',
-                    center: [52.09776408529675,23.69610453788942],
+                    center: [52.09776408529675, 23.69610453788942],
                     zoom: 12
                 }
-            }),   new ymaps.control.ListBoxItem({
+            }), new ymaps.control.ListBoxItem({
                 data: {
                     content: 'Витебск',
-                    center: [55.1926727351534,30.206306926835314],
+                    center: [55.1926727351534, 30.206306926835314],
                     zoom: 12
                 }
-            }),   new ymaps.control.ListBoxItem({
+            }), new ymaps.control.ListBoxItem({
                 data: {
                     content: 'Гомель',
-                    center: [52.42510947995823,31.009052120149114],
+                    center: [52.42510947995823, 31.009052120149114],
                     zoom: 12
                 }
-            }),   new ymaps.control.ListBoxItem({
+            }), new ymaps.control.ListBoxItem({
                 data: {
                     content: 'Гродно',
-                    center: [53.678083189470364,23.830716072310775],
+                    center: [53.678083189470364, 23.830716072310775],
                     zoom: 12
                 }
             }),
             new ymaps.control.ListBoxItem({
                 data: {
                     content: 'Могилёв',
-                    center: [53.898049170273595,30.332562737166853],
+                    center: [53.898049170273595, 30.332562737166853],
                     zoom: 12
                 }
             })
@@ -189,5 +199,40 @@ function init() {
 
     // ----------------------- список городов - конец
 
-
 }
+
+// ----------------------- логализация - начало
+
+window.onload = function () {
+    // Получим ссылки на элементы с тегом 'head' и id 'language'.
+    let head = document.getElementsByTagName('head')[0];
+    let select = document.getElementById('language');
+    select.createMap = function () {
+        // Получим значение выбранного языка.
+        let language = this.value;
+        // Если карта уже была создана, то удалим её.
+        if (myMap) {
+            myMap.destroy();
+        }
+        // Создадим элемент 'script'.
+        script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.charset = 'utf-8';
+        // Запишем ссылку на JS API Яндекс.Карт с выбранным языком в атрибут 'src'.
+        script.src = 'https://api-maps.yandex.ru/2.1/?onload=init_' + language + '&lang=' + language +
+            '_RU&ns=ymaps_' + language;
+        // Добавим элемент 'script' на страницу.
+        head.appendChild(script);
+        // Использование пространства имен позволяет избежать пересечения названий функций
+        // и прочих программных компонентов.
+        window['init_' + language] = function () {
+            init(window['ymaps_' + language]);
+        }
+    };
+    // Назначим обработчик для события выбора языка из списка.
+    document.getElementById('language').addEventListener("change", select.createMap);
+    // Создадим карту и зададим для нее язык, который был выбран по умолчанию.
+    select.createMap();
+};
+
+// ----------------------- локализация - конец

@@ -16,11 +16,11 @@
 
     <script src="${pageContext.request.contextPath}/js/map.js" type="text/javascript" charset="UTF-8"></script>
 
-//создать css. карта, объекты
+    <%--создать css. карта, объекты. локализацуия еще--%>
     <style>
         html, body, #map {
             width: 100%;
-            height: 100%;
+            height: 90%;
             padding: 0;
             margin: 0;
         }
@@ -29,18 +29,32 @@
             top: auto;
             left: auto;
         }
+
+        #language {
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 100%;
+        }
     </style>
 
 </head>
 
 <body>
-
-<h2>mainjsp</h2>
+<h1>SignsControl</h1>
+<h2>алло, как с русскими буквами обстоит вопрос?</h2>
+прекрасно
 
 <p><a href="${pageContext.request.contextPath}/login">log in</a>
 
-<%--<div id="map" style=" height: 500px"></div>--%>
-<div id="map" ></div>
+    <%--<div id="map" style=" height: 500px"></div>--%>
+
+    <select id="language">
+        <option selected value="ru">ru</option>
+        <option value="en">en</option>
+    </select>
+    hey bro
+<div id="map"></div>
+
 
 </body>
 
