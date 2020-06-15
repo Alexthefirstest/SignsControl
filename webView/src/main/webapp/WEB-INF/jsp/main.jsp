@@ -14,9 +14,10 @@
 
     <script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
 
-    <script src="${pageContext.request.contextPath}/js/map.js" type="text/javascript" charset="UTF-8"></script>
+    <script src='${pageContext.request.contextPath}/js/map.js' type="text/javascript" charset="UTF-8"></script>
 
-    <%--создать css. карта, объекты. локализацуия еще--%>
+    <%--    <script src="${pageContext.request.contextPath}/js/point_creator.js" type="text/javascript" charset="UTF-8"></script>--%>
+    <%--создать css: карта, стандартные объекты на ней. локализацуия еще--%>
     <style>
         html, body, #map {
             width: 100%;
@@ -44,9 +45,12 @@
 <h2>алло, как с русскими буквами обстоит вопрос?</h2>
 прекрасно
 
+Command: ${myCommand}
+
 <p><a href="${pageContext.request.contextPath}/login">log in</a>
 
     <%--<div id="map" style=" height: 500px"></div>--%>
+
 
     <select id="language">
         <option selected value="ru">ru</option>

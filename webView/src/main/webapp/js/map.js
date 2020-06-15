@@ -199,7 +199,17 @@ function init(ymaps) {
 
     // ----------------------- список городов - конец
 
-}
+    // ------------ метки начало
+
+     //let myPlacemark = new ymaps.Placemark([53.90, 27.56]);
+
+
+      let myPlacemark = new ymaps.Placemark([53.90, 27.56], { balloonContent: 'it is balooNN',  hintContent: 'hint here'},
+      { preset: 'islands#violetCircleIcon'});
+        myMap.geoObjects.add(myPlacemark);
+    // ------------- метки конец
+
+}//init finish
 
 // ----------------------- логализация - начало
 
