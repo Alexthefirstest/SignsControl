@@ -46,6 +46,7 @@ public class CommandController extends HttpServlet {
         //   req.getRequestDispatcher(req.getContextPath()+"/WEB-INF/jsp/main.jsp").forward(req, resp);
         req.getRequestDispatcher("/").forward(req, resp);
         logger.warn("poch ya tut, a?");
+
     }
 
 }

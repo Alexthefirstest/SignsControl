@@ -201,12 +201,24 @@ function init(ymaps) {
 
     // ------------ метки начало
 
-     //let myPlacemark = new ymaps.Placemark([53.90, 27.56]);
+    // let myCollection = new ymaps.GeoObjectCollection({}, {
+    //     preset: 'islands#violetCircleIcon'
+    // });
 
+    let myGeoObjects = [];
 
-      let myPlacemark = new ymaps.Placemark([53.90, 27.56], { balloonContent: 'it is balooNN',  hintContent: 'hint here'},
-      { preset: 'islands#violetCircleIcon'});
-        myMap.geoObjects.add(myPlacemark);
+    let myPlacemark = new ymaps.Placemark([53.90, 27.56], {balloonContent: 'it is balooNN', hintContent: 'hint here'},  { preset: 'islands#violetCircleIcon'});
+
+    myGeoObjects[0]=(myPlacemark);
+    myGeoObjects[1] = (new ymaps.Placemark([53.92, 27.56], {balloonContent: 'it is balooNN2',hintContent: 'hint here2'},  { preset: 'islands#violetCircleIcon'}));
+
+    let myClusterer = new ymaps.Clusterer(  {preset: 'islands#violetClusterIcons'});
+    myClusterer.add(myGeoObjects);
+    myMap.geoObjects.add(myClusterer);
+
+    // let myPlacemark = new ymaps.Placemark([53.90, 27.56], { balloonContent: 'it is balooNN',  hintContent: 'hint here'},
+    //     { preset: 'islands#violetCircleIcon'});
+    // myMap.geoObjects.add(myPlacemark);
     // ------------- метки конец
 
 }//init finish
