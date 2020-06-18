@@ -12,6 +12,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
@@ -22,6 +24,7 @@ public class URLFilter implements Filter {
 
     private static final String SERVLET_PATH = "/app";
     public static final String REQUIRED_URI = "uri";
+    public static final String ROLE = "role";
     private static final Logger logger = LogManager.getLogger(Filter.class);
 
     @Override
@@ -35,27 +38,24 @@ public class URLFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
         if (!Pattern.matches("/[^.]*", httpRequest.getRequestURI())) {
-            logger.info("if");
+            logger.info("if, catch: " + httpRequest.getRequestURI());
             chain.doFilter(request, response);
         }
 
-        logger.info("filter start 1");
+        HttpSession session = httpRequest.getSession();
 
-        logger.info("getServletPath: " + ((HttpServletRequest) request).getServletPath());
-        logger.info("URI: " + ((HttpServletRequest) request).getRequestURI());
-        logger.info("QUARYString: " + ((HttpServletRequest) request).getQueryString());
+        if (session.getAttribute(ROLE) == null) {
+            session.setAttribute(ROLE, 0);
+        }
 
-        logger.info("filter start 2");
+        logger.info("filter start 1, URI: " + httpRequest.getRequestURI());
 
         request.setAttribute(REQUIRED_URI, httpRequest.getRequestURI());
 
         request.getRequestDispatcher(SERVLET_PATH).forward(request, response);
 
-        logger.info("filter middle" + request + "      " + response);
+        logger.info("filter middle");
 
-        logger.info("getServletPath: " + ((HttpServletRequest) request).getServletPath());
-        logger.info("URI: " + ((HttpServletRequest) request).getRequestURI());
-        logger.info("QUARYString: " + ((HttpServletRequest) request).getQueryString());
 
         logger.info("end of filter");
     }

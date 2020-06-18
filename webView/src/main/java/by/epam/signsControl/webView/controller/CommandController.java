@@ -1,4 +1,4 @@
-package by.epam.signsControl.webView.servlets;
+package by.epam.signsControl.webView.controller;
 
 import by.epam.signsControl.webView.filters.URLFilter;
 
@@ -19,33 +19,48 @@ import java.util.regex.Pattern;
 public class CommandController extends HttpServlet {
 
     private static final Logger logger = LogManager.getLogger(CommandController.class);
-//    private static final CommandExecutor commandExecutor = new CommandExecutor();
+
 
     private String getCommandFromURI(HttpServletRequest request) {
-        logger.warn("g1");
+
         Pattern pattern = Pattern.compile(request.getContextPath() + "/([^/]+)");
-        logger.warn("g2");
         Matcher matcher = pattern.matcher(request.getAttribute(URLFilter.REQUIRED_URI).toString());
-        logger.warn("g3");
-        return matcher.find() ? matcher.group(1) : "mainPage";
+
+        return matcher.find() ? matcher.group(1) : "main_page";
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        logger.info("inside servlet get");
 
-        logger.info("inside servlet");
+        process(req, resp);
 
-//        commandExecutor.execute(url); default - main jsp
-        logger.warn("mm1 " + req.getAttribute(URLFilter.REQUIRED_URI));
+        logger.info("finish servlet get");
 
-        req.setAttribute("myCommand", getCommandFromURI(req));
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        logger.info("inside servlet post");
+
+//        process(req, resp);
 
 
-        //eto bydet v commandah мб, мб сделать переход на интекс.жсп!!!!!!!!!!!!!!!!!
-        //   req.getRequestDispatcher(req.getContextPath()+"/WEB-INF/jsp/main.jsp").forward(req, resp);
-        req.getRequestDispatcher("/").forward(req, resp);
-        logger.warn("poch ya tut, a?");
+        req.getSession().setAttribute("userName", req.getParameter("login"));
+
+
+        resp.sendRedirect(req.getContextPath() + "/");
+
+        logger.info("finish servlet post");
+    }
+
+    private static CommandProvider commandProvider = CommandProvider.getCommandProvider();
+
+    private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        commandProvider.getCommand(getCommandFromURI(req)).execute(req, resp);
 
     }
 

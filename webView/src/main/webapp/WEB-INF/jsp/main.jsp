@@ -16,8 +16,8 @@
 
     <script src='${pageContext.request.contextPath}/js/map.js?8' type="text/javascript" charset="UTF-8"></script>
 
-    <%--    <script src="${pageContext.request.contextPath}/js/point_creator.js" type="text/javascript" charset="UTF-8"></script>--%>
-    <%--создать css: карта, стандартные объекты на ней. локализацуия еще--%>
+
+  <%--создать css: карта, стандартные объекты на ней--%>
     <style>
         html, body, #map {
             width: 100%;
@@ -42,10 +42,12 @@
 
 <body>
 <h1>SignsControl</h1>
-<h2>алло, как с русскими буквами обстоит вопрос?</h2>
+<h2>what about russian?</h2>
 прекрасно
 
-Command: ${myCommand}
+Role: ${role}
+<br>
+Login: ${userName}
 
 <p><a href="${pageContext.request.contextPath}/login">log in</a>
 
