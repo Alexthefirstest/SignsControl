@@ -4,5 +4,7 @@ public enum CommandName {
 
     LOGIN,
     WRONG_COMMAND,
-    MAIN_PAGE
+    MAIN_PAGE,
+    LOGIN_FORM,
+    LOGOUT
 }

@@ -7,4 +7,16 @@
     <data-source>
         <name>SignsControl</name>
     </data-source>
+
+    <!--    -->
+    <!--    <error-page>-->
+    <!--        <error-code></error-code>-->
+    <!--        <location></location>-->
+    <!--    </error-page>-->
+
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/WEB-INF/error_pages/errors.jsp</location>
+    </error-page>
+
 </web-app>

@@ -9,7 +9,7 @@ import by.epam.rolesOrganisationsUsersController.service.IUsersControllerService
 
 public class ServiceFactory {
 
-    private ServiceFactory() {
+    public ServiceFactory() {
     }
 
     private static final ServiceFactory INSTANCE = new ServiceFactory();

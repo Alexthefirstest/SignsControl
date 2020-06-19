@@ -9,16 +9,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+public class Logout implements Command {
 
-public class Login implements Command {
-
-    private static final Logger logger = LogManager.getLogger(Login.class);
+    private static final Logger logger = LogManager.getLogger(Logout.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         logger.info("inside execute");
 
-        request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+        request.getSession().invalidate();
+
+        response.sendRedirect(request.getContextPath() + "/");
     }
 }

@@ -45,13 +45,8 @@ public class CommandController extends HttpServlet {
 
         logger.info("inside servlet post");
 
-//        process(req, resp);
+        process(req, resp);
 
-
-        req.getSession().setAttribute("userName", req.getParameter("login"));
-
-
-        resp.sendRedirect(req.getContextPath() + "/");
 
         logger.info("finish servlet post");
     }
@@ -60,8 +55,12 @@ public class CommandController extends HttpServlet {
 
     private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        commandProvider.getCommand(getCommandFromURI(req)).execute(req, resp);
+        try {
+            commandProvider.getCommand(getCommandFromURI(req)).execute(req, resp);
+        } catch (Exception ex) {
+            logger.warn(ex);
 
+        }
     }
 
 }

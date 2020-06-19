@@ -44,9 +44,6 @@ public class URLFilter implements Filter {
 
         HttpSession session = httpRequest.getSession();
 
-        if (session.getAttribute(ROLE) == null) {
-            session.setAttribute(ROLE, 0);
-        }
 
         logger.info("filter start 1, URI: " + httpRequest.getRequestURI());
 

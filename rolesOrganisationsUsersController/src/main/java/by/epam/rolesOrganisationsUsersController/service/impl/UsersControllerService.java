@@ -74,7 +74,13 @@ public class UsersControllerService implements IUsersControllerService {
 
         try {
 
-            return BCrypt.checkpw(password, usersController.getPassword(login)) ? usersController.getUser(login) : null;
+            String dbpass = usersController.getPassword(login);
+
+            if (dbpass == null) {
+                return null;
+            }
+
+            return BCrypt.checkpw(password, dbpass) ? usersController.getUser(login) : null;
 
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
@@ -92,9 +98,9 @@ public class UsersControllerService implements IUsersControllerService {
 
         try {
 
-            String oldPassword =  usersController.getPassword(login);
+            String oldPassword = usersController.getPassword(login);
 
-            if(oldPassword==null){
+            if (oldPassword == null) {
                 return false;
             }
 
@@ -114,12 +120,11 @@ public class UsersControllerService implements IUsersControllerService {
         InputValidation.nullAndSymbolsCheck(newPassword);
 
 
-
         try {
 
-            String oldPassword =  usersController.getPassword(login);
+            String oldPassword = usersController.getPassword(login);
 
-            if(oldPassword==null){
+            if (oldPassword == null) {
                 return false;
             }
 

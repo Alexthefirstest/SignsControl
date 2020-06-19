@@ -3,6 +3,8 @@ package by.epam.signsControl.webView.controller;
 import by.epam.signsControl.webView.controller.commands.Command;
 import by.epam.signsControl.webView.controller.commands.CommandName;
 import by.epam.signsControl.webView.controller.commands.impl.Login;
+import by.epam.signsControl.webView.controller.commands.impl.LoginFormHandler;
+import by.epam.signsControl.webView.controller.commands.impl.Logout;
 import by.epam.signsControl.webView.controller.commands.impl.MainPage;
 import by.epam.signsControl.webView.controller.commands.impl.WrongCommand;
 import org.apache.logging.log4j.LogManager;
@@ -19,12 +21,14 @@ class CommandProvider {
         commands.put(CommandName.MAIN_PAGE, new MainPage());
         commands.put(CommandName.LOGIN, new Login());
         commands.put(CommandName.WRONG_COMMAND, new WrongCommand());
+        commands.put(CommandName.LOGIN_FORM, new LoginFormHandler());
+        commands.put(CommandName.LOGOUT, new Logout());
 
     }
 
     private static final Logger logger = LogManager.getLogger(CommandProvider.class);
 
-    private static CommandProvider commandProvider = new CommandProvider();
+    private final static CommandProvider commandProvider = new CommandProvider();
 
     private final Map<CommandName, Command> commands = new HashMap<>();
 
