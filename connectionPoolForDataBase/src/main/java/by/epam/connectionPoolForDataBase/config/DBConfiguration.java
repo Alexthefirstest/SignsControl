@@ -7,24 +7,71 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * DBConfiguration class
+ * <p>
+ * Transfer connection pool configuration parameters
+ * from db.properties file to class variables
+ *
+ * @author Bulgak Alexander
+ */
 public class DBConfiguration {
 
+    /**
+     * field logger log4j2
+     */
     private static final Logger logger = LogManager.getLogger(DBConfiguration.class);
 
+    /**
+     * this class instance
+     */
+    private static DBConfiguration instance = new DBConfiguration();
+
+    /**
+     * field data base url to connect
+     */
+    private String dbUrl;
+
+    /**
+     * field data base user to connect
+     */
+    private String dbUser;
+
+    /**
+     * field data base password to connect
+     */
+    private String dbPassword;
+
+    /**
+     * field init connection pool size with default value
+     */
+    private int initPoolSize = 12;
+
+    /**
+     * field max connection pool size with default value
+     */
+    private int maxPoolSize = 30;
+
+    /**
+     * field connection pool increase step with default value
+     */
+    private int poolIncreaseStep = 2;
+
+    /*
+     * private constructor
+     * start {@link DBConfiguration#initPropert}
+     */
     private DBConfiguration() {
         initProperties();
         logger.info("constructor done successfully");
     }
 
-    private static DBConfiguration Instance = new DBConfiguration();
-
-    private String dbUrl;
-    private String dbUser;
-    private String dbPassword;
-    private int initPoolSize = 12;
-    private int maxPoolSize = 30;
-    private int poolIncreaseStep = 2;
-
+    /*
+     * init properties from db.properties file
+     * replace default values in case of conflict between default and file variables
+     *
+     * @throws Error if can't find db.properties file or exception inside method occurred
+     */
     private void initProperties() {
 
         logger.info("init started");
@@ -70,31 +117,51 @@ public class DBConfiguration {
 
     }
 
-
+    /**
+     * @return {@link DBConfiguration#instance}
+     */
     public static DBConfiguration getInstance() {
-        return Instance;
+        return instance;
     }
 
+    /**
+     * @return {@link DBConfiguration#dbUrl}
+     */
     public String getDbUrl() {
         return dbUrl;
     }
 
+    /**
+     * @return {@link DBConfiguration#dbUser}
+     */
     public String getDbUser() {
         return dbUser;
     }
 
+    /**
+     * @return {@link DBConfiguration#dbPassword}
+     */
     public String getDbPassword() {
         return dbPassword;
     }
 
+    /**
+     * @return {@link DBConfiguration#initPoolSize}
+     */
     public int getInitPoolSize() {
         return initPoolSize;
     }
 
+    /**
+     * @return {@link DBConfiguration#maxPoolSize}
+     */
     public int getMaxPoolSize() {
         return maxPoolSize;
     }
 
+    /**
+     * @return {@link DBConfiguration#poolIncreaseStep}
+     */
     public int getPoolIncreaseStep() {
         return poolIncreaseStep;
     }

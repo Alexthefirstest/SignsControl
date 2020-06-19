@@ -18,19 +18,67 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * Connection pool class
+ * <p>
+ * Connections storage with floating size
+ * Thread safe
+ * get and take connections
+ * Use {@link DBConfiguration} initial parameters
+ *
+ * @author Bulgak Alexander
+ */
 public class ConnectionPool implements IConnectionPool {
 
+    /**
+     * field logger log4j2
+     */
     private static Logger logger = LogManager.getLogger(ConnectionPool.class);
 
+    /**
+     * this class instance
+     */
     private static final ConnectionPool CONNECTION_POOL_INSTANCE = new ConnectionPool();
 
+    /**
+     * {@link DBConfiguration} instance
+     */
     private final DBConfiguration dbConfigs = DBConfiguration.getInstance();
+
+    /**
+     * connections available for usage
+     *
+     * @see BlockingQueue
+     */
     private final BlockingQueue<Connection> availableConnections = new ArrayBlockingQueue<>(dbConfigs.getMaxPoolSize());
+
+    /**
+     * taken connections, unavailable for usage at the moment
+     *
+     * @see Queue
+     */
     private final Queue<Connection> takenConnections = new PriorityQueue<>(dbConfigs.getMaxPoolSize());
 
+    /**
+     * lock for thread safe {@link ConnectionPool#retrieveConnection()}
+     * completely locking in {@link ConnectionPool#destroyConnectionPool()}
+     *
+     * @see ReentrantLock
+     */
     private Lock retrieveLocker = new ReentrantLock();
+
+    /**
+     * lock for thread safe {@link ConnectionPool#releaseConnection(Connection)} ()}
+     * completely locking in {@link ConnectionPool#destroyConnectionPool()}
+     *
+     * @see ReentrantLock
+     */
     private Lock releaseLocker = new ReentrantLock();
 
+    /*
+     * private constructor
+     * start {@link ConnectionPool@initConnectionPool()}
+     */
     private ConnectionPool() {
 
         initConnectionPool();
@@ -38,6 +86,11 @@ public class ConnectionPool implements IConnectionPool {
 
     }
 
+    /*
+     * shutdown connection
+     *
+     * @see Connection$Proxy#shutDown()
+     */
     private void shutDownConnection(Connection connection) {
 
         try {
@@ -53,6 +106,11 @@ public class ConnectionPool implements IConnectionPool {
 
     }
 
+    /*
+     * init connection pool use {@link DBConfiguration} parameters
+     *
+     * throw Error when can't create connection
+     */
     private void initConnectionPool() {
 
         logger.info("connection init started");
@@ -66,7 +124,9 @@ public class ConnectionPool implements IConnectionPool {
             }
 
         } catch (ClassNotFoundException e) {
-            logger.error("jdbc driver problem",e);
+
+            logger.error("jdbc driver problem", e);
+
         } catch (ConnectionPoolException ex) {
 
             logger.error("can't create connections for initialisation connection pool", ex);
@@ -82,6 +142,11 @@ public class ConnectionPool implements IConnectionPool {
 
     }
 
+    /**
+     * create connection using jdbc
+     *
+     * @throws ConnectionPoolException when {@link SQLException} occurred
+     */
     private Connection createConnection() throws ConnectionPoolException {
 
         logger.info("started create new connection");
@@ -101,6 +166,17 @@ public class ConnectionPool implements IConnectionPool {
 
     }
 
+    /**
+     * take connection from {@link ConnectionPool#availableConnections} and get it for user,
+     * put this connection into {@link ConnectionPool#takenConnections}
+     * thread safe, use {@link ConnectionPool#retrieveLocker}
+     * in case of haven't {@link ConnectionPool#availableConnections}:
+     * expand common connections quantity to {@link DBConfiguration#getMaxPoolSize()}
+     * (use {@link ConnectionPool#releaseLocker} during this)
+     * or wait for connection
+     *
+     * @return {@link Connection}
+     */
     @Override
     public Connection retrieveConnection() {
 
@@ -148,6 +224,16 @@ public class ConnectionPool implements IConnectionPool {
 
     }
 
+    /**
+     * take connection from user, take this connection from{@link ConnectionPool#takenConnections}
+     * put this connection into  {@link ConnectionPool#availableConnections} ,
+     * in case of {@link ConnectionPool#takenConnections} do not contain it - shut down connection
+     * thread safe, use {@link ConnectionPool#releaseLocker}
+     * set {@link Connection#setAutoCommit(boolean)} true
+     *
+     * @param connection connection, that user took before
+     * @return true always
+     */
     @Override
     public boolean releaseConnection(Connection connection) {
 
@@ -193,12 +279,21 @@ public class ConnectionPool implements IConnectionPool {
         return true;
     }
 
-
+    /**
+     * destroy connection pool using {@link ConnectionPool#finalize()}
+     */
     @Override
     public void destroyConnectionPool() {
         finalize();
     }
 
+    /**
+     * destroy connection pool
+     * <p>
+     * fully lock {@link ConnectionPool#releaseLocker} and {@link ConnectionPool#retrieveLocker}
+     * shutdown all connection from {@link ConnectionPool#availableConnections} and {@link ConnectionPool#takenConnections}
+     * using {@link ConnectionPool#shutDownConnection(Connection)}
+     */
     protected void finalize() {
 
         logger.info("destroying connection pool started");
@@ -214,7 +309,11 @@ public class ConnectionPool implements IConnectionPool {
         logger.info("destroying connection pool finished");
     }
 
-
+    /**
+     * get this class instance
+     *
+     * @return {@link ConnectionPool#CONNECTION_POOL_INSTANCE}
+     */
     public static ConnectionPool getConnectionPoolInstance() {
         return CONNECTION_POOL_INSTANCE;
     }

@@ -5,16 +5,43 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+/**
+ * Proxy class for the {@link Connection}
+ *
+ * @author Bulgak Alexander
+ */
 public class Connection$Proxy implements Connection, Comparable {
 
+    /**
+     * {@link Connection} instance
+     */
     private final Connection connection;
 
+    /**
+     * constructor
+     * set parameter to {@link Connection$Proxy#connection}
+     *
+     * @param connection {@link Connection} for creating proxy
+     */
     public Connection$Proxy(Connection connection) {
         this.connection = connection;
     }
 
+    /**
+     * execute {@link Connection#close()}
+     *
+     * @throws SQLException when {@link Connection} throws it
+     */
     public void shutDown() throws SQLException {
         connection.close();
+    }
+
+    /**
+     * execute {@link ConnectionPool#releaseConnection(Connection)}
+     */
+    @Override
+    public void close() {
+        ConnectionPool.getConnectionPoolInstance().releaseConnection(this);
     }
 
     @Override
@@ -57,10 +84,7 @@ public class Connection$Proxy implements Connection, Comparable {
         connection.rollback();
     }
 
-    @Override
-    public void close() {
-        ConnectionPool.getConnectionPoolInstance().releaseConnection(this);  //was changed
-    }
+
 
     @Override
     public boolean isClosed() throws SQLException {
