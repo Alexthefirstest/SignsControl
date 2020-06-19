@@ -9,7 +9,7 @@ public interface IRolesControllerService {
 
     boolean deleteRole(int id) throws ServiceException;
 
-    Role[] getRoles() throws ServiceException;
+    Role[] getRoles() throws ServiceException; //видимо единственный нужный
 
     boolean setName(int id, String name) throws ServiceException;
 

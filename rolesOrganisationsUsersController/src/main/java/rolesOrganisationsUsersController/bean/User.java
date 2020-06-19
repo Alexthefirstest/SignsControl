@@ -8,6 +8,7 @@ public class User implements FactoryType, Serializable {
 
     private int id;
     private String login;
+    private int role;
     private int organisationID;
     private String organisation;
     private boolean block;
@@ -19,15 +20,24 @@ public class User implements FactoryType, Serializable {
     }
 
 
-    public User(int id, String login, int organisationID, String organisation, boolean block, String name, String surname, String info) {
+    public User(int id, String login, int role, int organisationID, String organisation, boolean block, String name, String surname, String info) {
         this.id = id;
-        this.login=login;
+        this.login = login;
+        this.role = role;
         this.organisationID = organisationID;
         this.organisation = organisation;
         this.block = block;
         this.name = name;
         this.surname = surname;
         this.info = info;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 
     public int getId() {
@@ -103,6 +113,7 @@ public class User implements FactoryType, Serializable {
             sb.append(", login='").append(login).append('\'');
         }
 
+        sb.append(", role=").append(role);
         sb.append(", organisationID=").append(organisationID);
         sb.append(", organisation='").append(organisation).append('\'');
         sb.append(", block=").append(block);

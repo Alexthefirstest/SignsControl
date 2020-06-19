@@ -27,7 +27,7 @@ public class Factory {
 
 
         if (!rs.next()) {
-            logger.warn("rs.next = false: "+signsStaff);
+            logger.warn("rs.next = false: " + signsStaff);
             throw new DAOValidationException("cant find new object or it's wasn't created");
         }
 
@@ -59,12 +59,13 @@ public class Factory {
 
             user.setId(rs.getInt(1));
             user.setLogin(rs.getString(2));
-            user.setOrganisationID(rs.getInt(3));
-            user.setOrganisation(rs.getString(4));
-            user.setBlock(rs.getBoolean(5));
-            user.setName(rs.getString(6));
-            user.setSurname(rs.getString(7));
-            user.setInfo(rs.getString(8));
+            user.setRole(rs.getInt(3));
+            user.setOrganisationID(rs.getInt(4));
+            user.setOrganisation(rs.getString(5));
+            user.setBlock(rs.getBoolean(6));
+            user.setName(rs.getString(7));
+            user.setSurname(rs.getString(8));
+            user.setInfo(rs.getString(9));
 
             return user;
         }
@@ -107,9 +108,9 @@ public class Factory {
             while (rs.next()) {
 
                 signsStaffArr.add
-                        (new User(rs.getInt(1), rs.getString(2), rs.getInt(3),
-                                rs.getString(4), rs.getBoolean(5),
-                                rs.getString(6), rs.getString(7), rs.getString(8)));
+                        (new User(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4),
+                                rs.getString(5), rs.getBoolean(6),
+                                rs.getString(7), rs.getString(8), rs.getString(9)));
             }
 
             return signsStaffArr.toArray(new User[0]);
@@ -117,7 +118,7 @@ public class Factory {
 
 
         logger.warn("did't find if: createSignsStaff[] method, signStaff class: " + signsStaff.getClass());
-       return null;
+        return null;
 
     }
 

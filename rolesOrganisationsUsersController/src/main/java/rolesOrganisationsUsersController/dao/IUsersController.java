@@ -2,7 +2,6 @@ package rolesOrganisationsUsersController.dao;
 
 import rolesOrganisationsUsersController.bean.User;
 import rolesOrganisationsUsersController.dao.exceptions.DAOException;
-import rolesOrganisationsUsersController.dao.exceptions.DAOValidationException;
 
 public interface IUsersController {
 
