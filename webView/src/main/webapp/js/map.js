@@ -9,6 +9,7 @@ function init(ymaps) {
         controls: ['rulerControl', 'searchControl', 'typeSelector', 'zoomControl', 'geolocationControl', 'fullscreenControl']
     });
 
+
     //---------поиск на карте - начало, добавляет организации - удалить из массива сверху searchControl, работает, мб не нужен
     // let searchControl = new ymaps.control.SearchControl({
     //     options: {
@@ -204,22 +205,121 @@ function init(ymaps) {
     // let myCollection = new ymaps.GeoObjectCollection({}, {
     //     preset: 'islands#violetCircleIcon'
     // });
+//- старый вариант начало
+//     let myGeoObjects = [];
+//
+//     let myPlacemark = new ymaps.Placemark([53.90, 27.56], {
+//         balloonContent: 'it is balooNN',
+//         hintContent: 'hint here'
+//     }, {preset: 'islands#violetCircleIcon'});
+//
+//     myGeoObjects[0] = (myPlacemark);
+//     myGeoObjects[1] = (new ymaps.Placemark([53.92, 27.56], {
+//         balloonContent: 'it is balooNN2',
+//         hintContent: 'hint here2'
+//     }, {preset: 'islands#violetCircleIcon'}));
+//
+//     let myClusterer = new ymaps.Clusterer({preset: 'islands#violetClusterIcons'});
+//     myClusterer.add(myGeoObjects);
+//     myMap.geoObjects.add(myClusterer);
 
-    let myGeoObjects = [];
-
-    let myPlacemark = new ymaps.Placemark([53.90, 27.56], {balloonContent: 'it is balooNN', hintContent: 'hint here'},  { preset: 'islands#violetCircleIcon'});
-
-    myGeoObjects[0]=(myPlacemark);
-    myGeoObjects[1] = (new ymaps.Placemark([53.92, 27.56], {balloonContent: 'it is balooNN2',hintContent: 'hint here2'},  { preset: 'islands#violetCircleIcon'}));
-
-    let myClusterer = new ymaps.Clusterer(  {preset: 'islands#violetClusterIcons'});
-    myClusterer.add(myGeoObjects);
-    myMap.geoObjects.add(myClusterer);
-
+    //-------------старый вариант конец
     // let myPlacemark = new ymaps.Placemark([53.90, 27.56], { balloonContent: 'it is balooNN',  hintContent: 'hint here'},
     //     { preset: 'islands#violetCircleIcon'});
     // myMap.geoObjects.add(myPlacemark);
+
+    //---------------------метки начаоло
+
+    let objectManager = new ymaps.ObjectManager({
+        clustersize: true
+    });
+
+ objectManager.objects.options.set('preset', 'islands#violetCircleIcon');
+    objectManager.clusters.options.set('preset', 'islands#violetClusterIcons');
+
+    myMap.geoObjects.add(objectManager);
+
+
+    objectManager.objects.events.add('balloonopen', function (e) {
+        // Получим объект, на котором открылся балун.
+        let id = e.get('objectId'),
+            geoObject = objectManager.objects.getById(id);
+        // Загрузим данные для объекта при необходимости.
+        downloadContent([geoObject], id);
+    });
+
+    objectManager.clusters.events.add('balloonopen', function (e) {
+        // Получим id кластера, на котором открылся балун.
+        let id = e.get('objectId'),
+            // Получим геообъекты внутри кластера.
+            cluster = objectManager.clusters.getById(id),
+            geoObjects = cluster.properties.geoObjects;
+
+        // Загрузим данные для объектов при необходимости.
+        downloadContent(geoObjects, id, true);
+    });
+
+    function downloadContent(geoObjects, id, isCluster) {
+        // Создадим массив меток, для которых данные ещё не загружены.
+        let array = geoObjects.filter(function (geoObject) {
+                return geoObject.properties.balloonContent === 'balloon loading...' ||
+                    geoObject.properties.balloonContent === 'Not found';
+            }),
+            // Формируем массив идентификаторов, который будет передан серверу.
+            ids = array.map(function (geoObject) {
+                return geoObject.id;
+            });
+        if (ids.length) {
+            // Запрос к серверу.
+            // Сервер обработает массив идентификаторов и на его основе
+            // вернет JSON-объект, содержащий текст балуна для
+            // заданных меток.
+            ymaps.vow.resolve($.ajax({
+                // Обратите внимание, что серверную часть необходимо реализовать самостоятельно.
+                //contentType: 'application/json',
+                //type: 'POST',
+                //data: JSON.stringify(ids),
+
+                url: "get_baloons",
+                dataType: 'json',
+                processData: false
+            })).then(
+                function (data) {
+                    geoObjects.forEach(function (geoObject) {
+                        // Содержимое балуна берем из данных, полученных от сервера.
+                        // Сервер возвращает массив объектов вида:
+                        // [ {"balloonContent": "Содержимое балуна"}, ...]
+                        geoObject.properties.balloonContent = data[geoObject.id].balloonContent;
+                    });
+                    // Оповещаем балун, что нужно применить новые данные.
+                    setNewData();
+                }, function () {
+                    geoObjects.forEach(function (geoObject) {
+                        geoObject.properties.balloonContent = 'Not found';
+                    });
+                    // Оповещаем балун, что нужно применить новые данные.
+                    setNewData();
+                }
+            );
+        }
+
+        function setNewData() {
+            if (isCluster && objectManager.clusters.balloon.isOpen(id)) {
+                objectManager.clusters.balloon.setData(objectManager.clusters.balloon.getData());
+            } else if (objectManager.objects.balloon.isOpen(id)) {
+                objectManager.objects.balloon.setData(objectManager.objects.balloon.getData());
+            }
+        }
+    }
+
+    $.ajax({
+        url: "get_current_points"
+    }).done(function (data) {
+        objectManager.add(data);
+    });
+
     // ------------- метки конец
+
 
 }//init finish
 

@@ -37,9 +37,10 @@ public class URLFilter implements Filter {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-        if (!Pattern.matches("/[^.]*", httpRequest.getRequestURI())) {
-            logger.info("if, catch: " + httpRequest.getRequestURI());
+        if (!Pattern.matches("[^.]*", httpRequest.getRequestURI())) {
+            logger.warn("if, catch: " + httpRequest.getRequestURI());
             chain.doFilter(request, response);
+            return;
         }
 
         HttpSession session = httpRequest.getSession();
@@ -49,9 +50,9 @@ public class URLFilter implements Filter {
 
         request.setAttribute(REQUIRED_URI, httpRequest.getRequestURI());
 
-        request.getRequestDispatcher(SERVLET_PATH).forward(request, response);
-
         logger.info("filter middle");
+
+        request.getRequestDispatcher(SERVLET_PATH).forward(request, response);
 
 
         logger.info("end of filter");

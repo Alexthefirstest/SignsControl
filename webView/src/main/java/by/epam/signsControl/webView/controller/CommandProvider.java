@@ -2,6 +2,8 @@ package by.epam.signsControl.webView.controller;
 
 import by.epam.signsControl.webView.controller.commands.Command;
 import by.epam.signsControl.webView.controller.commands.CommandName;
+import by.epam.signsControl.webView.controller.commands.impl.GetBaloons;
+import by.epam.signsControl.webView.controller.commands.impl.GetCurrentPoints;
 import by.epam.signsControl.webView.controller.commands.impl.Login;
 import by.epam.signsControl.webView.controller.commands.impl.LoginFormHandler;
 import by.epam.signsControl.webView.controller.commands.impl.Logout;
@@ -23,6 +25,8 @@ class CommandProvider {
         commands.put(CommandName.WRONG_COMMAND, new WrongCommand());
         commands.put(CommandName.LOGIN_FORM, new LoginFormHandler());
         commands.put(CommandName.LOGOUT, new Logout());
+        commands.put(CommandName.GET_CURRENT_POINTS, new GetCurrentPoints());
+        commands.put(CommandName.GET_BALOONS, new GetBaloons());
 
     }
 

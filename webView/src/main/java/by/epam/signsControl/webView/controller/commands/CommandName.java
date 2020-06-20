@@ -6,5 +6,7 @@ public enum CommandName {
     WRONG_COMMAND,
     MAIN_PAGE,
     LOGIN_FORM,
-    LOGOUT
+    LOGOUT,
+    GET_CURRENT_POINTS,
+    GET_BALOONS
 }

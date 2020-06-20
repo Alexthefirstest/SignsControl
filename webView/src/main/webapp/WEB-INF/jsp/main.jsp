@@ -25,7 +25,7 @@
     <style>
         html, body, #map {
             width: 100%;
-            height: 90%;
+            height: 70%;
             padding: 0;
             margin: 0;
         }
@@ -42,13 +42,26 @@
         }
     </style>
 
+    <%--json test--%>
+    <script>
+        $(document).on("click", "#testbutton", function () {
+            $.get("${pageContext.request.contextPath}/get_current_points", function (responceJson) {
+                $("#mydiv").text(responceJson);
+            });
+        });
+    </script>
+    <%--json test--%>
+
 </head>
 
 <body>
 
- <header>
- SignsControl
+<header>
+    SignsControl
 </header>
+
+<button id="testbutton">press me</button>
+<div id="mydiv"></div>
 
 <c:choose>
 
@@ -68,11 +81,9 @@
     </c:choose>
 
 
-
-
     <%--<div id="map" style=" height: 500px"></div>--%>
 
-<br>
+    <br>
     <select id="language">
         <option selected value="ru">ru</option>
         <option value="en">en</option>
