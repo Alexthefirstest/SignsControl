@@ -2,6 +2,7 @@ package by.epam.signsControl.dao.impl.factory;
 
 import by.epam.signsControl.bean.LocalSign;
 import by.epam.signsControl.bean.MapPoint;
+import by.epam.signsControl.bean.MapPoint$LocalSign;
 import by.epam.signsControl.bean.Sign;
 import by.epam.signsControl.bean.FactoryType;
 import by.epam.signsControl.bean.StandardSize;
@@ -44,6 +45,7 @@ public class SignsControlFactory {
             localSign.setDateOfAdd(rs.getDate(9));
             localSign.setDateOfRemove(rs.getDate(10));
             localSign.setAnnotation(rs.getString(11));
+            localSign.setAngle(rs.getInt(12));
 
             return localSign;
         }
@@ -99,6 +101,47 @@ public class SignsControlFactory {
 
     public FactoryType[] createSignStaffArr(ResultSet rs, FactoryType signsStaff) throws SQLException {
 
+        if (signsStaff instanceof MapPoint$LocalSign) {
+
+            MapPoint$LocalSign mapPoint$LocalSign;
+            MapPoint mapPoint;
+
+            ArrayList<FactoryType> mapPoint$LocalSigns = new ArrayList<>();
+
+
+            boolean stillNext = rs.next();
+
+            while (stillNext) {
+
+                mapPoint$LocalSign = new MapPoint$LocalSign();
+                mapPoint = new MapPoint();
+
+                mapPoint.setCoordinates(rs.getString(13));
+
+                do {
+
+
+                    mapPoint.addAddress(rs.getString(14));
+                    mapPoint.addSignsList(rs.getInt(2));
+                    mapPoint.addAngle(rs.getInt(12));
+                    mapPoint.addAnnotation(rs.getString(11));
+
+                    mapPoint$LocalSign.addLocalSignArr();
+
+                    do {
+                        mapPoint$LocalSign.addLocalSignToLastArr(new LocalSign(rs.getInt(1), rs.getInt(2), rs.getInt(3),
+                                rs.getInt(4), rs.getInt(5), rs.getInt(6),
+                                rs.getBytes(7), rs.getInt(8), rs.getDate(9),
+                                rs.getDate(10), rs.getString(11), rs.getInt(12)));
+                    } while ((stillNext = rs.next()) && rs.getInt(2) == mapPoint$LocalSign.getLocalSignFromLastArr(0).getSignListId());
+
+                } while (stillNext && rs.getString(1).equals(mapPoint.getCoordinates()));
+
+                mapPoint$LocalSign.setMapPoint(mapPoint);
+                mapPoint$LocalSigns.add(mapPoint$LocalSign);
+            }
+            return mapPoint$LocalSigns.toArray(new MapPoint$LocalSign[0]);
+        }
 
         if (signsStaff instanceof LocalSign) {
 
@@ -110,7 +153,7 @@ public class SignsControlFactory {
                         (new LocalSign(rs.getInt(1), rs.getInt(2), rs.getInt(3),
                                 rs.getInt(4), rs.getInt(5), rs.getInt(6),
                                 rs.getBytes(7), rs.getInt(8), rs.getDate(9),
-                                rs.getDate(10), rs.getString(11)));
+                                rs.getDate(10), rs.getString(11), rs.getInt(12)));
             }
 
             return signsStaffArr.toArray(new LocalSign[0]);
@@ -156,20 +199,15 @@ public class SignsControlFactory {
                 mapPoint = new MapPoint();
 
                 mapPoint.setCoordinates(rs.getString(1));
-                mapPoint.addAddress(rs.getString(2));
-                mapPoint.addSignsList(rs.getInt(3));
-                mapPoint.addAngle(rs.getInt(4));
-                mapPoint.addAnnotation(rs.getString(5));
 
-
-                while ((stillNext = rs.next()) && rs.getString(1).equals(mapPoint.getCoordinates())) {
+                do {
 
                     mapPoint.addAddress(rs.getString(2));
                     mapPoint.addSignsList(rs.getInt(3));
                     mapPoint.addAngle(rs.getInt(4));
                     mapPoint.addAnnotation(rs.getString(5));
 
-                }
+                } while ((stillNext = rs.next()) && rs.getString(1).equals(mapPoint.getCoordinates()));
 
 
                 mapPoints.add(mapPoint);

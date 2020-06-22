@@ -17,7 +17,7 @@ public class MapPointsControl implements IMapPointsControl {
     private static final String SQL_SELECT =
             "SELECT ST_AsText(coordinates), address, signs_list, signs_angle, annotation  FROM map_points where coordinates=ST_GeomFromText(?);";
     private static final String SQL_SELECT_ALL =
-            "SELECT ST_AsText(coordinates), address, signs_list, signs_angle, annotation  FROM map_points order by coordinates";
+            "SELECT ST_AsText(coordinates), address, signs_list, signs_angle, annotation  FROM map_points order by coordinates, signs_list";
     private static final String SQL_SELECT_USE_LAST_INSERT_ID =
             "SELECT ST_AsText(coordinates), address, signs_list, signs_angle, annotation FROM map_points where signs_list=LAST_INSERT_ID();";
     private static final String SQL_INSERT = "INSERT INTO map_points (coordinates, signs_angle, address) " +

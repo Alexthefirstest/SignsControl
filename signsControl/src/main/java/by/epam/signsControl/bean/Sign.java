@@ -3,7 +3,19 @@ package by.epam.signsControl.bean;
 import java.io.Serializable;
 import java.util.Arrays;
 
-public class Sign implements Serializable, FactoryType {
+public class Sign implements Serializable, FactoryType, Cloneable {
+
+    @Override
+    protected Object clone()  {
+       try {
+           Sign sign = (Sign) super.clone();
+        sign.picture = picture.clone();
+        return sign;
+       } catch (CloneNotSupportedException e) {
+           // this shouldn't happen, since we are Cloneable
+           throw new InternalError(e);
+       }
+    }
 
     private static final long serialVersionUID = 750945877308718374L;
 
@@ -13,15 +25,15 @@ public class Sign implements Serializable, FactoryType {
     private int id;
     private int section;
     private int sign;
-    private  int kind;
-    private  byte[] picture;
+    private int kind;
+    private byte[] picture;
 
     public Sign(int id, int section, int sign, int kind, byte[] picture) {
         this.id = id;
         this.section = section;
         this.sign = sign;
         this.kind = kind;
-        this.picture=picture;
+        this.picture = picture;
 
     }
 
@@ -30,7 +42,7 @@ public class Sign implements Serializable, FactoryType {
     }
 
     public void setPicture(byte[] picture) {
-        this.picture = picture;
+        this.picture = picture.clone();
     }
 
     public int getId() {

@@ -1,6 +1,7 @@
 package by.epam.signsControl.service;
 
 import by.epam.signsControl.bean.LocalSign;
+import by.epam.signsControl.bean.MapPoint$LocalSign;
 import by.epam.signsControl.service.exceptions.ServiceException;
 
 import java.util.Date;
@@ -13,8 +14,9 @@ public interface ILocalSignsControlService {
 
     boolean deleteSign(int signId) throws ServiceException;
 
+    MapPoint$LocalSign[] getActualMapPoints$LocalSigns() throws ServiceException;
 
-    LocalSign[] getActualSigns(int signsListID) throws ServiceException;
+    LocalSign[] getActualSigns() throws ServiceException;
 
     LocalSign[] getActualSigns(int signsListID, String date) throws ServiceException;
 

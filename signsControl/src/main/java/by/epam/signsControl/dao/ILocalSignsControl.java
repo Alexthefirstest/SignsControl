@@ -1,6 +1,7 @@
 package by.epam.signsControl.dao;
 
 import by.epam.signsControl.bean.LocalSign;
+import by.epam.signsControl.bean.MapPoint$LocalSign;
 import by.epam.signsControl.dao.exceptions.DAOException;
 
 import java.util.Date;
@@ -13,8 +14,9 @@ public interface ILocalSignsControl {
 
     boolean deleteSign(int signId) throws DAOException;
 
+    MapPoint$LocalSign[] getActualMapPoints$LocalSigns() throws DAOException;
 
-    LocalSign[] getActualSigns(int signsListID) throws DAOException;
+    LocalSign[] getActualSigns() throws DAOException;
 
     LocalSign[] getActualSigns(int signsListID, String date) throws DAOException;
 

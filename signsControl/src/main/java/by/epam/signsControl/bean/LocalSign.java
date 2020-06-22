@@ -3,12 +3,22 @@ package by.epam.signsControl.bean;
 import java.io.Serializable;
 import java.util.Date;
 
-public class LocalSign extends Sign implements Serializable, FactoryType {
+public class LocalSign extends Sign implements Serializable, FactoryType, Cloneable {
+
+    @Override
+    protected Object clone() {
+
+        LocalSign localSign = (LocalSign) super.clone();
+        localSign.dateOfAdd = this.getDateOfAdd();
+        localSign.dateOfRemove = this.getDateOfRemove();
+        return localSign;
+
+    }
 
     public LocalSign() {
     }
 
-    public LocalSign(int localSignId, int signListId, int pddSignId, int section, int sign, int kind, byte[] picture, int standardSize, Date dateOfAdd, Date dateOfRemove, String annotation) {
+    public LocalSign(int localSignId, int signListId, int pddSignId, int section, int sign, int kind, byte[] picture, int standardSize, Date dateOfAdd, Date dateOfRemove, String annotation, int angle) {
         super(pddSignId, section, sign, kind, picture);
         this.localSignId = localSignId;
         this.signListId = signListId;
@@ -16,6 +26,7 @@ public class LocalSign extends Sign implements Serializable, FactoryType {
         this.dateOfAdd = dateOfAdd;
         this.dateOfRemove = dateOfRemove;
         this.annotation = annotation;
+        this.angle = angle;
     }
 
     private static final long serialVersionUID = 4513518075537237951L;
@@ -27,7 +38,16 @@ public class LocalSign extends Sign implements Serializable, FactoryType {
     private Date dateOfRemove;
 
     private String annotation;
+    private int angle;
 
+
+    public int getAngle() {
+        return angle;
+    }
+
+    public void setAngle(int angle) {
+        this.angle = angle;
+    }
 
     public int getLocalSignId() {
         return localSignId;
@@ -55,7 +75,7 @@ public class LocalSign extends Sign implements Serializable, FactoryType {
     }
 
     public Date getDateOfAdd() {
-        return dateOfAdd;
+        return (Date) dateOfAdd.clone();
     }
 
     public void setDateOfAdd(Date dateOfAdd) {
@@ -63,7 +83,7 @@ public class LocalSign extends Sign implements Serializable, FactoryType {
     }
 
     public Date getDateOfRemove() {
-        return dateOfRemove;
+        return (Date) dateOfRemove.clone();
     }
 
     public void setDateOfRemove(Date dateOfRemove) {
@@ -111,6 +131,7 @@ public class LocalSign extends Sign implements Serializable, FactoryType {
     public String toString() {
         final StringBuilder sb = new StringBuilder("LocalSign{");
         sb.append("id=").append(localSignId);
+        sb.append(", angle=").append(angle);
         sb.append(", signListId=").append(signListId);
         sb.append(", ").append(super.toString());
         sb.append(", standardSize=").append(standardSize);

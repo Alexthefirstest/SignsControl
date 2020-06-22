@@ -3,7 +3,20 @@ package by.epam.signsControl.bean;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MapPoint implements FactoryType, Serializable {
+public class MapPoint implements FactoryType, Serializable, Cloneable {
+    @Override
+    protected Object clone()  {
+        try{MapPoint mapPoint = (MapPoint) super.clone();
+        mapPoint.addresses = this.getAddresses();
+        mapPoint.signsLists = this.getSignsLists();
+        mapPoint.angles = this.getAngles();
+        mapPoint.annotations = this.getAnnotations();
+        return mapPoint;
+        } catch (CloneNotSupportedException e) {
+            // this shouldn't happen, since we are Cloneable
+            throw new InternalError(e);
+        }
+    }
 
     private static final long serialVersionUID = -2559001946431331274L;
 

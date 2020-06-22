@@ -2,7 +2,18 @@ package by.epam.signsControl.bean;
 
 import java.io.Serializable;
 
-public class StandardSize implements Serializable, FactoryType {
+public class StandardSize implements Serializable, FactoryType, Cloneable {
+
+    @Override
+    protected Object clone() {
+        try {
+            return super.clone();
+
+        } catch (CloneNotSupportedException e) {
+            // this shouldn't happen, since we are Cloneable
+            throw new InternalError(e);
+        }
+    }
 
     public StandardSize() {
     }

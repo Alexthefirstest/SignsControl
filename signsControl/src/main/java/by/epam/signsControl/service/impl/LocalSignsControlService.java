@@ -1,6 +1,7 @@
 package by.epam.signsControl.service.impl;
 
 import by.epam.signsControl.bean.LocalSign;
+import by.epam.signsControl.bean.MapPoint$LocalSign;
 import by.epam.signsControl.dao.ILocalSignsControl;
 import by.epam.signsControl.dao.exceptions.DAOException;
 import by.epam.signsControl.dao.exceptions.DAOValidationException;
@@ -14,6 +15,7 @@ import java.util.Date;
 public class LocalSignsControlService implements ILocalSignsControlService {
 
     private final ILocalSignsControl localSignsControl = DaoFactory.getINSTANCE().getLocalSignsControl();
+
 
     @Override
     public LocalSign addSign(int signListId, int pddSignId, int standardSize) throws ServiceException {
@@ -56,10 +58,22 @@ public class LocalSignsControlService implements ILocalSignsControlService {
     }
 
     @Override
-    public LocalSign[] getActualSigns(int signsListID) throws ServiceException {
+    public MapPoint$LocalSign[] getActualMapPoints$LocalSigns() throws ServiceException {
         try {
 
-            return localSignsControl.getActualSigns(signsListID);
+            return localSignsControl.getActualMapPoints$LocalSigns();
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public LocalSign[] getActualSigns() throws ServiceException {
+        try {
+
+            return localSignsControl.getActualSigns();
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
