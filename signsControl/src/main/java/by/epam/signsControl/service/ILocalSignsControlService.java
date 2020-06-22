@@ -16,6 +16,8 @@ public interface ILocalSignsControlService {
 
     MapPoint$LocalSign[] getActualMapPoints$LocalSigns() throws ServiceException;
 
+    MapPoint$LocalSign[] getAllMapPoints$LocalSigns() throws ServiceException;
+
     LocalSign[] getActualSigns() throws ServiceException;
 
     LocalSign[] getActualSigns(int signsListID, String date) throws ServiceException;

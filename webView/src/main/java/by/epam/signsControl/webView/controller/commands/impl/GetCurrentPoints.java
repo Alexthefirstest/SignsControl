@@ -1,5 +1,10 @@
 package by.epam.signsControl.webView.controller.commands.impl;
 
+import by.epam.rolesOrganisationsUsersController.service.IOrganisationsControllerService;
+import by.epam.signsControl.bean.MapPoint;
+import by.epam.signsControl.bean.MapPoint$LocalSign;
+import by.epam.signsControl.service.exceptions.ServiceException;
+import by.epam.signsControl.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.controller.commands.Command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,8 +26,12 @@ public class GetCurrentPoints implements Command {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        String json = "{\"type\": \"FeatureCollection\",\"features\": [{\"type\": \"Feature\", \"id\": 0, \"geometry\": {\"type\": \"Point\", \"coordinates\": [53.90, 27.56]}, \"properties\": {\"balloonContent\": \"balloon loading...\", \"clusterCaption\" : \"cluster0\", \"hintContent\": \"hint here\"}} ] }";
-        logger.warn(json);
-        response.getWriter().write(json);
+        try {
+            MapPoint$LocalSign[] mapPoint$LocalSign = ServiceFactory.getINSTANCE().getLocalSignsControlService().getAllMapPoints$LocalSigns();
+            response.getWriter().write(JsonCreator.createPointsJSON(mapPoint$LocalSign));
+        } catch (ServiceException e) {
+            logger.warn(e);
+        }
+
     }
 }

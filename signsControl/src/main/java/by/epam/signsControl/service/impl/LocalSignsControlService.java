@@ -70,6 +70,18 @@ public class LocalSignsControlService implements ILocalSignsControlService {
     }
 
     @Override
+    public MapPoint$LocalSign[] getAllMapPoints$LocalSigns() throws ServiceException {
+        try {
+
+            return localSignsControl.getAllMapPoints$LocalSigns();
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
     public LocalSign[] getActualSigns() throws ServiceException {
         try {
 

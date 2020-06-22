@@ -9,14 +9,15 @@ public class MapPoint$LocalSign implements Serializable, FactoryType, Cloneable 
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
-        return new MapPoint$LocalSign((MapPoint) this.mapPoint.clone(), (ArrayList<ArrayList<LocalSign>>) this.listOfLocalSignsArrays.clone());
+        return new MapPoint$LocalSign( (this.mapPoint==null? null: (MapPoint) this.mapPoint.clone()),
+                (this.listOfLocalSignsArrays==null? null : (ArrayList<ArrayList<LocalSign>>) this.listOfLocalSignsArrays.clone()));
     }
 
     private MapPoint mapPoint;
     private ArrayList<ArrayList<LocalSign>> listOfLocalSignsArrays;
 
     public MapPoint$LocalSign() {
-        listOfLocalSignsArrays= new ArrayList<>();
+        listOfLocalSignsArrays = new ArrayList<>();
     }
 
     public MapPoint$LocalSign(MapPoint mapPoint, ArrayList<ArrayList<LocalSign>> listOfLocalSignsArrays) {
@@ -25,7 +26,7 @@ public class MapPoint$LocalSign implements Serializable, FactoryType, Cloneable 
     }
 
     public MapPoint getMapPoint() {
-        return (MapPoint) mapPoint.clone();
+        return (this.mapPoint==null? null: (MapPoint) this.mapPoint.clone());
     }
 
     public void setMapPoint(MapPoint mapPoint) {
@@ -33,12 +34,16 @@ public class MapPoint$LocalSign implements Serializable, FactoryType, Cloneable 
     }
 
     public ArrayList<ArrayList<LocalSign>> getListOfLocalSignsArrays() {
-        return (ArrayList) listOfLocalSignsArrays.clone();
+        return (this.listOfLocalSignsArrays==null? null : (ArrayList<ArrayList<LocalSign>>) this.listOfLocalSignsArrays.clone());
+    }
+
+    public ArrayList<LocalSign> getLocalSignsArrays(int arrPosition) {
+        return (listOfLocalSignsArrays.get(arrPosition)==null? null : (ArrayList<LocalSign>) (listOfLocalSignsArrays.get(arrPosition)).clone());
     }
 
     //throw index out of bound
     public LocalSign getLocalSignFromLastArr(int localSignPosition) {
-        return (listOfLocalSignsArrays.get(listOfLocalSignsArrays.size()-1)).get(localSignPosition);
+        return (listOfLocalSignsArrays.get(listOfLocalSignsArrays.size() - 1)).get(localSignPosition);
     }
 
     public void setListOfLocalSignsArrays(ArrayList<ArrayList<LocalSign>> listOfLocalSignsArrays) {

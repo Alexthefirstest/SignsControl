@@ -132,7 +132,8 @@ public class SignsControlFactory {
                         mapPoint$LocalSign.addLocalSignToLastArr(new LocalSign(rs.getInt(1), rs.getInt(2), rs.getInt(3),
                                 rs.getInt(4), rs.getInt(5), rs.getInt(6),
                                 rs.getBytes(7), rs.getInt(8), rs.getDate(9),
-                                rs.getDate(10), rs.getString(11), rs.getInt(12)));
+                                rs.getDate(10), rs.getString(11), rs.getInt(12),
+                                rs.getString(15), rs.getString(16)));
                     } while ((stillNext = rs.next()) && rs.getInt(2) == mapPoint$LocalSign.getLocalSignFromLastArr(0).getSignListId());
 
                 } while (stillNext && rs.getString(1).equals(mapPoint.getCoordinates()));
@@ -153,7 +154,8 @@ public class SignsControlFactory {
                         (new LocalSign(rs.getInt(1), rs.getInt(2), rs.getInt(3),
                                 rs.getInt(4), rs.getInt(5), rs.getInt(6),
                                 rs.getBytes(7), rs.getInt(8), rs.getDate(9),
-                                rs.getDate(10), rs.getString(11), rs.getInt(12)));
+                                rs.getDate(10), rs.getString(11), rs.getInt(12),
+                                rs.getString(6), rs.getString(7)));
             }
 
             return signsStaffArr.toArray(new LocalSign[0]);
@@ -167,7 +169,7 @@ public class SignsControlFactory {
 
                 signsStaffArr.add
                         (new Sign(rs.getInt(1), rs.getInt(2), rs.getInt(3),
-                                rs.getInt(4), rs.getBytes(5)));
+                                rs.getInt(4), rs.getBytes(5), rs.getString(6), rs.getString(7)));//etogo net
             }
 
             return signsStaffArr.toArray(new Sign[0]);

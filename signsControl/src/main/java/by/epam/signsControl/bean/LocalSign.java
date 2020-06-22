@@ -18,8 +18,9 @@ public class LocalSign extends Sign implements Serializable, FactoryType, Clonea
     public LocalSign() {
     }
 
-    public LocalSign(int localSignId, int signListId, int pddSignId, int section, int sign, int kind, byte[] picture, int standardSize, Date dateOfAdd, Date dateOfRemove, String annotation, int angle) {
-        super(pddSignId, section, sign, kind, picture);
+    public LocalSign(int localSignId, int signListId, int pddSignId, int section, int sign, int kind, byte[] picture,
+                     int standardSize, Date dateOfAdd, Date dateOfRemove, String annotation, int angle, String name, String description) {
+        super(pddSignId, section, sign, kind, picture, name, description);
         this.localSignId = localSignId;
         this.signListId = signListId;
         this.standardSize = standardSize;
@@ -75,7 +76,7 @@ public class LocalSign extends Sign implements Serializable, FactoryType, Clonea
     }
 
     public Date getDateOfAdd() {
-        return (Date) dateOfAdd.clone();
+        return dateOfAdd==null?  null: (Date)dateOfAdd.clone();
     }
 
     public void setDateOfAdd(Date dateOfAdd) {
@@ -83,7 +84,7 @@ public class LocalSign extends Sign implements Serializable, FactoryType, Clonea
     }
 
     public Date getDateOfRemove() {
-        return (Date) dateOfRemove.clone();
+        return dateOfRemove==null? null : (Date) dateOfRemove.clone();
     }
 
     public void setDateOfRemove(Date dateOfRemove) {

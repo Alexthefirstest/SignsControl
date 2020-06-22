@@ -15,6 +15,7 @@ public interface ILocalSignsControl {
     boolean deleteSign(int signId) throws DAOException;
 
     MapPoint$LocalSign[] getActualMapPoints$LocalSigns() throws DAOException;
+    MapPoint$LocalSign[] getAllMapPoints$LocalSigns() throws DAOException;
 
     LocalSign[] getActualSigns() throws DAOException;
 
