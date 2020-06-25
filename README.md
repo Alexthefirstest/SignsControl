@@ -1,16 +1,17 @@
 # SignsControl
 ***
+javadoc: connectionPoolForDataBase, rolesOrganisationsUsersController
 
-
-
+vebView use: connectionPoolForDataBase, rolesOrganisationsUsersController, signsControl(not all)
+***
 Основные идеи:
 1. Контроль дорожных знаков. Карта, на карте точке, ткнуть на точку - получить информацию об актуальных знаках, которые расположены в этой точке + дополнение в виде информации о дорожных знаках, которые уже сняты, но когда-то тут висели. 
 2. Заказчик(организация) - может заказать дорожные знаки на конкретную точку + платит по счетам. 
 3. Исполнитель (организация) - исполняет заказ + получает деняк. 
 4. Банк - контролирует счета компаний (как минимум - прощает долги, блокирует счета)
 
-вероятные роли: 
-+ аноним - посмотреть на карту, потыкать на точки и увидеть знаки
+роли: 
++ нет роли - посмотреть на карту, потыкать на точки и увидеть знаки
 + заказчик - заказать
 
 + исполнитель - бригадир, который впишет номер бригады в поле исполненного заказа "номер бригады"
@@ -22,4 +23,4 @@
 
 
 
-модули: connectionPoolForDataBase, bank, organisationsRoles, signsControl, ordersManager, view
+модули: connectionPoolForDataBase, organisationsRoles, signsControl, webView, bank(его еще нет в webView), ordersManager(его еще нет)

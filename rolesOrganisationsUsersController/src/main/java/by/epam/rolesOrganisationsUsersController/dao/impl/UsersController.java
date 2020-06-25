@@ -2,6 +2,7 @@ package by.epam.rolesOrganisationsUsersController.dao.impl;
 
 import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
 import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
+import by.epam.rolesOrganisationsUsersController.bean.FactoryType;
 import by.epam.rolesOrganisationsUsersController.bean.User;
 import by.epam.rolesOrganisationsUsersController.dao.IUsersController;
 import by.epam.rolesOrganisationsUsersController.dao.exceptions.DAOException;
@@ -16,38 +17,128 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 
+/**
+ * operations with users table from mysql
+ *
+ * @author Bulgak Alexander
+ */
 public class UsersController implements IUsersController {
 
+    /**
+     * {@link IConnectionPool} instance
+     */
     private static final IConnectionPool CONNECTION_POOL = ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
+
+    /**
+     * DAO factory instance
+     */
     private static final Factory signsControlFactory = Factory.getINSTANCE();
+
+    /**
+     * logger log4j2
+     */
     private static final Logger logger = LogManager.getLogger(UsersController.class);
 
+    /**
+     * sql insert user to db table
+     */
     private static final String SQL_INSERT_USER_INFO = "INSERT INTO `user_info` (`name`, `surname`) VALUES (?, ?);";
+
+    /**
+     * sql insert user to db table
+     */
     private static final String SQL_INSERT_USER = "INSERT INTO `users` (`id`, `organisation`, `login`, `password`) VALUES ((SELECT id FROM user_info where id=LAST_INSERT_ID()), ?, ?, ?)";
 
+    /**
+     * sql select user with last inserted id from db
+     */
     private static final String SQL_SELECT_USE_LAST_INSERT_ID = "SELECT u.id, login, role, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation where u.id=LAST_INSERT_ID();";
+
+    /**
+     * sql select all users from db
+     */
     private static final String SQL_SELECT_ALL = "SELECT u.id, login, role, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation order by u.organisation, ui.surname, ui.name";
+
+    /**
+     * sql select users by organisation from db
+     */
     private static final String SQL_SELECT_USE_ORGANISATION = "SELECT u.id, login, role, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation where u.organisation=? order by ui.surname, ui.name";
+
+    /**
+     * sql select user by id from db
+     */
     private static final String SQL_SELECT_USER = "SELECT u.id, login, role, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation  where u.id=?";
+
+    /**
+     * sql select user by login from db
+     */
     private static final String SQL_SELECT_USER_LOGIN = "SELECT u.id, login, role, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation  where u.login=?";
     //private static final String SQL_SELECT_USER_BY_LOGIN_PASSWORD = "SELECT u.id, login, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation  where u.login=? AND u.password=?";
 
+    /**
+     * sql get user block condition
+     */
     private static final String SQL_GET_BLOCK = "SELECT is_blocked FROM users WHERE (`id` = ?);";
 
+    /**
+     * sql set user block condition
+     */
     private static final String SQL_SET_BLOCK = "UPDATE `users` SET `is_blocked` = ? WHERE (`id` = ?);";
 
+    /**
+     * sql select user info from db
+     */
     private static final String SQL_SET_INFO = "UPDATE `user_info` SET info = ? WHERE (`id` = ?);";
+
+    /**
+     * sql set organisation for user
+     */
     private static final String SQL_SET_ORGANISATION = "UPDATE users SET `is_blocked` = ? WHERE (`id` = ?);";
+
+    /**
+     * sql get user organisation from db
+     */
     private static final String SQL_GET_ORGANISATION = "SELECT organisation FROM users WHERE (`id` = ?);";
+
+    /**
+     * sql set name of user to db
+     */
     private static final String SQL_SET_NAME = "UPDATE `user_info` SET name = ? WHERE (`id` = ?);";
+
+    /**
+     * sql set surname of user
+     */
     private static final String SQL_SET_SURNAME = "UPDATE `user_info` SET surname = ? WHERE (`id` = ?);";
     // private static final String SQL_SET_LOGIN = "UPDATE users SET login = if(?=login AND ?=password, ?, null) where id=?";
+
+    /**
+     * sql set user login
+     */
     private static final String SQL_SET_LOGIN = "UPDATE users SET login = ? where id=?";
     //private static final String SQL_SET_PASSWORD = "UPDATE users SET password = if(?=login AND ?=password, ?, null) where id=?";
+    /**
+     * sql set user password
+     */
     private static final String SQL_SET_PASSWORD = "UPDATE users SET password = ? where id=?";
+
+    /**
+     * sql get user password
+     */
     private static final String SQL_GET_PASSWORD = "SELECT password FROM users WHERE login=?";
 
-
+    /**
+     * add user to jdbc table
+     *
+     * @param login        user login
+     * @param password     user password
+     * @param organisation user organisation
+     * @param name         user name
+     * @param surname      user surname
+     * @return {@link User} if success
+     * @throws DAOValidationException when user with this login are already exist,
+     *                                when wrong organisation id, when {@link Factory#createSignStaff(ResultSet, FactoryType)} throw it
+     * @throws DAOException           when other exceptions during process occurred
+     */
     @Override
     public User addUser(String login, String password, int organisation, String name, String surname) throws DAOException {
 
@@ -82,7 +173,7 @@ public class UsersController implements IUsersController {
             try {
                 connection.rollback();
             } catch (SQLException e) {
-            logger.warn("rollBackFail", ex);
+                logger.warn("rollBackFail", ex);
             }
 
             if ((Pattern.matches("Duplicate entry.+?login.*", ex.getMessage()))) {
@@ -95,11 +186,6 @@ public class UsersController implements IUsersController {
                 throw new DAOValidationException("wrong organisation: " + organisation);
             }
 
-            try {
-                connection.rollback();
-            } catch (SQLException eex) {
-                logger.warn(eex);
-            }
 
             throw new DAOException(ex);
 
@@ -115,6 +201,13 @@ public class UsersController implements IUsersController {
         }
     }
 
+    /**
+     * @param id user id in jdbc
+     * @return block condition
+     * @throws DAOValidationException when user with this id do not exist
+     * @throws DAOException           when other exceptions during process occurred
+     * @see RequestExecutor#getBoolean(String, int)
+     */
     @Override
     public boolean getBlock(int id) throws DAOException {
         try {
@@ -131,6 +224,15 @@ public class UsersController implements IUsersController {
         }
     }
 
+    /**
+     * set block in users table
+     *
+     * @param id    user id in jdbc
+     * @param block new block condition
+     * @return true if success, false - if no
+     * @throws DAOException when get an exception during execution
+     * @see RequestExecutor#setField(String, int, boolean)
+     */
     @Override
     public boolean setBlock(int id, boolean block) throws DAOException {
         try {
@@ -145,6 +247,15 @@ public class UsersController implements IUsersController {
         }
     }
 
+    /**
+     * set user login
+     *
+     * @param id    user id in jdbc
+     * @param login new user login
+     * @return true if success, false - if no
+     * @throws DAOValidationException if user with this login is already exist
+     * @throws DAOException           when get an exception during execution
+     */
     @Override
     public boolean setLogin(int id, String login) throws DAOException {
 
@@ -165,6 +276,13 @@ public class UsersController implements IUsersController {
         }
     }
 
+    /**
+     * @param id       user id in jdbc
+     * @param password new user password
+     * @return true if success, false - if no
+     * @throws DAOException when get an exception during execution
+     * @see RequestExecutor#setField(String, int, String)
+     */
     @Override
     public boolean setPassword(int id, String password) throws DAOException {
 
@@ -180,6 +298,11 @@ public class UsersController implements IUsersController {
         }
     }
 
+    /**
+     * @param login user login
+     * @return user password or null if can't find user with this login
+     * @throws DAOException when get an exception during execution
+     */
     @Override
     public String getPassword(String login) throws DAOException {
         try {
@@ -194,6 +317,12 @@ public class UsersController implements IUsersController {
         }
     }
 
+    /**
+     * @param id           user id
+     * @param organisation new organisation id
+     * @return true if success, false - if no
+     * @throws DAOException when get an exception during execution
+     */
     @Override
     public boolean setOrganisation(int id, int organisation) throws DAOException {
         try {
@@ -208,6 +337,11 @@ public class UsersController implements IUsersController {
         }
     }
 
+    /**
+     * @param userId user id
+     * @return organisation id or -1 if can't find it
+     * @throws DAOException when get an exception during execution
+     */
     @Override
     public int getOrganisation(int userId) throws DAOException {
         try {
@@ -222,6 +356,12 @@ public class UsersController implements IUsersController {
         }
     }
 
+    /**
+     * get all users from data base
+     *
+     * @return {@link User} array
+     * @throws DAOException when get an exception during execution
+     */
     @Override
     public User[] getUsers() throws DAOException {
         try {
@@ -236,6 +376,13 @@ public class UsersController implements IUsersController {
         }
     }
 
+    /**
+     * get all users from with organisation id param
+     *
+     * @param organisation organisation id
+     * @return {@link User} array
+     * @throws DAOException when get an exception during execution
+     */
     @Override
     public User[] getUsers(int organisation) throws DAOException {
         try {
@@ -250,6 +397,12 @@ public class UsersController implements IUsersController {
         }
     }
 
+    /**
+     * @param id user id
+     * @return {@link User} with param id
+     * @throws DAOValidationException when {@link Factory#createSignStaff(ResultSet, FactoryType)} throw it
+     * @throws DAOException           when get an exception during execution
+     */
     @Override
     public User getUser(int id) throws DAOException {
         try {
@@ -264,6 +417,12 @@ public class UsersController implements IUsersController {
         }
     }
 
+    /**
+     * @param login user login in jdbc
+     * @return {@link User} with param login
+     * @throws DAOValidationException when {@link Factory#createSignStaff(ResultSet, FactoryType)} throw it
+     * @throws DAOException           when get an exception during execution
+     */
     @Override
     public User getUser(String login) throws DAOException {
         try {
@@ -278,8 +437,15 @@ public class UsersController implements IUsersController {
         }
     }
 
+    /**
+     * @param id   user id in jdbc
+     * @param info new  user info in jdbc
+     * @return true if success, false - if no
+     * @throws DAOException when get an exception during execution
+     */
     @Override
     public boolean setInfo(int id, String info) throws DAOException {
+
         try {
 
             return RequestExecutor.setField(SQL_SET_INFO, id, info);
@@ -292,8 +458,15 @@ public class UsersController implements IUsersController {
         }
     }
 
+    /**
+     * @param id   user id in jdbc
+     * @param name new user name
+     * @return true if success, false - if no
+     * @throws DAOException when get an exception during execution
+     */
     @Override
     public boolean setName(int id, String name) throws DAOException {
+
         try {
 
             return RequestExecutor.setField(SQL_SET_NAME, id, name);
@@ -306,8 +479,15 @@ public class UsersController implements IUsersController {
         }
     }
 
+    /**
+     * @param id      user id in jdbc
+     * @param surname new  user surname
+     * @return true if success, false - if no
+     * @throws DAOException when get an exception during execution
+     */
     @Override
     public boolean setSurname(int id, String surname) throws DAOException {
+
         try {
 
             return RequestExecutor.setField(SQL_SET_SURNAME, id, surname);

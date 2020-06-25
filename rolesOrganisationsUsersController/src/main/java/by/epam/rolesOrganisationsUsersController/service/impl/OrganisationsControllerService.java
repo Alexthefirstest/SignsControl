@@ -9,13 +9,36 @@ import by.epam.rolesOrganisationsUsersController.dao.exceptions.DAOException;
 import by.epam.rolesOrganisationsUsersController.dao.factory.DaoFactory;
 import by.epam.rolesOrganisationsUsersController.service.IOrganisationsControllerService;
 
+/**
+ * Use {@link by.epam.rolesOrganisationsUsersController.dao.IRolesController} for working with dao
+ * include parameters validation
+ *
+ * @author Bulgak Alexander
+ * @see by.epam.rolesOrganisationsUsersController.bean.Organisation
+ * @see by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException
+ */
 public class OrganisationsControllerService implements IOrganisationsControllerService {
 
+    /**
+     * {@link IOrganisationsController} realisation
+     */
     private final IOrganisationsController organisationsController = DaoFactory.getINSTANCE().getOrganisationsController();
 
-
+    /**
+     * add organisation to jdbc table
+     *
+     * @param name organisation name
+     * @param role organisation members role
+     * @return {@link Organisation} if successfully added
+     * @throws ServiceValidationException when {@link InputValidation#nullAndSymbolsCheck(String)}
+     *                                    or catch {@link DAOValidationException}
+     *                                    from {@link IOrganisationsController#addOrganisation(String, int)}
+     * @throws ServiceException           when catch {@link DAOException}
+     *                                    from {@link IOrganisationsController#addOrganisation(String, int)}
+     */
     @Override
     public Organisation addOrganisation(String name, int role) throws ServiceException {
+
         InputValidation.nullAndSymbolsCheck(name);
 
         try {
@@ -28,8 +51,21 @@ public class OrganisationsControllerService implements IOrganisationsControllerS
         }
     }
 
+    /**
+     * set name for jdbc organisation
+     *
+     * @param id   organisation id in jdbc
+     * @param name new organisation name in jdbc
+     * @return true if success, false - if no
+     * @throws ServiceValidationException when {@link InputValidation#nullAndSymbolsCheck(String)}
+     *                                    or catch {@link DAOValidationException}
+     *                                    from {@link IOrganisationsController#setName(int, String)} }
+     * @throws ServiceException           when catch {@link DAOException}
+     *                                    from {@link IOrganisationsController#setName(int, String)}
+     */
     @Override
     public boolean setName(int id, String name) throws ServiceException {
+
         InputValidation.nullAndSymbolsCheck(name);
 
         try {
@@ -42,6 +78,17 @@ public class OrganisationsControllerService implements IOrganisationsControllerS
         }
     }
 
+    /**
+     * set organisation members role
+     *
+     * @param id   organisation id in jdbc
+     * @param role new organisation members role
+     * @return true if success, false - if no
+     * @throws ServiceValidationException when catch {@link DAOValidationException}
+     *                                    from {@link IOrganisationsController#setRole(int, int)}
+     * @throws ServiceException           when catch {@link DAOException}
+     *                                    from  {@link IOrganisationsController#setRole(int, int)}
+     */
     @Override
     public boolean setRole(int id, int role) throws ServiceException {
 
@@ -55,8 +102,17 @@ public class OrganisationsControllerService implements IOrganisationsControllerS
         }
     }
 
+    /**
+     * @param id organisation id in jdbc
+     * @return organisation member role or -1 in if can't find user with this id
+     * @throws ServiceValidationException when catch  {@link DAOValidationException(String)}
+     *                                    from  {@link IOrganisationsController#getRole(int)}
+     * @throws ServiceException           when catch {@link DAOException}
+     *                                    from {@link IOrganisationsController#getRole(int)}
+     */
     @Override
     public int getRole(int id) throws ServiceException {
+
         try {
 
             return organisationsController.getRole(id);
@@ -67,8 +123,21 @@ public class OrganisationsControllerService implements IOrganisationsControllerS
         }
     }
 
+    /**
+     * set info in jdbc organisation info field
+     *
+     * @param id   organisation id in jdbc
+     * @param info new organisation info in jdbc
+     * @return true if success, false - if no
+     * @throws ServiceValidationException when {@link InputValidation#nullAndSymbolsCheck(String)}
+     *                                    or catch {@link DAOValidationException}
+     *                                    from  {@link IOrganisationsController#setInfo(int, String)}
+     * @throws ServiceException           when catch {@link DAOException}
+     *                                    from {@link IOrganisationsController#setInfo(int, String)}
+     */
     @Override
     public boolean setInfo(int id, String info) throws ServiceException {
+
         InputValidation.nullAndSymbolsCheck(info);
 
         try {
@@ -81,8 +150,17 @@ public class OrganisationsControllerService implements IOrganisationsControllerS
         }
     }
 
+    /**
+     * @param id organisation id in jdbc
+     * @return organisation info in jdbc or null in if can't find user with this id
+     * @throws ServiceValidationException when  catch {@link DAOValidationException}
+     *                                    from {@link IOrganisationsController#getInfo(int)}
+     * @throws ServiceException           when catch {@link DAOException}
+     *                                    from {@link IOrganisationsController#getInfo(int)}
+     */
     @Override
     public String getInfo(int id) throws ServiceException {
+
         try {
 
             return organisationsController.getInfo(id);
@@ -93,8 +171,17 @@ public class OrganisationsControllerService implements IOrganisationsControllerS
         }
     }
 
+    /**
+     * @param id organisation id in jdbc
+     * @return block condition
+     * @throws ServiceValidationException when catch {@link DAOValidationException}
+     *                                    from {@link IOrganisationsController#getBlock(int)}
+     * @throws ServiceException           when catch {@link DAOException}
+     *                                    from {@link IOrganisationsController#getBlock(int)}
+     */
     @Override
     public boolean getBlock(int id) throws ServiceException {
+
         try {
 
             return organisationsController.getBlock(id);
@@ -105,8 +192,20 @@ public class OrganisationsControllerService implements IOrganisationsControllerS
         }
     }
 
+    /**
+     * set block in organisation table
+     *
+     * @param id    organisation id in jdbc
+     * @param block new block condition
+     * @return true if success, false - if no
+     * @throws ServiceValidationException when catch {@link DAOValidationException}
+     *                                    from {@link IOrganisationsController#setBlock(int, boolean)}
+     * @throws ServiceException           when catch {@link DAOException}
+     *                                    from {@link IOrganisationsController#setBlock(int, boolean)}
+     */
     @Override
     public boolean setBlock(int id, boolean block) throws ServiceException {
+
         try {
 
             return organisationsController.setBlock(id, block);
@@ -117,8 +216,16 @@ public class OrganisationsControllerService implements IOrganisationsControllerS
         }
     }
 
+    /**
+     * @return organisations array
+     * @throws ServiceValidationException when catch {@link DAOValidationException}
+     *                                    from {@link IOrganisationsController#getOrganisations()}
+     * @throws ServiceException           when catch {@link DAOException}
+     *                                    from {@link IOrganisationsController#getOrganisations()}
+     */
     @Override
     public Organisation[] getOrganisations() throws ServiceException {
+
         try {
 
             return organisationsController.getOrganisations();

@@ -20,6 +20,9 @@ public class ConnectionPoolFactory {
      */
     private final IConnectionPool connectionPoolInstance = ConnectionPool.getConnectionPoolInstance();
 
+    /*
+     *empty constructor
+     */
     private ConnectionPoolFactory() {
     }
 

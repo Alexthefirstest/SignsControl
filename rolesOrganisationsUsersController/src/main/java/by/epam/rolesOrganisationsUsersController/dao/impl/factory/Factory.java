@@ -13,15 +13,39 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * class for creating bean objects, that implements {@link FactoryType} from {@link ResultSet}
+ *
+ * @author Bulgak Alexander
+ */
 public class Factory {
 
+    /**
+     * log4j2 logger
+     */
     private static Logger logger = LogManager.getLogger(Factory.class);
 
+    /**
+     * this class instance
+     */
+    private static final Factory INSTANCE = new Factory();
+
+    /**
+     * empty constructor
+     */
     private Factory() {
     }
 
-    private static final Factory INSTANCE = new Factory();
-
+    /**
+     * create exemplar of bean object, that implements {@link FactoryType} from {@link ResultSet} by filling object
+     * from parameters using setters
+     *
+     * @param rs         {@link ResultSet} for creating bean object
+     * @param signsStaff bean object implements {@link FactoryType}
+     * @return bean object, that implements {@link FactoryType} or null in case of can't find object creator inside method
+     * @throws SQLException           if it been threw {@link ResultSet}
+     * @throws DAOValidationException in case of empty {@link ResultSet}
+     */
     public FactoryType createSignStaff(ResultSet rs, FactoryType signsStaff) throws SQLException, DAOValidationException {
 
 
@@ -74,6 +98,16 @@ public class Factory {
 
     }
 
+
+    /**
+     * create array of exemplars of one of the bean objects, that implements {@link FactoryType} from {@link ResultSet}
+     *
+     * @param rs         {@link ResultSet} for creating bean object
+     * @param signsStaff bean object implements {@link FactoryType} for defining a type of object
+     * @return array of bean object, that implements {@link FactoryType}, including empty array in case of empty {@link ResultSet}
+     * or null in case of can't find object creator inside method
+     * @throws SQLException if it been threw {@link ResultSet}
+     */
     public FactoryType[] createSignStaffArr(ResultSet rs, FactoryType signsStaff) throws SQLException {
 
         if (signsStaff instanceof Role) {
@@ -122,6 +156,9 @@ public class Factory {
     }
 
 
+    /**
+     * @return {@link Factory#INSTANCE}
+     */
     public static Factory getINSTANCE() {
         return INSTANCE;
     }
