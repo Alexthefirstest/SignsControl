@@ -82,6 +82,35 @@ public class LocalSignsControlService implements ILocalSignsControlService {
     }
 
     @Override
+    public MapPoint$LocalSign[] getMapPoints$LocalSignsByDate(String date) throws ServiceException {
+
+        InputValidation.nullAndDateCheck(date);
+
+        try {
+
+            return localSignsControl.getMapPoints$LocalSignsByDate(date);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public LocalSign[] getSigns(String coordinates) throws ServiceException {
+        InputValidation.pointCheck(coordinates);
+
+        try {
+
+            return localSignsControl.getSigns(coordinates);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
     public LocalSign[] getActualSigns() throws ServiceException {
         try {
 

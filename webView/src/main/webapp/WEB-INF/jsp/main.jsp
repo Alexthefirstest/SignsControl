@@ -13,19 +13,21 @@
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
+    <script>let ctx = "${pageContext.request.contextPath}"</script>
+
     <script src="https://api-maps.yandex.ru/2.1/?apikey=1c5fb506-d2a0-4d35-9f1f-6db2c0c54aa1&lang=ru_RU"
             type="text/javascript" charset="UTF-8"></script>
 
     <script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
 
-    <script src='${pageContext.request.contextPath}/js/map.js?9' type="text/javascript" charset="UTF-8"></script>
+    <script src='${pageContext.request.contextPath}/js/map.js?10' type="text/javascript" charset="UTF-8"></script>
 
 
     <%--создать css: карта, стандартные объекты на ней--%>
     <style>
         html, body, #map {
             width: 100%;
-            height: 70%;
+            height: 80%;
             padding: 0;
             margin: 0;
         }
@@ -40,17 +42,15 @@
             margin-left: 5px;
             font-size: 100%;
         }
+
+        #signsHistoryTable {
+            width: 100%;
+            height: 20%;
+            padding: 0;
+            margin: 0;
+        }
     </style>
 
-    <%--json test--%>
-    <script>
-        $(document).on("click", "#testbutton", function () {
-            $.get("${pageContext.request.contextPath}/get_current_points", function (responceJson) {
-                $("#mydiv").text(responceJson);
-            });
-        });
-    </script>
-    <%--json test--%>
 
 </head>
 
@@ -89,8 +89,22 @@
         <option value="en">en</option>
     </select>
 
+    <form>
+<p>Выберите дату:
+    <input type="date" name="calendar" max="2020-06-25" id="chosenDate">
+    <input type="reset" id="resetButton">
+</p>
+</form>
+
+<form>
+    <input type="checkbox" id="signsHistory" name="historyBox">
+    <label for="signsHistory">показать историю знаков</label>
+</form>
+
 
 <div id="map"></div>
+
+<div id="signsHistoryTable"></div>
 
 
 </body>

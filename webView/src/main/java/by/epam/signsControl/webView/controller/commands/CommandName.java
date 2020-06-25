@@ -8,5 +8,6 @@ public enum CommandName {
     LOGIN_FORM,
     LOGOUT,
     GET_CURRENT_POINTS,
-    GET_BALOONS
+    GET_POINTS_BY_DATE,
+    GET_POINT_HISTORY
 }

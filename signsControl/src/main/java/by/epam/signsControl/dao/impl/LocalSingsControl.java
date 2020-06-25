@@ -28,17 +28,47 @@ public class LocalSingsControl implements ILocalSignsControl {
     private static final String SQL_SELECT_ACTUAL = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add, \n" +
             " sl.date_of_remove, sl.annotation FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign " +
             " where date_of_remove is null AND signs_list_id=? order by signs_list_id, pdd_section, pdd_sign, pdd_kind;";
+
+
+
     private static final String SQL_SELECT_ACTUAL_INCLUDE_MAP_POINT = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add, " +
             "sl.date_of_remove, sl.annotation, mp.signs_angle, ST_AsText(mp.coordinates), mp.address FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign join map_points as mp on mp.signs_list = sl.signs_list_id " +
             " where date_of_remove is null order by mp.coordinates, mp.signs_list;";
+
+
+
+//use
     private static final String SQL_SELECT_ALL_INCLUDE_MAP_POINT = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add, " +
             "sl.date_of_remove, sl.annotation, mp.signs_angle, ST_AsText(mp.coordinates), mp.address, ps.name, ps.description FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign join map_points as mp on mp.signs_list = sl.signs_list_id " +
             "  order by mp.coordinates, mp.signs_list;";
+
+//use
+    private static final String SQL_SELECT_BY_DATE_INCLUDE_MAP_POINT = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add, " +
+            "sl.date_of_remove, sl.annotation, mp.signs_angle, ST_AsText(mp.coordinates), mp.address, ps.name, ps.description  " +
+            "FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign join map_points as mp on mp.signs_list = sl.signs_list_id  " +
+            "where  (STR_TO_DATE(?, '%Y.%m.%d') BETWEEN sl.date_of_add AND sl.date_of_remove) OR  (sl.date_of_remove is null AND (STR_TO_DATE(?, '%Y.%m.%d')>= sl.date_of_add))  " +
+            "order by mp.coordinates, mp.signs_list;";
+
+
+    //use
+    private static final String SQL_SELECT_BY_COORDINATES = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add," +
+            "     sl.date_of_remove, sl.annotation, mp.signs_angle, ps.name, ps.description FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign join map_points as mp on sl.signs_list_id=mp.signs_list" +
+            "        where mp.coordinates=st_geomfromtext(?)" +
+            "        order by signs_list_id,  sl.date_of_remove, sl.date_of_add, pdd_section, pdd_sign, pdd_kind;";
+
+
+
+
     private static final String SQL_SELECT_ACTUAL_USE_DATE = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add,  " +
             " sl.date_of_remove, sl.annotation FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign  " +
             "  where sl.signs_list_id=? AND (STR_TO_DATE(?, '%Y.%m.%d') BETWEEN sl.date_of_add AND sl.date_of_remove " +
             "   AND signs_list_id=8 OR sl.date_of_remove is null) " +
-            "   order by signs_list_id, pdd_section, pdd_sign, pdd_kind ";
+            "   order by signs_list_id, pdd_section, pdd_sign, pdd_kind; ";
+
+
+
+
+
     private static final String SQL_SELECT_ALL = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add, \n" +
             " sl.date_of_remove, sl.annotation FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign " +
             "order by signs_list_id, pdd_section, pdd_sign, pdd_kind;";
@@ -163,6 +193,34 @@ public class LocalSingsControl implements ILocalSignsControl {
 
         }
 
+    }
+
+    @Override
+    public MapPoint$LocalSign[] getMapPoints$LocalSignsByDate(String date) throws DAOException {
+        try {
+
+            return (MapPoint$LocalSign[]) RequestExecutor.getSignsStaffWithDifferentParameters(SQL_SELECT_BY_DATE_INCLUDE_MAP_POINT,
+                    new MapPoint$LocalSign(), date, date);
+
+        } catch (SQLException ex) {
+            logger.warn("select actual MapPoint$LocalSign fail ", ex);
+            throw new DAOException(ex);
+
+        }
+    }
+
+    @Override
+    public LocalSign[] getSigns(String coordinates) throws DAOException {
+
+        try {
+
+            return (LocalSign[]) RequestExecutor.getSignsStaffWithDifferentParameters(SQL_SELECT_BY_COORDINATES, new LocalSign(), coordinates);
+
+        } catch (SQLException ex) {
+            logger.warn("select sign use coordinates fail ", ex);
+            throw new DAOException(ex);
+
+        }
     }
 
     @Override

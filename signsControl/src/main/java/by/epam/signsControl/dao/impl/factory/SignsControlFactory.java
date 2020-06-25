@@ -46,6 +46,8 @@ public class SignsControlFactory {
             localSign.setDateOfRemove(rs.getDate(10));
             localSign.setAnnotation(rs.getString(11));
             localSign.setAngle(rs.getInt(12));
+            localSign.setName(rs.getString(13));
+            localSign.setDescription(rs.getString(14));
 
             return localSign;
         }
@@ -155,11 +157,10 @@ public class SignsControlFactory {
                                 rs.getInt(4), rs.getInt(5), rs.getInt(6),
                                 rs.getBytes(7), rs.getInt(8), rs.getDate(9),
                                 rs.getDate(10), rs.getString(11), rs.getInt(12),
-                                rs.getString(6), rs.getString(7)));
+                                rs.getString(13), rs.getString(14)));
             }
 
             return signsStaffArr.toArray(new LocalSign[0]);
-
         }
 
         if (signsStaff instanceof Sign) {

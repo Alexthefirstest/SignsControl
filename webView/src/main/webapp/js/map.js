@@ -1,7 +1,9 @@
 'use strict';
 let myMap;
 let script;
-
+let pointAjaxUrl = ctx + "/get_current_points";
+let pointAjaxDate = "1999-07-21";
+let a=0;
 function init(ymaps) {
 
     myMap = new ymaps.Map("map", {
@@ -200,33 +202,6 @@ function init(ymaps) {
 
     // ----------------------- список городов - конец
 
-    // ------------ метки начало
-
-    // let myCollection = new ymaps.GeoObjectCollection({}, {
-    //     preset: 'islands#violetCircleIcon'
-    // });
-//- старый вариант начало
-//     let myGeoObjects = [];
-//
-//     let myPlacemark = new ymaps.Placemark([53.90, 27.56], {
-//         balloonContent: 'it is balooNN',
-//         hintContent: 'hint here'
-//     }, {preset: 'islands#violetCircleIcon'});
-//
-//     myGeoObjects[0] = (myPlacemark);
-//     myGeoObjects[1] = (new ymaps.Placemark([53.92, 27.56], {
-//         balloonContent: 'it is balooNN2',
-//         hintContent: 'hint here2'
-//     }, {preset: 'islands#violetCircleIcon'}));
-//
-//     let myClusterer = new ymaps.Clusterer({preset: 'islands#violetClusterIcons'});
-//     myClusterer.add(myGeoObjects);
-//     myMap.geoObjects.add(myClusterer);
-
-    //-------------старый вариант конец
-    // let myPlacemark = new ymaps.Placemark([53.90, 27.56], { balloonContent: 'it is balooNN',  hintContent: 'hint here'},
-    //     { preset: 'islands#violetCircleIcon'});
-    // myMap.geoObjects.add(myPlacemark);
 
     //---------------------метки начаоло
 
@@ -234,105 +209,97 @@ function init(ymaps) {
         clusterize: true
     });
 
- objectManager.objects.options.set('preset', 'islands#violetCircleIcon');
+    objectManager.objects.options.set('preset', 'islands#violetCircleIcon'); //размеры сюда
     objectManager.clusters.options.set('preset', 'islands#violetClusterIcons');
 
     myMap.geoObjects.add(objectManager);
 
-//асинхронное добавление балунов - если добаят точку и лист  знаков в это время - полетит всё
-//    objectManager.objects.events.add('balloonopen', function (e) {
-//        // Получим объект, на котором открылся балун.
-//        let id = e.get('objectId'),
-//            geoObject = objectManager.objects.getById(id);
-//        // Загрузим данные для объекта при необходимости.
-//        downloadContent([geoObject], id);
+//// Поставим метку по клику над картой.
+//map.events.add('click', function (e) {
+//    // Географические координаты точки клика можно узнать
+//    // посредством вызова метода .get('coords').
+//    var position = e.get('coords');
+//    map.geoObjects.add(new ymaps.Placemark(position));
+//});
+
+//---координаты щелчка myMap.events ВЫДАЕТ КООРДИНАТЫ ПРИ КЛИКЕ НА ТОЧКУ - РАБОТАЕТ
+//objectManager.events.add('click', function (e) {
+//	let coords = e.get('coords');
+//
+//alert("ye")
+//       alert(coords);
 //    });
-//
-//    objectManager.clusters.events.add('balloonopen', function (e) {
-//        // Получим id кластера, на котором открылся балун.
-//        let id = e.get('objectId'),
-//            // Получим геообъекты внутри кластера.
-//            cluster = objectManager.clusters.getById(id),
-//            geoObjects = cluster.properties.geoObjects;
-//
-//        // Загрузим данные для объектов при необходимости.
-//        downloadContent(geoObjects, id, true);
-//    });
-//
-//    function downloadContent(geoObjects, id, isCluster) {
-//        // Создадим массив меток, для которых данные ещё не загружены.
-//        let array = geoObjects.filter(function (geoObject) {
-//                return geoObject.properties.balloonContent === 'balloon loading...' ||
-//                    geoObject.properties.balloonContent === 'Not found';
-//            }),
-//            // Формируем массив идентификаторов, который будет передан серверу.
-//            ids = array.map(function (geoObject) {
-//                return geoObject.id;
-//            });
-//        if (ids.length) {
-//            // Запрос к серверу.
-//            // Сервер обработает массив идентификаторов и на его основе
-//            // вернет JSON-объект, содержащий текст балуна для
-//            // заданных меток.
-//            ymaps.vow.resolve($.ajax({
-//                // Обратите внимание, что серверную часть необходимо реализовать самостоятельно.
-//                //contentType: 'application/json',
-//                //type: 'POST',
-//                //data: JSON.stringify(ids),
-//
-//                url: "get_baloons",
-//                dataType: 'json',
-//                processData: false
-//            })).then(
-//                function (data) {
-//                    geoObjects.forEach(function (geoObject) {
-//                        // Содержимое балуна берем из данных, полученных от сервера.
-//                        // Сервер возвращает массив объектов вида:
-//                        // [ {"balloonContent": "Содержимое балуна"}, ...]
-//                        geoObject.properties.balloonContent = data[geoObject.id].balloonContent;
-//                    });
-//                    // Оповещаем балун, что нужно применить новые данные.
-//                    setNewData();
-//                }, function () {
-//                    geoObjects.forEach(function (geoObject) {
-//                        geoObject.properties.balloonContent = 'Not found';
-//                    });
-//                    // Оповещаем балун, что нужно применить новые данные.
-//                    setNewData();
-//                }
-//            );
-//        }
-//
-//        function setNewData() {
-//            if (isCluster && objectManager.clusters.balloon.isOpen(id)) {
-//                objectManager.clusters.balloon.setData(objectManager.clusters.balloon.getData());
-//            } else if (objectManager.objects.balloon.isOpen(id)) {
-//                objectManager.objects.balloon.setData(objectManager.objects.balloon.getData());
-//            }
-//        }
-//    }
+
+//-----------signs hisory
+
+let activeObjectMonitor = new ymaps.Monitor(objectManager.clusters.state);
+
+	objectManager.objects.events.add('click', function (e) {
+
+			let objectId = e.get('objectId');
+		updateSignsHistory(objectId);
+		});
+
+		activeObjectMonitor.add('activeObject', function () {
+        			let objectId = activeObjectMonitor.get('activeObject').id;
+        			objectManager.objects.getById(objectId).properties.balloonContent;
+        				updateSignsHistory(objectId);
+
+        		});
+
+
+function updateSignsHistory(objectId) {
+
+
+  $.ajax({
+        url: ctx+"/get_point_history",
+        data: {"pointCoordinates": objectManager.objects.getById(objectId).properties.pointCoordinates}
+    }).done(function (data) {
+        changeSignsHistoryDiv(data);
+    });
+ // changeSignsHistoryDiv(objectManager.objects.getById(objectId).properties.pointCoordinates);
+
+}
+
+
+myMap.balloon.events.add('userclose', function (e) {
+
+changeSignsHistoryDiv("выберите точку");
+
+});
+
+
+
 
     $.ajax({
-        url: "get_current_points"
+        url: pointAjaxUrl,
+        data: {"chosenDate": pointAjaxDate}
     }).done(function (data) {
         objectManager.add(data);
     });
 
-    // ------------- метки конец
+    //   ------------- метки конец
 
 
 }//init finish
 
+
 // ----------------------- логализация - начало
 
 window.onload = function () {
+
     // Получим ссылки на элементы с тегом 'head' и id 'language'.
     let head = document.getElementsByTagName('head')[0];
     let select = document.getElementById('language');
     select.createMap = function () {
+
         // Получим значение выбранного языка.
         let language = this.value;
         // Если карта уже была создана, то удалим её.
+//        setTimeout(function () {if (myMap) {
+//                                            myMap.destroy();
+//                                        } }
+//                                        , 1000);
         if (myMap) {
             myMap.destroy();
         }
@@ -350,11 +317,66 @@ window.onload = function () {
         window['init_' + language] = function () {
             init(window['ymaps_' + language]);
         }
+
+
     };
     // Назначим обработчик для события выбора языка из списка.
     document.getElementById('language').addEventListener("change", select.createMap);
     // Создадим карту и зададим для нее язык, который был выбран по умолчанию.
-    select.createMap();
-};
 
+//points listeners
+
+     $(document).on("change", "#chosenDate", function () {
+
+
+        pointAjaxDate = (document.getElementById('chosenDate')).value;
+
+        pointAjaxUrl = ctx + "/get_points_by_date";
+
+        select.createMap();
+
+    });
+
+
+    $(document).on("click", "#resetButton", function () {
+
+
+        pointAjaxUrl = ctx + "/get_current_points";
+
+        select.createMap();
+
+    });
+
+//points listeners fin
+
+//signs hostory
+    signsDiv = document.getElementById("signsHistoryTable");
+
+
+ $(document).on("click", "#signsHistory", function(){
+
+      changeSignsHistoryDiv("выберите точку");
+
+    });
+
+
+    select.createMap();//----create map here
+}//window.onload;
+
+let signsDiv;
+
+function changeSignsHistoryDiv(html) {
+
+    if (document.getElementById("signsHistory").checked) {
+
+ signsDiv.innerHTML = html;
+  signsDiv.style.visibility = 'visible';
+
+
+    } else {
+
+        signsDiv.style.visibility = 'hidden';
+    }
+//signs hostory fin
+}
 // ----------------------- локализация - конец

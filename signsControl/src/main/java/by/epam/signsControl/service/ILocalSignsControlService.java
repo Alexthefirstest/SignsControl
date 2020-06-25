@@ -18,6 +18,10 @@ public interface ILocalSignsControlService {
 
     MapPoint$LocalSign[] getAllMapPoints$LocalSigns() throws ServiceException;
 
+    MapPoint$LocalSign[] getMapPoints$LocalSignsByDate(String date) throws ServiceException;
+
+    LocalSign[] getSigns (String coordinates) throws ServiceException;
+
     LocalSign[] getActualSigns() throws ServiceException;
 
     LocalSign[] getActualSigns(int signsListID, String date) throws ServiceException;

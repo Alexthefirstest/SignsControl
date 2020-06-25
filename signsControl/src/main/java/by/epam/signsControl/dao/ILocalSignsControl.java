@@ -15,7 +15,13 @@ public interface ILocalSignsControl {
     boolean deleteSign(int signId) throws DAOException;
 
     MapPoint$LocalSign[] getActualMapPoints$LocalSigns() throws DAOException;
+
     MapPoint$LocalSign[] getAllMapPoints$LocalSigns() throws DAOException;
+
+    MapPoint$LocalSign[] getMapPoints$LocalSignsByDate(String date) throws DAOException;
+
+    LocalSign[] getSigns (String coordinates) throws DAOException;
+
 
     LocalSign[] getActualSigns() throws DAOException;
 
@@ -25,6 +31,7 @@ public interface ILocalSignsControl {
 
 
     boolean setDateOfAdd(int localSignID, Date date) throws DAOException;
+
     boolean setDateOfRemove(int localSignID, Date date) throws DAOException;
 
     boolean setAnnotation(int localSignID, String annotation) throws DAOException;

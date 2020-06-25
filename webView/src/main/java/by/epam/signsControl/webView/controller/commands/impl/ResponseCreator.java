@@ -1,27 +1,27 @@
 package by.epam.signsControl.webView.controller.commands.impl;
 
 import by.epam.signsControl.bean.LocalSign;
-import by.epam.signsControl.bean.MapPoint;
 import by.epam.signsControl.bean.MapPoint$LocalSign;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class JsonCreator {
+public class ResponseCreator {
 
-    private static final Logger logger = LogManager.getLogger(JsonCreator.class);
+    private static final Logger logger = LogManager.getLogger(ResponseCreator.class);
 
-    private static final String JSON_POINT_PATTERN = "{\"type\": \"Feature\", \"id\": , \"geometry\": {\"type\": \"Point\", \"coordinates\": []}, \"properties\": {\"balloonContent\": \"\", \"clusterCaption\" : \"\", \"hintContent\": \"\"}}";
+    private static final String JSON_POINT_PATTERN = "{\"type\": \"Feature\", \"id\": , \"geometry\": {\"type\": \"Point\", \"coordinates\": []}, \"properties\": {\"balloonContent\": \"\", \"clusterCaption\" : \"\", \"hintContent\": \"\", \"pointCoordinates\": \"\"}}";
     private static final String JSON_POINTS_START_SUBSTRING = "{\"type\": \"FeatureCollection\",\"features\": [";
     private static final String JSON_POINTS_FINISH_SUBSTRING = "] }";
 
-    private JsonCreator() {
+    private ResponseCreator() {
     }
 
-    static String createPointsJSON(MapPoint$LocalSign[] mapPoints) {
+    static String createPointsJSON(MapPoint$LocalSign[] mapPoints, boolean allPoints) {
 
 
         StringBuilder jsonString = new StringBuilder(JSON_POINTS_START_SUBSTRING);
@@ -29,10 +29,10 @@ public class JsonCreator {
         int mapPointsLengthMinus1 = mapPoints.length - 1;
 
         for (int i = 0; i < mapPointsLengthMinus1; i++) {
-            jsonString.append(createPointJson(mapPoints[i], i)).append(",");
+            jsonString.append(createPointJson(mapPoints[i], i, allPoints)).append(",");
         }
 
-        jsonString.append(createPointJson(mapPoints[mapPointsLengthMinus1], mapPointsLengthMinus1));
+        jsonString.append(createPointJson(mapPoints[mapPointsLengthMinus1], mapPointsLengthMinus1, allPoints));
 
         jsonString.append(JSON_POINTS_FINISH_SUBSTRING);
 
@@ -42,15 +42,16 @@ public class JsonCreator {
 
     }
 
-    private static String createPointJson(MapPoint$LocalSign mapPoint$LocalSign, int id) {
+    private static String createPointJson(MapPoint$LocalSign mapPoint$LocalSign, int id, boolean allPoints) {
 
         StringBuilder jsonPoint = new StringBuilder(JSON_POINT_PATTERN);
 
         String hint = createHint(mapPoint$LocalSign);
 
+        jsonPoint.insert(178, mapPoint$LocalSign.getMapPoint().getCoordinates());
         jsonPoint.insert(154, hint);
         jsonPoint.insert(135, hint);
-        jsonPoint.insert(112, createBaloonJSON(mapPoint$LocalSign));
+        jsonPoint.insert(112, createBaloonJSON(mapPoint$LocalSign, allPoints));
         jsonPoint.insert(74, mysqlCoordinatesToJSONCoordinates(mapPoint$LocalSign.getMapPoint().getCoordinates()));
         jsonPoint.insert(26, id);
 
@@ -89,14 +90,14 @@ public class JsonCreator {
     }
 
 
-    private static String createBaloonJSON(MapPoint$LocalSign mapPoint$LocalSign) {
+    private static String createBaloonJSON(MapPoint$LocalSign mapPoint$LocalSign, boolean allPoints) {
 
 
         StringBuilder baloon = new StringBuilder();
 
         for (int i = 0; i < mapPoint$LocalSign.getListOfLocalSignsArrays().size(); i++) {
 
-            baloon.append(createBaloonStringForDirection(mapPoint$LocalSign.getLocalSignsArrays(i)));
+            baloon.append(createBalloonStringForDirection(mapPoint$LocalSign.getLocalSignsArrays(i), allPoints));
             baloon.append("<br /><br />");
 
         }
@@ -105,7 +106,7 @@ public class JsonCreator {
 
     }
 
-    private static String createBaloonStringForDirection(ArrayList<LocalSign> localSignsWithCommonDirection) {
+    private static String createBalloonStringForDirection(ArrayList<LocalSign> localSignsWithCommonDirection, boolean allPoints) {
 
         StringBuilder sb = new StringBuilder();
 
@@ -115,7 +116,7 @@ public class JsonCreator {
         for (int i = 0; i < localSignsWithCommonDirection.size(); i++) {
 
 
-            if ((localSignsWithCommonDirection.get(i).getDateOfRemove()) != null) {
+            if ((allPoints && (localSignsWithCommonDirection.get(i).getDateOfRemove()) != null)) {
 
                 continue;
             }
@@ -154,6 +155,46 @@ public class JsonCreator {
 
         return sb.toString();
 
+    }
+
+    public static String createPointHistory(LocalSign[] localSigns) {
+
+        StringBuilder pointHistory = new StringBuilder();
+
+        pointHistory.append("sign").append("|name").append("|опиcание").append("|размер").append("|направление")
+                .append("|дата добавления").append("|дата удаления").append("|картинка<br />");
+
+        for (LocalSign localSign : localSigns) {
+            pointHistory.append(createPointHistoryField(localSign)).append("<br/>");
+
+        }
+
+       return pointHistory.toString();
+
+    }
+
+    private static String createPointHistoryField(LocalSign localSigns) {
+
+        StringBuilder sb = new StringBuilder();
+
+        int signKind;
+        String description;
+        Date dateOfRemove;
+        byte[] picture;
+
+        sb.append(localSigns.getSection()).
+                append("." + localSigns.getSign())
+                .append(((signKind = localSigns.getKind()) > -1) ? "." + signKind : "");
+
+        sb.append("|" + localSigns.getName() + "|");
+        sb.append(((description = localSigns.getDescription()) != null) ? description : "-");
+        sb.append("|" + localSigns.getStandardSize());
+        sb.append("|" + localSigns.getAngle());
+        sb.append("|" + localSigns.getDateOfAdd()+"|");
+        sb.append(((dateOfRemove = localSigns.getDateOfRemove()) != null) ? dateOfRemove+"|" : "-|");
+        sb.append(((picture = localSigns.getPicture()) != null) ? picture : "-");
+
+        return sb.toString();
     }
 
 

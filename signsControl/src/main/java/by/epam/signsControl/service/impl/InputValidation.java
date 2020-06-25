@@ -12,8 +12,19 @@ public class InputValidation {
 
     public static void coordinatesValidation(String coordinate) throws ServiceValidationException {
 
+        nullCheck(coordinate);
+
         if (!Pattern.matches("\\d+(\\.\\d+)?", coordinate)) {
             throw new ServiceValidationException("wrong coordinate format");
+        }
+    }
+
+    public static void pointCheck(String coordinate) throws ServiceValidationException {
+
+        nullCheck(coordinate);
+
+        if (!Pattern.matches("POINT\\(\\d+(\\.\\d*)?\\s\\d+(\\.\\d*)?\\)", coordinate)) {
+            throw new ServiceValidationException("wrong coordinate point format");
         }
     }
 
