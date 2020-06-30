@@ -5,13 +5,15 @@ import by.epam.signsControl.service.exceptions.ServiceException;
 
 public interface IMapPointsControlService {
 
-    MapPoint getMapPoint(String coordinateX, String coordinateY) throws ServiceException;
+    MapPoint getMapPoint(String coordinates) throws ServiceException;
 
-    MapPoint addMapPoint(String coordinateX, String coordinateY, String address, int signsAngle) throws ServiceException;
+    MapPoint addMapPoint(String coordinates, String address, int signsAngle) throws ServiceException;
 
-    MapPoint addMapPoint(String coordinateX, String coordinateY, String address, int signsAngle, String annotation) throws ServiceException;
+    MapPoint addMapPoint(String coordinates, String address, int signsAngle, String annotation) throws ServiceException;
 
     MapPoint[] getMapPoints() throws ServiceException;
+
+    MapPoint[] getEmptyMapPoints() throws ServiceException;
 
     boolean removeMapPoint(int signsList) throws ServiceException;
 

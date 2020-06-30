@@ -1,5 +1,6 @@
 package by.epam.signsControl.dao.impl.factory;
 
+import by.epam.signsControl.bean.Direction;
 import by.epam.signsControl.bean.LocalSign;
 import by.epam.signsControl.bean.MapPoint;
 import by.epam.signsControl.bean.MapPoint$LocalSign;
@@ -45,7 +46,7 @@ public class SignsControlFactory {
             localSign.setDateOfAdd(rs.getDate(9));
             localSign.setDateOfRemove(rs.getDate(10));
             localSign.setAnnotation(rs.getString(11));
-            localSign.setAngle(rs.getInt(12));
+            localSign.setAngle(rs.getString(12).charAt(0));
             localSign.setName(rs.getString(13));
             localSign.setDescription(rs.getString(14));
 
@@ -73,13 +74,13 @@ public class SignsControlFactory {
 
             mapPoint.addAddress(rs.getString(2));
             mapPoint.addSignsList(rs.getInt(3));
-            mapPoint.addAngle(rs.getInt(4));
+            mapPoint.addAngle(rs.getString(4).charAt(0));
             mapPoint.addAnnotation(rs.getString(5));
 
             while (rs.next()) {
                 mapPoint.addAddress(rs.getString(2));
                 mapPoint.addSignsList(rs.getInt(3));
-                mapPoint.addAngle(rs.getInt(4));
+                mapPoint.addAngle(rs.getString(4).charAt(0));
                 mapPoint.addAnnotation(rs.getString(5));
             }
 
@@ -103,6 +104,21 @@ public class SignsControlFactory {
 
     public FactoryType[] createSignStaffArr(ResultSet rs, FactoryType signsStaff) throws SQLException {
 
+
+        if (signsStaff instanceof Direction) {
+
+            ArrayList<FactoryType> signsStaffArr = new ArrayList<>();
+
+            while (rs.next()) {
+
+                signsStaffArr.add(new Direction(rs.getInt(1), rs.getString(2).charAt(0)));
+            }
+
+
+            return signsStaffArr.toArray(new Direction[0]);
+
+        }
+
         if (signsStaff instanceof MapPoint$LocalSign) {
 
             MapPoint$LocalSign mapPoint$LocalSign;
@@ -125,7 +141,7 @@ public class SignsControlFactory {
 
                     mapPoint.addAddress(rs.getString(14));
                     mapPoint.addSignsList(rs.getInt(2));
-                    mapPoint.addAngle(rs.getInt(12));
+                    mapPoint.addAngle(rs.getString(12).charAt(0));
                     mapPoint.addAnnotation(rs.getString(11));
 
                     mapPoint$LocalSign.addLocalSignArr();
@@ -134,11 +150,11 @@ public class SignsControlFactory {
                         mapPoint$LocalSign.addLocalSignToLastArr(new LocalSign(rs.getInt(1), rs.getInt(2), rs.getInt(3),
                                 rs.getInt(4), rs.getInt(5), rs.getInt(6),
                                 rs.getBytes(7), rs.getInt(8), rs.getDate(9),
-                                rs.getDate(10), rs.getString(11), rs.getInt(12),
+                                rs.getDate(10), rs.getString(11), rs.getString(12).charAt(0),
                                 rs.getString(15), rs.getString(16)));
                     } while ((stillNext = rs.next()) && rs.getInt(2) == mapPoint$LocalSign.getLocalSignFromLastArr(0).getSignListId());
 
-                } while (stillNext && rs.getString(1).equals(mapPoint.getCoordinates()));
+                } while (stillNext && rs.getString(13).equals(mapPoint.getCoordinates()));
 
                 mapPoint$LocalSign.setMapPoint(mapPoint);
                 mapPoint$LocalSigns.add(mapPoint$LocalSign);
@@ -156,7 +172,7 @@ public class SignsControlFactory {
                         (new LocalSign(rs.getInt(1), rs.getInt(2), rs.getInt(3),
                                 rs.getInt(4), rs.getInt(5), rs.getInt(6),
                                 rs.getBytes(7), rs.getInt(8), rs.getDate(9),
-                                rs.getDate(10), rs.getString(11), rs.getInt(12),
+                                rs.getDate(10), rs.getString(11), rs.getString(12).charAt(0),
                                 rs.getString(13), rs.getString(14)));
             }
 
@@ -207,7 +223,7 @@ public class SignsControlFactory {
 
                     mapPoint.addAddress(rs.getString(2));
                     mapPoint.addSignsList(rs.getInt(3));
-                    mapPoint.addAngle(rs.getInt(4));
+                    mapPoint.addAngle(rs.getString(4).charAt(0));
                     mapPoint.addAnnotation(rs.getString(5));
 
                 } while ((stillNext = rs.next()) && rs.getString(1).equals(mapPoint.getCoordinates()));

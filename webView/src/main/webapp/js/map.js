@@ -3,7 +3,14 @@ let myMap;
 let script;
 let pointAjaxUrl = ctx + "/get_current_points";
 let pointAjaxDate = "1999-07-21";
-let a=0;
+let signsDiv;
+let objectManager;
+let indicatePointCoordinates = null;
+let indicatePlacemark;
+let coordinatesHtml;
+let point_form;
+   let objectManagerEP;
+
 function init(ymaps) {
 
     myMap = new ymaps.Map("map", {
@@ -205,15 +212,79 @@ function init(ymaps) {
 
     //---------------------метки начаоло
 
-    let objectManager = new ymaps.ObjectManager({
+    objectManager = new ymaps.ObjectManager({
         clusterize: true
     });
 
     objectManager.objects.options.set('preset', 'islands#violetCircleIcon'); //размеры сюда
     objectManager.clusters.options.set('preset', 'islands#violetClusterIcons');
 
-    myMap.geoObjects.add(objectManager);
+ objectManagerEP = new ymaps.ObjectManager({
+                       clusterize: true
+                   });
 
+                    objectManagerEP.objects.options.set('preset', 'islands#redCircleIcon'); //размеры сюда
+                                      objectManagerEP.clusters.options.set('preset', 'islands#redClusterIcons');
+
+  myMap.geoObjects.add(objectManager);
+   myMap.geoObjects.add(objectManagerEP);
+
+ myMap.events.add('dblclick', function (e) {
+
+      objectManager.removeAll();
+
+      });
+
+//indicate point
+  if( indicatePointCoordinates!=null) {
+
+ indicatePlacemark = new ymaps.Placemark(indicatePointCoordinates,{}, {preset: "islands#redIcon", draggable: "true"});
+
+   indicatePlacemark.events.add("dragend", function (e) {
+
+
+//alert(e.get('coords'));
+
+
+
+ coordinatesHtml.value=indicatePlacemark.geometry.getCoordinates();
+
+
+
+   $.ajax({
+
+          url: ctx+"/get_unused_directions",
+data: {"pointCoordinates": coordinatesHtml}
+
+      }).done(function (data) {
+
+let directions = JSON.parse(data)
+
+let directionsSelect=document.getElementById("direction");
+
+ $("#direction").empty();
+
+for(let j = 0; j<directions.ids.length; j++){
+
+  directionsSelect.append(new Option(directions.directions[j], directions.ids[j]));
+}
+
+  }).fail(function() {
+
+        $("#direction").empty();
+        //exception
+
+      });
+//ajax/
+
+              });
+
+
+  myMap.geoObjects.add(indicatePlacemark);
+
+
+  }
+//---indicate point
 //// Поставим метку по клику над картой.
 //map.events.add('click', function (e) {
 //    // Географические координаты точки клика можно узнать
@@ -237,19 +308,44 @@ let activeObjectMonitor = new ymaps.Monitor(objectManager.clusters.state);
 	objectManager.objects.events.add('click', function (e) {
 
 			let objectId = e.get('objectId');
-		updateSignsHistory(objectId);
+			updateSignsHistory(objectId);
+			changeDirectionCoordinates(objectManager.objects.getById(objectId).properties.pointCoordinates);
+
 		});
 
 		activeObjectMonitor.add('activeObject', function () {
         			let objectId = activeObjectMonitor.get('activeObject').id;
-        			objectManager.objects.getById(objectId).properties.balloonContent;
-        				updateSignsHistory(objectId);
+        		//	objectManager.objects.getById(objectId).properties.balloonContent;
+        		updateSignsHistory(objectId);
+        		//проверить что существует changeDIrectionCoorditnates
+        		changeDirectionCoordinates(objectManager.objects.getById(objectId).properties.pointCoordinates);
+
+
+        		});
+
+let activeObjectMonitorEP = new ymaps.Monitor(objectManagerEP.clusters.state);
+
+	objectManagerEP.objects.events.add('click', function (e) {
+
+			let objectId = e.get('objectId');
+
+			changeDirectionCoordinates(objectManagerEP.objects.getById(objectId).properties.pointCoordinates);
+		changeSignsHistoryDiv("empty point");
+		});
+
+		activeObjectMonitorEP.add('activeObject', function () {
+        			let objectId = activeObjectMonitorEP.get('activeObject').id;
+        		//	objectManager.objects.getById(objectId).properties.balloonContent;
+
+        				changeDirectionCoordinates(objectManagerEP.objects.getById(objectId).properties.pointCoordinates);
+        				 changeSignsHistoryDiv("empty point");
 
         		});
 
 
 function updateSignsHistory(objectId) {
 
+if (document.getElementById("signsHistory").checked) {
 
   $.ajax({
         url: ctx+"/get_point_history",
@@ -257,6 +353,7 @@ function updateSignsHistory(objectId) {
     }).done(function (data) {
         changeSignsHistoryDiv(data);
     });
+  }
  // changeSignsHistoryDiv(objectManager.objects.getById(objectId).properties.pointCoordinates);
 
 }
@@ -361,14 +458,93 @@ window.onload = function () {
 
 
     select.createMap();//----create map here
+
+
+    //add point
+
+    if (document.getElementById("addPointButton")!=null) {
+
+ point_form = document.getElementById("point_form");
+    point_form.style.visibility = 'hidden';
+coordinatesHtml=document.getElementsByName('coordinatesToSend')[0];
+
+
+coordinatesHtml.value=0;
+     $(document).on("click", "#addPointButton", function(){
+
+ myMap.events.add('click', function (e) {
+
+
+           indicatePointCoordinates = e.get('coords');
+           coordinatesHtml.value=indicatePointCoordinates;
+              point_form.style.visibility = 'visible';
+
+
+
+   $.ajax({
+
+          url: ctx+"/get_unused_directions",
+data: {"pointCoordinates": coordinatesHtml.value}
+
+      }).done(function (data) {
+
+let directions = JSON.parse(data)
+
+let directionsSelect=document.getElementById("direction");
+
+ $("#direction").empty();
+
+for(let j = 0; j<directions.ids.length; j++){
+
+  directionsSelect.append(new Option(directions.directions[j], directions.ids[j]));
+}
+
+  }).fail(function() {
+
+        $("#direction").empty();
+        //exception
+
+      });
+//ajax/
+
+
+                select.createMap();
+
+            });
+
+    });
+
+     $(document).on("click", "#addDirectionForm", function(){
+
+           changeDirectionCoordinates(null);
+
+         });
+
+ $(document).on("click", "#showEmptyPointsButton", function(){
+
+ $.ajax({
+
+        url: ctx+"/get_empty_points"
+
+    }).done(function (data) {
+
+    objectManagerEP.removeAll();
+
+               objectManagerEP.add(data);
+           });
+
+    });
+ }
+
+  //add point/
+
+
 }//window.onload;
 
-let signsDiv;
 
 function changeSignsHistoryDiv(html) {
 
     if (document.getElementById("signsHistory").checked) {
-
  signsDiv.innerHTML = html;
   signsDiv.style.visibility = 'visible';
 
@@ -376,6 +552,54 @@ function changeSignsHistoryDiv(html) {
     } else {
 
         signsDiv.style.visibility = 'hidden';
+    }
+//signs hostory fin
+}
+
+function changeDirectionCoordinates(coordinates) {
+
+let addDirectionForm=document.getElementById("addDirectionForm");
+
+    if((addDirectionForm!=null) && (addDirectionForm.checked)) {
+
+
+
+
+if(coordinates!=null){
+
+  coordinatesHtml.value=coordinates;
+
+   $.ajax({
+
+          url: ctx+"/get_unused_directions",
+data: {"pointCoordinates": coordinates}
+
+      }).done(function (data) {
+
+let directions = JSON.parse(data)
+
+let directionsSelect=document.getElementById("direction");
+
+ $("#direction").empty();
+
+for(let j = 0; j<directions.ids.length; j++){
+
+  directionsSelect.append(new Option(directions.directions[j], directions.ids[j]));
+}
+
+  }).fail(function() {
+
+        $("#direction").empty();
+        //exception
+
+      });
+
+}
+point_form.style.visibility = 'visible';
+
+    } else {
+
+         point_form.style.visibility = 'hidden';
     }
 //signs hostory fin
 }

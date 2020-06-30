@@ -7,12 +7,28 @@ public class StringTransformer {
     private StringTransformer() {
     }
 
-    public static String coordinatesToPointWithCheck(String firstCoordinate, String secondCoordinate) throws ServiceValidationException {
+    public static String coordinatesToPointWithCheck(String coordinates) throws ServiceValidationException {
 
-        InputValidation.nullCheck(firstCoordinate);
-        InputValidation.nullCheck(secondCoordinate);
-        InputValidation.coordinatesValidation(firstCoordinate);
-        InputValidation.coordinatesValidation(secondCoordinate);
-        return "Point("+firstCoordinate+' '+secondCoordinate+')';
+        InputValidation.nullCheck(coordinates);
+
+        InputValidation.coordinatesValidation(coordinates);
+
+        return "Point(" + coordinates.replace(",", " ") + ')';
+    }
+
+    public static String coordinatesOrPointToPointWithCheck(String coordinates) throws ServiceValidationException {
+
+        InputValidation.nullCheck(coordinates);
+
+        try {
+            InputValidation.pointCheck(coordinates);
+            return coordinates;
+        } catch (ServiceValidationException ex) {
+
+            InputValidation.coordinatesValidation(coordinates);
+            return "Point(" + coordinates.replace(",", " ") + ')';
+        }
+
+
     }
 }

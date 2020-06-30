@@ -12,6 +12,7 @@ public interface IMapPointsControl {
     MapPoint addMapPoint(String coordinates, String address, int signsAngle, String annotation) throws DAOException;
 
     MapPoint[] getMapPoints() throws DAOException;
+    MapPoint[] getEmptyMapPoints() throws DAOException;
 
     boolean removeMapPoint(int signsList) throws DAOException;
 

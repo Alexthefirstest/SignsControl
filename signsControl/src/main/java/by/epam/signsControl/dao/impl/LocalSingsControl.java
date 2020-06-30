@@ -32,28 +32,32 @@ public class LocalSingsControl implements ILocalSignsControl {
 
 
     private static final String SQL_SELECT_ACTUAL_INCLUDE_MAP_POINT = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add, " +
-            "sl.date_of_remove, sl.annotation, mp.signs_angle, ST_AsText(mp.coordinates), mp.address FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign join map_points as mp on mp.signs_list = sl.signs_list_id " +
+            "sl.date_of_remove, sl.annotation, directions.direction, ST_AsText(mp.coordinates), mp.address FROM sign_lists as sl " +
+            "join pdd_signs as ps on ps.id = sl.sign join map_points as mp on mp.signs_list = sl.signs_list_id join directions on mp.direction=directions.id" +
             " where date_of_remove is null order by mp.coordinates, mp.signs_list;";
 
-
+//аннотации у знаков мб не нужны
 
 //use
-    private static final String SQL_SELECT_ALL_INCLUDE_MAP_POINT = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add, " +
-            "sl.date_of_remove, sl.annotation, mp.signs_angle, ST_AsText(mp.coordinates), mp.address, ps.name, ps.description FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign join map_points as mp on mp.signs_list = sl.signs_list_id " +
-            "  order by mp.coordinates, mp.signs_list;";
+    private static final String SQL_SELECT_ALL_INCLUDE_MAP_POINT = "SELECT sl.local_sign_id, mp.signs_list, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add, " +
+        " sl.date_of_remove, mp.annotation, directions.direction, ST_AsText(mp.coordinates), mp.address, ps.name, ps.description FROM sign_lists as sl " +
+        " right join map_points as mp on mp.signs_list = sl.signs_list_id " +
+        " left join pdd_signs as ps on ps.id = sl.sign " +
+        " join directions on mp.direction=directions.id  " +
+        " where coordinates in (SELECT coordinates FROM map_points as mp join sign_lists as sl on mp.signs_list=sl.signs_list_id) order by mp.coordinates, mp.signs_list;";
 
 //use
     private static final String SQL_SELECT_BY_DATE_INCLUDE_MAP_POINT = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add, " +
-            "sl.date_of_remove, sl.annotation, mp.signs_angle, ST_AsText(mp.coordinates), mp.address, ps.name, ps.description  " +
+            "sl.date_of_remove, mp.annotation, directions.direction, ST_AsText(mp.coordinates), mp.address, ps.name, ps.description  " +
             "FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign join map_points as mp on mp.signs_list = sl.signs_list_id  " +
-            "where  (STR_TO_DATE(?, '%Y.%m.%d') BETWEEN sl.date_of_add AND sl.date_of_remove) OR  (sl.date_of_remove is null AND (STR_TO_DATE(?, '%Y.%m.%d')>= sl.date_of_add))  " +
+            "join directions on mp.direction=directions.id where  (STR_TO_DATE(?, '%Y.%m.%d') BETWEEN sl.date_of_add AND sl.date_of_remove) OR  (sl.date_of_remove is null AND (STR_TO_DATE(?, '%Y.%m.%d')>= sl.date_of_add))  " +
             "order by mp.coordinates, mp.signs_list;";
 
 
     //use
     private static final String SQL_SELECT_BY_COORDINATES = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add," +
-            "     sl.date_of_remove, sl.annotation, mp.signs_angle, ps.name, ps.description FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign join map_points as mp on sl.signs_list_id=mp.signs_list" +
-            "        where mp.coordinates=st_geomfromtext(?)" +
+            "     sl.date_of_remove, mp.annotation, directions.direction, ps.name, ps.description FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign join map_points as mp on sl.signs_list_id=mp.signs_list" +
+            " join directions on mp.direction=directions.id       where mp.coordinates=st_geomfromtext(?)" +
             "        order by signs_list_id,  sl.date_of_remove, sl.date_of_add, pdd_section, pdd_sign, pdd_kind;";
 
 

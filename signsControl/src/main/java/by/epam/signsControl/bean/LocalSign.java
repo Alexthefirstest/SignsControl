@@ -19,7 +19,7 @@ public class LocalSign extends Sign implements Serializable, FactoryType, Clonea
     }
 
     public LocalSign(int localSignId, int signListId, int pddSignId, int section, int sign, int kind, byte[] picture,
-                     int standardSize, Date dateOfAdd, Date dateOfRemove, String annotation, int angle, String name, String description) {
+                     int standardSize, Date dateOfAdd, Date dateOfRemove, String annotation, char angle, String name, String description) {
         super(pddSignId, section, sign, kind, picture, name, description);
         this.localSignId = localSignId;
         this.signListId = signListId;
@@ -29,7 +29,7 @@ public class LocalSign extends Sign implements Serializable, FactoryType, Clonea
         this.annotation = annotation;
         this.angle = angle;
     }
-
+//анотация не нужна
     private static final long serialVersionUID = 4513518075537237951L;
 
     private int localSignId;
@@ -39,14 +39,14 @@ public class LocalSign extends Sign implements Serializable, FactoryType, Clonea
     private Date dateOfRemove;
 
     private String annotation;
-    private int angle;
+    private char angle;
 
 
-    public int getAngle() {
+    public char getAngle() {
         return angle;
     }
 
-    public void setAngle(int angle) {
+    public void setAngle(char angle) {
         this.angle = angle;
     }
 

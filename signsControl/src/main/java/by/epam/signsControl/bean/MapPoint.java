@@ -5,13 +5,14 @@ import java.util.ArrayList;
 
 public class MapPoint implements FactoryType, Serializable, Cloneable {
     @Override
-    protected Object clone()  {
-        try{MapPoint mapPoint = (MapPoint) super.clone();
-        mapPoint.addresses = this.getAddresses();
-        mapPoint.signsLists = this.getSignsLists();
-        mapPoint.angles = this.getAngles();
-        mapPoint.annotations = this.getAnnotations();
-        return mapPoint;
+    protected Object clone() {
+        try {
+            MapPoint mapPoint = (MapPoint) super.clone();
+            mapPoint.addresses = this.getAddresses();
+            mapPoint.signsLists = this.getSignsLists();
+            mapPoint.angles = this.getAngles();
+            mapPoint.annotations = this.getAnnotations();
+            return mapPoint;
         } catch (CloneNotSupportedException e) {
             // this shouldn't happen, since we are Cloneable
             throw new InternalError(e);
@@ -23,7 +24,7 @@ public class MapPoint implements FactoryType, Serializable, Cloneable {
     public MapPoint() {
     }
 
-    public MapPoint(String coordinates, ArrayList<String> addresses, ArrayList<Integer> signsLists, ArrayList<Integer> angles, ArrayList<String> annotations) {
+    public MapPoint(String coordinates, ArrayList<String> addresses, ArrayList<Integer> signsLists, ArrayList<Character> angles, ArrayList<String> annotations) {
         this.coordinates = coordinates;
         this.addresses = addresses;
         this.signsLists = signsLists;
@@ -34,7 +35,7 @@ public class MapPoint implements FactoryType, Serializable, Cloneable {
     private String coordinates;
     private ArrayList<String> addresses = new ArrayList<>();
     private ArrayList<Integer> signsLists = new ArrayList<>();
-    private ArrayList<Integer> angles = new ArrayList<>();
+    private ArrayList<Character> angles = new ArrayList<>();
     private ArrayList<String> annotations = new ArrayList<>();
 
     public void addAddress(String addresses) {
@@ -49,7 +50,7 @@ public class MapPoint implements FactoryType, Serializable, Cloneable {
         this.annotations.add(annotation);
     }
 
-    public void addAngle(int angle) {
+    public void addAngle(char angle) {
         this.angles.add(angle);
     }
 
@@ -86,12 +87,12 @@ public class MapPoint implements FactoryType, Serializable, Cloneable {
         this.annotations = annotations;
     }
 
-    public ArrayList<Integer> getAngles() {
+    public ArrayList<Character> getAngles() {
 
-        return new ArrayList<Integer>(angles);
+        return new ArrayList<Character>(angles);
     }
 
-    public void setAngles(ArrayList<Integer> angles) {
+    public void setAngles(ArrayList<Character> angles) {
         this.angles = angles;
     }
 

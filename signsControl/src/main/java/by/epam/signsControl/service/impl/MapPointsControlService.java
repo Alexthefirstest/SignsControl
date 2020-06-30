@@ -14,9 +14,9 @@ public class MapPointsControlService implements IMapPointsControlService {
     private final IMapPointsControl mapPointsControl = DaoFactory.getINSTANCE().getMapPointsControl();
 
     @Override
-    public MapPoint getMapPoint(String coordinateX, String coordinateY) throws ServiceException {
+    public MapPoint getMapPoint(String coordinates) throws ServiceException {
 
-        String point = StringTransformer.coordinatesToPointWithCheck(coordinateX, coordinateY);
+        String point = StringTransformer.coordinatesToPointWithCheck(coordinates);
 
         try {
 
@@ -29,14 +29,15 @@ public class MapPointsControlService implements IMapPointsControlService {
     }
 
     @Override
-    public MapPoint addMapPoint(String coordinateX, String coordinateY, String address, int signsAngle) throws ServiceException {
+    public MapPoint addMapPoint(String point, String address, int signsAngle) throws ServiceException {
 
-        String point = StringTransformer.coordinatesToPointWithCheck(coordinateX, coordinateY);
+      String checkedPoint = StringTransformer.coordinatesOrPointToPointWithCheck(point);
+
         InputValidation.nullCheck(address);
 
         try {
 
-            return mapPointsControl.addMapPoint(point, address, signsAngle);
+            return mapPointsControl.addMapPoint(checkedPoint, address, signsAngle);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -45,15 +46,15 @@ public class MapPointsControlService implements IMapPointsControlService {
     }
 
     @Override
-    public MapPoint addMapPoint(String coordinateX, String coordinateY, String address, int signsAngle, String annotation) throws ServiceException {
+    public MapPoint addMapPoint(String point, String address, int signsAngle, String annotation) throws ServiceException {
 
-        String point = StringTransformer.coordinatesToPointWithCheck(coordinateX, coordinateY);
+        String checkedPoint = StringTransformer.coordinatesOrPointToPointWithCheck(point);
         InputValidation.nullCheck(address);
         InputValidation.nullCheck(annotation);
 
         try {
 
-            return mapPointsControl.addMapPoint(point, address, signsAngle, annotation);
+            return mapPointsControl.addMapPoint(checkedPoint, address, signsAngle, annotation);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -66,6 +67,18 @@ public class MapPointsControlService implements IMapPointsControlService {
         try {
 
             return mapPointsControl.getMapPoints();
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public MapPoint[] getEmptyMapPoints() throws ServiceException {
+        try {
+
+            return mapPointsControl.getEmptyMapPoints();
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

@@ -20,7 +20,7 @@
 
     <script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
 
-    <script src='${pageContext.request.contextPath}/js/map.js?10' type="text/javascript" charset="UTF-8"></script>
+    <script src='${pageContext.request.contextPath}/js/map.js?18' type="text/javascript" charset="UTF-8"></script>
 
 
     <%--создать css: карта, стандартные объекты на ней--%>
@@ -43,9 +43,15 @@
             font-size: 100%;
         }
 
+        #point_form {
+            width: 100%;
+            height: 10%;
+            padding: 0;
+            margin: 0;
+        }
         #signsHistoryTable {
             width: 100%;
-            height: 20%;
+            height: 10%;
             padding: 0;
             margin: 0;
         }
@@ -60,8 +66,7 @@
     SignsControl
 </header>
 
-<button id="testbutton">press me</button>
-<div id="mydiv"></div>
+
 
 <c:choose>
 
@@ -79,6 +84,46 @@
     </c:otherwise>
 
     </c:choose>
+
+<c:if test='${sessionScope.role==1}'>
+
+  <button id="addPointButton">добавить точку</button>
+
+ <form>
+     <input type="checkbox" id="addDirectionForm" name="directionBox">
+     <label for="addDirection">добавить направление</label>
+ </form>
+
+  <button id="addSignButton">добавить знак</button>
+
+  <form action='${pageContext.request.contextPath}/add_map_point' method="post" id='point_form'>
+
+ <input type="hidden" name="coordinatesToSend" value='null' required>
+
+      <label for="address">address: </label><input type="text" id="address" name="address"
+                                                         pattern="[\wА-Яа-я\s:!.,)(-?\d]+"
+                                                       required>
+      <label for="direction"> direction:</label><select name="direction" id='direction' required>
+
+
+ <%--<c:forEach var="cDirection" items='${directions}'> --%>
+
+                                               <%--        <option value='${cDirection.id}'>${cDirection.direction}</option> --%>
+
+
+ <%-- </c:forEach> --%>
+
+                                                    </select>
+
+       <label for="annotation"> annotation:</label><input type="text" id="annotation"
+                                                             name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
+      <br><input type="reset" value="сбросить">
+      <input type="submit" value="добавить">
+  </form>
+
+ <button id="showEmptyPointsButton">показать пустые точки</button>
+
+</c:if>
 
 
     <%--<div id="map" style=" height: 500px"></div>--%>

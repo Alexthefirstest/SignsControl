@@ -2,14 +2,7 @@ package by.epam.signsControl.webView.controller;
 
 import by.epam.signsControl.webView.controller.commands.Command;
 import by.epam.signsControl.webView.controller.commands.CommandName;
-import by.epam.signsControl.webView.controller.commands.impl.GetPointHistory;
-import by.epam.signsControl.webView.controller.commands.impl.GetPointsByDate;
-import by.epam.signsControl.webView.controller.commands.impl.GetCurrentPoints;
-import by.epam.signsControl.webView.controller.commands.impl.Login;
-import by.epam.signsControl.webView.controller.commands.impl.LoginFormHandler;
-import by.epam.signsControl.webView.controller.commands.impl.Logout;
-import by.epam.signsControl.webView.controller.commands.impl.MainPage;
-import by.epam.signsControl.webView.controller.commands.impl.WrongCommand;
+import by.epam.signsControl.webView.controller.commands.impl.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,6 +22,10 @@ class CommandProvider {
         commands.put(CommandName.GET_CURRENT_POINTS, new GetCurrentPoints());
         commands.put(CommandName.GET_POINTS_BY_DATE, new GetPointsByDate());
         commands.put(CommandName.GET_POINT_HISTORY, new GetPointHistory());
+        commands.put(CommandName.ADD_MAP_POINT, new AddMapPoint());
+        commands.put(CommandName.GET_EMPTY_POINTS, new GetEmptyPoints());
+        commands.put(CommandName.GET_POINT_DIRECTIONS, new GetPointDirections());
+        commands.put(CommandName.GET_UNUSED_DIRECTIONS, new GetUnusedDirections());
 
     }
 

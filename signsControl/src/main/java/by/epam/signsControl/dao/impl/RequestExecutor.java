@@ -56,6 +56,9 @@ class RequestExecutor {
             if (parameters[i] instanceof String) {
                 ps.setString(i + 1, (String) parameters[i]);
             }
+            if (parameters[i] instanceof Character) {
+                ps.setString(i + 1, String.valueOf(parameters[i]));
+            }
         }
 
         return ps;

@@ -14,8 +14,8 @@ public class InputValidation {
 
         nullCheck(coordinate);
 
-        if (!Pattern.matches("\\d+(\\.\\d+)?", coordinate)) {
-            throw new ServiceValidationException("wrong coordinate format");
+        if (!Pattern.matches("\\d+(\\.\\d*)?,\\d+(\\.\\d*)?", coordinate)) {
+            throw new ServiceValidationException("wrong coordinate format: "+coordinate);
         }
     }
 
@@ -24,7 +24,7 @@ public class InputValidation {
         nullCheck(coordinate);
 
         if (!Pattern.matches("POINT\\(\\d+(\\.\\d*)?\\s\\d+(\\.\\d*)?\\)", coordinate)) {
-            throw new ServiceValidationException("wrong coordinate point format");
+            throw new ServiceValidationException("wrong coordinate point format: "+coordinate);
         }
     }
 

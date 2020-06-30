@@ -1,9 +1,11 @@
 package by.epam.signsControl.dao.factory;
 
+import by.epam.signsControl.dao.IDirectionsControl;
 import by.epam.signsControl.dao.ILocalSignsControl;
 import by.epam.signsControl.dao.IMapPointsControl;
 import by.epam.signsControl.dao.IPDDSignsControl;
 import by.epam.signsControl.dao.IStandardSizesControl;
+import by.epam.signsControl.dao.impl.DirectionsControl;
 import by.epam.signsControl.dao.impl.LocalSingsControl;
 import by.epam.signsControl.dao.impl.MapPointsControl;
 import by.epam.signsControl.dao.impl.PDDSignsControl;
@@ -21,6 +23,11 @@ public class DaoFactory {
     private final IMapPointsControl mapPointsControl = new MapPointsControl();
     private final IPDDSignsControl pddSignsControl = new PDDSignsControl();
     private final IStandardSizesControl standardSizesControl = new StandardSizesControl();
+    private final IDirectionsControl directionsControl = new DirectionsControl();
+
+    public IDirectionsControl getDirectionsControl() {
+        return directionsControl;
+    }
 
     public static DaoFactory getINSTANCE() {
         return INSTANCE;

@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
+import java.util.regex.Pattern;
 
 public class MapPointsControl implements IMapPointsControl {
 
@@ -19,13 +20,26 @@ public class MapPointsControl implements IMapPointsControl {
     private static final String SQL_SELECT_ALL =
             "SELECT ST_AsText(coordinates), address, signs_list, signs_angle, annotation  FROM map_points order by coordinates, signs_list";
     private static final String SQL_SELECT_USE_LAST_INSERT_ID =
-            "SELECT ST_AsText(coordinates), address, signs_list, signs_angle, annotation FROM map_points where signs_list=LAST_INSERT_ID();";
-    private static final String SQL_INSERT = "INSERT INTO map_points (coordinates, signs_angle, address) " +
+            "SELECT ST_AsText(coordinates), address, signs_list, direction, annotation FROM map_points where signs_list=LAST_INSERT_ID();";
+
+    //use
+    private static final String SQL_SELECT_EMPTY =
+            "SELECT ST_AsText(coordinates), address, signs_list, dir.direction, mp.annotation  FROM map_points as mp " +
+                    "join directions as dir on dir.id=mp.direction " +
+                    "where coordinates not in (SELECT coordinates FROM map_points as mp join sign_lists as sl on mp.signs_list=sl.signs_list_id) " +
+                    "order by coordinates, signs_list;";
+
+    //use
+    private static final String SQL_INSERT = "INSERT INTO map_points (coordinates, direction, address) " +
             "SELECT * FROM (SELECT ST_GeomFromText(?), ?, ? ) as rt " +
-            "where not exists(SELECT coordinates, signs_angle FROM map_points where coordinates=ST_GeomFromText(?) AND signs_angle=?) LIMIT 1";
-    private static final String SQL_INSERT_WITH_ANNOTATION = "INSERT INTO map_points (coordinates, signs_angle, address, annotation) " +
+            "where not exists(SELECT coordinates, direction FROM map_points where coordinates=ST_GeomFromText(?) AND direction=?) LIMIT 1";
+    //use
+    private static final String SQL_INSERT_WITH_ANNOTATION = "INSERT INTO map_points (coordinates, direction, address, annotation) " +
             "SELECT * FROM (SELECT ST_GeomFromText(?), ?, ?, ? ) as rt " +
-            "where not exists(SELECT coordinates, signs_angle FROM map_points where coordinates=ST_GeomFromText(?) AND signs_angle=?) LIMIT 1";
+            "where not exists(SELECT coordinates, direction FROM map_points where coordinates=ST_GeomFromText(?) AND direction=?) LIMIT 1";
+
+
+
     private static final String SQL_DELETE = "DELETE FROM map_points WHERE (signs_list = ?);";
     private static final String SQL_FIND_BY_SINGS_LIST =
             "SELECT ST_AsText(coordinates), address, signs_list, signs_angle, annotation  FROM map_points where signs_list=";
@@ -58,6 +72,11 @@ public class MapPointsControl implements IMapPointsControl {
 
         } catch (SQLException ex) {
 
+            if ((Pattern.matches(".*fk_direction.*", ex.getMessage()))) {
+                logger.warn("add fail: wrong direction ", ex);
+                throw new DAOValidationException("wrong direction");
+            }
+
             logger.warn("add with coordinates, address fail: coordinates: " + coordinates + ";" + address, ex);
             throw new DAOException(ex);
 
@@ -73,6 +92,11 @@ public class MapPointsControl implements IMapPointsControl {
 
         } catch (SQLException ex) {
 
+            if ((Pattern.matches(".*fk_direction.*", ex.getMessage()))) {
+                logger.warn("add fail: wrong direction ", ex);
+                throw new DAOValidationException("wrong direction");
+            }
+
             logger.warn("add with coordinates, address, annotation fail: coordinates: " + coordinates + "; " + address + "; " + annotation, ex);
             throw new DAOException(ex);
 
@@ -84,6 +108,20 @@ public class MapPointsControl implements IMapPointsControl {
         try {
 
             return (MapPoint[]) RequestExecutor.getSignsStaff(SQL_SELECT_ALL, new MapPoint());
+
+        } catch (SQLException ex) {
+
+            logger.warn("getMapPoints fail ", ex);
+            throw new DAOException(ex);
+
+        }
+    }
+
+    @Override
+    public MapPoint[] getEmptyMapPoints() throws DAOException {
+        try {
+
+            return (MapPoint[]) RequestExecutor.getSignsStaff(SQL_SELECT_EMPTY, new MapPoint());
 
         } catch (SQLException ex) {
 
