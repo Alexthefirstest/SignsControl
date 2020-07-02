@@ -4,6 +4,9 @@ import by.epam.signsControl.bean.Direction;
 import by.epam.signsControl.bean.LocalSign;
 import by.epam.signsControl.bean.MapPoint;
 import by.epam.signsControl.bean.MapPoint$LocalSign;
+import by.epam.signsControl.bean.Sign;
+import by.epam.signsControl.bean.StandardSize;
+import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,8 +24,38 @@ public class ResponseCreator {
     private static final String JSON_POINTS_START_SUBSTRING = "{\"type\": \"FeatureCollection\",\"features\": [";
     private static final String JSON_POINTS_FINISH_SUBSTRING = "] }";
 
+    private static final Gson gson = new Gson();
+
     private ResponseCreator() {
     }
+
+    static String createAddPointInfoJSON(Direction[] directions, StandardSize[] standardSizes, Sign[] pddSigns) {
+
+        StringBuilder json = new StringBuilder("{");
+
+
+        json.append("\"signsLists\" :").append(gson.toJson(directions)).append(",");
+        json.append("\"pddSigns\" : ").append(createSignJSONArr(pddSigns)).append(",");
+        json.append("\"standardSizes\" : ").append(gson.toJson(standardSizes));
+
+        json.append("}");
+
+        return json.toString();
+    }
+
+    private static String createSignJSONArr(Sign[] pddSigns) {
+
+        StringBuilder json = new StringBuilder("[");
+
+        for (Sign sign : pddSigns) {
+            json.append("{\"id\":").append(sign.getId());
+            json.append(",\"sign\":").append(createSignWithQuotes(sign.getSection(), sign.getSign(), sign.getKind()));
+            json.append("},");
+        }
+
+        return json.substring(0, json.length() - 1) + "]";
+    }
+
 
     static String createDirectionsJSON(Direction[] directionsObj) {
         StringBuilder ids = new StringBuilder("[");
@@ -132,7 +165,7 @@ public class ResponseCreator {
 
     private static String createHint(MapPoint mapPoint) {
 
-        String annotation;
+       // String annotation;
 
         StringBuilder hint = new StringBuilder();
 
@@ -143,7 +176,8 @@ public class ResponseCreator {
         for (int i = 0; i < angles.size(); i++) {
             hint.append(addresses.get(i)).append(", ").
                     append(angles.get(i)).append(", ").
-                    append((annotation = annotations.get(i)) == null || annotation.isEmpty() ? "- " : annotation).append(";<br />");
+                   // append((annotation = annotations.get(i)) == null || annotation.isEmpty() ? "- " : annotation).append(";<br />");
+                    append((annotations.get(i))).append(";<br />");
         }
 
         return hint.toString();
@@ -180,15 +214,9 @@ public class ResponseCreator {
             }
 
 
-            sb.append("<br />" + localSignsWithCommonDirection.get(i).getSection() + ".");
-
-            sb.append(localSignsWithCommonDirection.get(i).getSign());
-
-            int kind;
-            if ((kind = localSignsWithCommonDirection.get(i).getKind()) > -1) {
-
-                sb.append("." + kind);
-            }
+            sb.append("<br />" + createSign(localSignsWithCommonDirection.get(i).getSection(),
+                    localSignsWithCommonDirection.get(i).getSign(),
+                    localSignsWithCommonDirection.get(i).getKind()));
 
 
             sb.append("   " + localSignsWithCommonDirection.get(i).getName());
@@ -221,7 +249,7 @@ public class ResponseCreator {
         StringBuilder pointHistory = new StringBuilder();
 
         pointHistory.append("sign").append("|name").append("|description").append("|size").append("|direction")
-                .append("|date of add").append("|date of remove").append("|picture<br />");
+                .append("|date of add").append("|date of remove").append("|annotation|picture<br />");
 
         for (LocalSign localSign : localSigns) {
             pointHistory.append(createPointHistoryField(localSign)).append("<br/>");
@@ -232,28 +260,35 @@ public class ResponseCreator {
 
     }
 
-    private static String createPointHistoryField(LocalSign localSigns) {
+    private static String createPointHistoryField(LocalSign localSign) {
 
         StringBuilder sb = new StringBuilder();
 
-        int signKind;
-        String description;
+     //   String description;
         Date dateOfRemove;
         byte[] picture;
 
-        sb.append(localSigns.getSection()).
-                append("." + localSigns.getSign())
-                .append(((signKind = localSigns.getKind()) > -1) ? "." + signKind : "");
+        sb.append(createSign(localSign.getSection(), localSign.getSign(), localSign.getKind()));
 
-        sb.append("|" + localSigns.getName() + "|");
-        sb.append(((description = localSigns.getDescription()) != null) ? description : "-");
-        sb.append("|" + localSigns.getStandardSize());
-        sb.append("|" + localSigns.getAngle());
-        sb.append("|" + localSigns.getDateOfAdd() + "|");
-        sb.append(((dateOfRemove = localSigns.getDateOfRemove()) != null) ? dateOfRemove + "|" : "-|");
-        sb.append(((picture = localSigns.getPicture()) != null) ? picture : "-");
-
+        sb.append("|" + localSign.getName() + "|");
+        //sb.append(((description = localSign.getDescription()) != null) ? description : "-");
+        sb.append(localSign.getDescription());
+        sb.append("|" + localSign.getStandardSize());
+        sb.append("|" + localSign.getAngle());
+        sb.append("|" + localSign.getDateOfAdd() + "|");
+        sb.append(((dateOfRemove = localSign.getDateOfRemove()) != null) ? dateOfRemove + "|" : "-|");
+        sb.append("|" + localSign.getAnnotation());
+        sb.append(((picture = localSign.getPicture()) != null) ? picture : "-");
         return sb.toString();
+    }
+
+    private static String createSign(int section, int sign, int kind) {
+        return (section + "." + sign + ((kind > -1) ? ("." + kind) : ""));
+    }
+
+    private static String createSignWithQuotes(int section, int sign, int kind) {
+
+        return ("\"" + section + "." + sign + ((kind > -1) ? ("." + kind) : "") + '\"');
     }
 
 

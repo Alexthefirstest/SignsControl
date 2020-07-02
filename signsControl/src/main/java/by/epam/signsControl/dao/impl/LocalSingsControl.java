@@ -17,18 +17,23 @@ import java.util.regex.Pattern;
 public class LocalSingsControl implements ILocalSignsControl {
 
     Logger logger = LogManager.getLogger(LocalSingsControl.class);
-
+//use this 4
     private static final String SQL_SELECT_USE_LAST_INSERT_ID =
             "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add, " +
-                    "sl.date_of_remove, sl.annotation FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign " +
-                    "where local_sign_id=last_insert_id();";
-    private static final String SQL_INSERT = "INSERT INTO sign_lists (signs_list_id, sign, standard_size) VALUES (?, ?, ?)";
-    private static final String SQL_INSERT_WITH_ANNOTATION = "INSERT INTO sign_lists (signs_list_id, sign, standard_size, annotation) VALUES (?, ?, ?,?)";
+                    "sl.date_of_remove, sl.annotation, directions.direction, ps.name, ps.description FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign join map_points as mp on sl.signs_list_id=mp.signs_list" +
+                    " join directions on mp.direction=directions.id where local_sign_id=last_insert_id();";
+
+    private static final String SQL_INSERT = "INSERT INTO sign_lists (signs_list_id, sign, standard_size, annotation) VALUES (?, ?, ?, ?)";
+    private static final String SQL_INSERT_WITH_DATE_OF_ADD = "INSERT INTO sign_lists (`signs_list_id`, `sign`, `standard_size`, `date_of_add`, annotation) VALUES (?, ?, ?,?,?);";
+    private static final String SQL_INSERT_WITH_DATE_OF_ADD_DATE_OF_REMOVE = "INSERT INTO sign_lists (signs_list_id, sign, standard_size, date_of_add, date_of_remove, annotation) VALUES (?, ?, ?,?,?,?);";
+
+  //  private static final String SQL_INSERT_WITH_ANNOTATION = "INSERT INTO sign_lists (signs_list_id, sign, standard_size, annotation) VALUES (?, ?, ?,?)";
+
+
     private static final String SQL_DELETE = "DELETE FROM `sign_lists` WHERE (`local_sign_id` = ?);";
     private static final String SQL_SELECT_ACTUAL = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add, \n" +
             " sl.date_of_remove, sl.annotation FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign " +
             " where date_of_remove is null AND signs_list_id=? order by signs_list_id, pdd_section, pdd_sign, pdd_kind;";
-
 
 
     private static final String SQL_SELECT_ACTUAL_INCLUDE_MAP_POINT = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add, " +
@@ -36,19 +41,18 @@ public class LocalSingsControl implements ILocalSignsControl {
             "join pdd_signs as ps on ps.id = sl.sign join map_points as mp on mp.signs_list = sl.signs_list_id join directions on mp.direction=directions.id" +
             " where date_of_remove is null order by mp.coordinates, mp.signs_list;";
 
-//аннотации у знаков мб не нужны
 
-//use
+    //use
     private static final String SQL_SELECT_ALL_INCLUDE_MAP_POINT = "SELECT sl.local_sign_id, mp.signs_list, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add, " +
-        " sl.date_of_remove, mp.annotation, directions.direction, ST_AsText(mp.coordinates), mp.address, ps.name, ps.description FROM sign_lists as sl " +
-        " right join map_points as mp on mp.signs_list = sl.signs_list_id " +
-        " left join pdd_signs as ps on ps.id = sl.sign " +
-        " join directions on mp.direction=directions.id  " +
-        " where coordinates in (SELECT coordinates FROM map_points as mp join sign_lists as sl on mp.signs_list=sl.signs_list_id) order by mp.coordinates, mp.signs_list;";
+            " sl.date_of_remove, mp.annotation, directions.direction, ST_AsText(mp.coordinates), mp.address, ps.name, ps.description, sl.annotation FROM sign_lists as sl " +
+            " right join map_points as mp on mp.signs_list = sl.signs_list_id " +
+            " left join pdd_signs as ps on ps.id = sl.sign " +
+            " join directions on mp.direction=directions.id  " +
+            " where coordinates in (SELECT coordinates FROM map_points as mp join sign_lists as sl on mp.signs_list=sl.signs_list_id) order by mp.coordinates, mp.signs_list;";
 
-//use
+    //use
     private static final String SQL_SELECT_BY_DATE_INCLUDE_MAP_POINT = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add, " +
-            "sl.date_of_remove, mp.annotation, directions.direction, ST_AsText(mp.coordinates), mp.address, ps.name, ps.description  " +
+            "sl.date_of_remove, mp.annotation, directions.direction, ST_AsText(mp.coordinates), mp.address, ps.name, ps.description, sl.annotation  " +
             "FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign join map_points as mp on mp.signs_list = sl.signs_list_id  " +
             "join directions on mp.direction=directions.id where  (STR_TO_DATE(?, '%Y.%m.%d') BETWEEN sl.date_of_add AND sl.date_of_remove) OR  (sl.date_of_remove is null AND (STR_TO_DATE(?, '%Y.%m.%d')>= sl.date_of_add))  " +
             "order by mp.coordinates, mp.signs_list;";
@@ -56,11 +60,9 @@ public class LocalSingsControl implements ILocalSignsControl {
 
     //use
     private static final String SQL_SELECT_BY_COORDINATES = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add," +
-            "     sl.date_of_remove, mp.annotation, directions.direction, ps.name, ps.description FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign join map_points as mp on sl.signs_list_id=mp.signs_list" +
+            "     sl.date_of_remove, sl.annotation, directions.direction, ps.name, ps.description FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign join map_points as mp on sl.signs_list_id=mp.signs_list" +
             " join directions on mp.direction=directions.id       where mp.coordinates=st_geomfromtext(?)" +
             "        order by signs_list_id,  sl.date_of_remove, sl.date_of_add, pdd_section, pdd_sign, pdd_kind;";
-
-
 
 
     private static final String SQL_SELECT_ACTUAL_USE_DATE = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add,  " +
@@ -68,9 +70,6 @@ public class LocalSingsControl implements ILocalSignsControl {
             "  where sl.signs_list_id=? AND (STR_TO_DATE(?, '%Y.%m.%d') BETWEEN sl.date_of_add AND sl.date_of_remove " +
             "   AND signs_list_id=8 OR sl.date_of_remove is null) " +
             "   order by signs_list_id, pdd_section, pdd_sign, pdd_kind; ";
-
-
-
 
 
     private static final String SQL_SELECT_ALL = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add, \n" +
@@ -81,11 +80,11 @@ public class LocalSingsControl implements ILocalSignsControl {
     private static final String SQL_SET_DATE_OF_REMOVE = "UPDATE sign_lists SET date_of_remove = ? WHERE (`local_sign_id` = ?)";
 
     @Override
-    public LocalSign addSign(int signListId, int pddSignId, int standardSize) throws DAOException {
+    public LocalSign addSign(int signListId, int pddSignId, int standardSize, String annotation) throws DAOException {
         try {
 
             return (LocalSign) RequestExecutor.createFieldUseDifferentParameters
-                    (SQL_INSERT, SQL_SELECT_USE_LAST_INSERT_ID, new LocalSign(), signListId, pddSignId, standardSize);
+                    (SQL_INSERT, SQL_SELECT_USE_LAST_INSERT_ID, new LocalSign(), signListId, pddSignId, standardSize, annotation);
 
         } catch (SQLIntegrityConstraintViolationException ex) {
 
@@ -102,6 +101,11 @@ public class LocalSingsControl implements ILocalSignsControl {
             if ((Pattern.matches(".*fk_standard_size.*", ex.getMessage()))) {
                 logger.warn("add fail: wrong standard size ", ex);
                 throw new DAOValidationException("wrong standard size");
+            }
+
+            if ((Pattern.matches(".*cannot be null.*", ex.getMessage()))) {
+                logger.warn("add fail: string is null ", ex);
+                throw new DAOValidationException("string is null");
             }
 
             logger.warn("add fail fail", ex);
@@ -116,11 +120,12 @@ public class LocalSingsControl implements ILocalSignsControl {
     }
 
     @Override
-    public LocalSign addSign(int signListId, int pddSignId, int standardSize, String annotation) throws DAOException {
+    public LocalSign addSign(int signListId, int pddSignId, int standardSize, String dateOfAdd,  String annotation) throws DAOException {
         try {
 
             return (LocalSign) RequestExecutor.createFieldUseDifferentParameters
-                    (SQL_INSERT_WITH_ANNOTATION, SQL_SELECT_USE_LAST_INSERT_ID, new LocalSign(), signListId, pddSignId, standardSize, annotation);
+                    (SQL_INSERT_WITH_DATE_OF_ADD, SQL_SELECT_USE_LAST_INSERT_ID, new LocalSign(), signListId, pddSignId,
+                            standardSize, dateOfAdd, annotation);
 
         } catch (SQLIntegrityConstraintViolationException ex) {
 
@@ -137,6 +142,52 @@ public class LocalSingsControl implements ILocalSignsControl {
             if ((Pattern.matches(".*fk_standard_size.*", ex.getMessage()))) {
                 logger.warn("add fail: wrong standard size ", ex);
                 throw new DAOValidationException("wrong standard size");
+            }
+
+            if ((Pattern.matches(".*cannot be null.*", ex.getMessage()))) {
+                logger.warn("add fail: string is null ", ex);
+                throw new DAOValidationException("string is null");
+            }
+
+            logger.warn("add fail fail", ex);
+            throw new DAOException(ex);
+
+        } catch (SQLException ex) {
+
+            logger.warn("add fail", ex);
+            throw new DAOException(ex);
+
+        }
+    }
+
+    @Override
+    public LocalSign addSign(int signListId, int pddSignId, int standardSize, String dateOfAdd, String dateOfRemove,  String annotation) throws DAOException {
+        try {
+
+            return (LocalSign) RequestExecutor.createFieldUseDifferentParameters
+                    (SQL_INSERT_WITH_DATE_OF_ADD_DATE_OF_REMOVE, SQL_SELECT_USE_LAST_INSERT_ID, new LocalSign(),
+                            signListId, pddSignId, standardSize, dateOfAdd, dateOfRemove, annotation);
+
+        } catch (SQLIntegrityConstraintViolationException ex) {
+
+            if ((Pattern.matches(".*fk_sign_list.*", ex.getMessage()))) {
+                logger.warn("add fail: wrong sign list ", ex);
+                throw new DAOValidationException("wrong sign_list");
+            }
+
+            if ((Pattern.matches(".*fk_pdd_sign.*", ex.getMessage()))) {
+                logger.warn("add fail: wrong sign ", ex);
+                throw new DAOValidationException("wrong sign");
+            }
+
+            if ((Pattern.matches(".*fk_standard_size.*", ex.getMessage()))) {
+                logger.warn("add fail: wrong standard size ", ex);
+                throw new DAOValidationException("wrong standard size");
+            }
+
+            if ((Pattern.matches(".*cannot be null.*", ex.getMessage()))) {
+                logger.warn("add fail: string is null ", ex);
+                throw new DAOValidationException("string is null");
             }
 
             logger.warn("add fail fail", ex);

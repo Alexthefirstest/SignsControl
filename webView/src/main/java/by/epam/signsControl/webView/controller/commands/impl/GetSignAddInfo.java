@@ -1,5 +1,8 @@
 package by.epam.signsControl.webView.controller.commands.impl;
 
+import by.epam.signsControl.bean.Direction;
+import by.epam.signsControl.bean.Sign;
+import by.epam.signsControl.bean.StandardSize;
 import by.epam.signsControl.service.exceptions.ServiceException;
 import by.epam.signsControl.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.controller.commands.Command;
@@ -11,10 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class GetPointDirections implements Command {
+public class GetSignAddInfo implements Command {
 
 
-    private static final Logger logger = LogManager.getLogger(GetPointDirections.class);
+    private static final Logger logger = LogManager.getLogger(GetSignAddInfo.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -24,10 +27,19 @@ public class GetPointDirections implements Command {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
 
+        ServiceFactory sf = ServiceFactory.getINSTANCE();
+
         try {
 
-            response.getWriter().write(ResponseCreator.createDirectionsJSON
-                    (ServiceFactory.getINSTANCE().getDirectionsControlService().getPointDirections(request.getParameter("pointCoordinates"))));
+            Direction[] directions = sf.getDirectionsControlService().getPointDirectionsSignListID(request.getParameter("pointCoordinates"));
+            StandardSize[] standardSizes = sf.getStandardSizesControlService().getStandardSizes();
+            Sign[] pddSigns = sf.getPddSignsControlService().getPddSigns();
+
+            String result = ResponseCreator.createAddPointInfoJSON(directions, standardSizes, pddSigns);
+
+            logger.info(result);
+
+            response.getWriter().write(result);
 
         } catch (ServiceException e) {
             logger.warn(e);

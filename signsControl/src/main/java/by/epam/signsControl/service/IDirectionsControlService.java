@@ -9,5 +9,5 @@ public interface IDirectionsControlService {
 
     Direction[] getUnusedDirections(String coordinates) throws ServiceException;
 
-    Direction[] getPointDirections(String coordinates) throws ServiceException;
+    Direction[] getPointDirectionsSignListID(String coordinates) throws ServiceException;
 }

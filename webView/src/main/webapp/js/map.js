@@ -310,6 +310,7 @@ let activeObjectMonitor = new ymaps.Monitor(objectManager.clusters.state);
 			let objectId = e.get('objectId');
 			updateSignsHistory(objectId);
 			changeDirectionCoordinates(objectManager.objects.getById(objectId).properties.pointCoordinates);
+			updateAddSignForm(objectManager.objects.getById(objectId).properties.pointCoordinates)
 
 		});
 
@@ -320,7 +321,7 @@ let activeObjectMonitor = new ymaps.Monitor(objectManager.clusters.state);
         		//проверить что существует changeDIrectionCoorditnates
         		changeDirectionCoordinates(objectManager.objects.getById(objectId).properties.pointCoordinates);
 
-
+	updateAddSignForm(objectManager.objects.getById(objectId).properties.pointCoordinates)
         		});
 
 let activeObjectMonitorEP = new ymaps.Monitor(objectManagerEP.clusters.state);
@@ -331,6 +332,7 @@ let activeObjectMonitorEP = new ymaps.Monitor(objectManagerEP.clusters.state);
 
 			changeDirectionCoordinates(objectManagerEP.objects.getById(objectId).properties.pointCoordinates);
 		changeSignsHistoryDiv("empty point");
+		updateAddSignForm(objectManagerEP.objects.getById(objectId).properties.pointCoordinates)
 		});
 
 		activeObjectMonitorEP.add('activeObject', function () {
@@ -340,6 +342,7 @@ let activeObjectMonitorEP = new ymaps.Monitor(objectManagerEP.clusters.state);
         				changeDirectionCoordinates(objectManagerEP.objects.getById(objectId).properties.pointCoordinates);
         				 changeSignsHistoryDiv("empty point");
 
+updateAddSignForm(objectManagerEP.objects.getById(objectId).properties.pointCoordinates)
         		});
 
 
@@ -352,6 +355,7 @@ if (document.getElementById("signsHistory").checked) {
         data: {"pointCoordinates": objectManager.objects.getById(objectId).properties.pointCoordinates}
     }).done(function (data) {
         changeSignsHistoryDiv(data);
+
     });
   }
  // changeSignsHistoryDiv(objectManager.objects.getById(objectId).properties.pointCoordinates);
@@ -538,6 +542,7 @@ for(let j = 0; j<directions.ids.length; j++){
 
   //add point/
 
+updateAddSignForm(null);
 
 }//window.onload;
 
@@ -598,9 +603,70 @@ for(let j = 0; j<directions.ids.length; j++){
 point_form.style.visibility = 'visible';
 
     } else {
-
+if(point_form!=null){
          point_form.style.visibility = 'hidden';
+  }
     }
 //signs hostory fin
+}
+
+function  updateAddSignForm(coordinates){
+
+let addSignCheckbox= document.getElementById("addSignCBox");
+let addSignForm= document.getElementById("addSign_form");
+
+if((addSignCheckbox!=null) && (addSignCheckbox.checked)){
+
+  $.ajax({
+
+          url: ctx+"/get_sign_add_info",
+          data: {"pointCoordinates": coordinates}
+
+      }).done(function (data) {
+
+let addSignsInfo = JSON.parse(data)
+let receivedSignsLists=addSignsInfo.signsLists;
+let receivedPddSigns=addSignsInfo.pddSigns;
+let receivedStandardSizes=addSignsInfo.standardSizes;
+
+let signListSelect=document.getElementById("sign_list");
+let pddSignSelect=document.getElementById("pdd_sign");
+let standardSizeSelect=document.getElementById("standard_size");
+
+ $("#sign_list").empty();
+ $("#pdd_sign").empty();
+ $("#standard_size").empty();
+
+for(let k = 0; k<receivedSignsLists.length; k++){
+
+  signListSelect.append(new Option(receivedSignsLists[k].direction, receivedSignsLists[k].id));
+
+}
+
+for(let k = 0; k<receivedPddSigns.length; k++){
+
+
+  pddSignSelect.append(new Option(receivedPddSigns[k].sign, receivedPddSigns[k].id));
+
+}for(let k = 0; k<receivedStandardSizes.length; k++){
+
+  standardSizeSelect.append(new Option(receivedStandardSizes[k].size, receivedStandardSizes[k].size));
+}
+
+  }).fail(function() {
+
+        $("#direction").empty();
+        //exception
+
+      });
+
+addSignForm.style.visibility = 'visible';
+}else{
+if(addSignCheckbox!=null){
+addSignForm.style.visibility = 'hidden';
+}
+}
+
+
 }
 // ----------------------- локализация - конец

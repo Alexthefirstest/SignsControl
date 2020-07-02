@@ -150,7 +150,7 @@ public class SignsControlFactory {
                         mapPoint$LocalSign.addLocalSignToLastArr(new LocalSign(rs.getInt(1), rs.getInt(2), rs.getInt(3),
                                 rs.getInt(4), rs.getInt(5), rs.getInt(6),
                                 rs.getBytes(7), rs.getInt(8), rs.getDate(9),
-                                rs.getDate(10), rs.getString(11), rs.getString(12).charAt(0),
+                                rs.getDate(10), rs.getString(17), rs.getString(12).charAt(0),
                                 rs.getString(15), rs.getString(16)));
                     } while ((stillNext = rs.next()) && rs.getInt(2) == mapPoint$LocalSign.getLocalSignFromLastArr(0).getSignListId());
 
@@ -175,6 +175,7 @@ public class SignsControlFactory {
                                 rs.getDate(10), rs.getString(11), rs.getString(12).charAt(0),
                                 rs.getString(13), rs.getString(14)));
             }
+
 
             return signsStaffArr.toArray(new LocalSign[0]);
         }

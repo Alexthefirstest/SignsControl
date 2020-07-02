@@ -31,4 +31,11 @@ public class StringTransformer {
 
 
     }
+
+    public static String dashFromNull(String text) throws ServiceValidationException {
+
+
+        return text == null ? "-" : text;
+    }
+
 }

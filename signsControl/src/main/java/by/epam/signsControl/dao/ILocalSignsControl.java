@@ -8,9 +8,10 @@ import java.util.Date;
 
 public interface ILocalSignsControl {
 
-    LocalSign addSign(int signListId, int pddSignId, int standardSize) throws DAOException;
+    LocalSign addSign(int signListId, int pddSignId, int standardSize,  String annotation) throws DAOException;
 
-    LocalSign addSign(int signListId, int pddSignId, int standardSize, String annotation) throws DAOException;
+    LocalSign addSign(int signListId, int pddSignId, int standardSize, String dateOfAdd,  String annotation) throws DAOException;
+    LocalSign addSign(int signListId, int pddSignId, int standardSize, String dateOfAdd, String dateOfRemove,  String annotation) throws DAOException;
 
     boolean deleteSign(int signId) throws DAOException;
 

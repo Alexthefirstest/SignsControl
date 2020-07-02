@@ -20,7 +20,7 @@
 
     <script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
 
-    <script src='${pageContext.request.contextPath}/js/map.js?18' type="text/javascript" charset="UTF-8"></script>
+    <script src='${pageContext.request.contextPath}/js/map.js?24' type="text/javascript" charset="UTF-8"></script>
 
 
     <%--создать css: карта, стандартные объекты на ней--%>
@@ -94,7 +94,10 @@
      <label for="addDirection">добавить направление</label>
  </form>
 
-  <button id="addSignButton">добавить знак</button>
+ <form>
+     <input type="checkbox" id="addSignCBox" name="addSignBox">
+     <label for="addSignCBox">добавить знак</label>
+ </form>
 
   <form action='${pageContext.request.contextPath}/add_map_point' method="post" id='point_form'>
 
@@ -117,6 +120,27 @@
 
        <label for="annotation"> annotation:</label><input type="text" id="annotation"
                                                              name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
+      <br><input type="reset" value="сбросить">
+      <input type="submit" value="добавить">
+  </form>
+
+
+  <form action='${pageContext.request.contextPath}/add_sign' method="post" id='addSign_form'>
+
+      <label for="pdd_sign"> pdd_sign:</label><select name="pdd_sign" id='pdd_sign' required> </select>
+
+      <label for="standard_size"> standard_size:</label><select name="standard_size" id='standard_size' required> </select>
+
+
+       <label for="sign_list"> direction:</label><select name="sign_list" id='sign_list' required>  </select>
+
+
+       <label for="signAnnotation"> annotation:</label><input type="text" id="signAnnotation"
+                                                             name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
+
+       <label for="date_of_add">date_of_add: </label> <input type="date" name="date_of_add"  id="date_of_add">
+        <label for="date_of_remove">date_of_remove: </label><input type="date" name="date_of_remove"  id="date_of_remove">
+
       <br><input type="reset" value="сбросить">
       <input type="submit" value="добавить">
   </form>

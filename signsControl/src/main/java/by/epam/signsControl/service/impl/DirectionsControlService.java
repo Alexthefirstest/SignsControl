@@ -46,13 +46,13 @@ public class DirectionsControlService implements IDirectionsControlService {
     }
 
     @Override
-    public Direction[] getPointDirections(String coordinates) throws ServiceException {
+    public Direction[] getPointDirectionsSignListID(String coordinates) throws ServiceException {
 
         InputValidation.pointCheck(coordinates);
 
         try {
 
-            return directionsControl.getPointDirections(coordinates);
+            return directionsControl.getPointDirectionsSignListID(coordinates);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

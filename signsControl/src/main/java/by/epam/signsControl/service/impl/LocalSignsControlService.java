@@ -18,11 +18,11 @@ public class LocalSignsControlService implements ILocalSignsControlService {
 
 
     @Override
-    public LocalSign addSign(int signListId, int pddSignId, int standardSize) throws ServiceException {
+    public LocalSign addSign(int signListId, int pddSignId, int standardSize,  String annotation) throws ServiceException {
 
         try {
 
-            return localSignsControl.addSign(signListId, pddSignId, standardSize);
+            return localSignsControl.addSign(signListId, pddSignId, standardSize, StringTransformer.dashFromNull(annotation));
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -31,19 +31,34 @@ public class LocalSignsControlService implements ILocalSignsControlService {
     }
 
     @Override
-    public LocalSign addSign(int signListId, int pddSignId, int standardSize, String annotation) throws ServiceException {
-
-        InputValidation.nullCheck(annotation);
-
+    public LocalSign addSign(int signListId, int pddSignId, int standardSize, String dateOfAdd,  String annotation) throws ServiceException {
+        InputValidation.nullAndDateCheck(dateOfAdd);
         try {
 
-            return localSignsControl.addSign(signListId, pddSignId, standardSize, annotation);
+            return localSignsControl.addSign(signListId, pddSignId, standardSize, dateOfAdd, StringTransformer.dashFromNull(annotation));
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
             throw new ServiceException(ex);
         }
     }
+
+    @Override
+    public LocalSign addSign(int signListId, int pddSignId, int standardSize, String dateOfAdd, String dateOFRemove,  String annotation) throws ServiceException {
+
+        InputValidation.nullAndDateCheck(dateOfAdd);
+        InputValidation.nullAndDateCheck(dateOFRemove);
+
+        try {
+
+            return localSignsControl.addSign(signListId, pddSignId, standardSize, dateOfAdd, dateOFRemove, StringTransformer.dashFromNull(annotation));
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
 
     @Override
     public boolean deleteSign(int signId) throws ServiceException {

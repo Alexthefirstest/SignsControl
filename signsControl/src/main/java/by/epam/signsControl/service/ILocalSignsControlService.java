@@ -8,9 +8,12 @@ import java.util.Date;
 
 public interface ILocalSignsControlService {
 
-    LocalSign addSign(int signListId, int pddSignId, int standardSize) throws ServiceException;
+    LocalSign addSign(int signListId, int pddSignId, int standardSize,  String annotation) throws ServiceException;
 
-    LocalSign addSign(int signListId, int pddSignId, int standardSize, String annotation) throws ServiceException;
+    LocalSign addSign(int signListId, int pddSignId, int standardSize, String dateOfAdd,  String annotation) throws ServiceException;
+
+    LocalSign addSign(int signListId, int pddSignId, int standardSize, String dateOfAdd, String dateOFRemove,  String annotation) throws ServiceException;
+
 
     boolean deleteSign(int signId) throws ServiceException;
 
@@ -20,7 +23,7 @@ public interface ILocalSignsControlService {
 
     MapPoint$LocalSign[] getMapPoints$LocalSignsByDate(String date) throws ServiceException;
 
-    LocalSign[] getSigns (String coordinates) throws ServiceException;
+    LocalSign[] getSigns(String coordinates) throws ServiceException;
 
     LocalSign[] getActualSigns() throws ServiceException;
 

@@ -31,7 +31,7 @@ public class InputValidation {
     public static void dateCheck(String string) throws ServiceValidationException {
 
         if (!Pattern.matches("\\d{4}(\\.\\d{2}(\\.\\d{2})?)?", string)) {
-            throw new ServiceValidationException("wrong date format, use yyyy or yyyy.mm or yyyy.mm.dd");
+            throw new ServiceValidationException("wrong date format, use yyyy or yyyy.mm or yyyy.mm.dd - "+string);
         }
     }
 

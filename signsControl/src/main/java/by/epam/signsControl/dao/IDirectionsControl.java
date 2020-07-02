@@ -9,5 +9,5 @@ public interface IDirectionsControl {
 
     Direction[] getUnusedDirections(String coordinates) throws DAOException;
 
-    Direction[] getPointDirections(String coordinates) throws DAOException;
+    Direction[] getPointDirectionsSignListID(String coordinates) throws DAOException;
 }

@@ -12,6 +12,7 @@
     <artifactId>signsControl</artifactId>
     <dependencies>
 
+
         <dependency>
             <groupId>by.epam.SignsControl</groupId>
             <artifactId>connectionPoolForDataBase</artifactId>

@@ -24,8 +24,9 @@ class CommandProvider {
         commands.put(CommandName.GET_POINT_HISTORY, new GetPointHistory());
         commands.put(CommandName.ADD_MAP_POINT, new AddMapPoint());
         commands.put(CommandName.GET_EMPTY_POINTS, new GetEmptyPoints());
-        commands.put(CommandName.GET_POINT_DIRECTIONS, new GetPointDirections());
+        commands.put(CommandName.GET_SIGN_ADD_INFO, new GetSignAddInfo());
         commands.put(CommandName.GET_UNUSED_DIRECTIONS, new GetUnusedDirections());
+        commands.put(CommandName.ADD_SIGN, new AddSign());
 
     }
 
