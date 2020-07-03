@@ -1,4 +1,4 @@
-package by.epam.signsControl.webView.controller.commands.impl;
+package by.epam.signsControl.webView.controller.commands.impl.signsControl;
 
 import by.epam.signsControl.bean.Direction;
 import by.epam.signsControl.bean.Sign;
@@ -25,7 +25,7 @@ public class GetSignAddInfo implements Command {
         logger.info("inside execute");
 
         response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");
+
 
         ServiceFactory sf = ServiceFactory.getINSTANCE();
 

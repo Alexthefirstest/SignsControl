@@ -20,7 +20,7 @@
 
     <script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
 
-    <script src='${pageContext.request.contextPath}/js/map.js?24' type="text/javascript" charset="UTF-8"></script>
+    <script src='${pageContext.request.contextPath}/js/map.js?29' type="text/javascript" charset="UTF-8"></script>
 
 
     <%--создать css: карта, стандартные объекты на ней--%>
@@ -67,7 +67,7 @@
 </header>
 
 
-
+<%-- контент с учетом роли --%>
 <c:choose>
 
 <c:when test="${empty sessionScope.role}">
@@ -84,7 +84,7 @@
     </c:otherwise>
 
     </c:choose>
-
+<%-- контент для роли 1 - одд --%>
 <c:if test='${sessionScope.role==1}'>
 
   <button id="addPointButton">добавить точку</button>
@@ -99,7 +99,14 @@
      <label for="addSignCBox">добавить знак</label>
  </form>
 
-  <form action='${pageContext.request.contextPath}/add_map_point' method="post" id='point_form'>
+  <form>
+     <input type="checkbox" id="changeDirectionBox" name="changeDirectionBox">
+     <label for="changeDirectionBox">изменить направление</label>
+ </form>
+<%--  --%>
+
+<%-- добавляет точку иили направление --%>
+  <form action='${pageContext.request.contextPath}/add_map_point' method="post" id='point_form' accept-charset="UTF-8">
 
  <input type="hidden" name="coordinatesToSend" value='null' required>
 
@@ -124,8 +131,8 @@
       <input type="submit" value="добавить">
   </form>
 
-
-  <form action='${pageContext.request.contextPath}/add_sign' method="post" id='addSign_form'>
+<%--  добавляет локальный знак --%>
+  <form action='${pageContext.request.contextPath}/add_sign' method="post" id='addSign_form' accept-charset="UTF-8">
 
       <label for="pdd_sign"> pdd_sign:</label><select name="pdd_sign" id='pdd_sign' required> </select>
 
@@ -140,6 +147,23 @@
 
        <label for="date_of_add">date_of_add: </label> <input type="date" name="date_of_add"  id="date_of_add">
         <label for="date_of_remove">date_of_remove: </label><input type="date" name="date_of_remove"  id="date_of_remove">
+
+      <br><input type="reset" value="сбросить">
+      <input type="submit" value="добавить">
+  </form>
+
+<%--  для изменения/удаления направления --%>
+  <form action='${pageContext.request.contextPath}/change_delete_direction' method="post" id='direction_control_form' accept-charset="UTF-8">
+
+      <label for="old_direction"> old direction:</label><select name="old_direction" id='old_direction' required> </select>
+
+      <label for="new_direction"> new direction:</label><select name="new_direction" id='new_direction' required> </select>
+
+  <label for="addressDirCh">address: </label><input type="text" id="addressDirCh" name="address"
+                                                         pattern="[\wА-Яа-я\s:!.,)(-?\d]+" >
+
+ <label for="annotationDirCh"> annotation:</label><input type="text" id="annotationDirCh"
+    name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
 
       <br><input type="reset" value="сбросить">
       <input type="submit" value="добавить">

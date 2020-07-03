@@ -1,4 +1,4 @@
-package by.epam.signsControl.webView.controller.commands.impl;
+package by.epam.signsControl.webView.controller.commands.impl.signsControl;
 
 import by.epam.signsControl.bean.MapPoint$LocalSign;
 import by.epam.signsControl.service.exceptions.ServiceException;
@@ -24,7 +24,7 @@ public class GetPointsByDate implements Command {
         logger.info(request.getParameter("chosenDate"));
 
         response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+
 
         try {
             MapPoint$LocalSign[] mapPoint$LocalSign = ServiceFactory.getINSTANCE().getLocalSignsControlService().

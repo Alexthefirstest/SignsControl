@@ -1,4 +1,4 @@
-package by.epam.signsControl.webView.controller.commands.impl;
+package by.epam.signsControl.webView.controller.commands.impl.signsControl;
 
 import by.epam.signsControl.bean.MapPoint;
 import by.epam.signsControl.service.exceptions.ServiceException;
@@ -21,7 +21,7 @@ public class GetEmptyPoints implements Command {
         logger.info("inside execute");
 
         response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+
 
         try {
             MapPoint[] mapPoints = ServiceFactory.getINSTANCE().getMapPointsControlService().getEmptyMapPoints();

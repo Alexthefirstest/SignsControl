@@ -32,6 +32,7 @@ public class DirectionsControl implements IDirectionsControl {
 
     }
 
+    //return id and direction
     @Override
     public Direction[] getUnusedDirections(String coordinates) throws DAOException {
 
@@ -47,6 +48,7 @@ public class DirectionsControl implements IDirectionsControl {
 
     }
 
+    //return sign list and direction
     @Override
     public Direction[] getPointDirectionsSignListID(String coordinates) throws DAOException {
 

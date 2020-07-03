@@ -202,6 +202,27 @@ class RequestExecutor {
 
     }
 
+    static boolean setFields(String request, Object...parameters) throws SQLException {
+
+        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(request)) {
+
+differentParametersInsideRequest(parameters, ps);
+
+            if (ps.executeUpdate() == 0) {
+                logger.info(" wrong id ");
+                return false;
+            }
+
+            return true;
+
+        } finally {
+            CONNECTION_POOL.releaseConnection(connection);
+        }
+
+    }
+
     static boolean setField(String request, int id, int parameter) throws SQLException {
 
         Connection connection = CONNECTION_POOL.retrieveConnection();
@@ -341,6 +362,28 @@ class RequestExecutor {
         try (PreparedStatement ps = connection.prepareStatement(request)) {
 
             stringParametersInsideRequest(parameters, ps);
+
+
+            rs = ps.executeQuery();
+
+            return signsControlFactory.createSignStaff(rs, signsStaff);
+
+
+        } finally {
+            closeResultSetAndReturnConnection(rs, connection);
+        }
+
+    }
+
+    static FactoryType getOneSignsStaff(String request, FactoryType signsStaff, Object... parameters) throws SQLException, DAOValidationException {
+
+        ResultSet rs = null;
+
+        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(request)) {
+
+            differentParametersInsideRequest(parameters, ps);
 
 
             rs = ps.executeQuery();

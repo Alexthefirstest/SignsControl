@@ -1,5 +1,7 @@
-package by.epam.signsControl.webView.controller.commands.impl;
+package by.epam.signsControl.webView.controller.commands.impl.signsControl;
 
+
+import by.epam.signsControl.bean.MapPoint$LocalSign;
 import by.epam.signsControl.service.exceptions.ServiceException;
 import by.epam.signsControl.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.controller.commands.Command;
@@ -11,26 +13,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class GetPointHistory implements Command {
+public class GetCurrentPoints implements Command {
 
-
-    private static final Logger logger = LogManager.getLogger(GetPointHistory.class);
+    private static final Logger logger = LogManager.getLogger(GetCurrentPoints.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         logger.info("inside execute");
 
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
 
         try {
-
-            response.getWriter().write(ResponseCreator.createPointHistory
-                    (ServiceFactory.getINSTANCE().getLocalSignsControlService().getSigns(request.getParameter("pointCoordinates"))));
-
+            MapPoint$LocalSign[] mapPoint$LocalSign = ServiceFactory.getINSTANCE().getLocalSignsControlService().getAllMapPoints$LocalSigns();
+            response.getWriter().write(ResponseCreator.createPointsJSON(mapPoint$LocalSign, true));
         } catch (ServiceException e) {
             logger.warn(e);
         }
+
     }
 }

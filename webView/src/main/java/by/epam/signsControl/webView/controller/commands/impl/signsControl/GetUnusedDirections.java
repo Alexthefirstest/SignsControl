@@ -1,4 +1,4 @@
-package by.epam.signsControl.webView.controller.commands.impl;
+package by.epam.signsControl.webView.controller.commands.impl.signsControl;
 
 import by.epam.signsControl.service.exceptions.ServiceException;
 import by.epam.signsControl.service.factory.ServiceFactory;
@@ -22,7 +22,7 @@ public class GetUnusedDirections implements Command {
         logger.info("inside execute");
 
         response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");
+
 
         try {
             String json = (ResponseCreator.createDirectionsJSON

@@ -1,4 +1,4 @@
-package by.epam.signsControl.webView.controller.commands.impl;
+package by.epam.signsControl.webView.controller.commands.impl.signsControl;
 
 import by.epam.signsControl.service.exceptions.ServiceException;
 import by.epam.signsControl.service.ILocalSignsControlService;

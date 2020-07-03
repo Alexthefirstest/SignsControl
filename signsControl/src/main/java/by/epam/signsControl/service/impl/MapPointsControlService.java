@@ -29,6 +29,21 @@ public class MapPointsControlService implements IMapPointsControlService {
     }
 
     @Override
+    public MapPoint getMapPoint(int signsList) throws ServiceException {
+
+
+
+        try {
+
+            return mapPointsControl.getMapPoint(signsList);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
     public MapPoint addMapPoint(String point, String address, int signsAngle) throws ServiceException {
 
       String checkedPoint = StringTransformer.coordinatesOrPointToPointWithCheck(point);
@@ -91,6 +106,30 @@ public class MapPointsControlService implements IMapPointsControlService {
         try {
 
             return mapPointsControl.removeMapPoint(signsList);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public boolean setParameters(int signs_list, int newDirection, String address, String annotation) throws ServiceException {
+        try {
+
+            return mapPointsControl.setParameters(signs_list, newDirection, address, annotation);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public boolean setParameters(int signs_list, String address, String annotation) throws ServiceException {
+        try {
+
+            return mapPointsControl.setParameters(signs_list, address, annotation);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

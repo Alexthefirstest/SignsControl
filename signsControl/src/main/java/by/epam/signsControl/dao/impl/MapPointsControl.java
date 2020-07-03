@@ -20,8 +20,13 @@ public class MapPointsControl implements IMapPointsControl {
     private static final String SQL_SELECT_ALL =
             "SELECT ST_AsText(coordinates), address, signs_list, signs_angle, annotation  FROM map_points order by coordinates, signs_list";
     private static final String SQL_SELECT_USE_LAST_INSERT_ID =
-            "SELECT ST_AsText(coordinates), address, signs_list, direction, annotation FROM map_points where signs_list=LAST_INSERT_ID();";
+            "SELECT ST_AsText(coordinates), address, signs_list, dir.direction, mp.annotation  FROM map_points as mp " +
+                    "join directions as dir on dir.id=mp.direction where signs_list=LAST_INSERT_ID();";
 
+   //use
+    private static final String SQL_SELECT_BY_SIGNS_LIST =
+           "SELECT ST_AsText(coordinates), address, signs_list, dir.direction, mp.annotation  FROM map_points as mp " +
+                   "join directions as dir on dir.id=mp.direction  where signs_list=?;";
     //use
     private static final String SQL_SELECT_EMPTY =
             "SELECT ST_AsText(coordinates), address, signs_list, dir.direction, mp.annotation  FROM map_points as mp " +
@@ -37,8 +42,12 @@ public class MapPointsControl implements IMapPointsControl {
     private static final String SQL_INSERT_WITH_ANNOTATION = "INSERT INTO map_points (coordinates, direction, address, annotation) " +
             "SELECT * FROM (SELECT ST_GeomFromText(?), ?, ?, ? ) as rt " +
             "where not exists(SELECT coordinates, direction FROM map_points where coordinates=ST_GeomFromText(?) AND direction=?) LIMIT 1";
-
-
+//use
+    private static final String SQL_SET_ADDRESS_DIRECTION_ANNOTATION =
+            "UPDATE `map_points` SET `address` = ?, `direction` = ?, `annotation` = ? WHERE (`signs_list` = ?);";
+  //use
+  private static final String SQL_SET_ADDRESS_ANNOTATION =
+            "UPDATE `map_points` SET `address` = ?, `annotation` = ? WHERE (`signs_list` = ?);";
 
     private static final String SQL_DELETE = "DELETE FROM map_points WHERE (signs_list = ?);";
     private static final String SQL_FIND_BY_SINGS_LIST =
@@ -57,6 +66,20 @@ public class MapPointsControl implements IMapPointsControl {
         } catch (SQLException ex) {
 
             logger.warn("getMapPoint fail: coordinates: " + coordinates, ex);
+            throw new DAOException(ex);
+
+        }
+    }
+
+    @Override
+    public MapPoint getMapPoint(int signsList) throws DAOException {
+        try {
+
+            return (MapPoint) RequestExecutor.getOneSignsStaff(SQL_SELECT_BY_SIGNS_LIST, new MapPoint(), signsList);
+
+        } catch (SQLException ex) {
+
+            logger.warn("getMapPoint fail: signsList: " + signsList, ex);
             throw new DAOException(ex);
 
         }
@@ -184,6 +207,38 @@ public class MapPointsControl implements IMapPointsControl {
             return RequestExecutor.setField(SQL_SET_ANNOTATION, signs_list, annotation);
         } catch (SQLException ex) {
             logger.warn("setAdress fail: id: " + signs_list, ex);
+            throw new DAOException(ex);
+        }
+    }
+
+    @Override
+    public boolean setParameters(int signs_list, int newDirection, String address, String annotation) throws DAOException {
+        if (annotation == null) {
+            annotation = "-";
+        } if (address == null) {
+            address = "-";
+        }
+
+        try {
+            return RequestExecutor.setFields(SQL_SET_ADDRESS_DIRECTION_ANNOTATION, address, newDirection, annotation, signs_list);
+        } catch (SQLException ex) {
+            logger.warn("set params fail fail: id: " + signs_list, ex);
+            throw new DAOException(ex);
+        }
+    }
+
+    @Override
+    public boolean setParameters(int signs_list, String address, String annotation) throws DAOException {
+        if (annotation == null) {
+            annotation = "-";
+        } if (address == null) {
+            address = "-";
+        }
+
+        try {
+            return RequestExecutor.setFields(SQL_SET_ADDRESS_ANNOTATION, address, annotation, signs_list);
+        } catch (SQLException ex) {
+            logger.warn("set params fail fail: id: " + signs_list, ex);
             throw new DAOException(ex);
         }
     }

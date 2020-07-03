@@ -3,6 +3,7 @@ package by.epam.signsControl.webView.controller;
 import by.epam.signsControl.webView.controller.commands.Command;
 import by.epam.signsControl.webView.controller.commands.CommandName;
 import by.epam.signsControl.webView.controller.commands.impl.*;
+import by.epam.signsControl.webView.controller.commands.impl.signsControl.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,6 +28,9 @@ class CommandProvider {
         commands.put(CommandName.GET_SIGN_ADD_INFO, new GetSignAddInfo());
         commands.put(CommandName.GET_UNUSED_DIRECTIONS, new GetUnusedDirections());
         commands.put(CommandName.ADD_SIGN, new AddSign());
+        commands.put(CommandName.GET_DIRECTION_CHANGE_INFO, new GetDirectionChangeInfo());
+        commands.put(CommandName.GET_DIRECTION_ADDRESS_ANNOTATION, new GetDirectionAddressAnnotation());
+        commands.put(CommandName.CHANGE_DELETE_DIRECTION, new ChangeDeleteDirection());
 
     }
 

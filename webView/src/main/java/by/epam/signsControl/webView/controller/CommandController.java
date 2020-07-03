@@ -45,6 +45,8 @@ public class CommandController extends HttpServlet {
 
         logger.info("inside servlet post");
 
+
+
         process(req, resp);
 
 
@@ -55,7 +57,10 @@ public class CommandController extends HttpServlet {
 
     private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        resp.setCharacterEncoding("UTF-8");
+       req.setCharacterEncoding("UTF-8");
         try {
+
             commandProvider.getCommand(getCommandFromURI(req)).execute(req, resp);
         } catch (Exception ex) {
             logger.warn(ex);

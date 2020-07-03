@@ -11,6 +11,10 @@ let coordinatesHtml;
 let point_form;
    let objectManagerEP;
 
+   let changeDirectionBox;
+   let changeDirectionForm;
+   let oldDirectionsSelect;
+
 function init(ymaps) {
 
     myMap = new ymaps.Map("map", {
@@ -311,6 +315,7 @@ let activeObjectMonitor = new ymaps.Monitor(objectManager.clusters.state);
 			updateSignsHistory(objectId);
 			changeDirectionCoordinates(objectManager.objects.getById(objectId).properties.pointCoordinates);
 			updateAddSignForm(objectManager.objects.getById(objectId).properties.pointCoordinates)
+			updateDirectionsForm(objectManager.objects.getById(objectId).properties.pointCoordinates)
 
 		});
 
@@ -322,6 +327,7 @@ let activeObjectMonitor = new ymaps.Monitor(objectManager.clusters.state);
         		changeDirectionCoordinates(objectManager.objects.getById(objectId).properties.pointCoordinates);
 
 	updateAddSignForm(objectManager.objects.getById(objectId).properties.pointCoordinates)
+	updateDirectionsForm(objectManager.objects.getById(objectId).properties.pointCoordinates)
         		});
 
 let activeObjectMonitorEP = new ymaps.Monitor(objectManagerEP.clusters.state);
@@ -333,6 +339,7 @@ let activeObjectMonitorEP = new ymaps.Monitor(objectManagerEP.clusters.state);
 			changeDirectionCoordinates(objectManagerEP.objects.getById(objectId).properties.pointCoordinates);
 		changeSignsHistoryDiv("empty point");
 		updateAddSignForm(objectManagerEP.objects.getById(objectId).properties.pointCoordinates)
+		updateDirectionsForm(objectManagerEP.objects.getById(objectId).properties.pointCoordinates)
 		});
 
 		activeObjectMonitorEP.add('activeObject', function () {
@@ -343,6 +350,7 @@ let activeObjectMonitorEP = new ymaps.Monitor(objectManagerEP.clusters.state);
         				 changeSignsHistoryDiv("empty point");
 
 updateAddSignForm(objectManagerEP.objects.getById(objectId).properties.pointCoordinates)
+updateDirectionsForm(objectManagerEP.objects.getById(objectId).properties.pointCoordinates)
         		});
 
 
@@ -385,7 +393,7 @@ changeSignsHistoryDiv("выберите точку");
 }//init finish
 
 
-// ----------------------- логализация - начало
+// ----------------------- локализация карты- начало
 
 window.onload = function () {
 
@@ -539,10 +547,38 @@ for(let j = 0; j<directions.ids.length; j++){
 
     });
  }
-
+// ----------------------- локализация - конец где-то примерно тут, вроде
   //add point/
 
+changeDirectionBox= document.getElementById("changeDirectionBox");
+changeDirectionForm= document.getElementById("direction_control_form");
+
+oldDirectionsSelect=document.getElementById("old_direction");
+
+ $(document).on("change", "#old_direction", function(){
+
+ $.ajax({
+
+        url: ctx+"/get_direction_address_annotation",
+        data: {"signList":oldDirectionsSelect.value}
+
+    }).done(function (data) {
+
+let pdate = JSON.parse(data);
+   let addressDirCh=document.getElementById("addressDirCh");
+   let annotationDirCh = document.getElementById("annotationDirCh");
+
+   addressDirCh.value = pdate.address;
+   annotationDirCh.value = pdate.annotation;
+
+           });
+
+    });
+
 updateAddSignForm(null);
+updateDirectionsForm(null);
+
+
 
 }//window.onload;
 
@@ -581,7 +617,7 @@ data: {"pointCoordinates": coordinates}
 
       }).done(function (data) {
 
-let directions = JSON.parse(data)
+let directions = JSON.parse(data);
 
 let directionsSelect=document.getElementById("direction");
 
@@ -669,4 +705,76 @@ addSignForm.style.visibility = 'hidden';
 
 
 }
-// ----------------------- локализация - конец
+//get directions change
+function  updateDirectionsForm(coordinates){
+
+
+if((changeDirectionBox!=null) && (changeDirectionBox.checked)){
+
+  $.ajax({
+
+          url: ctx+"/get_direction_change_info",
+          data: {"pointCoordinates": coordinates}
+
+      }).done(function (data) {
+
+let directions=JSON.parse(data);
+let oldDirections = directions.oldDir;
+let newDirections = directions.newDir;
+
+let newDirectionsSelect=document.getElementById("new_direction");
+//let oldDirectionsSelect=document.getElementById("new_direction");
+
+ $("#old_direction").empty();
+ $("#new_direction").empty();
+
+for(let i = 0; i<oldDirections.ids.length; i++){
+
+  oldDirectionsSelect.append(new Option(oldDirections.directions[i], oldDirections.ids[i]));
+}
+
+ $.ajax({
+
+        url: ctx+"/get_direction_address_annotation",
+        data: {"signList":oldDirectionsSelect.value}
+
+    }).done(function (data) {
+
+let pdate = JSON.parse(data);
+   let addressDirCh=document.getElementById("addressDirCh");
+   let annotationDirCh = document.getElementById("annotationDirCh");
+
+   addressDirCh.value = pdate.address;
+   annotationDirCh.value = pdate.annotation;
+
+           });
+
+ newDirectionsSelect.append(new Option("do not change", -1));
+ newDirectionsSelect.append(new Option("delete", -2));
+
+for(let i = 0; i<newDirections.ids.length; i++){
+
+  newDirectionsSelect.append(new Option(newDirections.directions[i], newDirections.ids[i]));
+
+}
+
+
+  }).fail(function() {
+
+        $("#old_direction").empty();
+        $("#new_direction").empty();
+        //exception
+
+      });
+
+changeDirectionForm.style.visibility = 'visible';
+}else{
+if(changeDirectionBox!=null){
+changeDirectionForm.style.visibility = 'hidden';
+}
+}
+
+
+}
+
+
