@@ -20,7 +20,7 @@
 
     <script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
 
-    <script src='${pageContext.request.contextPath}/js/map.js?29' type="text/javascript" charset="UTF-8"></script>
+    <script src='${pageContext.request.contextPath}/js/map.js?34' type="text/javascript" charset="UTF-8"></script>
 
 
     <%--создать css: карта, стандартные объекты на ней--%>
@@ -103,6 +103,11 @@
      <input type="checkbox" id="changeDirectionBox" name="changeDirectionBox">
      <label for="changeDirectionBox">изменить направление</label>
  </form>
+
+ <form>
+     <input type="checkbox" id="change_local_sign_box" name="change_local_sign_box">
+     <label for="change_local_sign_box">изменить знак</label>
+ </form>
 <%--  --%>
 
 <%-- добавляет точку иили направление --%>
@@ -152,7 +157,7 @@
       <input type="submit" value="добавить">
   </form>
 
-<%--  для изменения/удаления направления --%>
+<%--  для изменения/удаления направления - удалить все направления = удалить точку --%>
   <form action='${pageContext.request.contextPath}/change_delete_direction' method="post" id='direction_control_form' accept-charset="UTF-8">
 
       <label for="old_direction"> old direction:</label><select name="old_direction" id='old_direction' required> </select>
@@ -168,6 +173,33 @@
       <br><input type="reset" value="сбросить">
       <input type="submit" value="добавить">
   </form>
+
+
+
+<%--  для изменения/удаления знака --%>
+  <form action='${pageContext.request.contextPath}/change_delete_local_sign' method="post" id='sign_control_form' accept-charset="UTF-8">
+
+      <label for="sign_info"> sign:</label><select name="local_sign_id" id='sign_info' > </select>
+
+        <label for="sign_annotation_change"> annotation:</label><input type="text" id="sign_annotation_change"
+                                                              name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
+
+        <label for="date_of_add_change">date_of_add: </label> <input type="date" name="date_of_add"  id="date_of_add_change">
+         <label for="date_of_remove_change">date_of_remove: </label><input type="date" name="date_of_remove"  id="date_of_remove_change">
+
+<input type="checkbox" id="deleteSign" name="deleteSign" value"delete_sign">
+    <label for="deleteSign">удалить знак</label>
+
+   <br><input type="reset" value="сбросить">
+      <input type="submit" value="добавить">
+  </form>
+
+
+
+
+    <%--<div id="map" style=" height: 500px"></div>--%>
+
+
 
  <button id="showEmptyPointsButton">показать пустые точки</button>
 

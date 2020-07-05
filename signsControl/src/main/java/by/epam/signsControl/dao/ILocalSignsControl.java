@@ -30,7 +30,9 @@ public interface ILocalSignsControl {
 
     LocalSign[] getSignsLists() throws DAOException;
 
-
+    boolean setParameters(int localSignId, String dateOfAdd, String dateOfRemove, String annotation) throws DAOException;
+     boolean setDateOfAdd(int localSignID, String date) throws DAOException;
+  boolean setDateOfRemove(int localSignID, String date) throws DAOException;
     boolean setDateOfAdd(int localSignID, Date date) throws DAOException;
 
     boolean setDateOfRemove(int localSignID, Date date) throws DAOException;

@@ -7,6 +7,7 @@ import by.epam.signsControl.bean.MapPoint$LocalSign;
 import by.epam.signsControl.bean.Sign;
 import by.epam.signsControl.bean.StandardSize;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,10 +25,36 @@ public class ResponseCreator {
     private static final String JSON_POINTS_START_SUBSTRING = "{\"type\": \"FeatureCollection\",\"features\": [";
     private static final String JSON_POINTS_FINISH_SUBSTRING = "] }";
 
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
     private ResponseCreator() {
     }
+
+    static String createChangeSignJSON(Object[] objects) {
+
+       return gson.toJson(objects);
+    }
+
+//    static String createChangeSignJSON(LocalSign[] localSigns) {
+//
+//        StringBuilder json = new StringBuilder("{signs:[");
+//
+//        Date dateOfRemove;
+//
+//        for (LocalSign localSign : localSigns) {
+//            json.append("{\"id\":").append(localSign.getLocalSignId());
+//            json.append("\"info\":\"")
+//                    .append(createSign(localSign.getSection(), localSign.getSign(), localSign.getKind()))
+//                    .append(' ').append(localSign.getDateOfAdd())
+//                    .append(' ').append((dateOfRemove = localSign.getDateOfRemove()) == null ? '-' : dateOfRemove)
+//                    .append("\"}");
+//        }
+//
+//        json.append("]}");
+//
+//        return json.toString();
+//    }
+
 
     static String createAddPointInfoJSON(Direction[] directions, StandardSize[] standardSizes, Sign[] pddSigns) {
 
@@ -165,7 +192,7 @@ public class ResponseCreator {
 
     private static String createHint(MapPoint mapPoint) {
 
-       // String annotation;
+        // String annotation;
 
         StringBuilder hint = new StringBuilder();
 
@@ -176,8 +203,8 @@ public class ResponseCreator {
         for (int i = 0; i < angles.size(); i++) {
             hint.append(addresses.get(i)).append(", ").
                     append(angles.get(i)).append(", ").
-                   // append((annotation = annotations.get(i)) == null || annotation.isEmpty() ? "- " : annotation).append(";<br />");
-                    append((annotations.get(i))).append(";<br />");
+                    // append((annotation = annotations.get(i)) == null || annotation.isEmpty() ? "- " : annotation).append(";<br />");
+                            append((annotations.get(i))).append(";<br />");
         }
 
         return hint.toString();
@@ -264,7 +291,7 @@ public class ResponseCreator {
 
         StringBuilder sb = new StringBuilder();
 
-     //   String description;
+        //   String description;
         Date dateOfRemove;
         byte[] picture;
 

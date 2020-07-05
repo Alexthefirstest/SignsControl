@@ -1,6 +1,7 @@
 package by.epam.signsControl.service.impl;
 
 import by.epam.signsControl.service.exceptions.ServiceValidationException;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.regex.Pattern;
 
@@ -79,8 +80,11 @@ public class InputValidation {
     }
 
     public static void nullAndSymbolsCheckWithRus(String string) throws ServiceValidationException {
+        LogManager.getLogger(InputValidation.class).info(string);
+
+
         nullCheck(string);
-        validateStringRus(string);
+        validateStringRusForText(string);
     }
 
 }

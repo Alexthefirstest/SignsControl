@@ -18,7 +18,10 @@ public class LocalSignsControlService implements ILocalSignsControlService {
 
 
     @Override
-    public LocalSign addSign(int signListId, int pddSignId, int standardSize,  String annotation) throws ServiceException {
+    public LocalSign addSign(int signListId, int pddSignId, int standardSize, String annotation) throws ServiceException {
+
+        InputValidation.nullCheck(annotation);
+
 
         try {
 
@@ -31,7 +34,8 @@ public class LocalSignsControlService implements ILocalSignsControlService {
     }
 
     @Override
-    public LocalSign addSign(int signListId, int pddSignId, int standardSize, String dateOfAdd,  String annotation) throws ServiceException {
+    public LocalSign addSign(int signListId, int pddSignId, int standardSize, String dateOfAdd, String annotation) throws ServiceException {
+        InputValidation.nullCheck(annotation);
         InputValidation.nullAndDateCheck(dateOfAdd);
         try {
 
@@ -44,8 +48,8 @@ public class LocalSignsControlService implements ILocalSignsControlService {
     }
 
     @Override
-    public LocalSign addSign(int signListId, int pddSignId, int standardSize, String dateOfAdd, String dateOFRemove,  String annotation) throws ServiceException {
-
+    public LocalSign addSign(int signListId, int pddSignId, int standardSize, String dateOfAdd, String dateOFRemove, String annotation) throws ServiceException {
+        InputValidation.nullCheck(annotation);
         InputValidation.nullAndDateCheck(dateOfAdd);
         InputValidation.nullAndDateCheck(dateOFRemove);
 
@@ -157,6 +161,53 @@ public class LocalSignsControlService implements ILocalSignsControlService {
         try {
 
             return localSignsControl.getSignsLists();
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public boolean setParameters(int localSignId, String dateOfAdd, String dateOfRemove, String annotation) throws ServiceException {
+
+//        InputValidation.nullAndSymbolsCheckWithRus(annotation);
+        InputValidation.nullCheck(annotation);
+        InputValidation.nullAndDateCheck(dateOfAdd);
+        InputValidation.nullAndDateCheck(dateOfRemove);
+
+        try {
+
+            return localSignsControl.setParameters(localSignId, dateOfAdd, dateOfRemove, annotation);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public boolean setDateOfAdd(int localSignID, String date) throws ServiceException {
+
+        InputValidation.nullAndDateCheck(date);
+
+        try {
+
+            return localSignsControl.setDateOfAdd(localSignID, date);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public boolean setDateOfRemove(int localSignID, String date) throws ServiceException {
+        InputValidation.nullAndDateCheck(date);
+
+        try {
+
+            return localSignsControl.setDateOfRemove(localSignID, date);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

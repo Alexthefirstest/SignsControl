@@ -31,6 +31,8 @@ class CommandProvider {
         commands.put(CommandName.GET_DIRECTION_CHANGE_INFO, new GetDirectionChangeInfo());
         commands.put(CommandName.GET_DIRECTION_ADDRESS_ANNOTATION, new GetDirectionAddressAnnotation());
         commands.put(CommandName.CHANGE_DELETE_DIRECTION, new ChangeDeleteDirection());
+        commands.put(CommandName.GET_SIGN_CHANGE_INFO, new GetSignsChangeInfo());
+        commands.put(CommandName.CHANGE_DELETE_LOCAL_SIGN, new ChangeDeleteLocalSign());
 
     }
 

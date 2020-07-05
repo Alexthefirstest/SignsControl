@@ -31,6 +31,10 @@ public interface ILocalSignsControlService {
 
     LocalSign[] getSignsLists() throws ServiceException;
 
+    boolean setParameters(int localSignId, String dateOfAdd, String dateOfRemove, String annotation) throws ServiceException;
+
+    boolean setDateOfAdd(int localSignID, String date) throws ServiceException;
+    boolean setDateOfRemove(int localSignID, String date) throws ServiceException;
 
     boolean setDateOfAdd(int localSignID, Date date) throws ServiceException;
 

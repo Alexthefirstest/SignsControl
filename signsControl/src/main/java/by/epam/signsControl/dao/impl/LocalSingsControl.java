@@ -62,7 +62,9 @@ public class LocalSingsControl implements ILocalSignsControl {
     private static final String SQL_SELECT_BY_COORDINATES = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add," +
             "     sl.date_of_remove, sl.annotation, directions.direction, ps.name, ps.description FROM sign_lists as sl join pdd_signs as ps on ps.id = sl.sign join map_points as mp on sl.signs_list_id=mp.signs_list" +
             " join directions on mp.direction=directions.id       where mp.coordinates=st_geomfromtext(?)" +
-            "        order by signs_list_id,  sl.date_of_remove, sl.date_of_add, pdd_section, pdd_sign, pdd_kind;";
+            "        order by signs_list_id,  sl.date_of_remove, sl.date_of_add, pdd_section, pdd_sign, pdd_kind;";  //use
+//use
+    private static final String SQL_SET_ADD_REMOVE_DATES_ANNOTATION = "UPDATE `sign_lists` SET `date_of_add` = ?, `date_of_remove` = ?, `annotation` = ? WHERE (`local_sign_id` = ?);";
 
 
     private static final String SQL_SELECT_ACTUAL_USE_DATE = "SELECT sl.local_sign_id, sl.signs_list_id, ps.id, pdd_section, pdd_sign, pdd_kind, picture, standard_size, sl.date_of_add,  " +
@@ -318,9 +320,33 @@ public class LocalSingsControl implements ILocalSignsControl {
     }
 
     @Override
+    public boolean setParameters(int localSignId, String dateOfAdd, String dateOfRemove, String annotation) throws DAOException {
+        if (annotation == null) {
+            annotation = "-";
+        }
+
+        try {
+            return RequestExecutor.setFields(SQL_SET_ADD_REMOVE_DATES_ANNOTATION, dateOfAdd, dateOfRemove, annotation, localSignId);
+        } catch (SQLException ex) {
+            logger.warn("set params fail fail: id: " + localSignId, ex);
+            throw new DAOException(ex);
+        }
+    }
+
+    @Override
     public boolean setDateOfAdd(int localSignID, Date date) throws DAOException {
         try {
             return RequestExecutor.setField(SQL_SET_DATE_OF_ADD, localSignID, new Timestamp(date.getTime()));
+        } catch (SQLException ex) {
+            logger.warn("set date add: id: " + localSignID, ex);
+            throw new DAOException(ex);
+        }
+    }
+
+    @Override
+    public boolean setDateOfAdd(int localSignID, String date) throws DAOException {
+        try {
+            return RequestExecutor.setField(SQL_SET_DATE_OF_ADD, localSignID, date);
         } catch (SQLException ex) {
             logger.warn("set date add: id: " + localSignID, ex);
             throw new DAOException(ex);
@@ -332,6 +358,17 @@ public class LocalSingsControl implements ILocalSignsControl {
 
         try {
             return RequestExecutor.setField(SQL_SET_DATE_OF_REMOVE, localSignID, new java.sql.Date(date.getTime()));
+        } catch (SQLException ex) {
+            logger.warn("set date remove: id: " + localSignID, ex);
+            throw new DAOException(ex);
+        }
+    }
+
+    @Override
+    public boolean setDateOfRemove(int localSignID, String date) throws DAOException {
+
+        try {
+            return RequestExecutor.setField(SQL_SET_DATE_OF_REMOVE, localSignID, date);
         } catch (SQLException ex) {
             logger.warn("set date remove: id: " + localSignID, ex);
             throw new DAOException(ex);

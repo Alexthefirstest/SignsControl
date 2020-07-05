@@ -15,6 +15,12 @@ let point_form;
    let changeDirectionForm;
    let oldDirectionsSelect;
 
+   let changeSignBox;
+   let changeSignForm;
+   let selectedSign;
+
+   let changeSignLatestInfo;
+
 function init(ymaps) {
 
     myMap = new ymaps.Map("map", {
@@ -313,9 +319,10 @@ let activeObjectMonitor = new ymaps.Monitor(objectManager.clusters.state);
 
 			let objectId = e.get('objectId');
 			updateSignsHistory(objectId);
+			updateSignChangeForm(objectManager.objects.getById(objectId).properties.pointCoordinates);
 			changeDirectionCoordinates(objectManager.objects.getById(objectId).properties.pointCoordinates);
-			updateAddSignForm(objectManager.objects.getById(objectId).properties.pointCoordinates)
-			updateDirectionsForm(objectManager.objects.getById(objectId).properties.pointCoordinates)
+			updateAddSignForm(objectManager.objects.getById(objectId).properties.pointCoordinates);
+			updateDirectionsForm(objectManager.objects.getById(objectId).properties.pointCoordinates);
 
 		});
 
@@ -325,7 +332,7 @@ let activeObjectMonitor = new ymaps.Monitor(objectManager.clusters.state);
         		updateSignsHistory(objectId);
         		//проверить что существует changeDIrectionCoorditnates
         		changeDirectionCoordinates(objectManager.objects.getById(objectId).properties.pointCoordinates);
-
+updateSignChangeForm(objectManager.objects.getById(objectId).properties.pointCoordinates);
 	updateAddSignForm(objectManager.objects.getById(objectId).properties.pointCoordinates)
 	updateDirectionsForm(objectManager.objects.getById(objectId).properties.pointCoordinates)
         		});
@@ -335,7 +342,7 @@ let activeObjectMonitorEP = new ymaps.Monitor(objectManagerEP.clusters.state);
 	objectManagerEP.objects.events.add('click', function (e) {
 
 			let objectId = e.get('objectId');
-
+updateSignChangeForm(objectManagerEP.objects.getById(objectId).properties.pointCoordinates);
 			changeDirectionCoordinates(objectManagerEP.objects.getById(objectId).properties.pointCoordinates);
 		changeSignsHistoryDiv("empty point");
 		updateAddSignForm(objectManagerEP.objects.getById(objectId).properties.pointCoordinates)
@@ -345,7 +352,7 @@ let activeObjectMonitorEP = new ymaps.Monitor(objectManagerEP.clusters.state);
 		activeObjectMonitorEP.add('activeObject', function () {
         			let objectId = activeObjectMonitorEP.get('activeObject').id;
         		//	objectManager.objects.getById(objectId).properties.balloonContent;
-
+updateSignChangeForm(objectManagerEP.objects.getById(objectId).properties.pointCoordinates);
         				changeDirectionCoordinates(objectManagerEP.objects.getById(objectId).properties.pointCoordinates);
         				 changeSignsHistoryDiv("empty point");
 
@@ -575,8 +582,28 @@ let pdate = JSON.parse(data);
 
     });
 
+ changeSignBox = document.getElementById("change_local_sign_box");
+   changeSignForm  = document.getElementById("sign_control_form");
+   selectedSign = document.getElementById("sign_info");
+
+//редактирование знака
+ $(document).on("change", "#sign_info", function(){
+
+let signAnnotation=document.getElementById("sign_annotation_change");
+   let dateOfAddCh = document.getElementById("date_of_add_change");
+   let dateOfRemoveCh = document.getElementById("date_of_remove_change");
+
+let selectedSignPosition = selectedSign.options.selectedIndex;
+
+   signAnnotation.value = changeSignLatestInfo[selectedSign.options.selectedIndex].annotation;
+   dateOfAddCh.value =changeSignLatestInfo[selectedSign.options.selectedIndex].dateOfAdd;
+   dateOfRemoveCh.value =changeSignLatestInfo[selectedSign.options.selectedIndex].dateOfRemove;
+
+    });
+
 updateAddSignForm(null);
 updateDirectionsForm(null);
+updateSignChangeForm(null);
 
 
 
@@ -705,7 +732,7 @@ addSignForm.style.visibility = 'hidden';
 
 
 }
-//get directions change
+// directions change
 function  updateDirectionsForm(coordinates){
 
 
@@ -771,6 +798,61 @@ changeDirectionForm.style.visibility = 'visible';
 }else{
 if(changeDirectionBox!=null){
 changeDirectionForm.style.visibility = 'hidden';
+}
+}
+
+
+}
+
+// sign change
+function  updateSignChangeForm(coordinates){
+
+if((changeSignBox!=null) && (changeSignBox.checked)){
+
+
+  $.ajax({
+
+          url: ctx+"/get_sign_change_info",
+          data: {"pointCoordinates": coordinates}
+
+      }).done(function (data) {
+
+
+ $("#sign_info").empty();
+
+for(let i = 0; i<data.length; i++){
+
+let kind = data[i].kind;
+let signNumber = (data[i].section + "." + data[i].sign + ((kind > -1) ? ("." + kind) : ""));
+
+  selectedSign.append(new Option( (signNumber+" : "+data[i].dateOfAdd+" : "+(data[i].dateOfRemove==null? " - " : data[i].dateOfRemove ) ) , data[i].localSignId));
+}
+
+let signAnnotation=document.getElementById("sign_annotation_change");
+   let dateOfAddCh = document.getElementById("date_of_add_change");
+   let dateOfRemoveCh = document.getElementById("date_of_remove_change");
+
+let selectedSignPosition = selectedSign.options.selectedIndex;
+
+   signAnnotation.value = data[selectedSign.options.selectedIndex].annotation;
+   dateOfAddCh.value =data[selectedSign.options.selectedIndex].dateOfAdd;
+   dateOfRemoveCh.value =data[selectedSign.options.selectedIndex].dateOfRemove;
+
+changeSignForm.style.visibility = 'visible';
+
+changeSignLatestInfo=data;
+
+}).fail(function() {
+
+changeSignLatestInfo=null;
+          //exception
+
+        });;
+
+
+}else{
+if(changeSignForm!=null){
+changeSignForm.style.visibility = 'hidden';
 }
 }
 

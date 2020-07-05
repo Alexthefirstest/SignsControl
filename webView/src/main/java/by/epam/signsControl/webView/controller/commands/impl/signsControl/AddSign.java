@@ -34,6 +34,7 @@ public class AddSign implements Command {
             String dateOfRemove = ((request.getParameter("date_of_remove")));
             String annotation = ((request.getParameter("annotation")));
 
+logger.info((request.getParameter("annotation")));
 
             try {
 
