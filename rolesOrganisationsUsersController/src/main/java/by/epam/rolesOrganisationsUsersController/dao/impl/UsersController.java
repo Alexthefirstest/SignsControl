@@ -47,32 +47,32 @@ public class UsersController implements IUsersController {
     /**
      * sql insert user to db table
      */
-    private static final String SQL_INSERT_USER = "INSERT INTO `users` (`id`, `organisation`, `login`, `password`) VALUES ((SELECT id FROM user_info where id=LAST_INSERT_ID()), ?, ?, ?)";
+    private static final String SQL_INSERT_USER = "INSERT INTO `users` (`id`, `role`, `organisation`, `login`, `password`) VALUES ((SELECT id FROM user_info where id=LAST_INSERT_ID()),?, ?, ?, ?)";
 
     /**
      * sql select user with last inserted id from db
      */
-    private static final String SQL_SELECT_USE_LAST_INSERT_ID = "SELECT u.id, login, role, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation where u.id=LAST_INSERT_ID();";
+    private static final String SQL_SELECT_USE_LAST_INSERT_ID = "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked, ui.name, ui.surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation join user_roles as ur on u.role=ur.id join organisation_roles as orr on o.role=orr.id where u.id=LAST_INSERT_ID();";
 
     /**
      * sql select all users from db
      */
-    private static final String SQL_SELECT_ALL = "SELECT u.id, login, role, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation order by u.organisation, ui.surname, ui.name";
+    private static final String SQL_SELECT_ALL = "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked, ui.name, ui.surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation join user_roles as ur on u.role=ur.id join organisation_roles as orr on o.role=orr.id";
 
     /**
      * sql select users by organisation from db
      */
-    private static final String SQL_SELECT_USE_ORGANISATION = "SELECT u.id, login, role, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation where u.organisation=? order by ui.surname, ui.name";
+    private static final String SQL_SELECT_USE_ORGANISATION = "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked, ui.name, ui.surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation join user_roles as ur on u.role=ur.id join organisation_roles as orr on o.role=orr.id where u.organisation=? order by ui.surname, ui.name";
 
     /**
      * sql select user by id from db
      */
-    private static final String SQL_SELECT_USER = "SELECT u.id, login, role, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation  where u.id=?";
+    private static final String SQL_SELECT_USER = "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked, ui.name, ui.surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation join user_roles as ur on u.role=ur.id join organisation_roles as orr on o.role=orr.id  where u.id=?";
 
     /**
      * sql select user by login from db
      */
-    private static final String SQL_SELECT_USER_LOGIN = "SELECT u.id, login, role, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation  where u.login=?";
+    private static final String SQL_SELECT_USER_LOGIN = "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked, ui.name, ui.surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation join user_roles as ur on u.role=ur.id join organisation_roles as orr on o.role=orr.id  where u.login=?";
     //private static final String SQL_SELECT_USER_BY_LOGIN_PASSWORD = "SELECT u.id, login, o.id as orgID, o.name as org, u.is_blocked, ui.name, surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation  where u.login=? AND u.password=?";
 
     /**
@@ -95,10 +95,10 @@ public class UsersController implements IUsersController {
      */
     private static final String SQL_SET_ORGANISATION = "UPDATE users SET `is_blocked` = ? WHERE (`id` = ?);";
 
-    /**
-     * sql get user organisation from db
-     */
-    private static final String SQL_GET_ORGANISATION = "SELECT organisation FROM users WHERE (`id` = ?);";
+//    /**
+//     * sql get user organisation from db
+//     */
+//    private static final String SQL_GET_ORGANISATION = "SELECT organisation FROM users WHERE (`id` = ?);";
 
     /**
      * sql set name of user to db
@@ -140,7 +140,7 @@ public class UsersController implements IUsersController {
      * @throws DAOException           when other exceptions during process occurred
      */
     @Override
-    public User addUser(String login, String password, int organisation, String name, String surname) throws DAOException {
+    public User addUser(String login, String password, int role, int organisation, String name, String surname) throws DAOException {
 
         ResultSet rs = null;
 
@@ -157,9 +157,10 @@ public class UsersController implements IUsersController {
 
             psInsertUserInfo.executeUpdate();
 
-            psInsertUser.setInt(1, organisation);
-            psInsertUser.setString(2, login);
-            psInsertUser.setString(3, password);
+            psInsertUser.setInt(1, role);
+            psInsertUser.setInt(2, organisation);
+            psInsertUser.setString(3, login);
+            psInsertUser.setString(4, password);
 
             psInsertUser.executeUpdate();
 
@@ -182,7 +183,7 @@ public class UsersController implements IUsersController {
             }
 
             if ((Pattern.matches(".*a foreign key constraint fails.*", ex.getMessage()))) {
-                logger.info("add fail, wrong organisation: " + organisation, ex);
+                logger.info("add fail, wrong organisation or role: " + organisation, ex);
                 throw new DAOValidationException("wrong organisation: " + organisation);
             }
 
@@ -337,24 +338,24 @@ public class UsersController implements IUsersController {
         }
     }
 
-    /**
-     * @param userId user id
-     * @return organisation id or -1 if can't find it
-     * @throws DAOException when get an exception during execution
-     */
-    @Override
-    public int getOrganisation(int userId) throws DAOException {
-        try {
-
-            return RequestExecutor.getInt(SQL_GET_ORGANISATION, userId);
-
-        } catch (SQLException ex) {
-
-            logger.warn("get organisation fail, id: " + userId, ex);
-            throw new DAOException(ex);
-
-        }
-    }
+//    /**
+//     * @param userId user id
+//     * @return organisation id or -1 if can't find it
+//     * @throws DAOException when get an exception during execution
+//     */
+//    @Override
+//    public int getOrganisation(int userId) throws DAOException {
+//        try {
+//
+//            return RequestExecutor.getInt(SQL_GET_ORGANISATION, userId);
+//
+//        } catch (SQLException ex) {
+//
+//            logger.warn("get organisation fail, id: " + userId, ex);
+//            throw new DAOException(ex);
+//
+//        }
+//    }
 
     /**
      * get all users from data base
@@ -498,5 +499,10 @@ public class UsersController implements IUsersController {
             throw new DAOException(ex);
 
         }
+    }
+
+    @Override
+    public boolean setRole(int id, String role) throws DAOException {
+        return false;
     }
 }

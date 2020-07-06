@@ -24,71 +24,71 @@ public class RolesControllerService implements IRolesControllerService {
      */
     private final IRolesController rolesController = DaoFactory.getINSTANCE().getRolesController();
 
-    /**
-     * add role to jdbc table
-     *
-     * @param name role name
-     * @return {@link Role} if successfully added
-     * @throws ServiceValidationException when {@link InputValidation#nullAndSymbolsCheck(String)}
-     *                                    or catch {@link DAOValidationException}
-     *                                    from {@link IRolesController#addRole(String)}
-     * @throws ServiceException           when catch {@link DAOException}
-     *                                    from {@link IRolesController#addRole(String)}
-     */
-    @Override
-    public Role addRole(String name) throws ServiceException {
-
-        InputValidation.nullAndSymbolsCheck(name);
-
-        try {
-
-            return rolesController.addRole(name);
-        } catch (DAOValidationException ex) {
-            throw new ServiceValidationException(ex.getMessage());
-        } catch (DAOException ex) {
-            throw new ServiceException(ex);
-        }
-    }
-
-    /**
-     * delete role from jdbc table
-     *
-     * @param id role id
-     * @return true if success, false - if no
-     * @throws ServiceValidationException when  catch {@link DAOValidationException}
-     *                                    from {@link IRolesController#deleteRole(int)}
-     * @throws ServiceException           when catch {@link DAOException}
-     *                                    from {@link IRolesController#deleteRole(int)}
-     */
-    @Override
-    public boolean deleteRole(int id) throws ServiceException {
-
-        try {
-
-            return rolesController.deleteRole(id);
-        } catch (DAOValidationException ex) {
-            throw new ServiceValidationException(ex.getMessage());
-        } catch (DAOException ex) {
-            throw new ServiceException(ex);
-
-        }
-    }
+//    /**
+//     * add role to jdbc table
+//     *
+//     * @param name role name
+//     * @return {@link Role} if successfully added
+//     * @throws ServiceValidationException when {@link InputValidation#nullAndSymbolsCheck(String)}
+//     *                                    or catch {@link DAOValidationException}
+//     *                                    from {@link IRolesController#addRole(String)}
+//     * @throws ServiceException           when catch {@link DAOException}
+//     *                                    from {@link IRolesController#addRole(String)}
+//     */
+//    @Override
+//    public Role addRole(String name) throws ServiceException {
+//
+//        InputValidation.nullAndSymbolsCheck(name);
+//
+//        try {
+//
+//            return rolesController.(name);
+//        } catch (DAOValidationException ex) {
+//            throw new ServiceValidationException(ex.getMessage());
+//        } catch (DAOException ex) {
+//            throw new ServiceException(ex);
+//        }
+//    }
+//
+//    /**
+//     * delete role from jdbc table
+//     *
+//     * @param id role id
+//     * @return true if success, false - if no
+//     * @throws ServiceValidationException when  catch {@link DAOValidationException}
+//     *                                    from {@link IRolesController#deleteRole(int)}
+//     * @throws ServiceException           when catch {@link DAOException}
+//     *                                    from {@link IRolesController#deleteRole(int)}
+//     */
+//    @Override
+//    public boolean deleteRole(int id) throws ServiceException {
+//
+//        try {
+//
+//            return rolesController.deleteRole(id);
+//        } catch (DAOValidationException ex) {
+//            throw new ServiceValidationException(ex.getMessage());
+//        } catch (DAOException ex) {
+//            throw new ServiceException(ex);
+//
+//        }
+//    }
 
     /**
      * get array of all roles
      *
      * @return {@link Role} array
      * @throws ServiceValidationException when { catch {@link DAOValidationException}
-     *                                    from {@link IRolesController#getRoles()}  }
+     *                                    from {@link IRolesController#getOrganisationsRoles()} ()}  }
      * @throws ServiceException           when catch {@link DAOException}
-     *                                    from {@link IRolesController#getRoles()}
+     *                                    from {@link IRolesController#getOrganisationsRoles()} ()}
      */
     @Override
-    public Role[] getRoles() throws ServiceException {
+    public Role[] getOrganisationsRoles() throws ServiceException {
 
         try {
 
-            return rolesController.getRoles();
+            return rolesController.getOrganisationsRoles();
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -102,18 +102,66 @@ public class RolesControllerService implements IRolesControllerService {
      * @return true if success, false - if no
      * @throws ServiceValidationException when {@link InputValidation#nullAndSymbolsCheck(String)}
      *                                    or catch {@link DAOValidationException}
-     *                                    from {@link IRolesController#setName(int, String)}
+     *                                    from {@link IRolesController#setOrganisationRoleName(int, String)} (int, String)}
      * @throws ServiceException           when catch {@link DAOException}
-     *                                    from {@link IRolesController#setName(int, String)}
+     *                                    from {@link IRolesController#setOrganisationRoleName(int, String)} (int, String)}
      */
     @Override
-    public boolean setName(int id, String name) throws ServiceException {
+    public boolean setOrganisationRoleName(int id, String name) throws ServiceException {
 
         InputValidation.nullAndSymbolsCheck(name);
 
         try {
 
-            return rolesController.setName(id, name);
+            return rolesController.setOrganisationRoleName(id, name);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+
+    /**
+     * get array of all roles
+     *
+     * @return {@link Role} array
+     * @throws ServiceValidationException when { catch {@link DAOValidationException}
+     *                                    from {@link IRolesController#getUsersRoles()} ()}  }
+     * @throws ServiceException           when catch {@link DAOException}
+     *                                    from {@link IRolesController#getUsersRoles()} ()}
+     */
+    @Override
+    public Role[] getUsersRoles() throws ServiceException {
+
+        try {
+
+            return rolesController.getUsersRoles();
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    /**
+     * @param id   role id
+     * @param name new role name
+     * @return true if success, false - if no
+     * @throws ServiceValidationException when {@link InputValidation#nullAndSymbolsCheck(String)}
+     *                                    or catch {@link DAOValidationException}
+     *                                    from {@link IRolesController#setUserRoleName(int, String)} (int, String)}
+     * @throws ServiceException           when catch {@link DAOException}
+     *                                    from {@link IRolesController#setUserRoleName(int, String)} (int, String)}
+     */
+    @Override
+    public boolean setUserRoleName(int id, String name) throws ServiceException {
+
+        InputValidation.nullAndSymbolsCheck(name);
+
+        try {
+
+            return rolesController.setUserRoleName(id, name);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

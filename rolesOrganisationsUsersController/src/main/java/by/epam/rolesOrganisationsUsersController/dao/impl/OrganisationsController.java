@@ -67,10 +67,10 @@ public class OrganisationsController implements IOrganisationsController {
      */
     private static final String SQL_GET_BLOCK = "SELECT is_blocked FROM `organisations` WHERE (`id` = ?);";
 
-    /**
-     * get role request in jdbc for {@link java.sql.PreparedStatement}
-     */
-    private static final String SQL_GET_ROLE = "SELECT role FROM `organisations` WHERE (`id` = ?);";
+//    /**
+//     * get role request in jdbc for {@link java.sql.PreparedStatement}
+//     */
+//    private static final String SQL_GET_ROLE = "SELECT role FROM `organisations` WHERE (`id` = ?);";
 
     /**
      * select request request in jdbc for {@link java.sql.PreparedStatement}
@@ -173,27 +173,27 @@ public class OrganisationsController implements IOrganisationsController {
         }
     }
 
-    /**
-     * get role from jdbc
-     *
-     * @param id organisation id in jdbc
-     * @return role id or -1 if can't find role
-     * @throws DAOException when other exceptions during process occurred
-     * @see RequestExecutor#getInt(String, int)
-     */
-    @Override
-    public int getRole(int id) throws DAOException {
-
-        try {
-
-            return RequestExecutor.getInt(SQL_GET_ROLE, id);
-
-        } catch (SQLException ex) {
-
-            throw new DAOException(ex);
-
-        }
-    }
+//    /**
+//     * get role from jdbc
+//     *
+//     * @param id organisation id in jdbc
+//     * @return role id or -1 if can't find role
+//     * @throws DAOException when other exceptions during process occurred
+//     * @see RequestExecutor#getInt(String, int)
+//     */
+//    @Override
+//    public int getRole(int id) throws DAOException {
+//
+//        try {
+//
+//            return RequestExecutor.getInt(SQL_GET_ROLE, id);
+//
+//        } catch (SQLException ex) {
+//
+//            throw new DAOException(ex);
+//
+//        }
+//    }
 
     /**
      * set info inside jdbc table

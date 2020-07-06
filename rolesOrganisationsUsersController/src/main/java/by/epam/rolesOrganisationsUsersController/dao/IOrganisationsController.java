@@ -42,12 +42,12 @@ public interface IOrganisationsController {
      */
     boolean setRole(int id, int role) throws DAOException;
 
-    /**
-     * @param id organisation id in jdbc
-     * @return organisation member role
-     * @throws DAOException when get an exception during execution
-     */
-    int getRole(int id) throws DAOException;
+//    /**
+//     * @param id organisation id in jdbc
+//     * @return organisation member role
+//     * @throws DAOException when get an exception during execution
+//     */
+//    int getRole(int id) throws DAOException;
 
     /**
      * set info in jdbc organisation info field

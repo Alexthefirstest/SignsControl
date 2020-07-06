@@ -1,5 +1,6 @@
 package by.epam.rolesOrganisationsUsersController.dao;
 
+import by.epam.rolesOrganisationsUsersController.bean.Organisation;
 import by.epam.rolesOrganisationsUsersController.bean.User;
 import by.epam.rolesOrganisationsUsersController.dao.exceptions.DAOException;
 
@@ -23,7 +24,7 @@ public interface IUsersController {
      * @return {@link User} if success
      * @throws DAOException when get an exception during execution
      */
-    User addUser(String login, String password, int organisation, String name, String surname) throws DAOException;
+    User addUser(String login, String password, int role, int organisation, String name, String surname) throws DAOException;
 
     /**
      * @param id user id in jdbc
@@ -73,12 +74,12 @@ public interface IUsersController {
      */
     boolean setOrganisation(int id, int organisation) throws DAOException;
 
-    /**
-     * @param userId user id
-     * @return organisation id
-     * @throws DAOException when get an exception during execution
-     */
-    int getOrganisation(int userId) throws DAOException;
+//    /**
+//     * @param userId user id
+//     * @return {@link Organisation}
+//     * @throws DAOException when get an exception during execution
+//     */
+//   Organisation getOrganisation(int userId) throws DAOException;
 
     /**
      * get all users from data base
@@ -135,6 +136,14 @@ public interface IUsersController {
      * @throws DAOException when get an exception during execution
      */
     boolean setSurname(int id, String surname) throws DAOException;
+
+    /**
+     * @param id      user id in jdbc
+     * @param role new  user role
+     * @return true if success, false - if no
+     * @throws DAOException when get an exception during execution
+     */
+    boolean setRole(int id, String role) throws DAOException;
 
 
 }

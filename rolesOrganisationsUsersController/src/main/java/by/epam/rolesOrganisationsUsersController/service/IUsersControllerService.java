@@ -18,13 +18,14 @@ public interface IUsersControllerService {
      *
      * @param login        user login
      * @param password     user password
+     * @param role user role
      * @param organisation user organisation
      * @param name         user name
      * @param surname      user surname
      * @return {@link User} if success
      * @throws ServiceException when get an exception during execution
      */
-    User addUser(String login, String password, int organisation, String name, String surname) throws ServiceException;
+    User addUser(String login, String password, int role, int organisation, String name, String surname) throws ServiceException;
 
     /**
      * @param id user id in jdbc
@@ -85,12 +86,12 @@ public interface IUsersControllerService {
      */
     boolean setOrganisation(int id, int organisation) throws ServiceException;
 
-    /**
-     * @param userId user id
-     * @return organisation of this user id
-     * @throws ServiceException when get an exception during execution
-     */
-    int getOrganisation(int userId) throws ServiceException;
+//    /**
+//     * @param userId user id
+//     * @return organisation of this user id
+//     * @throws ServiceException when get an exception during execution
+//     */
+//    int getOrganisation(int userId) throws ServiceException;
 
     /**
      * get all users from data base
@@ -147,5 +148,15 @@ public interface IUsersControllerService {
      * @throws ServiceException when get an exception during execution
      */
     boolean setSurname(int id, String surname) throws ServiceException;
+
+    /**
+     * set new role for user
+     *
+     * @param id      user id in jdbc
+     * @param role new  user role
+     * @return true if success, false - if no
+     * @throws ServiceException when get an exception during execution
+     */
+    boolean setRole(int id, String role) throws ServiceException;
 
 }

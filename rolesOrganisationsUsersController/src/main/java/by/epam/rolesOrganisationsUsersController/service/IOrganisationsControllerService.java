@@ -43,12 +43,12 @@ public interface IOrganisationsControllerService {
      */
     boolean setRole(int id, int role) throws ServiceException;
 
-    /**
-     * @param id organisation id in jdbc
-     * @return organisation member role
-     * @throws ServiceException when get an exception during execution
-     */
-    int getRole(int id) throws ServiceException;
+//    /**
+//     * @param id organisation id in jdbc
+//     * @return organisation member role
+//     * @throws ServiceException when get an exception during execution
+//     */
+//    int getRole(int id) throws ServiceException;
 
 
     /**

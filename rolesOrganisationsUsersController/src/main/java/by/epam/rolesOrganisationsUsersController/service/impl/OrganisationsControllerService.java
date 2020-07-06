@@ -110,18 +110,18 @@ public class OrganisationsControllerService implements IOrganisationsControllerS
      * @throws ServiceException           when catch {@link DAOException}
      *                                    from {@link IOrganisationsController#getRole(int)}
      */
-    @Override
-    public int getRole(int id) throws ServiceException {
-
-        try {
-
-            return organisationsController.getRole(id);
-        } catch (DAOValidationException ex) {
-            throw new ServiceValidationException(ex.getMessage());
-        } catch (DAOException ex) {
-            throw new ServiceException(ex);
-        }
-    }
+//    @Override
+//    public int getRole(int id) throws ServiceException {
+//
+//        try {
+//
+//            return organisationsController.getRole(id);
+//        } catch (DAOValidationException ex) {
+//            throw new ServiceValidationException(ex.getMessage());
+//        } catch (DAOException ex) {
+//            throw new ServiceException(ex);
+//        }
+//    }
 
     /**
      * set info in jdbc organisation info field

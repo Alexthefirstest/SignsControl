@@ -69,8 +69,7 @@ public class Factory {
             Organisation organisation = (Organisation) signsStaff;
             organisation.setId(rs.getInt(1));
             organisation.setName(rs.getString(2));
-            organisation.setRoleID(rs.getInt(3));
-            organisation.setRole(rs.getString(4));
+            organisation.setRole(new Role(rs.getInt(3), rs.getString(4)));
             organisation.setBlocked(rs.getBoolean(5));
             organisation.setInfo(rs.getString(6));
 
@@ -81,14 +80,20 @@ public class Factory {
             User user = (User) signsStaff;
 
             user.setId(rs.getInt(1));
+
             user.setLogin(rs.getString(2));
-            user.setRole(rs.getInt(3));
-            user.setOrganisationID(rs.getInt(4));
-            user.setOrganisation(rs.getString(5));
-            user.setBlock(rs.getBoolean(6));
-            user.setName(rs.getString(7));
-            user.setSurname(rs.getString(8));
-            user.setInfo(rs.getString(9));
+
+            user.setRole(new Role(rs.getInt(3), rs.getString(4)));
+
+            user.setOrganisation(new Organisation(rs.getInt(5), rs.getString(6),
+                    new Role(rs.getInt(7), rs.getString(8)), rs.getBoolean(9), rs.getString(10)));
+
+
+            user.setBlock(rs.getBoolean(11));
+
+            user.setName(rs.getString(12));
+            user.setSurname(rs.getString(13));
+            user.setInfo(rs.getString(14));
 
             return user;
         }
@@ -129,7 +134,7 @@ public class Factory {
 
                 signsStaffArr.add
                         (new Organisation(rs.getInt(1), rs.getString(2),
-                                rs.getInt(3), rs.getString(4), rs.getBoolean(5), rs.getString(6)));
+                                new Role(rs.getInt(3), rs.getString(4)), rs.getBoolean(5), rs.getString(6)));
             }
 
             return signsStaffArr.toArray(new Organisation[0]);
@@ -141,9 +146,10 @@ public class Factory {
             while (rs.next()) {
 
                 signsStaffArr.add
-                        (new User(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4),
-                                rs.getString(5), rs.getBoolean(6),
-                                rs.getString(7), rs.getString(8), rs.getString(9)));
+                        (new User(rs.getInt(1), rs.getString(2), new Role(rs.getInt(3), rs.getString(4)),
+                                new Organisation(rs.getInt(5), rs.getString(6),
+                                        new Role(rs.getInt(7), rs.getString(8)), rs.getBoolean(9), rs.getString(10)),
+                                rs.getBoolean(11), rs.getString(12), rs.getString(13), rs.getString(14)));
             }
 
             return signsStaffArr.toArray(new User[0]);

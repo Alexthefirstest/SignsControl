@@ -30,18 +30,19 @@ public class UsersControllerService implements IUsersControllerService {
      *
      * @param login        user login
      * @param password     user password
+     * @param role         user role
      * @param organisation user organisation
      * @param name         user name
      * @param surname      user surname
      * @return {@link User} if success
      * @throws ServiceValidationException when {@link InputValidation#nullAndSymbolsCheck(String)} throw it
      *                                    or catch {@link DAOValidationException}
-     *                                    from {@link IUsersController#addUser(String, String, int, String, String)}
+     *                                    from {@link IUsersController#addUser(String, String, int, int, String, String)}
      * @throws ServiceException           when catch {@link DAOException}
-     *                                    from {@link IUsersController#addUser(String, String, int, String, String)}
+     *                                    from {@link IUsersController#addUser(String, String, int, int, String, String)}
      */
     @Override
-    public User addUser(String login, String password, int organisation, String name, String surname) throws ServiceException {
+    public User addUser(String login, String password, int role, int organisation, String name, String surname) throws ServiceException {
 
         InputValidation.nullAndSymbolsCheck(login);
         InputValidation.nullAndSymbolsCheck(password);
@@ -51,7 +52,7 @@ public class UsersControllerService implements IUsersControllerService {
 
         try {
 
-            return usersController.addUser(login, BCrypt.hashpw(password, BCrypt.gensalt(8)), organisation, name, surname);
+            return usersController.addUser(login, BCrypt.hashpw(password, BCrypt.gensalt(8)), role, organisation, name, surname);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -238,26 +239,26 @@ public class UsersControllerService implements IUsersControllerService {
         }
     }
 
-    /**
-     * @param userId user id
-     * @return organisation of this user id or -1 if user do not exist
-     * @throws ServiceValidationException when catch {@link DAOValidationException}
-     *                                    from {@link IUsersController#getOrganisation(int)}
-     * @throws ServiceException           when catch {@link DAOException}
-     *                                    from {@link IUsersController#getOrganisation(int)}
-     */
-    @Override
-    public int getOrganisation(int userId) throws ServiceException {
-
-        try {
-
-            return usersController.getOrganisation(userId);
-        } catch (DAOValidationException ex) {
-            throw new ServiceValidationException(ex.getMessage());
-        } catch (DAOException ex) {
-            throw new ServiceException(ex);
-        }
-    }
+//    /**
+//     * @param userId user id
+//     * @return organisation of this user id or -1 if user do not exist
+//     * @throws ServiceValidationException when catch {@link DAOValidationException}
+//     *                                    from {@link IUsersController#getOrganisation(int)}
+//     * @throws ServiceException           when catch {@link DAOException}
+//     *                                    from {@link IUsersController#getOrganisation(int)}
+//     */
+//    @Override
+//    public int getOrganisation(int userId) throws ServiceException {
+//
+//        try {
+//
+//            return usersController.getOrganisation(userId);
+//        } catch (DAOValidationException ex) {
+//            throw new ServiceValidationException(ex.getMessage());
+//        } catch (DAOException ex) {
+//            throw new ServiceException(ex);
+//        }
+//    }
 
     /**
      * get all users from data base
@@ -400,6 +401,21 @@ public class UsersControllerService implements IUsersControllerService {
         try {
 
             return usersController.setSurname(id, surname);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public boolean setRole(int id, String role) throws ServiceException {
+
+        InputValidation.nullAndSymbolsCheckWithRus(role);
+
+        try {
+
+            return usersController.setRole(id, role);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
