@@ -1,4 +1,4 @@
-package by.epam.signsControl.webView.controller.commands.impl.signsControl;
+package by.epam.signsControl.webView.controller.commands.impl;
 
 import by.epam.rolesOrganisationsUsersController.bean.User;
 import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
@@ -38,10 +38,11 @@ public class LoginFormHandler implements Command {
             logger.warn("USER ELSE: " + user);
 
 
-            session.setAttribute("role", user.getRole());
-            session.setAttribute("organisation", user.getOrganisationID());
             session.setAttribute("userID", user.getId());
+            session.setAttribute("role", user.getRole());
             session.setAttribute("username", user.getLogin());
+            session.setAttribute("organisationID", user.getOrganisation().getId());
+            session.setAttribute("organisationRole", user.getOrganisation().getRole());
 
 
             response.sendRedirect(request.getContextPath() + "/");

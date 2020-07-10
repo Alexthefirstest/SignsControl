@@ -14,7 +14,7 @@
 </head>
 
 <body>
-
+<jsp:include page="header.jsp"/>
 <h2> Log in</h2>
 
 <br>

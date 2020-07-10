@@ -153,7 +153,7 @@ class RequestExecutor {
 
     }
 
-    static FactoryType createFieldWithExistingCheck(String sqlInsert, String sqlSelect, FactoryType signsStaff, int... parameters) throws SQLException, DAOValidationException {
+    static FactoryType createFieldWithExistingCheck(String sqlInsert, String sqlSelect, FactoryType signsStaff, Object... parameters) throws SQLException, DAOValidationException {
 
         ResultSet rs = null;
 
@@ -161,7 +161,7 @@ class RequestExecutor {
 
         try (PreparedStatement psInsert = connection.prepareStatement(sqlInsert); PreparedStatement psSelect = connection.prepareStatement(sqlSelect)) {
 
-            intParametersInsideRequest(parameters, psInsert);
+            differentParametersInsideRequest(parameters, psInsert);
 
             if (psInsert.executeUpdate() == 0) {
                 logger.info("duplicate entry: " + signsStaff.getClass());

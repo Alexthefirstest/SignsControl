@@ -19,8 +19,10 @@ public class StandardSizesControl implements IStandardSizesControl {
 
     private static final String SQL_SELECT_USE_ID = "SELECT * FROM standard_sizes WHERE number = ";
     private static final String SQL_INSERT = "INSERT INTO `standard_sizes` (`number`) VALUES (?)";
+    private static final String SQL_INSERT_WITH_INFO = "INSERT INTO `standard_sizes` (`number`, `info`) VALUES (?, ?)";
     private static final String SQL_DELETE = "DELETE FROM `standard_sizes` WHERE (`number` = ?);";
     private static final String SQL_SET_INFO = "UPDATE standard_sizes SET info = ? WHERE (`number` = ?)";
+    private static final String SQL_SET_SIZE = "UPDATE standard_sizes SET number = ? WHERE (`number` = ?)";
     private static final String SQL_SELECT_INFO = "SELECT info FROM standard_sizes WHERE number = ?";
     private static final String SQL_SELECT_ALL = "SELECT * FROM standard_sizes order by number";
 
@@ -43,6 +45,27 @@ public class StandardSizesControl implements IStandardSizesControl {
 
         }
 
+    }
+
+    @Override
+    public StandardSize addStandardSize(int size, String info) throws DAOException {
+
+        try {
+
+            return (StandardSize) RequestExecutor.createFieldUseDifferentParameters
+                    (SQL_INSERT_WITH_INFO, SQL_SELECT_USE_ID + size, new StandardSize(), size, info);
+
+        } catch (SQLException ex) {
+
+            if ((Pattern.matches("Duplicate entry.*", ex.getMessage()))) {
+                logger.warn("add size fail, duplicate entry: size: " + size, ex);
+                return null;
+            }
+
+            logger.warn("add size fail: size: " + size, ex);
+            throw new DAOException(ex);
+
+        }
     }
 
 
@@ -78,6 +101,16 @@ public class StandardSizesControl implements IStandardSizesControl {
             throw new DAOException(ex);
         }
 
+    }
+
+    @Override
+    public boolean setSize(int oldSize, int newSize) throws DAOException {
+        try {
+            return RequestExecutor.setField(SQL_SET_SIZE, oldSize, newSize);
+        } catch (SQLException ex) {
+            logger.warn("setInfo fail: id: " + oldSize, ex);
+            throw new DAOException(ex);
+        }
     }
 
     @Override

@@ -1,5 +1,7 @@
 package by.epam.bank.bean;
 
+import by.epam.rolesOrganisationsUsersController.bean.Organisation;
+
 import java.io.Serializable;
 
 public class BankAccount implements Serializable {
@@ -9,19 +11,18 @@ public class BankAccount implements Serializable {
     public BankAccount() {
     }
 
-    public BankAccount(String organisation, int organisationID, double balance,
+    public BankAccount(Organisation organisation, double balance,
                        double minAllowedBalance, boolean isBlocked, String info) {
-        this.organisation=organisation;
-        this.organisationID = organisationID;
+        this.organisation = organisation;
         this.balance = balance;
-        this.minAllowedBalance=minAllowedBalance;
+        this.minAllowedBalance = minAllowedBalance;
         this.isBlocked = isBlocked;
         this.info = info;
     }
 
-    private String organisation;
+
+    private Organisation organisation;
     private double minAllowedBalance;
-    private int organisationID;
     private double balance;
     private boolean isBlocked;
     private String info;
@@ -34,20 +35,12 @@ public class BankAccount implements Serializable {
         this.minAllowedBalance = minAllowedBalance;
     }
 
-    public String getOrganisation() {
-        return organisation;
+    public Organisation getOrganisation() {
+        return (Organisation) organisation.clone();
     }
 
-    public void setOrganisation(String organisation) {
+    public void setOrganisation(Organisation organisation) {
         this.organisation = organisation;
-    }
-
-    public int getOrganisationID() {
-        return organisationID;
-    }
-
-    public void setOrganisationID(int organisationID) {
-        this.organisationID = organisationID;
     }
 
     public double getBalance() {
@@ -67,7 +60,7 @@ public class BankAccount implements Serializable {
     }
 
     public String getInfo() {
-        return info==null? "":info;
+        return info == null ? "" : info;
     }
 
     public void setInfo(String info) {
@@ -82,7 +75,6 @@ public class BankAccount implements Serializable {
         BankAccount that = (BankAccount) o;
 
         if (Double.compare(that.minAllowedBalance, minAllowedBalance) != 0) return false;
-        if (organisationID != that.organisationID) return false;
         if (Double.compare(that.balance, balance) != 0) return false;
         if (isBlocked != that.isBlocked) return false;
         if (organisation != null ? !organisation.equals(that.organisation) : that.organisation != null) return false;
@@ -96,7 +88,6 @@ public class BankAccount implements Serializable {
         result = organisation != null ? organisation.hashCode() : 0;
         temp = Double.doubleToLongBits(minAllowedBalance);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + organisationID;
         temp = Double.doubleToLongBits(balance);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (isBlocked ? 1 : 0);
@@ -106,13 +97,12 @@ public class BankAccount implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder(this.getClass().getName());
-        sb.append("{organisation='").append(organisation).append('\'');
-        sb.append(", organisationID=").append(organisationID);
-        sb.append(", balance=").append(balance);
+        final StringBuilder sb = new StringBuilder("BankAccount{");
+        sb.append("organisation=").append(organisation);
         sb.append(", minAllowedBalance=").append(minAllowedBalance);
+        sb.append(", balance=").append(balance);
         sb.append(", isBlocked=").append(isBlocked);
-        sb.append(", info='").append(info==null? "":info).append('\'');
+        sb.append(", info='").append(info).append('\'');
         sb.append('}');
         return sb.toString();
     }

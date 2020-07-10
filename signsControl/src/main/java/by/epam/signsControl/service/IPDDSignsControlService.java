@@ -7,9 +7,11 @@ import java.io.InputStream;
 
 public interface IPDDSignsControlService {
 
-    Sign addSign(int section, int number, int kind) throws ServiceException;
+    Sign addSign(int section, int number, int kind, String name, String description) throws ServiceException;
 
-    Sign addSign(int section, int number) throws ServiceException;
+    Sign addSign(int section, int number, int kind, String name) throws ServiceException;
+
+    Sign addSign(int section, int number, String name) throws ServiceException;
 
     boolean removeSign(int id) throws ServiceException;
 
@@ -22,6 +24,11 @@ public interface IPDDSignsControlService {
     boolean setPicture(int id, InputStream inputStream) throws ServiceException;
 
     byte[] getPicture(int id) throws ServiceException;
+
+    boolean updateName(int id, String name) throws ServiceException;
+
+    boolean updateDescription(int id, String info) throws ServiceException;
+
 
     Sign[] getPddSigns() throws ServiceException;
 

@@ -10,6 +10,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 
 //@WebFilter(urlPatterns = "/[^.]*") didn't working
+
 @WebFilter(urlPatterns = "/*")
 public class URLFilter implements Filter {
 
@@ -43,10 +45,7 @@ public class URLFilter implements Filter {
             return;
         }
 
-        HttpSession session = httpRequest.getSession();
-
-
-        logger.info("filter start 1, URI: " + httpRequest.getRequestURI());
+        logger.info("filter start URI: " + httpRequest.getRequestURI());
 
         request.setAttribute(REQUIRED_URI, httpRequest.getRequestURI());
 

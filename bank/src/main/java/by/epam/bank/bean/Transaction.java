@@ -1,33 +1,36 @@
 package by.epam.bank.bean;
 
+import by.epam.rolesOrganisationsUsersController.bean.Organisation;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.text.SimpleDateFormat;
 
 public class Transaction implements Serializable {
-
 
     private static final long serialVersionUID = 2619428068434472353L;
 
     public Transaction() {
     }
 
-    public Transaction(int id, int idFrom, String from, int idTo, String to, double money, Timestamp date) {
+    public Transaction(int id, Organisation from, Organisation to, double money, Timestamp date) {
         this.id = id;
-        this.idFrom = idFrom;
-        From = from;
-        this.idTo = idTo;
+        this.from = from;
         this.to = to;
         this.money = money;
         this.date = date;
     }
 
+    public Organisation getFrom() {
+        return (Organisation) from.clone();
+    }
+
+    public void setFrom(Organisation from) {
+        this.from = from;
+    }
+
     private int id;
-    private int idFrom;
-    private String From;
-    private int idTo;
-    private String to;
+    private Organisation from;
+    private Organisation to;
     private double money;
     private Timestamp date;
 
@@ -40,35 +43,12 @@ public class Transaction implements Serializable {
         this.id = id;
     }
 
-    public int getIdFrom() {
-        return idFrom;
+
+    public Organisation getTo() {
+        return (Organisation) to.clone();
     }
 
-    public void setIdFrom(int idFrom) {
-        this.idFrom = idFrom;
-    }
-
-    public String getFrom() {
-        return From;
-    }
-
-    public void setFrom(String from) {
-        From = from;
-    }
-
-    public int getIdTo() {
-        return idTo;
-    }
-
-    public void setIdTo(int idTo) {
-        this.idTo = idTo;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
+    public void setTo(Organisation to) {
         this.to = to;
     }
 
@@ -96,10 +76,8 @@ public class Transaction implements Serializable {
         Transaction that = (Transaction) o;
 
         if (id != that.id) return false;
-        if (idFrom != that.idFrom) return false;
-        if (idTo != that.idTo) return false;
         if (Double.compare(that.money, money) != 0) return false;
-        if (From != null ? !From.equals(that.From) : that.From != null) return false;
+        if (from != null ? !from.equals(that.from) : that.from != null) return false;
         if (to != null ? !to.equals(that.to) : that.to != null) return false;
         return date != null ? date.equals(that.date) : that.date == null;
     }
@@ -109,9 +87,7 @@ public class Transaction implements Serializable {
         int result;
         long temp;
         result = id;
-        result = 31 * result + idFrom;
-        result = 31 * result + (From != null ? From.hashCode() : 0);
-        result = 31 * result + idTo;
+        result = 31 * result + (from != null ? from.hashCode() : 0);
         result = 31 * result + (to != null ? to.hashCode() : 0);
         temp = Double.doubleToLongBits(money);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
@@ -121,14 +97,12 @@ public class Transaction implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder(getClass().getName());
-        sb.append("{id=").append(id);
-        sb.append(", idFrom=").append(idFrom);
-        sb.append(", From='").append(From).append('\'');
-        sb.append(", idTo=").append(idTo);
-        sb.append(", to='").append(to).append('\'');
+        final StringBuilder sb = new StringBuilder("Transaction{");
+        sb.append("id=").append(id);
+        sb.append(", from=").append(from);
+        sb.append(", to=").append(to);
         sb.append(", money=").append(money);
-        sb.append(", date=").append(new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(date));
+        sb.append(", date=").append(date);
         sb.append('}');
         return sb.toString();
     }

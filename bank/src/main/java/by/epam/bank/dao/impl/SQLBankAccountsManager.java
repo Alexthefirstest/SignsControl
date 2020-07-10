@@ -7,6 +7,8 @@ import by.epam.bank.dao.exceptions.DAOValidationException;
 import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
 import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
 
+import by.epam.rolesOrganisationsUsersController.bean.Organisation;
+import by.epam.rolesOrganisationsUsersController.bean.Role;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,7 +34,9 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
     private static final String SQL_SELECT_BALANCE = "SELECT balance FROM bank_accounts WHERE organisation_id = ?";
     private static final String SQL_SELECT_MIN_ALLOWED_BALANCE = "SELECT balance FROM bank_accounts WHERE organisation_id = ?";
     private static final String SQL_SET_MIN_ALLOWED_BALANCE = "UPDATE bank_accounts SET min_allowed_balance = ? WHERE (organisation_id = ?)";
-    private static final String SQL_SELECT_ACCOUNT = "SELECT name, organisation_id, balance, min_allowed_balance, ba.is_blocked, ba.info FROM bank_accounts as ba join organisations on id=organisation_id where organisation_id=?";
+    private static final String SQL_SELECT_ACCOUNT =
+            "SELECT ba.balance, ba.min_allowed_balance, ba.is_blocked, ba.info, o.id, o.name, o.role, orr.role, o.is_blocked, o.info " +
+                    "FROM bank_accounts as ba join organisations as o on id=organisation_id join organisation_roles as orr on o.role=orr.id where organisation_id=?";
 
     /*
      *
@@ -47,7 +51,7 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
 
         ResultSet rs = null;
 
-        try (PreparedStatement ps = connection.prepareStatement(SQL_INSERT); PreparedStatement psS = connection.prepareStatement(SQL_SELECT_ACCOUNT) ) {
+        try (PreparedStatement ps = connection.prepareStatement(SQL_INSERT); PreparedStatement psS = connection.prepareStatement(SQL_SELECT_ACCOUNT)) {
             ps.setInt(1, organisationID);
             ps.execute();
 
@@ -61,9 +65,10 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
                 return null;
             }
 
-            return new BankAccount(rs.getString(1), rs.getInt(2), rs.getDouble(3),
-                    rs.getDouble(4), rs.getBoolean(5), rs.getString(6));
-
+            return new BankAccount(
+                    new Organisation(rs.getInt(5), rs.getString(6), new Role(rs.getInt(7),
+                            rs.getString(8)), rs.getBoolean(9), rs.getString(10)),
+                    rs.getDouble(1), rs.getDouble(2), rs.getBoolean(3), rs.getString(4));
 
 
         } catch (SQLIntegrityConstraintViolationException ex) {
@@ -395,8 +400,10 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
                 return null;
             }
 
-            return new BankAccount(rs.getString(1), rs.getInt(2), rs.getDouble(3),
-                    rs.getDouble(4), rs.getBoolean(5), rs.getString(6));
+            return new BankAccount(
+                    new Organisation(rs.getInt(5), rs.getString(6), new Role(rs.getInt(7),
+                            rs.getString(8)), rs.getBoolean(9), rs.getString(10)),
+                    rs.getDouble(1), rs.getDouble(2), rs.getBoolean(3), rs.getString(4));
 
 
         } catch (SQLException ex) {

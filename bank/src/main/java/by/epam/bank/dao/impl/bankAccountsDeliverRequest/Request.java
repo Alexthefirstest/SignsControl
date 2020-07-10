@@ -9,8 +9,9 @@ public class Request implements IRequest {
         this.request = request;
     }
 
-    private static final String BASE_REQUEST = "SELECT name, organisation_id, balance, min_allowed_balance, ba.is_blocked, ba.info " +
-            "FROM bank_accounts as ba join organisations on id=organisation_id";
+    private static final String BASE_REQUEST =
+            "SELECT ba.balance, ba.min_allowed_balance, ba.is_blocked, ba.info, o.id, o.name, o.role, orr.role, o.is_blocked, o.info " +
+                    "FROM bank_accounts as ba join organisations as o on id=organisation_id join organisation_roles as orr on o.role=orr.id";
 
     private String request;
 

@@ -1,4 +1,4 @@
-package by.epam.signsControl.webView.controller.commands.impl.signsControl;
+package by.epam.signsControl.webView.controller.commands.impl;
 
 import by.epam.signsControl.webView.controller.commands.Command;
 import org.apache.logging.log4j.LogManager;

@@ -20,19 +20,19 @@ public class RequestBuilder implements IRequestBuilder {
 
     @Override
     public RequestBuilder withSortByOrganisationName() {
-        orderBy += " name,";
+        orderBy += " o.name,";
         return this;
     }
 
     @Override
     public RequestBuilder withSortByBalance() {
-        orderBy += " balance,";
+        orderBy += " ba.balance,";
         return this;
     }
 
     @Override
     public RequestBuilder withSortByMinAllowedBalance() {
-        orderBy += " min_allowed_balance,";
+        orderBy += " ba.min_allowed_balance,";
         return this;
     }
 
@@ -57,25 +57,25 @@ public class RequestBuilder implements IRequestBuilder {
 
     @Override
     public RequestBuilder showOnlyWithNegativeBalance() {
-        where += " balance<0,";
+        where += " ba.balance<0,";
         return this;
     }
 
     @Override
     public RequestBuilder showOnlyWithPositiveBalance() {
-        where += " balance>=0,";
+        where += " ba.balance>=0,";
         return this;
     }
 
     @Override
     public RequestBuilder whereBalanceMoreThen(int number) {
-        where += " balance>=" + number + ",";
+        where += " ba.balance>=" + number + ",";
         return this;
     }
 
     @Override
     public RequestBuilder whereBalanceLessThen(int number) {
-        where += " balance<" + number + ",";
+        where += " ba.balance<" + number + ",";
         return this;
     }
 

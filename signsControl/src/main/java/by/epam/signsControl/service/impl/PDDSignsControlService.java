@@ -15,11 +15,12 @@ public class PDDSignsControlService implements IPDDSignsControlService {
 
     private final IPDDSignsControl pddSignsControl = DaoFactory.getINSTANCE().getPddSignsControl();
 
+
     @Override
-    public Sign addSign(int section, int number, int kind) throws ServiceException {
+    public Sign addSign(int section, int number, int kind, String name, String description) throws ServiceException {
         try {
 
-            return pddSignsControl.addSign(section, number, kind);
+            return pddSignsControl.addSign(section, number, kind, name, description);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -28,10 +29,22 @@ public class PDDSignsControlService implements IPDDSignsControlService {
     }
 
     @Override
-    public Sign addSign(int section, int number) throws ServiceException {
+    public Sign addSign(int section, int number, int kind, String name) throws ServiceException {
         try {
 
-            return pddSignsControl.addSign(section, number);
+            return pddSignsControl.addSign(section, number, kind, name);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public Sign addSign(int section, int number, String name) throws ServiceException {
+        try {
+
+            return pddSignsControl.addSign(section, number, name);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -107,6 +120,30 @@ public class PDDSignsControlService implements IPDDSignsControlService {
         try {
 
             return pddSignsControl.getPicture(id);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public boolean updateName(int id, String name) throws ServiceException {
+        try {
+
+            return pddSignsControl.updateName(id, name);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public boolean updateDescription(int id, String info) throws ServiceException {
+        try {
+
+            return pddSignsControl.updateDescription(id, info);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

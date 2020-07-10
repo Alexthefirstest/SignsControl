@@ -62,6 +62,8 @@ public class SignsControlFactory {
             sign.setSign(rs.getInt(3));
             sign.setKind(rs.getInt(4));
             sign.setPicture(rs.getBytes(5));
+            sign.setName(rs.getString(6));
+            sign.setDescription(rs.getString(7));
 
             return sign;
         }

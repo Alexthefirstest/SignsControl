@@ -22,14 +22,22 @@ public class PDDSignsControl implements IPDDSignsControl {
     private static final IConnectionPool CONNECTION_POOL = ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
 
     private static final String SQL_SELECT_USE_LAST_INSERT_ID = "SELECT * FROM `pdd_signs` where id=LAST_INSERT_ID();";
-    private static final String SQL_INSERT_UNIQUE = "INSERT INTO `pdd_signs` (`pdd_section`, `pdd_sign`, `pdd_kind`) " +
-            "SELECT * FROM (SELECT ? as se, ? as si, ? as ki) as rt " +
+    private static final String SQL_INSERT_UNIQUE = "INSERT INTO `pdd_signs` (`pdd_section`, `pdd_sign`, `pdd_kind`, name) " +
+            "SELECT * FROM (SELECT ? as se, ? as si, ? as ki, ? as na) as rt " +
             "where not exists(SELECT `pdd_section`, `pdd_sign`, `pdd_kind` FROM pdd_signs where `pdd_section`=? AND `pdd_sign`=? AND `pdd_kind`=? ) LIMIT 1";
+
+    private static final String SQL_INSERT_UNIQUE_WITH_INFO =
+            "INSERT INTO `pdd_signs` (`pdd_section`, `pdd_sign`, `pdd_kind`, name, description) " +
+                    "SELECT * FROM (SELECT ? as se, ? as si, ? as ki, ? as na, ? as des) as rt " +
+                    "where not exists(SELECT `pdd_section`, `pdd_sign`, `pdd_kind` " +
+                    "FROM pdd_signs where `pdd_section`=? AND `pdd_sign`=? AND `pdd_kind`=? ) LIMIT 1";
     private static final String SQL_DELETE = "DELETE FROM `pdd_signs` WHERE (`id` = ?);";
     private static final String SQL_FIND_BY_ID = "SELECT * FROM pdd_signs where id=";
     private static final String SQL_SET_SECTION = "UPDATE `pdd_signs` SET `pdd_section` = ? WHERE (`id` = ?);";
     private static final String SQL_SET_SIGN = "UPDATE `pdd_signs` SET `pdd_sign` = ? WHERE (`id` = ?);";
     private static final String SQL_SET_KIND = "UPDATE `pdd_signs` SET `pdd_kind` = ? WHERE (`id` = ?);";
+    private static final String SQL_SET_NAME = "UPDATE `pdd_signs` SET `name` = ? WHERE (`id` = ?);";
+    private static final String SQL_SET_DESCRIPTION = "UPDATE `pdd_signs` SET `description` = ? WHERE (`id` = ?);";
     private static final String SQL_SELECT_ALL = "SELECT * FROM pdd_signs order by pdd_section, pdd_sign, pdd_kind";
     private static final String SQL_SELECT_BY_SECTION = "SELECT * FROM pdd_signs WHERE pdd_section=? order by pdd_section, pdd_sign, pdd_kind";
     private static final String SQL_SELECT_BY_SECTION_AND_SIGN = "SELECT * FROM pdd_signs WHERE pdd_section=? AND pdd_sign=? order by pdd_section, pdd_sign, pdd_kind";
@@ -37,12 +45,12 @@ public class PDDSignsControl implements IPDDSignsControl {
     private static final String SQL_SELECT_PICTURE = "SELECT picture from pdd_signs where id=?";
 
     @Override
-    public Sign addSign(int section, int number, int kind) throws DAOException {
+    public Sign addSign(int section, int number, int kind, String name) throws DAOException {
 
         try {
 
             return (Sign) RequestExecutor.createFieldWithExistingCheck
-                    (SQL_INSERT_UNIQUE, SQL_SELECT_USE_LAST_INSERT_ID, new Sign(), section, number, kind, section, number, kind);
+                    (SQL_INSERT_UNIQUE, SQL_SELECT_USE_LAST_INSERT_ID, new Sign(), section, number, kind, name, section, number, kind);
 
         } catch (SQLException ex) {
 
@@ -54,8 +62,26 @@ public class PDDSignsControl implements IPDDSignsControl {
     }
 
     @Override
-    public Sign addSign(int section, int number) throws DAOException {
-        return addSign(section, number, 0);
+    public Sign addSign(int section, int number, int kind, String name, String description) throws DAOException {
+
+        try {
+
+            return (Sign) RequestExecutor.createFieldWithExistingCheck
+                    (SQL_INSERT_UNIQUE_WITH_INFO, SQL_SELECT_USE_LAST_INSERT_ID, new Sign(),
+                            section, number, kind, name, description, section, number, kind);
+
+        } catch (SQLException ex) {
+
+            logger.warn("add sign fail: section, number, kind: " + section + ", " + number + ", " + kind, ex);
+            throw new DAOException(ex);
+
+        }
+
+    }
+
+    @Override
+    public Sign addSign(int section, int number, String name) throws DAOException {
+        return addSign(section, number, -1, name);
     }
 
     @Override
@@ -113,6 +139,34 @@ public class PDDSignsControl implements IPDDSignsControl {
         } catch (SQLException ex) {
 
             logger.warn("updateKind fail: id: " + id, ex);
+            throw new DAOException(ex);
+
+        }
+    }
+
+    @Override
+    public boolean updateName(int id, String name) throws DAOException {
+        try {
+
+            return RequestExecutor.setField(SQL_SET_NAME, id, name);
+
+        } catch (SQLException ex) {
+
+            logger.warn("update name fail: id: " + id, ex);
+            throw new DAOException(ex);
+
+        }
+    }
+
+    @Override
+    public boolean updateDescription(int id, String info) throws DAOException {
+        try {
+
+            return RequestExecutor.setField(SQL_SET_DESCRIPTION, id, info);
+
+        } catch (SQLException ex) {
+
+            logger.warn("update description fail: id: " + id, ex);
             throw new DAOException(ex);
 
         }

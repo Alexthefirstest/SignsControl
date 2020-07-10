@@ -7,6 +7,8 @@ import by.epam.bank.dao.exceptions.DAOException;
 import by.epam.bank.dao.exceptions.DAOValidationException;
 import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
 import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
+import by.epam.rolesOrganisationsUsersController.bean.Organisation;
+import by.epam.rolesOrganisationsUsersController.bean.Role;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -43,8 +45,10 @@ public class BankAccountsDeliver implements IBankAccountsDeliver {
             rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                bankAccounts.add(new BankAccount(rs.getString(1), rs.getInt(2), rs.getDouble(3),
-                        rs.getDouble(4), rs.getBoolean(5), rs.getString(6)));
+                bankAccounts.add(new BankAccount(
+                        new Organisation(rs.getInt(5), rs.getString(6), new Role(rs.getInt(7),
+                                rs.getString(8)), rs.getBoolean(9), rs.getString(10)),
+                        rs.getDouble(1), rs.getDouble(2), rs.getBoolean(3), rs.getString(4)));
             }
 
 

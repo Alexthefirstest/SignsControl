@@ -26,6 +26,21 @@ public class StandardSizesControlService implements IStandardSizesControlService
     }
 
     @Override
+    public StandardSize addStandardSize(int size, String info) throws ServiceException {
+
+        InputValidation.nullCheck(info);
+
+        try {
+
+            return standardSizesControl.addStandardSize(size, info);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
     public boolean removeStandardSize(int size) throws ServiceException {
         try {
 
@@ -45,6 +60,18 @@ public class StandardSizesControlService implements IStandardSizesControlService
         try {
 
             return standardSizesControl.setInfo(id, info);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public boolean setSize(int oldSize, int newSize) throws ServiceException {
+        try {
+
+            return standardSizesControl.setSize(oldSize, newSize);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

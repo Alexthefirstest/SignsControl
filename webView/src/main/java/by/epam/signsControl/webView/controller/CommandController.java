@@ -6,6 +6,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
+
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +16,9 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@WebServlet(name = "Main Servlet", urlPatterns = "/app")
 
+@WebServlet(name = "Main Servlet", urlPatterns = "/app")
+@MultipartConfig
 public class CommandController extends HttpServlet {
 
     private static final Logger logger = LogManager.getLogger(CommandController.class);
@@ -44,9 +47,11 @@ public class CommandController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         logger.info("inside servlet post");
-
-
-
+        logger.info(req.getParameter("name"));
+        logger.info(req.getParameter("pdd_section"));
+        logger.info(req.getParameter("description"));
+        logger.info(req.getParts());
+        logger.info("inside servlet post2");
         process(req, resp);
 
 
@@ -58,7 +63,7 @@ public class CommandController extends HttpServlet {
     private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         resp.setCharacterEncoding("UTF-8");
-       req.setCharacterEncoding("UTF-8");
+        req.setCharacterEncoding("UTF-8");
         try {
 
             commandProvider.getCommand(getCommandFromURI(req)).execute(req, resp);

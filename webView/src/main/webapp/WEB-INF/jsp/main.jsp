@@ -20,7 +20,7 @@
 
     <script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
 
-    <script src='${pageContext.request.contextPath}/js/map.js?34' type="text/javascript" charset="UTF-8"></script>
+    <script src='${pageContext.request.contextPath}/js/map.js?35' type="text/javascript" charset="UTF-8"></script>
 
 
     <%--создать css: карта, стандартные объекты на ней--%>
@@ -49,6 +49,7 @@
             padding: 0;
             margin: 0;
         }
+
         #signsHistoryTable {
             width: 100%;
             height: 10%;
@@ -62,10 +63,7 @@
 
 <body>
 
-<header>
-    SignsControl
-</header>
-
+<jsp:include page="header.jsp"/>
 
 <%-- контент с учетом роли --%>
 <c:choose>
@@ -84,141 +82,143 @@
     </c:otherwise>
 
     </c:choose>
-<%-- контент для роли 1 - одд --%>
-<c:if test='${sessionScope.role==1}'>
+    <%-- контент для роли 1 - одд --%>
+    <c:if test='${sessionScope.role==1}'>
 
-  <button id="addPointButton">добавить точку</button>
+    <button id="addPointButton">добавить точку</button>
 
- <form>
-     <input type="checkbox" id="addDirectionForm" name="directionBox">
-     <label for="addDirection">добавить направление</label>
- </form>
+<form>
+    <input type="checkbox" id="addDirectionForm" name="directionBox">
+    <label for="addDirectionForm">добавить направление</label>
+</form>
 
- <form>
-     <input type="checkbox" id="addSignCBox" name="addSignBox">
-     <label for="addSignCBox">добавить знак</label>
- </form>
+<form>
+    <input type="checkbox" id="addSignCBox" name="addSignBox">
+    <label for="addSignCBox">добавить знак</label>
+</form>
 
-  <form>
-     <input type="checkbox" id="changeDirectionBox" name="changeDirectionBox">
-     <label for="changeDirectionBox">изменить направление</label>
- </form>
+<form>
+    <input type="checkbox" id="changeDirectionBox" name="changeDirectionBox">
+    <label for="changeDirectionBox">изменить направление</label>
+</form>
 
- <form>
-     <input type="checkbox" id="change_local_sign_box" name="change_local_sign_box">
-     <label for="change_local_sign_box">изменить знак</label>
- </form>
-<%--  --%>
+<form>
+    <input type="checkbox" id="change_local_sign_box" name="change_local_sign_box">
+    <label for="change_local_sign_box">изменить знак</label>
+</form>
+    <%--  --%>
 
-<%-- добавляет точку иили направление --%>
-  <form action='${pageContext.request.contextPath}/add_map_point' method="post" id='point_form' accept-charset="UTF-8">
+    <%-- добавляет точку иили направление --%>
+<form action='${pageContext.request.contextPath}/add_map_point' method="post" id='point_form' accept-charset="UTF-8">
 
- <input type="hidden" name="coordinatesToSend" value='null' required>
+    <input type="hidden" name="coordinatesToSend" value='null' required>
 
-      <label for="address">address: </label><input type="text" id="address" name="address"
-                                                         pattern="[\wА-Яа-я\s:!.,)(-?\d]+"
-                                                       required>
-      <label for="direction"> direction:</label><select name="direction" id='direction' required>
-
-
- <%--<c:forEach var="cDirection" items='${directions}'> --%>
-
-                                               <%--        <option value='${cDirection.id}'>${cDirection.direction}</option> --%>
+    <label for="address">address: </label><input type="text" id="address" name="address"
+                                                 pattern="[\wА-Яа-я\s:!.,)(-?\d]+"
+                                                 required>
+    <label for="direction"> direction:</label><select name="direction" id='direction' required>
 
 
- <%-- </c:forEach> --%>
+        <%--<c:forEach var="cDirection" items='${directions}'> --%>
 
-                                                    </select>
-
-       <label for="annotation"> annotation:</label><input type="text" id="annotation"
-                                                             name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
-      <br><input type="reset" value="сбросить">
-      <input type="submit" value="добавить">
-  </form>
-
-<%--  добавляет локальный знак --%>
-  <form action='${pageContext.request.contextPath}/add_sign' method="post" id='addSign_form' accept-charset="UTF-8">
-
-      <label for="pdd_sign"> pdd_sign:</label><select name="pdd_sign" id='pdd_sign' required> </select>
-
-      <label for="standard_size"> standard_size:</label><select name="standard_size" id='standard_size' required> </select>
+        <%--        <option value='${cDirection.id}'>${cDirection.direction}</option> --%>
 
 
-       <label for="sign_list"> direction:</label><select name="sign_list" id='sign_list' required>  </select>
+        <%-- </c:forEach> --%>
+
+</select>
+
+    <label for="annotation"> annotation:</label><input type="text" id="annotation"
+                                                       name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
+    <br><input type="reset" value="сбросить">
+    <input type="submit" value="добавить">
+</form>
+
+    <%--  добавляет локальный знак --%>
+<form action='${pageContext.request.contextPath}/add_sign' method="post" id='addSign_form' accept-charset="UTF-8">
+
+    <label for="pdd_sign"> pdd_sign:</label><select name="pdd_sign" id='pdd_sign' required> </select>
+
+    <label for="standard_size"> standard_size:</label><select name="standard_size" id='standard_size'
+                                                              required> </select>
 
 
-       <label for="signAnnotation"> annotation:</label><input type="text" id="signAnnotation"
-                                                             name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
-
-       <label for="date_of_add">date_of_add: </label> <input type="date" name="date_of_add"  id="date_of_add">
-        <label for="date_of_remove">date_of_remove: </label><input type="date" name="date_of_remove"  id="date_of_remove">
-
-      <br><input type="reset" value="сбросить">
-      <input type="submit" value="добавить">
-  </form>
-
-<%--  для изменения/удаления направления - удалить все направления = удалить точку --%>
-  <form action='${pageContext.request.contextPath}/change_delete_direction' method="post" id='direction_control_form' accept-charset="UTF-8">
-
-      <label for="old_direction"> old direction:</label><select name="old_direction" id='old_direction' required> </select>
-
-      <label for="new_direction"> new direction:</label><select name="new_direction" id='new_direction' required> </select>
-
-  <label for="addressDirCh">address: </label><input type="text" id="addressDirCh" name="address"
-                                                         pattern="[\wА-Яа-я\s:!.,)(-?\d]+" >
-
- <label for="annotationDirCh"> annotation:</label><input type="text" id="annotationDirCh"
-    name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
-
-      <br><input type="reset" value="сбросить">
-      <input type="submit" value="добавить">
-  </form>
+    <label for="sign_list"> direction:</label><select name="sign_list" id='sign_list' required> </select>
 
 
+    <label for="signAnnotation"> annotation:</label><input type="text" id="signAnnotation"
+                                                           name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
 
-<%--  для изменения/удаления знака --%>
-  <form action='${pageContext.request.contextPath}/change_delete_local_sign' method="post" id='sign_control_form' accept-charset="UTF-8">
+    <label for="date_of_add">date_of_add: </label> <input type="date" name="date_of_add" id="date_of_add">
+    <label for="date_of_remove">date_of_remove: </label><input type="date" name="date_of_remove" id="date_of_remove">
 
-      <label for="sign_info"> sign:</label><select name="local_sign_id" id='sign_info' > </select>
+    <br><input type="reset" value="сбросить">
+    <input type="submit" value="добавить">
+</form>
 
-        <label for="sign_annotation_change"> annotation:</label><input type="text" id="sign_annotation_change"
-                                                              name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
+    <%--  для изменения/удаления направления - удалить все направления = удалить точку --%>
+<form action='${pageContext.request.contextPath}/change_delete_direction' method="post" id='direction_control_form'
+      accept-charset="UTF-8">
 
-        <label for="date_of_add_change">date_of_add: </label> <input type="date" name="date_of_add"  id="date_of_add_change">
-         <label for="date_of_remove_change">date_of_remove: </label><input type="date" name="date_of_remove"  id="date_of_remove_change">
+    <label for="old_direction"> old direction:</label><select name="old_direction" id='old_direction'
+                                                              required> </select>
 
-<input type="checkbox" id="deleteSign" name="deleteSign" value"delete_sign">
+    <label for="new_direction"> new direction:</label><select name="new_direction" id='new_direction'
+                                                              required> </select>
+
+    <label for="addressDirCh">address: </label><input type="text" id="addressDirCh" name="address"
+                                                      pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
+
+    <label for="annotationDirCh"> annotation:</label><input type="text" id="annotationDirCh"
+                                                            name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
+
+    <br><input type="reset" value="сбросить">
+    <input type="submit" value="добавить">
+</form>
+
+
+    <%--  для изменения/удаления знака --%>
+<form action='${pageContext.request.contextPath}/change_delete_local_sign' method="post" id='sign_control_form'
+      accept-charset="UTF-8">
+
+    <label for="sign_info"> sign:</label><select name="local_sign_id" id='sign_info'> </select>
+
+    <label for="sign_annotation_change"> annotation:</label><input type="text" id="sign_annotation_change"
+                                                                   name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
+
+    <label for="date_of_add_change">date_of_add: </label> <input type="date" name="date_of_add" id="date_of_add_change">
+    <label for="date_of_remove_change">date_of_remove: </label><input type="date" name="date_of_remove"
+                                                                      id="date_of_remove_change">
+
+    <input type="checkbox" id="deleteSign" name="deleteSign" value="delete_sign">
     <label for="deleteSign">удалить знак</label>
 
-   <br><input type="reset" value="сбросить">
-      <input type="submit" value="добавить">
-  </form>
-
-
+    <br><input type="reset" value="сбросить">
+    <input type="submit" value="добавить">
+</form>
 
 
     <%--<div id="map" style=" height: 500px"></div>--%>
 
 
-
- <button id="showEmptyPointsButton">показать пустые точки</button>
+<button id="showEmptyPointsButton">показать пустые точки</button>
 
 </c:if>
 
 
-    <%--<div id="map" style=" height: 500px"></div>--%>
+<%--<div id="map" style=" height: 500px"></div>--%>
 
-    <br>
-    <select id="language">
-        <option selected value="ru">ru</option>
-        <option value="en">en</option>
-    </select>
+<br>
+<select id="language">
+    <option selected value="ru">ru</option>
+    <option value="en">en</option>
+</select>
 
-    <form>
-<p>Выберите дату:
-    <input type="date" name="calendar" max="2020-06-25" id="chosenDate">
-    <input type="reset" id="resetButton">
-</p>
+<form>
+    <p>Выберите дату:
+        <input type="date" name="calendar" max="2020-06-25" id="chosenDate">
+        <input type="reset" id="resetButton">
+    </p>
 </form>
 
 <form>

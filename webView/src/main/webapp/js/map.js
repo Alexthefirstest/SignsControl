@@ -9,17 +9,17 @@ let indicatePointCoordinates = null;
 let indicatePlacemark;
 let coordinatesHtml;
 let point_form;
-   let objectManagerEP;
+let objectManagerEP;
 
-   let changeDirectionBox;
-   let changeDirectionForm;
-   let oldDirectionsSelect;
+let changeDirectionBox;
+let changeDirectionForm;
+let oldDirectionsSelect;
 
-   let changeSignBox;
-   let changeSignForm;
-   let selectedSign;
+let changeSignBox;
+let changeSignForm;
+let selectedSign;
 
-   let changeSignLatestInfo;
+let changeSignLatestInfo;
 
 function init(ymaps) {
 
@@ -222,6 +222,7 @@ function init(ymaps) {
 
     //---------------------метки начаоло
 
+    //для основных точел
     objectManager = new ymaps.ObjectManager({
         clusterize: true
     });
@@ -229,72 +230,50 @@ function init(ymaps) {
     objectManager.objects.options.set('preset', 'islands#violetCircleIcon'); //размеры сюда
     objectManager.clusters.options.set('preset', 'islands#violetClusterIcons');
 
- objectManagerEP = new ymaps.ObjectManager({
-                       clusterize: true
-                   });
+    //для пустых точек
+    objectManagerEP = new ymaps.ObjectManager({
+        clusterize: true
+    });
 
-                    objectManagerEP.objects.options.set('preset', 'islands#redCircleIcon'); //размеры сюда
-                                      objectManagerEP.clusters.options.set('preset', 'islands#redClusterIcons');
+    objectManagerEP.objects.options.set('preset', 'islands#redCircleIcon'); //размеры сюда
+    objectManagerEP.clusters.options.set('preset', 'islands#redClusterIcons');
 
-  myMap.geoObjects.add(objectManager);
-   myMap.geoObjects.add(objectManagerEP);
+    myMap.geoObjects.add(objectManager);
+    myMap.geoObjects.add(objectManagerEP);
 
- myMap.events.add('dblclick', function (e) {
+    myMap.events.add('dblclick', function (e) {
 
-      objectManager.removeAll();
+        objectManager.removeAll();
 
-      });
+    });
 
 //indicate point
-  if( indicatePointCoordinates!=null) {
+    if (indicatePointCoordinates != null) {
 
- indicatePlacemark = new ymaps.Placemark(indicatePointCoordinates,{}, {preset: "islands#redIcon", draggable: "true"});
+        indicatePlacemark = new ymaps.Placemark(indicatePointCoordinates, {}, {
+            preset: "islands#redIcon",
+            draggable: "true"
+        });
 
-   indicatePlacemark.events.add("dragend", function (e) {
+        indicatePlacemark.events.add("dragend", function (e) {
 
+            coordinatesHtml.value = indicatePlacemark.geometry.getCoordinates();
 
-//alert(e.get('coords'));
+            alert("dragged");
 
-
-
- coordinatesHtml.value=indicatePlacemark.geometry.getCoordinates();
-
-
-
-   $.ajax({
-
-          url: ctx+"/get_unused_directions",
-data: {"pointCoordinates": coordinatesHtml}
-
-      }).done(function (data) {
-
-let directions = JSON.parse(data)
-
-let directionsSelect=document.getElementById("direction");
-
- $("#direction").empty();
-
-for(let j = 0; j<directions.ids.length; j++){
-
-  directionsSelect.append(new Option(directions.directions[j], directions.ids[j]));
-}
-
-  }).fail(function() {
-
-        $("#direction").empty();
-        //exception
-
-      });
+            fillUnusedDirections();
 //ajax/
 
-              });
+        });
 
 
-  myMap.geoObjects.add(indicatePlacemark);
+        myMap.geoObjects.add(indicatePlacemark);
 
 
-  }
-//---indicate point
+    }
+//---/indicate point
+
+
 //// Поставим метку по клику над картой.
 //map.events.add('click', function (e) {
 //    // Географические координаты точки клика можно узнать
@@ -313,78 +292,64 @@ for(let j = 0; j<directions.ids.length; j++){
 
 //-----------signs hisory
 
-let activeObjectMonitor = new ymaps.Monitor(objectManager.clusters.state);
+    let activeObjectMonitor = new ymaps.Monitor(objectManager.clusters.state);
 
-	objectManager.objects.events.add('click', function (e) {
+    objectManager.objects.events.add('click', function (e) {
 
-			let objectId = e.get('objectId');
-			updateSignsHistory(objectId);
-			updateSignChangeForm(objectManager.objects.getById(objectId).properties.pointCoordinates);
-			changeDirectionCoordinates(objectManager.objects.getById(objectId).properties.pointCoordinates);
-			updateAddSignForm(objectManager.objects.getById(objectId).properties.pointCoordinates);
-			updateDirectionsForm(objectManager.objects.getById(objectId).properties.pointCoordinates);
-
-		});
-
-		activeObjectMonitor.add('activeObject', function () {
-        			let objectId = activeObjectMonitor.get('activeObject').id;
-        		//	objectManager.objects.getById(objectId).properties.balloonContent;
-        		updateSignsHistory(objectId);
-        		//проверить что существует changeDIrectionCoorditnates
-        		changeDirectionCoordinates(objectManager.objects.getById(objectId).properties.pointCoordinates);
-updateSignChangeForm(objectManager.objects.getById(objectId).properties.pointCoordinates);
-	updateAddSignForm(objectManager.objects.getById(objectId).properties.pointCoordinates)
-	updateDirectionsForm(objectManager.objects.getById(objectId).properties.pointCoordinates)
-        		});
-
-let activeObjectMonitorEP = new ymaps.Monitor(objectManagerEP.clusters.state);
-
-	objectManagerEP.objects.events.add('click', function (e) {
-
-			let objectId = e.get('objectId');
-updateSignChangeForm(objectManagerEP.objects.getById(objectId).properties.pointCoordinates);
-			changeDirectionCoordinates(objectManagerEP.objects.getById(objectId).properties.pointCoordinates);
-		changeSignsHistoryDiv("empty point");
-		updateAddSignForm(objectManagerEP.objects.getById(objectId).properties.pointCoordinates)
-		updateDirectionsForm(objectManagerEP.objects.getById(objectId).properties.pointCoordinates)
-		});
-
-		activeObjectMonitorEP.add('activeObject', function () {
-        			let objectId = activeObjectMonitorEP.get('activeObject').id;
-        		//	objectManager.objects.getById(objectId).properties.balloonContent;
-updateSignChangeForm(objectManagerEP.objects.getById(objectId).properties.pointCoordinates);
-        				changeDirectionCoordinates(objectManagerEP.objects.getById(objectId).properties.pointCoordinates);
-        				 changeSignsHistoryDiv("empty point");
-
-updateAddSignForm(objectManagerEP.objects.getById(objectId).properties.pointCoordinates)
-updateDirectionsForm(objectManagerEP.objects.getById(objectId).properties.pointCoordinates)
-        		});
-
-
-function updateSignsHistory(objectId) {
-
-if (document.getElementById("signsHistory").checked) {
-
-  $.ajax({
-        url: ctx+"/get_point_history",
-        data: {"pointCoordinates": objectManager.objects.getById(objectId).properties.pointCoordinates}
-    }).done(function (data) {
-        changeSignsHistoryDiv(data);
+        let objectId = e.get('objectId');
+        let coordinates = objectManager.objects.getById(objectId).properties.pointCoordinates;
+        updateSignsHistory(objectId);
+        updateSignChangeForm(coordinates);
+        changeDirectionCoordinates(coordinates);
+        updateAddSignForm(coordinates);
+        updateDirectionsForm(coordinates);
 
     });
-  }
- // changeSignsHistoryDiv(objectManager.objects.getById(objectId).properties.pointCoordinates);
 
-}
+    activeObjectMonitor.add('activeObject', function () {
+
+        let objectId = activeObjectMonitor.get('activeObject').id;
+
+        let coordinates = objectManager.objects.getById(objectId).properties.pointCoordinates;
+        updateSignsHistory(objectId);
+        updateSignChangeForm(coordinates);
+        changeDirectionCoordinates(coordinates);
+        updateAddSignForm(coordinates);
+        updateDirectionsForm(coordinates);
+    });
+
+    let activeObjectMonitorEP = new ymaps.Monitor(objectManagerEP.clusters.state);
+
+    objectManagerEP.objects.events.add('click', function (e) {
+
+        let objectId = e.get('objectId');
+
+        let coordinates = objectManagerEP.objects.getById(objectId).properties.pointCoordinates;
+        changeSignsHistoryDiv("empty point");
+        updateSignChangeForm(coordinates);
+        changeDirectionCoordinates(coordinates);
+        updateAddSignForm(coordinates);
+        updateDirectionsForm(coordinates);
+    });
+
+    activeObjectMonitorEP.add('activeObject', function () {
+
+        let objectId = activeObjectMonitorEP.get('activeObject').id;
+
+        let coordinates = objectManagerEP.objects.getById(objectId).properties.pointCoordinates;
+        changeSignsHistoryDiv("empty point");
+        updateSignChangeForm(coordinates);
+        changeDirectionCoordinates(coordinates);
+        updateAddSignForm(coordinates);
+        updateDirectionsForm(coordinates);
+    });
 
 
-myMap.balloon.events.add('userclose', function (e) {
+    myMap.balloon.events.add('userclose', function (e) {
 
-changeSignsHistoryDiv("выберите точку");
+        changeSignsHistoryDiv("выберите точку");
 
-});
-
-
+    });
 
 
     $.ajax({
@@ -442,7 +407,7 @@ window.onload = function () {
 
 //points listeners
 
-     $(document).on("change", "#chosenDate", function () {
+    $(document).on("change", "#chosenDate", function () {
 
 
         pointAjaxDate = (document.getElementById('chosenDate')).value;
@@ -469,61 +434,37 @@ window.onload = function () {
     signsDiv = document.getElementById("signsHistoryTable");
 
 
- $(document).on("click", "#signsHistory", function(){
+    $(document).on("click", "#signsHistory", function () {
 
-      changeSignsHistoryDiv("выберите точку");
+        changeSignsHistoryDiv("выберите точку");
 
     });
 
 
     select.createMap();//----create map here
 
+// ----------------------- локализация - конец
+
 
     //add point
+    if (document.getElementById("addPointButton") != null) {
 
-    if (document.getElementById("addPointButton")!=null) {
-
- point_form = document.getElementById("point_form");
-    point_form.style.visibility = 'hidden';
-coordinatesHtml=document.getElementsByName('coordinatesToSend')[0];
-
-
-coordinatesHtml.value=0;
-     $(document).on("click", "#addPointButton", function(){
-
- myMap.events.add('click', function (e) {
+        point_form = document.getElementById("point_form");
+        point_form.style.visibility = 'hidden';
+        coordinatesHtml = document.getElementsByName('coordinatesToSend')[0];
 
 
-           indicatePointCoordinates = e.get('coords');
-           coordinatesHtml.value=indicatePointCoordinates;
-              point_form.style.visibility = 'visible';
+        coordinatesHtml.value = 0;
+        $(document).on("click", "#addPointButton", function () {
+
+            myMap.events.add('click', function (e) {
 
 
+                indicatePointCoordinates = e.get('coords');
+                coordinatesHtml.value = indicatePointCoordinates;
+                point_form.style.visibility = 'visible';
 
-   $.ajax({
-
-          url: ctx+"/get_unused_directions",
-data: {"pointCoordinates": coordinatesHtml.value}
-
-      }).done(function (data) {
-
-let directions = JSON.parse(data)
-
-let directionsSelect=document.getElementById("direction");
-
- $("#direction").empty();
-
-for(let j = 0; j<directions.ids.length; j++){
-
-  directionsSelect.append(new Option(directions.directions[j], directions.ids[j]));
-}
-
-  }).fail(function() {
-
-        $("#direction").empty();
-        //exception
-
-      });
+                fillUnusedDirections();
 //ajax/
 
 
@@ -531,331 +472,342 @@ for(let j = 0; j<directions.ids.length; j++){
 
             });
 
-    });
+        });
 
-     $(document).on("click", "#addDirectionForm", function(){
+        $(document).on("click", "#addDirectionForm", function () {
 
-           changeDirectionCoordinates(null);
+            changeDirectionCoordinates(null);
 
-         });
+        });
 
- $(document).on("click", "#showEmptyPointsButton", function(){
+        $(document).on("click", "#showEmptyPointsButton", function () {
 
- $.ajax({
+            $.ajax({
 
-        url: ctx+"/get_empty_points"
+                url: ctx + "/get_empty_points"
 
-    }).done(function (data) {
+            }).done(function (data) {
 
-    objectManagerEP.removeAll();
+                objectManagerEP.removeAll();
 
-               objectManagerEP.add(data);
-           });
+                objectManagerEP.add(data);
+            });
 
-    });
- }
-// ----------------------- локализация - конец где-то примерно тут, вроде
-  //add point/
+        });
 
-changeDirectionBox= document.getElementById("changeDirectionBox");
-changeDirectionForm= document.getElementById("direction_control_form");
 
-oldDirectionsSelect=document.getElementById("old_direction");
+        //редактирование направления
+        changeDirectionBox = document.getElementById("changeDirectionBox");
+        changeDirectionForm = document.getElementById("direction_control_form");
+        oldDirectionsSelect = document.getElementById("old_direction");
 
- $(document).on("change", "#old_direction", function(){
+        $(document).on("change", "#old_direction", function () {
 
- $.ajax({
+            fillDirectionsAdressAnnotation();
 
-        url: ctx+"/get_direction_address_annotation",
-        data: {"signList":oldDirectionsSelect.value}
-
-    }).done(function (data) {
-
-let pdate = JSON.parse(data);
-   let addressDirCh=document.getElementById("addressDirCh");
-   let annotationDirCh = document.getElementById("annotationDirCh");
-
-   addressDirCh.value = pdate.address;
-   annotationDirCh.value = pdate.annotation;
-
-           });
-
-    });
-
- changeSignBox = document.getElementById("change_local_sign_box");
-   changeSignForm  = document.getElementById("sign_control_form");
-   selectedSign = document.getElementById("sign_info");
+        });
 
 //редактирование знака
- $(document).on("change", "#sign_info", function(){
+        changeSignBox = document.getElementById("change_local_sign_box");
+        changeSignForm = document.getElementById("sign_control_form");
+        selectedSign = document.getElementById("sign_info");
 
-let signAnnotation=document.getElementById("sign_annotation_change");
-   let dateOfAddCh = document.getElementById("date_of_add_change");
-   let dateOfRemoveCh = document.getElementById("date_of_remove_change");
+        $(document).on("change", "#sign_info", function () {
 
-let selectedSignPosition = selectedSign.options.selectedIndex;
+            let signAnnotation = document.getElementById("sign_annotation_change");
+            let dateOfAddCh = document.getElementById("date_of_add_change");
+            let dateOfRemoveCh = document.getElementById("date_of_remove_change");
 
-   signAnnotation.value = changeSignLatestInfo[selectedSign.options.selectedIndex].annotation;
-   dateOfAddCh.value =changeSignLatestInfo[selectedSign.options.selectedIndex].dateOfAdd;
-   dateOfRemoveCh.value =changeSignLatestInfo[selectedSign.options.selectedIndex].dateOfRemove;
+            let selectedSignPosition = selectedSign.options.selectedIndex;
 
-    });
+            signAnnotation.value = changeSignLatestInfo[selectedSign.options.selectedIndex].annotation;
+            dateOfAddCh.value = changeSignLatestInfo[selectedSign.options.selectedIndex].dateOfAdd;
+            dateOfRemoveCh.value = changeSignLatestInfo[selectedSign.options.selectedIndex].dateOfRemove;
 
-updateAddSignForm(null);
-updateDirectionsForm(null);
-updateSignChangeForm(null);
+        });
 
+        updateAddSignForm(null);
+        updateDirectionsForm(null);
+        updateSignChangeForm(null);
+
+    }//add point button !=null
 
 
 }//window.onload;
 
+function updateSignsHistory(objectId) {
+
+    if (document.getElementById("signsHistory").checked) {
+
+        $.ajax({
+            url: ctx + "/get_point_history",
+            data: {"pointCoordinates": objectManager.objects.getById(objectId).properties.pointCoordinates}
+        }).done(function (data) {
+            changeSignsHistoryDiv(data);
+
+        });
+    }
+    // changeSignsHistoryDiv(objectManager.objects.getById(objectId).properties.pointCoordinates);
+
+}
 
 function changeSignsHistoryDiv(html) {
 
     if (document.getElementById("signsHistory").checked) {
- signsDiv.innerHTML = html;
-  signsDiv.style.visibility = 'visible';
 
+        signsDiv.innerHTML = html;
+        signsDiv.style.visibility = 'visible';
 
     } else {
-
         signsDiv.style.visibility = 'hidden';
     }
-//signs hostory fin
-}
+
+
+}//signs hostory fin
 
 function changeDirectionCoordinates(coordinates) {
 
-let addDirectionForm=document.getElementById("addDirectionForm");
+    let addDirectionForm = document.getElementById("addDirectionForm");
 
-    if((addDirectionForm!=null) && (addDirectionForm.checked)) {
-
-
+    if ((addDirectionForm != null) && (addDirectionForm.checked)) {
 
 
-if(coordinates!=null){
+        if (coordinates != null) {
 
-  coordinatesHtml.value=coordinates;
+            coordinatesHtml.value = coordinates;
 
-   $.ajax({
+            fillUnusedDirections();
 
-          url: ctx+"/get_unused_directions",
-data: {"pointCoordinates": coordinates}
-
-      }).done(function (data) {
-
-let directions = JSON.parse(data);
-
-let directionsSelect=document.getElementById("direction");
-
- $("#direction").empty();
-
-for(let j = 0; j<directions.ids.length; j++){
-
-  directionsSelect.append(new Option(directions.directions[j], directions.ids[j]));
-}
-
-  }).fail(function() {
-
-        $("#direction").empty();
-        //exception
-
-      });
-
-}
-point_form.style.visibility = 'visible';
+        }
+        point_form.style.visibility = 'visible';
 
     } else {
-if(point_form!=null){
-         point_form.style.visibility = 'hidden';
-  }
+        if (point_form != null) {
+            point_form.style.visibility = 'hidden';
+        }
     }
-//signs hostory fin
+
+}//change direction coordinates
+
+function updateAddSignForm(coordinates) {
+
+    let addSignCheckbox = document.getElementById("addSignCBox");
+    let addSignForm = document.getElementById("addSign_form");
+
+    if ((addSignCheckbox != null) && (addSignCheckbox.checked)) {
+
+        $.ajax({
+
+            url: ctx + "/get_sign_add_info",
+            data: {"pointCoordinates": coordinates}
+
+        }).done(function (data) {
+
+            let addSignsInfo = JSON.parse(data)
+            let receivedSignsLists = addSignsInfo.signsLists;
+            let receivedPddSigns = addSignsInfo.pddSigns;
+            let receivedStandardSizes = addSignsInfo.standardSizes;
+
+            let signListSelect = document.getElementById("sign_list");
+            let pddSignSelect = document.getElementById("pdd_sign");
+            let standardSizeSelect = document.getElementById("standard_size");
+
+            $("#sign_list").empty();
+            $("#pdd_sign").empty();
+            $("#standard_size").empty();
+
+            for (let k = 0; k < receivedSignsLists.length; k++) {
+
+                signListSelect.append(new Option(receivedSignsLists[k].direction, receivedSignsLists[k].id));
+
+            }
+
+            for (let k = 0; k < receivedPddSigns.length; k++) {
+
+
+                pddSignSelect.append(new Option(receivedPddSigns[k].sign, receivedPddSigns[k].id));
+
+            }
+
+            for (let k = 0; k < receivedStandardSizes.length; k++) {
+
+                standardSizeSelect.append(new Option(receivedStandardSizes[k].size, receivedStandardSizes[k].size));
+            }
+
+        }).fail(function () {
+
+            $("#direction").empty();
+            //exception
+
+        });
+
+        addSignForm.style.visibility = 'visible';
+    } else {
+        if (addSignCheckbox != null) {
+            addSignForm.style.visibility = 'hidden';
+        }
+    }
+
+
 }
 
-function  updateAddSignForm(coordinates){
-
-let addSignCheckbox= document.getElementById("addSignCBox");
-let addSignForm= document.getElementById("addSign_form");
-
-if((addSignCheckbox!=null) && (addSignCheckbox.checked)){
-
-  $.ajax({
-
-          url: ctx+"/get_sign_add_info",
-          data: {"pointCoordinates": coordinates}
-
-      }).done(function (data) {
-
-let addSignsInfo = JSON.parse(data)
-let receivedSignsLists=addSignsInfo.signsLists;
-let receivedPddSigns=addSignsInfo.pddSigns;
-let receivedStandardSizes=addSignsInfo.standardSizes;
-
-let signListSelect=document.getElementById("sign_list");
-let pddSignSelect=document.getElementById("pdd_sign");
-let standardSizeSelect=document.getElementById("standard_size");
-
- $("#sign_list").empty();
- $("#pdd_sign").empty();
- $("#standard_size").empty();
-
-for(let k = 0; k<receivedSignsLists.length; k++){
-
-  signListSelect.append(new Option(receivedSignsLists[k].direction, receivedSignsLists[k].id));
-
-}
-
-for(let k = 0; k<receivedPddSigns.length; k++){
-
-
-  pddSignSelect.append(new Option(receivedPddSigns[k].sign, receivedPddSigns[k].id));
-
-}for(let k = 0; k<receivedStandardSizes.length; k++){
-
-  standardSizeSelect.append(new Option(receivedStandardSizes[k].size, receivedStandardSizes[k].size));
-}
-
-  }).fail(function() {
-
-        $("#direction").empty();
-        //exception
-
-      });
-
-addSignForm.style.visibility = 'visible';
-}else{
-if(addSignCheckbox!=null){
-addSignForm.style.visibility = 'hidden';
-}
-}
-
-
-}
 // directions change
-function  updateDirectionsForm(coordinates){
+function updateDirectionsForm(coordinates) {
 
 
-if((changeDirectionBox!=null) && (changeDirectionBox.checked)){
+    if ((changeDirectionBox != null) && (changeDirectionBox.checked)) {
 
-  $.ajax({
+        $.ajax({
 
-          url: ctx+"/get_direction_change_info",
-          data: {"pointCoordinates": coordinates}
+            url: ctx + "/get_direction_change_info",
+            data: {"pointCoordinates": coordinates}
 
-      }).done(function (data) {
+        }).done(function (data) {
 
-let directions=JSON.parse(data);
-let oldDirections = directions.oldDir;
-let newDirections = directions.newDir;
+            let directions = JSON.parse(data);
+            let oldDirections = directions.oldDir;
+            let newDirections = directions.newDir;
 
-let newDirectionsSelect=document.getElementById("new_direction");
+            let newDirectionsSelect = document.getElementById("new_direction");
 //let oldDirectionsSelect=document.getElementById("new_direction");
 
- $("#old_direction").empty();
- $("#new_direction").empty();
+            $("#old_direction").empty();
+            $("#new_direction").empty();
 
-for(let i = 0; i<oldDirections.ids.length; i++){
+            for (let i = 0; i < oldDirections.ids.length; i++) {
 
-  oldDirectionsSelect.append(new Option(oldDirections.directions[i], oldDirections.ids[i]));
-}
+                oldDirectionsSelect.append(new Option(oldDirections.directions[i], oldDirections.ids[i]));
+            }
 
- $.ajax({
+            fillDirectionsAdressAnnotation();
 
-        url: ctx+"/get_direction_address_annotation",
-        data: {"signList":oldDirectionsSelect.value}
+            newDirectionsSelect.append(new Option("do not change", -1));
+            newDirectionsSelect.append(new Option("delete", -2));
 
-    }).done(function (data) {
+            for (let i = 0; i < newDirections.ids.length; i++) {
 
-let pdate = JSON.parse(data);
-   let addressDirCh=document.getElementById("addressDirCh");
-   let annotationDirCh = document.getElementById("annotationDirCh");
+                newDirectionsSelect.append(new Option(newDirections.directions[i], newDirections.ids[i]));
 
-   addressDirCh.value = pdate.address;
-   annotationDirCh.value = pdate.annotation;
-
-           });
-
- newDirectionsSelect.append(new Option("do not change", -1));
- newDirectionsSelect.append(new Option("delete", -2));
-
-for(let i = 0; i<newDirections.ids.length; i++){
-
-  newDirectionsSelect.append(new Option(newDirections.directions[i], newDirections.ids[i]));
-
-}
+            }
 
 
-  }).fail(function() {
+        }).fail(function () {
 
-        $("#old_direction").empty();
-        $("#new_direction").empty();
-        //exception
+            $("#old_direction").empty();
+            $("#new_direction").empty();
+            //exception
 
-      });
+        });
 
-changeDirectionForm.style.visibility = 'visible';
-}else{
-if(changeDirectionBox!=null){
-changeDirectionForm.style.visibility = 'hidden';
-}
-}
+        changeDirectionForm.style.visibility = 'visible';
+    } else {
+        if (changeDirectionBox != null) {
+            changeDirectionForm.style.visibility = 'hidden';
+        }
+    }
 
 
 }
 
 // sign change
-function  updateSignChangeForm(coordinates){
+function updateSignChangeForm(coordinates) {
 
-if((changeSignBox!=null) && (changeSignBox.checked)){
-
-
-  $.ajax({
-
-          url: ctx+"/get_sign_change_info",
-          data: {"pointCoordinates": coordinates}
-
-      }).done(function (data) {
+    if ((changeSignBox != null) && (changeSignBox.checked)) {
 
 
- $("#sign_info").empty();
+        $.ajax({
 
-for(let i = 0; i<data.length; i++){
+            url: ctx + "/get_sign_change_info",
+            data: {"pointCoordinates": coordinates}
 
-let kind = data[i].kind;
-let signNumber = (data[i].section + "." + data[i].sign + ((kind > -1) ? ("." + kind) : ""));
+        }).done(function (data) {
 
-  selectedSign.append(new Option( (signNumber+" : "+data[i].dateOfAdd+" : "+(data[i].dateOfRemove==null? " - " : data[i].dateOfRemove ) ) , data[i].localSignId));
+
+            $("#sign_info").empty();
+
+            for (let i = 0; i < data.length; i++) {
+
+                let kind = data[i].kind;
+                let signNumber = (data[i].section + "." + data[i].sign + ((kind > -1) ? ("." + kind) : ""));
+
+                selectedSign.append(new Option((signNumber + " : " + data[i].dateOfAdd + " : " + (data[i].dateOfRemove == null ? " - " : data[i].dateOfRemove)), data[i].localSignId));
+            }
+
+            let signAnnotation = document.getElementById("sign_annotation_change");
+            let dateOfAddCh = document.getElementById("date_of_add_change");
+            let dateOfRemoveCh = document.getElementById("date_of_remove_change");
+
+            let selectedSignPosition = selectedSign.options.selectedIndex;
+
+            signAnnotation.value = data[selectedSign.options.selectedIndex].annotation;
+            dateOfAddCh.value = data[selectedSign.options.selectedIndex].dateOfAdd;
+            dateOfRemoveCh.value = data[selectedSign.options.selectedIndex].dateOfRemove;
+
+            changeSignForm.style.visibility = 'visible';
+
+            changeSignLatestInfo = data;
+
+        }).fail(function () {
+
+            changeSignLatestInfo = null;
+            //exception
+
+        });
+
+
+    } else {
+        if (changeSignForm != null) {
+            changeSignForm.style.visibility = 'hidden';
+        }
+    }
+
 }
 
-let signAnnotation=document.getElementById("sign_annotation_change");
-   let dateOfAddCh = document.getElementById("date_of_add_change");
-   let dateOfRemoveCh = document.getElementById("date_of_remove_change");
+function fillUnusedDirections() {
 
-let selectedSignPosition = selectedSign.options.selectedIndex;
+    $.ajax({
 
-   signAnnotation.value = data[selectedSign.options.selectedIndex].annotation;
-   dateOfAddCh.value =data[selectedSign.options.selectedIndex].dateOfAdd;
-   dateOfRemoveCh.value =data[selectedSign.options.selectedIndex].dateOfRemove;
+        url: ctx + "/get_unused_directions",
+        data: {"pointCoordinates": coordinatesHtml}
 
-changeSignForm.style.visibility = 'visible';
+    }).done(function (data) {
 
-changeSignLatestInfo=data;
+        let directions = JSON.parse(data)
 
-}).fail(function() {
+        let directionsSelect = document.getElementById("direction");
 
-changeSignLatestInfo=null;
-          //exception
+        $("#direction").empty();
 
-        });;
+        for (let j = 0; j < directions.ids.length; j++) {
 
+            directionsSelect.append(new Option(directions.directions[j], directions.ids[j]));
+        }
 
-}else{
-if(changeSignForm!=null){
-changeSignForm.style.visibility = 'hidden';
+    }).fail(function () {
+
+        $("#direction").empty();
+        //exception
+
+    });
 }
-}
 
+function fillDirectionsAdressAnnotation() {
+
+    $.ajax({
+
+        url: ctx + "/get_direction_address_annotation",
+        data: {"signList": oldDirectionsSelect.value}
+
+    }).done(function (data) {
+
+        let pdate = JSON.parse(data);
+        let addressDirCh = document.getElementById("addressDirCh");
+        let annotationDirCh = document.getElementById("annotationDirCh");
+
+        addressDirCh.value = pdate.address;
+        annotationDirCh.value = pdate.annotation;
+
+    });
 
 }
 

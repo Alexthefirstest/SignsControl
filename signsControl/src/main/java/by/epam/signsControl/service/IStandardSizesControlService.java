@@ -7,9 +7,13 @@ public interface IStandardSizesControlService {
 
     StandardSize addStandardSize(int size) throws ServiceException;
 
+    StandardSize addStandardSize(int size, String info) throws ServiceException;
+
     boolean removeStandardSize(int size) throws ServiceException;
 
     boolean setInfo(int id, String info) throws ServiceException;
+
+    boolean setSize(int oldSize, int newSize) throws ServiceException;
 
     String getInfo(int id) throws ServiceException;
 
