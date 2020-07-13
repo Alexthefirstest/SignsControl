@@ -25,14 +25,14 @@ public class TransactionsDeliver implements ITransactionsDeliver {
     private static final IConnectionPool CONNECTION_POOL = ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
 
     private static final String SQL_GET_TRANSACTIONS =
-            "SELECT t.id, money, date_time, o1.id, o1.name, o1.role, orr1.role,  o1.is_blocked, o1.info, o2.id, o2.name, o2.role, orr2.role, o2.is_blocked, o2.info\n" +
-                    "FROM transactions as t join organisations as o1 on t.from=o1.id join organisations as o2 on t.to=o2.id\n" +
+            "SELECT t.id, money, date_time, o1.id, o1.name, o1.role, orr1.role,  o1.is_blocked, o1.info, o2.id, o2.name, o2.role, orr2.role, o2.is_blocked, o2.info " +
+                    "FROM transactions as t join organisations as o1 on t.from=o1.id join organisations as o2 on t.to=o2.id " +
                     "join organisation_roles as orr1 on o1.role=orr1.id join organisation_roles as orr2 on o2.role=orr2.id";
 
-    private static final String SQL_ORDER_BY_ID = " order by t.id ";
-    private static final String SQL_WHERE_ID = "where t.id=?";
-    private static final String SQL_WHERE_ID_FROM = "where t.from=?";
-    private static final String SQL_WHERE_ID_FROM_ID_TO = "where t.from=? AND t.to=?";
+    private static final String SQL_ORDER_BY_ID = " order by t.id DESC";
+    private static final String SQL_WHERE_ID = " where t.id=?";
+    private static final String SQL_WHERE_ID_FROM = " where t.from=?";
+    private static final String SQL_WHERE_ID_FROM_ID_TO = " where t.from=? AND t.to=?";
     private static final String SQL_WHERE_ID_FROM_DATE = "  WHERE t.from=? " +
             "AND date_time BETWEEN STR_TO_DATE(?, '%Y.%m.%d %H:%i:%s') AND STR_TO_DATE(?, '%Y.%m.%d %H:%i:%s') ";
 
@@ -108,6 +108,8 @@ public class TransactionsDeliver implements ITransactionsDeliver {
             }
 
             rs = ps.executeQuery();
+
+
 
             return resultSetToArray(rs);
 

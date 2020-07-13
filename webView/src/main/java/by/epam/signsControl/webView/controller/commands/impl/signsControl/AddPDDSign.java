@@ -19,6 +19,6 @@ public class AddPDDSign implements Command {
 
         logger.info("inside execute");
 
-        request.getRequestDispatcher("/WEB-INF/jsp/add_pdd_sign.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/signs_control/add_pdd_sign.jsp").forward(request, response);
     }
 }

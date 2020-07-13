@@ -44,7 +44,7 @@ public class Organisation implements FactoryType, Serializable, Cloneable {
     /**
      * block parameter from jdbc
      */
-    private boolean isBlocked;
+    private boolean blocked;
 
     /**
      * nfo field from jdbc
@@ -63,14 +63,14 @@ public class Organisation implements FactoryType, Serializable, Cloneable {
      * @param id        {@link Organisation#id}
      * @param name      {@link Organisation#name}
      * @param role      {@link Organisation#role}
-     * @param isBlocked {@link Organisation#isBlocked}
+     * @param blocked {@link Organisation#blocked}
      * @param info      {@link Organisation#info}
      */
-    public Organisation(int id, String name, Role role, boolean isBlocked, String info) {
+    public Organisation(int id, String name, Role role, boolean blocked, String info) {
         this.id = id;
         this.name = name;
         this.role = role;
-        this.isBlocked = isBlocked;
+        this.blocked = blocked;
         this.info = info;
     }
 
@@ -119,17 +119,17 @@ public class Organisation implements FactoryType, Serializable, Cloneable {
     }
 
     /**
-     * @return {@link Organisation#isBlocked}
+     * @return {@link Organisation#blocked}
      */
     public boolean isBlocked() {
-        return isBlocked;
+        return blocked;
     }
 
     /**
      * @param blocked {@link Organisation#isBlocked}
      */
     public void setBlocked(boolean blocked) {
-        isBlocked = blocked;
+        this.blocked = blocked;
     }
 
     /**
@@ -154,7 +154,7 @@ public class Organisation implements FactoryType, Serializable, Cloneable {
         Organisation that = (Organisation) o;
 
         if (id != that.id) return false;
-        if (isBlocked != that.isBlocked) return false;
+        if (blocked != that.blocked) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (role != null ? !role.equals(that.role) : that.role != null) return false;
         return info != null ? info.equals(that.info) : that.info == null;
@@ -165,7 +165,7 @@ public class Organisation implements FactoryType, Serializable, Cloneable {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
-        result = 31 * result + (isBlocked ? 1 : 0);
+        result = 31 * result + (blocked ? 1 : 0);
         result = 31 * result + (info != null ? info.hashCode() : 0);
         return result;
     }
@@ -176,7 +176,7 @@ public class Organisation implements FactoryType, Serializable, Cloneable {
         sb.append("id=").append(id);
         sb.append(", name='").append(name).append('\'');
         sb.append(", role=").append(role);
-        sb.append(", isBlocked=").append(isBlocked);
+        sb.append(", isBlocked=").append(blocked);
         sb.append(", info='").append(info).append('\'');
         sb.append('}');
         return sb.toString();

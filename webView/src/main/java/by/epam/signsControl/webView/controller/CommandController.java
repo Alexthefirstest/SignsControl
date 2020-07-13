@@ -24,14 +24,6 @@ public class CommandController extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(CommandController.class);
 
 
-    private String getCommandFromURI(HttpServletRequest request) {
-
-        Pattern pattern = Pattern.compile(request.getContextPath() + "/([^/]+)");
-        Matcher matcher = pattern.matcher(request.getAttribute(URLFilter.REQUIRED_URI).toString());
-
-        return matcher.find() ? matcher.group(1) : "main_page";
-    }
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -47,10 +39,11 @@ public class CommandController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         logger.info("inside servlet post");
-        logger.info(req.getParameter("name"));
-        logger.info(req.getParameter("pdd_section"));
-        logger.info(req.getParameter("description"));
-        logger.info(req.getParts());
+//        logger.info(req.getParameter("name"));
+//        logger.info(req.getParameter("pdd_section"));
+//        logger.info(req.getParameter("description"));
+//        logger.info(req.getParts());
+//        logger.info(req.getPart("picture"));
         logger.info("inside servlet post2");
         process(req, resp);
 
@@ -66,7 +59,7 @@ public class CommandController extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         try {
 
-            commandProvider.getCommand(getCommandFromURI(req)).execute(req, resp);
+            commandProvider.getCommand(RequestParser.getCommandFromURI(req)).execute(req, resp);
         } catch (Exception ex) {
             logger.warn(ex);
 

@@ -3,7 +3,7 @@ package by.epam.orders.dao;
 import by.epam.orders.bean.TypeOfWork;
 import by.epam.orders.dao.exceptions.DAOException;
 
-public interface ITypeOfWorControl {
+public interface ITypeOfWorkControl {
 
     TypeOfWork addTypeOfWork(String name) throws DAOException;
 

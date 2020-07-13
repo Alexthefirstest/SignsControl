@@ -1,10 +1,13 @@
 package by.epam.bank.dao.impl;
 
+import by.epam.bank.bean.Transaction;
 import by.epam.bank.dao.IFinanceOperationsManager;
 import by.epam.bank.dao.exceptions.DAOException;
 import by.epam.bank.dao.exceptions.DAOValidationException;
 import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
 import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
+import by.epam.rolesOrganisationsUsersController.bean.Organisation;
+import by.epam.rolesOrganisationsUsersController.bean.Role;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,14 +30,17 @@ public class SQLFinanceOperationsManager implements IFinanceOperationsManager {
             "UPDATE bank_accounts SET balance = if(is_blocked=false, balance+?, null) WHERE (organisation_id = ?);";
 
     private static final String SQL_ADD_TRANSACTION = "INSERT INTO `transactions` (`from`, `to`, `money`) VALUES (?, ?, ?);";
-    private static final String SQL_SELECT_LAST_INSERT_ID = "SELECT LAST_INSERT_ID() FROM transactions where id=LAST_INSERT_ID();";
+    private static final String SQL_SELECT_LAST_INSERT_ID =
+            "SELECT t.id, money, date_time, o1.id, o1.name, o1.role, orr1.role,  o1.is_blocked, o1.info, o2.id, o2.name, o2.role, orr2.role, o2.is_blocked, o2.info " +
+                    "FROM transactions as t join organisations as o1 on t.from=o1.id join organisations as o2 on t.to=o2.id " +
+                    "join organisation_roles as orr1 on o1.role=orr1.id join organisation_roles as orr2 on o2.role=orr2.id where t.id=LAST_INSERT_ID()";
 
     private static final IConnectionPool connectionPool = ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
 
 
     //return transaction id
     @Override
-    public int transferMoney(int organisationIDFrom, int organisationIDTo, double money) throws DAOException {
+    public Transaction transferMoney(int organisationIDFrom, int organisationIDTo, double money) throws DAOException {
 
         Connection connection = connectionPool.retrieveConnection();
 
@@ -76,12 +82,12 @@ public class SQLFinanceOperationsManager implements IFinanceOperationsManager {
 
             int lastID = -1;
 
-            if (!rs.next() || (lastID = rs.getInt(1)) == 0) {
+            if (!rs.next() || (lastID = rs.getInt(1)) < 1) {
                 logger.warn("last id wasn't found " + lastID);
                 throw new DAOException("transaction add fail - last id wasn't found: last id " + lastID);
             }
 
-            return lastID;
+            return resultSetToTransaction(rs);
 
         } catch (SQLIntegrityConstraintViolationException ex) {
 
@@ -147,21 +153,55 @@ public class SQLFinanceOperationsManager implements IFinanceOperationsManager {
     }
 
     @Override
-    public boolean addMoney(int organisationID, double money) throws DAOException {
+    public Transaction addMoney(int bankID, int organisationID, double money) throws DAOException {
 
         Connection connection = connectionPool.retrieveConnection();
 
-        try (PreparedStatement ps = connection.prepareStatement(SQL_UPDATE_TRANSACTION_SEND_TO)) {
+        ResultSet rs = null;
 
-            ps.setDouble(1, money);
-            ps.setInt(2,organisationID);
+        try (PreparedStatement sendTo = connection.prepareStatement(SQL_UPDATE_TRANSACTION_SEND_TO);
+             PreparedStatement addTransaction = connection.prepareStatement(SQL_ADD_TRANSACTION);
+             PreparedStatement transaction = connection.prepareStatement(SQL_SELECT_LAST_INSERT_ID)) {
 
-            if (ps.executeUpdate() == 0) {
-                logger.info("addMoney fail, wrong user");
-                return false;
+            connection.setAutoCommit(false);
+
+            sendTo.setDouble(1, money);
+            sendTo.setInt(2, organisationID);
+
+            if (sendTo.executeUpdate() == 0) {
+                throw new DAOValidationException("wrong user " + organisationID);
             }
 
+            addTransaction.setInt(1, bankID);
+            addTransaction.setInt(2, organisationID);
+            addTransaction.setDouble(3, money);
+            addTransaction.executeUpdate();
+
+            rs = transaction.executeQuery();
+
+            connection.commit();
+
+            int lastID = -1;
+
+            if (!rs.next() || (lastID = rs.getInt(1)) == 0) {
+                logger.warn("last id wasn't found " + lastID);
+                try {
+                    connection.rollback();
+                } catch (SQLException e) {
+                    logger.warn("rollback fail", e);
+                }
+                throw new DAOValidationException("transaction add fail - last id wasn't found: last id " + lastID);
+            }
+
+            return resultSetToTransaction(rs);
+
         } catch (SQLIntegrityConstraintViolationException ex) {
+
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                logger.warn("rollback fail", e);
+            }
 
             if ((Pattern.matches(".*cannot be null.*", ex.getMessage()))) {
                 logger.info("operation fail cause bank account blocked", ex);
@@ -172,12 +212,47 @@ public class SQLFinanceOperationsManager implements IFinanceOperationsManager {
             }
 
         } catch (SQLException ex) {
+
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                logger.warn("rollback fail", e);
+            }
+
             logger.warn("addMoney fail " + ex);
             throw new DAOException("add money fail", ex);
         } finally {
+
+            if (rs != null) {
+
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    logger.warn("rs.close fail", ex);
+                }
+
+            }
+
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                logger.warn("setAutoCommit fail", ex);
+            }
             connectionPool.releaseConnection(connection);
         }
-        return true;
+
+    }
+
+    private Transaction resultSetToTransaction(ResultSet rs) throws SQLException {
+
+
+        return new Transaction(rs.getInt(1), new Organisation(rs.getInt(4), rs.getString(5),
+                new Role(rs.getInt(6), rs.getString(7)), rs.getBoolean(8), rs.getString(9)),
+                new Organisation(rs.getInt(10), rs.getString(11),
+                        new Role(rs.getInt(12), rs.getString(13)), rs.getBoolean(14), rs.getString(15)),
+                rs.getDouble(2), rs.getTimestamp(3));
+
+
     }
 
 }

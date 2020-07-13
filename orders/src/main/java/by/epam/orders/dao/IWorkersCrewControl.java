@@ -11,7 +11,7 @@ public interface IWorkersCrewControl {
 
     boolean removeWorkersCrew(int id) throws DAOException;
 
-    boolean setDateOfRemove(int WorkersCrewID, String date) throws DAOException;
+    boolean setDateOfRemove(int workersCrewID, String date) throws DAOException;
 
     WorkersCrew addWorker(int workersCrewId, int workersId) throws DAOException;
 

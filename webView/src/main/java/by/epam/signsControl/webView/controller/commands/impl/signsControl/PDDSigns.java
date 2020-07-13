@@ -30,6 +30,6 @@ public class PDDSigns implements Command {
             }
 
 
-        request.getRequestDispatcher("/WEB-INF/jsp/pdd_signs.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/signs_control/pdd_signs.jsp").forward(request, response);
     }
 }

@@ -3,6 +3,12 @@ package by.epam.signsControl.webView.controller;
 import by.epam.signsControl.webView.controller.commands.Command;
 import by.epam.signsControl.webView.controller.commands.CommandName;
 import by.epam.signsControl.webView.controller.commands.impl.*;
+import by.epam.signsControl.webView.controller.commands.impl.bank.AddBankAccountFormHandler;
+import by.epam.signsControl.webView.controller.commands.impl.bank.AddMoney;
+import by.epam.signsControl.webView.controller.commands.impl.bank.ChangeBankAccountFormHandler;
+import by.epam.signsControl.webView.controller.commands.impl.bank.CreateBankAccount;
+import by.epam.signsControl.webView.controller.commands.impl.bank.ShowBankAccounts;
+import by.epam.signsControl.webView.controller.commands.impl.bank.ShowTransactionsHistory;
 import by.epam.signsControl.webView.controller.commands.impl.signsControl.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,6 +53,15 @@ class CommandProvider {
         commands.put(CommandName.REMOVE_PDD_SIGN, new RemovePDDSign());
         commands.put(CommandName.ADD_PDD_SIGN, new AddPDDSign());
         commands.put(CommandName.ADD_PDD_SIGN_FORM, new AddPDDSignFormHandler());
+
+        //bank
+        commands.put(CommandName.BANK_ACCOUNTS, new ShowBankAccounts());
+        commands.put(CommandName.ADD_BANK_ACCOUNT, new CreateBankAccount());
+        commands.put(CommandName.ADD_BANK_ACCOUNT_FORM, new AddBankAccountFormHandler());
+        commands.put(CommandName.CHANGE_BANK_ACCOUNT_FORM, new ChangeBankAccountFormHandler());
+
+        commands.put(CommandName.SHOW_TRANSACTIONS_HISTORY, new ShowTransactionsHistory());
+        commands.put(CommandName.ADD_MONEY, new AddMoney());
 
     }
 

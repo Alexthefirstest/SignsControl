@@ -16,7 +16,7 @@
 </head>
 
 <body>
-<jsp:include page="header.jsp"/>
+<jsp:include page="../header.jsp"/>
 <p><a href="${pageContext.request.contextPath}/add_standard_size">add st size</a>
 
     <c:forEach var="standard_size" items='${standard_sizes}'>
@@ -26,7 +26,7 @@
         <c:out value='        '/>
         <c:out value='${standard_size.info}'/>
 
-<form action='${pageContext.request.contextPath}/change_standard_size' method="get">
+<form action='${pageContext.request.contextPath}/change_standard_size' method="post">
     <input type="text" id="size" name="size" value='${standard_size.size}' hidden>
     <input type="submit" value="change size">
 </form>

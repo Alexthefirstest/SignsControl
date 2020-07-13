@@ -1,8 +1,12 @@
 package by.epam.bank.dao.impl.bankAccountsDeliverRequest;
 
 import by.epam.bank.dao.IRequestBuilder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class RequestBuilder implements IRequestBuilder {
+
+    private static Logger logger = LogManager.getLogger(RequestBuilder.class);
 
     private String where = "";
     private String orderBy = "";
@@ -57,37 +61,37 @@ public class RequestBuilder implements IRequestBuilder {
 
     @Override
     public RequestBuilder showOnlyWithNegativeBalance() {
-        where += " ba.balance<0,";
+        where += " ba.balance<0 AND";
         return this;
     }
 
     @Override
     public RequestBuilder showOnlyWithPositiveBalance() {
-        where += " ba.balance>=0,";
+        where += " ba.balance>=0 AND";
         return this;
     }
 
     @Override
     public RequestBuilder whereBalanceMoreThen(int number) {
-        where += " ba.balance>=" + number + ",";
+        where += " ba.balance>=" + number + " AND";
         return this;
     }
 
     @Override
     public RequestBuilder whereBalanceLessThen(int number) {
-        where += " ba.balance<" + number + ",";
+        where += " ba.balance<" + number + " AND";
         return this;
     }
 
     @Override
     public RequestBuilder showOnlyBlocked() {
-        where += " ba.is_blocked=true,";
+        where += " ba.is_blocked=true AND";
         return this;
     }
 
     @Override
     public RequestBuilder showOnlyUnblocked() {
-        where += " ba.is_blocked=false,";
+        where += " ba.is_blocked=false AND";
         return this;
     }
 
@@ -97,7 +101,7 @@ public class RequestBuilder implements IRequestBuilder {
         String additionToRequest = "";
 
         if (!where.isEmpty()) {
-            additionToRequest += " where" + where.substring(0, where.length() - 1);
+            additionToRequest += " where" + where.substring(0, where.length() - 3);
             where = "";
         }
 
@@ -106,7 +110,11 @@ public class RequestBuilder implements IRequestBuilder {
             orderBy = "";
         }
 
-        return new Request(Request.getBaseRequest() + additionToRequest);
+        Request finalRequest=new Request(Request.getBaseRequest() + additionToRequest);
+
+        logger.info(finalRequest);
+
+        return finalRequest;
     }
 
 

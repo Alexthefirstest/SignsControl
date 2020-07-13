@@ -1,5 +1,6 @@
 package by.epam.bank.service.impl;
 
+import by.epam.bank.bean.Transaction;
 import by.epam.bank.dao.IFinanceOperationsManager;
 import by.epam.bank.dao.exceptions.DAOException;
 import by.epam.bank.dao.exceptions.DAOValidationException;
@@ -13,7 +14,7 @@ public class FinanceOperationsManagerService implements IFinanceOperationsManage
     private static IFinanceOperationsManager fom = DaoFactory.getINSTANCE().getFinanceOperationsManager();
 
     @Override
-    public int transferMoney(int organisationIDFrom, int organisationIDTo, double money) throws ServiceException {
+    public Transaction transferMoney(int organisationIDFrom, int organisationIDTo, double money) throws ServiceException {
         try {
             return fom.transferMoney(organisationIDFrom, organisationIDTo, money);
         } catch (DAOValidationException ex) {
@@ -24,9 +25,9 @@ public class FinanceOperationsManagerService implements IFinanceOperationsManage
     }
 
     @Override
-    public boolean addMoney(int organisationID, double money) throws ServiceException {
+    public Transaction addMoney(int bankID, int organisationID, double money) throws ServiceException {
         try {
-            return fom.addMoney(organisationID, money);
+            return fom.addMoney(bankID, organisationID, money);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

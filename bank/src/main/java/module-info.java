@@ -7,7 +7,7 @@ module bank {
     requires java.sql;
 
     exports by.epam.bank.bean;
-//    exports by.epam.orders.service;
-//    exports by.epam.orders.service.factory;
-//    exports by.epam.orders.service.exceptions;
+    exports by.epam.bank.service;
+    exports by.epam.bank.service.factory;
+    exports by.epam.bank.service.exceptions;
 }

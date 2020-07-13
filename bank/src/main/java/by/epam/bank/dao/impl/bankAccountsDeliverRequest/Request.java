@@ -24,4 +24,11 @@ public class Request implements IRequest {
         return request;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Request{");
+        sb.append("request='").append(request).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

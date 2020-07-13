@@ -22,7 +22,6 @@ public class AddPDDSignFormHandler implements Command {
         logger.info("inside execute");
 
 
-
         //logger.info(request.getPart("picture").getInputStream());
         logger.info(request.getParameter("pdd_section"));
         logger.info(request.getParameter("pdd_sign"));
@@ -30,7 +29,7 @@ public class AddPDDSignFormHandler implements Command {
         logger.info(request.getParameter("name"));
         logger.info(request.getParameter("description"));
         logger.info(request.getParameter("picture"));
-//        logger.info(request.getPart("picture"));
+//       logger.info(request.getPart("picture"));
 
         logger.info("after form");
 

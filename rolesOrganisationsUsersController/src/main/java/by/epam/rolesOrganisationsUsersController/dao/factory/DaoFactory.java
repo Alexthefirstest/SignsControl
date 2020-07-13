@@ -1,9 +1,9 @@
 package by.epam.rolesOrganisationsUsersController.dao.factory;
 
+import by.epam.rolesOrganisationsUsersController.dao.IOrganisationsController;
 import by.epam.rolesOrganisationsUsersController.dao.IRolesController;
 import by.epam.rolesOrganisationsUsersController.dao.IUsersController;
 import by.epam.rolesOrganisationsUsersController.dao.impl.OrganisationsController;
-import by.epam.rolesOrganisationsUsersController.dao.IOrganisationsController;
 import by.epam.rolesOrganisationsUsersController.dao.impl.RolesController;
 import by.epam.rolesOrganisationsUsersController.dao.impl.UsersController;
 

@@ -9,7 +9,7 @@ public interface IOrdersControl {
     Order addOrder(int signList, int sign, int sign_standard_size, int customer, int typeOfWork, String info) throws DAOException;
 
 
-    Order addOrder(int signList, int sign, int sign_standard_size, int customer, int transaction, String info, int typeOfWork) throws DAOException;
+    Order addOrder(int signList, int sign, int sign_standard_size, int customer, int typeOfWork, String info, int transaction) throws DAOException;
 
     Boolean setTransaction(int orderID, int transactionID) throws DAOException;
 

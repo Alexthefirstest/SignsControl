@@ -40,6 +40,9 @@ public class BankAccountsDeliver implements IBankAccountsDeliver {
 
         String selectRequest = selectRequestHolder.getRequest();
 
+        logger.info(selectRequest);
+
+
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectRequest)) {
 
             rs = preparedStatement.executeQuery();

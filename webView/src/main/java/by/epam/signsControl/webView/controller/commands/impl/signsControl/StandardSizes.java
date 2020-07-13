@@ -28,6 +28,6 @@ public class StandardSizes implements Command {
         }
 
 
-        request.getRequestDispatcher("/WEB-INF/jsp/standard_sizes.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/signs_control/standard_sizes.jsp").forward(request, response);
     }
 }

@@ -3,12 +3,14 @@ package by.epam.bank.service.factory;
 import by.epam.bank.service.IBankAccountsDeliverService;
 import by.epam.bank.service.IBankAccountsManagerService;
 import by.epam.bank.service.IFinanceOperationsManagerService;
-import by.epam.bank.service.IRequestBuilder;
+import by.epam.bank.service.IOrganisationsDeliverService;
+import by.epam.bank.service.IRequestBuilderService;
 import by.epam.bank.service.ITransactionsDeliverService;
 import by.epam.bank.service.impl.BankAccountsDeliverService;
 import by.epam.bank.service.impl.BankAccountsManagerService;
 import by.epam.bank.service.impl.FinanceOperationsManagerService;
-import by.epam.bank.service.impl.RequestBuilder;
+import by.epam.bank.service.impl.OrganisationsDeliverService;
+import by.epam.bank.service.impl.RequestBuilderService;
 import by.epam.bank.service.impl.TransactionsDeliverService;
 
 public class ServiceFactory {
@@ -27,7 +29,7 @@ public class ServiceFactory {
     private final IBankAccountsManagerService bankAccountsManager = new BankAccountsManagerService();
     private final IFinanceOperationsManagerService financeOperationsManager = new FinanceOperationsManagerService();
     private final ITransactionsDeliverService transactionsDeliver = new TransactionsDeliverService();
-    private final IRequestBuilder requestBuilder = new RequestBuilder();
+    private final IOrganisationsDeliverService organisationsDeliver = new OrganisationsDeliverService();
 
 
     public IBankAccountsDeliverService getBankAccountsDeliver() {
@@ -46,7 +48,13 @@ public class ServiceFactory {
         return transactionsDeliver;
     }
 
-    public IRequestBuilder getRequestBuilder() {
-        return requestBuilder;
+    public IRequestBuilderService getRequestBuilder() {
+        return new RequestBuilderService();
     }
+
+    public IOrganisationsDeliverService getOrganisationsDeliver() {
+        return organisationsDeliver;
+    }
+
+
 }

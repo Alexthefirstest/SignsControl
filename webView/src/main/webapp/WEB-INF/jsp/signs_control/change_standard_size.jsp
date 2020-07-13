@@ -19,7 +19,7 @@
 </head>
 
 <body>
-<jsp:include page="header.jsp"/>
+<jsp:include page="../header.jsp"/>
 <form action='${pageContext.request.contextPath}/change_standard_size_form' method="post" accept-charset="UTF-8">
 
 

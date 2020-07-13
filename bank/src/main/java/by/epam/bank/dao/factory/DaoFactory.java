@@ -3,9 +3,11 @@ package by.epam.bank.dao.factory;
 import by.epam.bank.dao.IBankAccountsDeliver;
 import by.epam.bank.dao.IBankAccountsManager;
 import by.epam.bank.dao.IFinanceOperationsManager;
+import by.epam.bank.dao.IOrganisationsDeliver;
 import by.epam.bank.dao.IRequestBuilder;
 import by.epam.bank.dao.ITransactionsDeliver;
 import by.epam.bank.dao.impl.BankAccountsDeliver;
+import by.epam.bank.dao.impl.OrganisationDeliver;
 import by.epam.bank.dao.impl.SQLBankAccountsManager;
 import by.epam.bank.dao.impl.SQLFinanceOperationsManager;
 import by.epam.bank.dao.impl.TransactionsDeliver;
@@ -24,7 +26,8 @@ public class DaoFactory {
     private final IBankAccountsManager bankAccountsManager = new SQLBankAccountsManager();
     private final IFinanceOperationsManager financeOperationsManager = new SQLFinanceOperationsManager();
     private final ITransactionsDeliver transactionsDeliver = new TransactionsDeliver();
-    private final IRequestBuilder requestBuilder =  new RequestBuilder();
+    private final IOrganisationsDeliver organisationsDeliver = new OrganisationDeliver();
+    // private final IRequestBuilder requestBuilder =  new RequestBuilder();
 
     public static DaoFactory getINSTANCE() {
         return INSTANCE;
@@ -47,6 +50,14 @@ public class DaoFactory {
     }
 
     public IRequestBuilder getRequestBuilder() {
-        return requestBuilder;
+        return new RequestBuilder();
     }
+
+    public IOrganisationsDeliver getOrganisationsDeliver() {
+        return organisationsDeliver;
+    }
+
+//    public IRequestBuilder getRequestBuilder() {
+//        return requestBuilder;
+//    }
 }

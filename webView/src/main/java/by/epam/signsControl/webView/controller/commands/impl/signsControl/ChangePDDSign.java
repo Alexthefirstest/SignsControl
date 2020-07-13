@@ -33,6 +33,6 @@ public class ChangePDDSign  implements Command {
         }
 
 
-        request.getRequestDispatcher("/WEB-INF/jsp/change_standard_size.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/signs_control/change_standard_size.jsp").forward(request, response);
     }
 }

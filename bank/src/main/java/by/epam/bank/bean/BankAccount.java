@@ -12,11 +12,11 @@ public class BankAccount implements Serializable {
     }
 
     public BankAccount(Organisation organisation, double balance,
-                       double minAllowedBalance, boolean isBlocked, String info) {
+                       double minAllowedBalance, boolean blocked, String info) {
         this.organisation = organisation;
         this.balance = balance;
         this.minAllowedBalance = minAllowedBalance;
-        this.isBlocked = isBlocked;
+        this.blocked = blocked;
         this.info = info;
     }
 
@@ -24,7 +24,7 @@ public class BankAccount implements Serializable {
     private Organisation organisation;
     private double minAllowedBalance;
     private double balance;
-    private boolean isBlocked;
+    private boolean blocked;
     private String info;
 
     public double getMinAllowedBalance() {
@@ -52,11 +52,11 @@ public class BankAccount implements Serializable {
     }
 
     public boolean isBlocked() {
-        return isBlocked;
+        return blocked;
     }
 
     public void setBlocked(boolean blocked) {
-        isBlocked = blocked;
+        this.blocked = blocked;
     }
 
     public String getInfo() {
@@ -76,7 +76,7 @@ public class BankAccount implements Serializable {
 
         if (Double.compare(that.minAllowedBalance, minAllowedBalance) != 0) return false;
         if (Double.compare(that.balance, balance) != 0) return false;
-        if (isBlocked != that.isBlocked) return false;
+        if (blocked != that.blocked) return false;
         if (organisation != null ? !organisation.equals(that.organisation) : that.organisation != null) return false;
         return info != null ? info.equals(that.info) : that.info == null;
     }
@@ -90,7 +90,7 @@ public class BankAccount implements Serializable {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(balance);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (isBlocked ? 1 : 0);
+        result = 31 * result + (blocked ? 1 : 0);
         result = 31 * result + (info != null ? info.hashCode() : 0);
         return result;
     }
@@ -101,7 +101,7 @@ public class BankAccount implements Serializable {
         sb.append("organisation=").append(organisation);
         sb.append(", minAllowedBalance=").append(minAllowedBalance);
         sb.append(", balance=").append(balance);
-        sb.append(", isBlocked=").append(isBlocked);
+        sb.append(", isBlocked=").append(blocked);
         sb.append(", info='").append(info).append('\'');
         sb.append('}');
         return sb.toString();

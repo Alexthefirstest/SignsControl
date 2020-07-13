@@ -16,7 +16,7 @@
 </head>
 
 <body>
-<jsp:include page="header.jsp"/>
+<jsp:include page="../header.jsp"/>
 <p><a href="${pageContext.request.contextPath}/add_pdd_sign">add sign</a>
 
     <c:forEach var="sign" items='${pdd_signs}'>

@@ -1,12 +1,12 @@
 package by.epam.orders.dao.impl;
 
 import by.epam.orders.bean.TypeOfWork;
-import by.epam.orders.dao.ITypeOfWorControl;
+import by.epam.orders.dao.ITypeOfWorkControl;
 import by.epam.orders.dao.exceptions.DAOException;
 
 import java.sql.SQLException;
 
-public class TypeOfWorkControl implements ITypeOfWorControl {
+public class TypeOfWorkControl implements ITypeOfWorkControl {
 
     private static final String SQL_ADD = "INSERT INTO `type_of_work` (`id`, `type`) VALUES (?, ?);";
     private static final String SQL_SELECT_BY_LAST_INSERT_ID = "SELECT * FROM type_of_work where id = LAST_INSERT_ID()";

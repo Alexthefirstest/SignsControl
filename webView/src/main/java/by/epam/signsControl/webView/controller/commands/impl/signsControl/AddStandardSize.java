@@ -19,6 +19,6 @@ public class AddStandardSize implements Command {
 
         logger.info("inside execute");
 
-        request.getRequestDispatcher("/WEB-INF/jsp/add_standard_size.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/signs_control/add_standard_size.jsp").forward(request, response);
     }
 }
