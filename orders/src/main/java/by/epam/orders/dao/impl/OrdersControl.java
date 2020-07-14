@@ -1,5 +1,6 @@
 package by.epam.orders.dao.impl;
 
+import by.epam.orders.bean.MapPoint$Orders;
 import by.epam.orders.bean.Order;
 import by.epam.orders.dao.IOrdersControl;
 import by.epam.orders.dao.exceptions.DAOException;
@@ -35,6 +36,22 @@ public class OrdersControl implements IOrdersControl {
                     "join type_of_work as tow on tow.id = ord.type_of_work " +
                     "order by date_of_execution, date_of_order";
 
+    private static final String GET_ORDERS_MAP_POINT =
+            "SELECT ord.id, ord.sign_list, ord.date_of_order, ord.date_of_execution, ord.info, ord.sign_standard_size, ord.workers_crew,  " +
+                    " ps.id, pdd_section, pdd_sign, pdd_kind, picture, ps.name, ps.description,  " +
+                    " o1.id, o1.name, o1.role, orr1.role,  o1.is_blocked, o1.info,  " +
+                    " tr.id, tr.money,  " +
+                    "tow.id,  " +
+                    "tow.type, " +
+                    "ST_AsText(mp.coordinates) as coords, mp.address, directions.direction, mp.annotation " +
+                    "FROM orders as ord  " +
+                    "join pdd_signs as ps on ps.id = ord.sign  " +
+                    "join organisations as o1 on o1.id=ord.customer join organisation_roles as orr1 on o1.role=orr1.id  " +
+                    "join map_points as mp on mp.signs_list = ord.sign_list join directions on mp.direction=directions.id  " +
+                    " left join transactions as tr on ord.transaction = tr.id  " +
+                    "join type_of_work as tow on tow.id = ord.type_of_work  " +
+                    "order by mp.coordinates, mp.signs_list, date_of_execution, date_of_order";
+
     private static final String GET_ORDERS_BY_ID =
             "SELECT ord.id, ord.sign_list, ord.date_of_order, ord.date_of_execution, ord.info, ord.sign_standard_size, ord.workers_crew, " +
                     "ps.id, pdd_section, pdd_sign, pdd_kind, picture, ps.name, ps.description, " +
@@ -61,8 +78,25 @@ public class OrdersControl implements IOrdersControl {
                     "join organisations as o1 on o1.id=ord.customer join organisation_roles as orr1 on o1.role=orr1.id " +
                     "left join transactions as tr on ord.transaction = tr.id " +
                     "join type_of_work as tow on tow.id = ord.type_of_work " +
-                    "where ord.date_of_execution is not null" +
+                    "where ord.date_of_execution is not null " +
                     "order by date_of_execution, date_of_order";
+
+    private static final String GET_EXECUTED_ORDERS_MAP_POINT =
+            "SELECT ord.id, ord.sign_list, ord.date_of_order, ord.date_of_execution, ord.info, ord.sign_standard_size, ord.workers_crew,  " +
+                    " ps.id, pdd_section, pdd_sign, pdd_kind, picture, ps.name, ps.description,  " +
+                    " o1.id, o1.name, o1.role, orr1.role,  o1.is_blocked, o1.info,  " +
+                    " tr.id, tr.money,  " +
+                    "tow.id,  " +
+                    "tow.type, " +
+                    "ST_AsText(mp.coordinates) as coords, mp.address, directions.direction, mp.annotation " +
+                    "FROM orders as ord  " +
+                    "join pdd_signs as ps on ps.id = ord.sign  " +
+                    "join organisations as o1 on o1.id=ord.customer join organisation_roles as orr1 on o1.role=orr1.id  " +
+                    "join map_points as mp on mp.signs_list = ord.sign_list join directions on mp.direction=directions.id  " +
+                    " left join transactions as tr on ord.transaction = tr.id  " +
+                    "join type_of_work as tow on tow.id = ord.type_of_work  " +
+                    "where ord.date_of_execution is not null " +
+                    "order by mp.coordinates, mp.signs_list, date_of_execution, date_of_order";
 
     private static final String GET_UNEXECUTED_ORDERS =
             "SELECT ord.id, ord.sign_list, ord.date_of_order, ord.date_of_execution, ord.info, ord.sign_standard_size, ord.workers_crew, " +
@@ -76,8 +110,25 @@ public class OrdersControl implements IOrdersControl {
                     "join organisations as o1 on o1.id=ord.customer join organisation_roles as orr1 on o1.role=orr1.id " +
                     "left join transactions as tr on ord.transaction = tr.id " +
                     "join type_of_work as tow on tow.id = ord.type_of_work " +
-                    "where ord.date_of_execution is null" +
+                    "where ord.date_of_execution is null " +
                     "order by date_of_execution, date_of_order";
+
+    private static final String GET_UNEXECUTED_ORDERS_MAP_POINT =
+            "SELECT ord.id, ord.sign_list, ord.date_of_order, ord.date_of_execution, ord.info, ord.sign_standard_size, ord.workers_crew,  " +
+                    " ps.id, pdd_section, pdd_sign, pdd_kind, picture, ps.name, ps.description,  " +
+                    " o1.id, o1.name, o1.role, orr1.role,  o1.is_blocked, o1.info,  " +
+                    " tr.id, tr.money,  " +
+                    "tow.id,  " +
+                    "tow.type, " +
+                    "ST_AsText(mp.coordinates) as coords, mp.address, directions.direction, mp.annotation " +
+                    "FROM orders as ord  " +
+                    "join pdd_signs as ps on ps.id = ord.sign  " +
+                    "join organisations as o1 on o1.id=ord.customer join organisation_roles as orr1 on o1.role=orr1.id  " +
+                    "join map_points as mp on mp.signs_list = ord.sign_list join directions on mp.direction=directions.id  " +
+                    " left join transactions as tr on ord.transaction = tr.id  " +
+                    "join type_of_work as tow on tow.id = ord.type_of_work  " +
+                    "where ord.date_of_execution is null " +
+                    "order by mp.coordinates, mp.signs_list, date_of_execution, date_of_order";
 
     private static final String GET_ORDERS_LAST_INSERTED_ID =
             "SELECT ord.id, ord.sign_list, ord.date_of_order, ord.date_of_execution, ord.info, ord.sign_standard_size, ord.workers_crew, " +
@@ -226,6 +277,48 @@ public class OrdersControl implements IOrdersControl {
         try {
 
             return (Order[]) RequestExecutor.getSignsStaff(GET_UNEXECUTED_ORDERS, new Order());
+
+        } catch (SQLException ex) {
+
+
+            throw new DAOException(ex);
+
+        }
+    }
+
+    @Override
+    public MapPoint$Orders[] getOrdersMapPoint() throws DAOException {
+        try {
+
+            return (MapPoint$Orders[]) RequestExecutor.getSignsStaff(GET_ORDERS_MAP_POINT, new MapPoint$Orders());
+
+        } catch (SQLException ex) {
+
+
+            throw new DAOException(ex);
+
+        }
+    }
+
+    @Override
+    public MapPoint$Orders[] getExecutedOrdersMapPoint() throws DAOException {
+        try {
+
+            return (MapPoint$Orders[]) RequestExecutor.getSignsStaff(GET_EXECUTED_ORDERS_MAP_POINT, new MapPoint$Orders());
+
+        } catch (SQLException ex) {
+
+
+            throw new DAOException(ex);
+
+        }
+    }
+
+    @Override
+    public MapPoint$Orders[] getUnExecutedOrdersMapPoint() throws DAOException {
+        try {
+
+            return (MapPoint$Orders[]) RequestExecutor.getSignsStaff(GET_UNEXECUTED_ORDERS_MAP_POINT, new MapPoint$Orders());
 
         } catch (SQLException ex) {
 

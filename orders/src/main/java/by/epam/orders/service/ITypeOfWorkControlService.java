@@ -11,4 +11,5 @@ public interface ITypeOfWorkControlService {
 
     TypeOfWork[] getTypesOfWork() throws ServiceException;
 
+
 }

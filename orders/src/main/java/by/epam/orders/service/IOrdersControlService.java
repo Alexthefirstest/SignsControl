@@ -1,5 +1,6 @@
 package by.epam.orders.service;
 
+import by.epam.orders.bean.MapPoint$Orders;
 import by.epam.orders.bean.Order;
 import by.epam.orders.service.exceptions.ServiceException;
 
@@ -21,7 +22,14 @@ public interface IOrdersControlService {
     Boolean setInfo(int orderID, String info) throws ServiceException;
 
     Order[] getOrders() throws ServiceException;
+
     Order[] getExecutedOrders() throws ServiceException;
+
     Order[] getUnExecutedOrders() throws ServiceException;
 
+    MapPoint$Orders[] getOrdersMapPoint() throws ServiceException;
+
+    MapPoint$Orders[] getExecutedOrdersMapPoint() throws ServiceException;
+
+    MapPoint$Orders[] getUnExecutedOrdersMapPoint() throws ServiceException;
 }

@@ -8,7 +8,21 @@ import by.epam.signsControl.bean.StandardSize;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Order implements Serializable, FactoryType {
+public class Order implements Serializable, FactoryType, Cloneable {
+
+    @Override
+    protected Object clone() {
+        try {
+            Order order = (Order) super.clone();
+            order.sign = this.getSign();
+            order.customerOrganisation = this.getCustomerOrganisation();
+            order.typeOFWork = this.getTypeOFWork();
+            return order;
+        } catch (CloneNotSupportedException e) {
+            // this shouldn't happen, since we are Cloneable
+            throw new InternalError(e);
+        }
+    }
 
     private static final long serialVersionUID = -2927331317579971691L;
 
@@ -37,8 +51,8 @@ public class Order implements Serializable, FactoryType {
         this.sign = sign;
         this.standardSize = standardSize;
         this.customerOrganisation = customerOrganisation;
-        this.transactionID=transactionID;
-        this.transactionMoney=transactionMoney;
+        this.transactionID = transactionID;
+        this.transactionMoney = transactionMoney;
         this.typeOFWork = typeOFWork;
         this.workersCrew = workersCrew;
         this.dateOfOrder = dateOfOrder;
@@ -61,7 +75,7 @@ public class Order implements Serializable, FactoryType {
     }
 
     public void setSign(Sign sign) {
-        this.sign = sign;
+        this.sign = (Sign) sign.clone();
     }
 
     public int getStandardSize() {
@@ -73,7 +87,7 @@ public class Order implements Serializable, FactoryType {
     }
 
     public Organisation getCustomerOrganisation() {
-        return customerOrganisation;
+        return (Organisation) customerOrganisation.clone();
     }
 
     public void setCustomerOrganisation(Organisation customerOrganisation) {
@@ -105,7 +119,9 @@ public class Order implements Serializable, FactoryType {
     }
 
     public TypeOfWork getTypeOFWork() {
-        return typeOFWork;
+
+        return (TypeOfWork) typeOFWork.clone();
+
     }
 
     public void setTypeOFWork(TypeOfWork typeOFWork) {

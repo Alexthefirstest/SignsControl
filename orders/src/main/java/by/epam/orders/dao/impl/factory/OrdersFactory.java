@@ -1,6 +1,7 @@
 package by.epam.orders.dao.impl.factory;
 
 
+import by.epam.orders.bean.MapPoint$Orders;
 import by.epam.orders.bean.Order;
 import by.epam.orders.bean.TypeOfWork;
 import by.epam.orders.bean.WorkersCrew;
@@ -10,6 +11,7 @@ import by.epam.rolesOrganisationsUsersController.bean.User;
 import by.epam.orders.bean.FactoryType;
 
 import by.epam.orders.dao.exceptions.DAOValidationException;
+import by.epam.signsControl.bean.MapPoint;
 import by.epam.signsControl.bean.Sign;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -135,6 +137,59 @@ public class OrdersFactory {
             } while (next);
 
             return signsStaffArr.toArray(new WorkersCrew[0]);
+        }
+
+
+        if (signsStaff instanceof MapPoint$Orders) {
+
+            ArrayList<FactoryType> mapPoint$OrdersArr = new ArrayList<>();
+
+            MapPoint mapPoint;
+
+            ArrayList<Order> orders;
+
+
+            boolean stillNext = rs.next();
+
+            while (stillNext) {
+
+                orders = new ArrayList<>();
+                mapPoint = new MapPoint();
+
+                mapPoint.setCoordinates(rs.getString(25));
+
+                do {
+
+
+                    mapPoint.addAddress(rs.getString(26));
+                    mapPoint.addAngle(rs.getString(27).charAt(0));
+                    mapPoint.addAnnotation(rs.getString(28));
+                    mapPoint.addSignsList(rs.getInt(2));
+
+
+                    do {
+                        orders.add((new Order(rs.getInt(1), rs.getInt(2),
+                                new Sign(rs.getInt(8), rs.getInt(9), rs.getInt(10), rs.getInt(11),
+                                        rs.getBytes(12), rs.getString(13), rs.getString(14)), rs.getInt(6),
+                                new Organisation(rs.getInt(15), rs.getString(16),
+                                        new Role(rs.getInt(17), rs.getString(18)), rs.getBoolean(19),
+                                        rs.getString(20)),
+                                rs.getInt(21), rs.getDouble(22),
+                                new TypeOfWork(rs.getInt(23), rs.getString(24)),
+                                rs.getInt(7), rs.getTimestamp(3),
+                                rs.getTimestamp(4), rs.getString(5))));
+
+                    } while ((stillNext = rs.next()) && rs.getInt(2) == orders.get(0).getSignList());
+
+
+                } while (stillNext && rs.getString(25).equals(mapPoint.getCoordinates()));
+
+                mapPoint$OrdersArr.add(new MapPoint$Orders(mapPoint, orders));
+            }
+
+            return mapPoint$OrdersArr.toArray(new MapPoint$Orders[0]);
+
+
         }
 
         if (signsStaff instanceof TypeOfWork) {

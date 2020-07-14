@@ -1,5 +1,6 @@
 package by.epam.orders.service.impl;
 
+import by.epam.orders.bean.MapPoint$Orders;
 import by.epam.orders.bean.Order;
 import by.epam.orders.dao.IOrdersControl;
 import by.epam.orders.dao.exceptions.DAOException;
@@ -134,6 +135,42 @@ public class OrdersControlService implements IOrdersControlService {
         try {
 
             return ordersControl.getUnExecutedOrders();
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public MapPoint$Orders[] getOrdersMapPoint() throws ServiceException {
+        try {
+
+            return ordersControl.getOrdersMapPoint();
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public MapPoint$Orders[] getExecutedOrdersMapPoint() throws ServiceException {
+        try {
+
+            return ordersControl.getExecutedOrdersMapPoint();
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public MapPoint$Orders[] getUnExecutedOrdersMapPoint() throws ServiceException {
+        try {
+
+            return ordersControl.getUnExecutedOrdersMapPoint();
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

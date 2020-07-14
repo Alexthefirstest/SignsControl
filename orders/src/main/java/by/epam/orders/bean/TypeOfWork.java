@@ -2,7 +2,17 @@ package by.epam.orders.bean;
 
 import java.io.Serializable;
 
-public class TypeOfWork implements Serializable, FactoryType {
+public class TypeOfWork implements Serializable, FactoryType, Cloneable {
+
+    @Override
+    protected Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            // this shouldn't happen, since we are Cloneable
+            throw new InternalError(e);
+        }
+    }
 
     private static final long serialVersionUID = 1493709820799992287L;
 
