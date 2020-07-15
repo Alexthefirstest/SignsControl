@@ -22,6 +22,7 @@ public interface IWorkersCrewControl {
     WorkersCrew[] getActiveWorkersCrews() throws DAOException;
 
     WorkersCrew[] getWorkersCrews(int organisationID) throws DAOException;
+    WorkersCrew[] getWorkersCrewsByUser(int userID) throws DAOException;
 
     WorkersCrew[] getEmptyWorkersCrews() throws DAOException;
 

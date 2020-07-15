@@ -36,6 +36,22 @@ public class OrdersControl implements IOrdersControl {
                     "join type_of_work as tow on tow.id = ord.type_of_work " +
                     "order by date_of_execution, date_of_order";
 
+    private static final String GET_ORDERS_BY_COORDINATES =
+            "SELECT ord.id, ord.sign_list, ord.date_of_order, ord.date_of_execution, ord.info, ord.sign_standard_size, ord.workers_crew, " +
+                    "ps.id, pdd_section, pdd_sign, pdd_kind, picture, ps.name, ps.description, " +
+                    "o1.id, o1.name, o1.role, orr1.role,  o1.is_blocked, o1.info, " +
+                    "tr.id, tr.money, " +
+                    "tow.id, " +
+                    "tow.type " +
+                    "FROM orders as ord  " +
+                    "join pdd_signs as ps on ps.id = ord.sign " +
+                    "join organisations as o1 on o1.id=ord.customer join organisation_roles as orr1 on o1.role=orr1.id " +
+                    "join map_points as mp on mp.signs_list = ord.sign_list " +
+                    "left join transactions as tr on ord.transaction = tr.id " +
+                    "join type_of_work as tow on tow.id = ord.type_of_work " +
+                    "where  mp.coordinates=st_geomfromtext(?) " +
+                    "order by ord.id DESC";
+
     private static final String GET_ORDERS_MAP_POINT =
             "SELECT ord.id, ord.sign_list, ord.date_of_order, ord.date_of_execution, ord.info, ord.sign_standard_size, ord.workers_crew,  " +
                     " ps.id, pdd_section, pdd_sign, pdd_kind, picture, ps.name, ps.description,  " +
@@ -291,6 +307,20 @@ public class OrdersControl implements IOrdersControl {
         try {
 
             return (MapPoint$Orders[]) RequestExecutor.getSignsStaff(GET_ORDERS_MAP_POINT, new MapPoint$Orders());
+
+        } catch (SQLException ex) {
+
+
+            throw new DAOException(ex);
+
+        }
+    }
+
+    @Override
+    public Order[] getOrdersMapPoint(String coordinates) throws DAOException {
+        try {
+
+            return (Order[]) RequestExecutor.getSignsStaff(GET_ORDERS_BY_COORDINATES, new Order(), coordinates);
 
         } catch (SQLException ex) {
 

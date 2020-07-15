@@ -9,6 +9,10 @@ import by.epam.signsControl.webView.controller.commands.impl.bank.ChangeBankAcco
 import by.epam.signsControl.webView.controller.commands.impl.bank.CreateBankAccount;
 import by.epam.signsControl.webView.controller.commands.impl.bank.ShowBankAccounts;
 import by.epam.signsControl.webView.controller.commands.impl.bank.ShowTransactionsHistory;
+import by.epam.signsControl.webView.controller.commands.impl.orders.AddOrderFormHandler;
+import by.epam.signsControl.webView.controller.commands.impl.orders.GetOrders;
+import by.epam.signsControl.webView.controller.commands.impl.orders.GetOrdersChangeInfo;
+import by.epam.signsControl.webView.controller.commands.impl.orders.GetOrdersJSP;
 import by.epam.signsControl.webView.controller.commands.impl.signsControl.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -62,6 +66,12 @@ class CommandProvider {
 
         commands.put(CommandName.SHOW_TRANSACTIONS_HISTORY, new ShowTransactionsHistory());
         commands.put(CommandName.ADD_MONEY, new AddMoney());
+
+        //orders
+        commands.put(CommandName.SHOW_ORDERS, new GetOrders());
+        commands.put(CommandName.ORDERS, new GetOrdersJSP());
+        commands.put(CommandName.ADD_ORDER, new AddOrderFormHandler());
+        commands.put(CommandName.GET_ORDERS_CHANGE_INFO, new GetOrdersChangeInfo());
 
     }
 

@@ -88,7 +88,7 @@ public class OrdersFactory {
                     rs.getString(20)));
             order.setTransactionID(rs.getInt(21));
             order.setTransactionMoney(rs.getDouble(22));
-            order.setTypeOFWork(new TypeOfWork(rs.getInt(23), rs.getString(24)));
+            order.setTypeOfWork(new TypeOfWork(rs.getInt(23), rs.getString(24)));
 
             return order;
 

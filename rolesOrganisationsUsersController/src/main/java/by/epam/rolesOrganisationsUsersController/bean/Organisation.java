@@ -14,7 +14,9 @@ public class Organisation implements FactoryType, Serializable, Cloneable {
     @Override
     public Object clone() {
         try {
-            return super.clone();
+            Organisation organisation = (Organisation) super.clone();
+            organisation.role = this.getRole();
+            return organisation;
         } catch (CloneNotSupportedException e) {
             // this shouldn't happen, since we are Cloneable
             throw new InternalError(e);
@@ -60,11 +62,11 @@ public class Organisation implements FactoryType, Serializable, Cloneable {
     /**
      * constructor with all parameters
      *
-     * @param id        {@link Organisation#id}
-     * @param name      {@link Organisation#name}
-     * @param role      {@link Organisation#role}
+     * @param id      {@link Organisation#id}
+     * @param name    {@link Organisation#name}
+     * @param role    {@link Organisation#role}
      * @param blocked {@link Organisation#blocked}
-     * @param info      {@link Organisation#info}
+     * @param info    {@link Organisation#info}
      */
     public Organisation(int id, String name, Role role, boolean blocked, String info) {
         this.id = id;

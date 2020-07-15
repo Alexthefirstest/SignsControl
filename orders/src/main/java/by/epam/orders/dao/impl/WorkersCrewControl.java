@@ -55,6 +55,13 @@ public class WorkersCrewControl implements IWorkersCrewControl {
             "  join users as u on u.id=wc.worker  join user_info as ui on u.id=ui.id  join organisations as o on o.id=u.organisation  join user_roles as   " +
             " ur on u.role=ur.id  join organisation_roles as orr on o.role=orr.id where o.id = ?";
 
+  private static final String GET_WORKERS_CREWS_BY_USER = "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked,  " +
+            "  ui.name, ui.surname, ui.info,  " +
+            " c.id, c.creation_date, c.remove_date, c.info  " +
+            " FROM workers_crews as wc right join crews as c on wc.workers_crew_id=c.id  " +
+            "  join users as u on u.id=wc.worker  join user_info as ui on u.id=ui.id  join organisations as o on o.id=u.organisation  join user_roles as   " +
+            " ur on u.role=ur.id  join organisation_roles as orr on o.role=orr.id where u.id = ?";
+
     private static final String GET_EMPTY_WORKERS_CREWS = "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked,  " +
             "  ui.name, ui.surname, ui.info,  " +
             " c.id, c.creation_date, c.remove_date, c.info  " +
@@ -192,6 +199,20 @@ public class WorkersCrewControl implements IWorkersCrewControl {
         try {
 
             return (WorkersCrew []) RequestExecutor.getSignsStaff(GET_WORKERS_CREWS_BY_ORGANISATION, new WorkersCrew(), organisationID);
+
+        } catch (SQLException ex) {
+
+            logger.warn("select all use organisation fail");
+            throw new DAOException(ex);
+
+        }
+    }
+
+    @Override
+    public WorkersCrew[] getWorkersCrewsByUser(int userID) throws DAOException {
+        try {
+
+            return (WorkersCrew []) RequestExecutor.getSignsStaff(GET_WORKERS_CREWS_BY_USER, new WorkersCrew(), userID);
 
         } catch (SQLException ex) {
 

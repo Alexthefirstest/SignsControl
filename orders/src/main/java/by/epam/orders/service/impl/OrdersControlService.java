@@ -155,6 +155,18 @@ public class OrdersControlService implements IOrdersControlService {
     }
 
     @Override
+    public Order[] getOrdersMapPoint(String coordinates) throws ServiceException {
+        try {
+
+            return ordersControl.getOrdersMapPoint(coordinates);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
     public MapPoint$Orders[] getExecutedOrdersMapPoint() throws ServiceException {
         try {
 

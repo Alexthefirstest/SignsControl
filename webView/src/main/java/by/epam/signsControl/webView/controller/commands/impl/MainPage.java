@@ -1,7 +1,8 @@
 package by.epam.signsControl.webView.controller.commands.impl;
 
+import by.epam.orders.service.exceptions.ServiceException;
+import by.epam.orders.service.factory.ServiceFactory;
 import by.epam.signsControl.bean.Direction;
-import by.epam.signsControl.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.controller.commands.Command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,12 +22,14 @@ public class MainPage implements Command {
 
         logger.info("inside execute");
 
-        //get directions
+
         try {
 
-            request.setAttribute("directions", ServiceFactory.getINSTANCE().getDirectionsControlService().getDirections());
+            //if (request.getSession().getAttribute("role") != null) {
 
-        } catch (by.epam.signsControl.service.exceptions.ServiceException e) {
+            request.setAttribute("types_of_work", ServiceFactory.getINSTANCE().getTypeOfWorkControlService().getTypesOfWork());
+            // }
+        } catch (ServiceException e) {
             logger.warn(e);
         }
         //get directions

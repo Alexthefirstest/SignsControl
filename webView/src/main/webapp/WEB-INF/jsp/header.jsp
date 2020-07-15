@@ -13,6 +13,7 @@
     <a href="${pageContext.request.contextPath}/pdd_signs">pdd signs</a>
     <a href="${pageContext.request.contextPath}/standard_sizes">standard sizes</a>
     <a href="${pageContext.request.contextPath}/bank_accounts">bank</a>
+    <a href="${pageContext.request.contextPath}/orders">orders</a>
 </header>
 
 </body>

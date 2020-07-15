@@ -122,6 +122,18 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
     }
 
     @Override
+    public WorkersCrew[] getWorkersCrewsByUser(int userID) throws ServiceException {
+        try {
+
+            return workersCrewControl.getWorkersCrewsByUser(userID);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
     public WorkersCrew[] getEmptyWorkersCrews() throws ServiceException {
         try {
 

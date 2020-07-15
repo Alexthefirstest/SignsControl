@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class MapPoint implements FactoryType, Serializable, Cloneable {
     @Override
-    protected Object clone() {
+    public Object clone() {
         try {
             MapPoint mapPoint = (MapPoint) super.clone();
             mapPoint.addresses = this.getAddresses();

@@ -6,7 +6,7 @@ import java.util.Date;
 public class LocalSign extends Sign implements Serializable, FactoryType, Cloneable {
 
     @Override
-    protected Object clone() {
+    public Object clone() {
 
         LocalSign localSign = (LocalSign) super.clone();
         localSign.dateOfAdd = this.getDateOfAdd();

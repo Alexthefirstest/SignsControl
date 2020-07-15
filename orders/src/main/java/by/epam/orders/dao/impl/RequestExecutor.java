@@ -310,7 +310,7 @@ differentParametersInsideRequest(parameters, ps);
 
     }
 
-    static FactoryType[] getSignsStaff(String request, FactoryType signsStaff, int... parameters) throws SQLException {
+    static FactoryType[] getSignsStaff(String request, FactoryType signsStaff, Object... parameters) throws SQLException {
 
         ResultSet rs = null;
 
@@ -318,7 +318,7 @@ differentParametersInsideRequest(parameters, ps);
 
         try (PreparedStatement ps = connection.prepareStatement(request)) {
 
-            intParametersInsideRequest(parameters, ps);
+            differentParametersInsideRequest(parameters, ps);
 
             rs = ps.executeQuery();
 

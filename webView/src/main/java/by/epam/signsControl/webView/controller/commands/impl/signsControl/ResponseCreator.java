@@ -20,10 +20,10 @@ public class ResponseCreator {
 
     private static final Logger logger = LogManager.getLogger(ResponseCreator.class);
 
-    private static final String JSON_POINT_PATTERN = "{\"type\": \"Feature\", \"id\": , \"geometry\": {\"type\": \"Point\", \"coordinates\": []}, \"properties\": {\"balloonContent\": \"\", \"clusterCaption\" : \"\", \"hintContent\": \"\", \"pointCoordinates\": \"\"}}";
-    private static final String JSON_POINT_ONLY_HINT_PATTERN = "{\"type\": \"Feature\", \"id\": , \"geometry\": {\"type\": \"Point\", \"coordinates\": []}, \"properties\": {\"hintContent\": \"\", \"pointCoordinates\": \"\",\"clusterCaption\":\"\" }}";
-    private static final String JSON_POINTS_START_SUBSTRING = "{\"type\": \"FeatureCollection\",\"features\": [";
-    private static final String JSON_POINTS_FINISH_SUBSTRING = "] }";
+    public static final String JSON_POINT_PATTERN = "{\"type\": \"Feature\", \"id\": , \"geometry\": {\"type\": \"Point\", \"coordinates\": []}, \"properties\": {\"balloonContent\": \"\", \"clusterCaption\" : \"\", \"hintContent\": \"\", \"pointCoordinates\": \"\"}}";
+    public static final String JSON_POINT_ONLY_HINT_PATTERN = "{\"type\": \"Feature\", \"id\": , \"geometry\": {\"type\": \"Point\", \"coordinates\": []}, \"properties\": {\"hintContent\": \"\", \"pointCoordinates\": \"\",\"clusterCaption\":\"\" }}";
+    public static final String JSON_POINTS_START_SUBSTRING = "{\"type\": \"FeatureCollection\",\"features\": [";
+    public static final String JSON_POINTS_FINISH_SUBSTRING = "] }";
 
     private static final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
@@ -70,7 +70,7 @@ public class ResponseCreator {
         return json.toString();
     }
 
-    private static String createSignJSONArr(Sign[] pddSigns) {
+    public static String createSignJSONArr(Sign[] pddSigns) {
 
         StringBuilder json = new StringBuilder("[");
 
@@ -178,7 +178,7 @@ public class ResponseCreator {
         return jsonPoint.toString();
     }
 
-    private static String mysqlCoordinatesToJSONCoordinates(String coordinates) {
+    public static String mysqlCoordinatesToJSONCoordinates(String coordinates) {
         Pattern pattern = Pattern.compile("POINT\\((\\d+\\.?\\d*) (\\d+\\.?\\d*)\\)");
         Matcher matcher = pattern.matcher(coordinates);
 
@@ -190,7 +190,7 @@ public class ResponseCreator {
         return matcher.group(1) + ", " + matcher.group(2);
     }
 
-    private static String createHint(MapPoint mapPoint) {
+    public static String createHint(MapPoint mapPoint) {
 
         // String annotation;
 
@@ -309,11 +309,11 @@ public class ResponseCreator {
         return sb.toString();
     }
 
-    private static String createSign(int section, int sign, int kind) {
+    public static String createSign(int section, int sign, int kind) {
         return (section + "." + sign + ((kind > -1) ? ("." + kind) : ""));
     }
 
-    private static String createSignWithQuotes(int section, int sign, int kind) {
+    public static String createSignWithQuotes(int section, int sign, int kind) {
 
         return ("\"" + section + "." + sign + ((kind > -1) ? ("." + kind) : "") + '\"');
     }

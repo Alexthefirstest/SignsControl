@@ -16,7 +16,7 @@ public class Order implements Serializable, FactoryType, Cloneable {
             Order order = (Order) super.clone();
             order.sign = this.getSign();
             order.customerOrganisation = this.getCustomerOrganisation();
-            order.typeOFWork = this.getTypeOFWork();
+            order.typeOfWork = this.getTypeOfWork();
             return order;
         } catch (CloneNotSupportedException e) {
             // this shouldn't happen, since we are Cloneable
@@ -33,7 +33,7 @@ public class Order implements Serializable, FactoryType, Cloneable {
     private Organisation customerOrganisation;
     private int transactionID;
     private double transactionMoney;
-    private TypeOfWork typeOFWork;
+    private TypeOfWork typeOfWork;
     private int workersCrew;
     private Timestamp dateOfOrder;
     private Timestamp dateOfExecution;
@@ -44,7 +44,7 @@ public class Order implements Serializable, FactoryType, Cloneable {
 
 
     public Order(int id, int signList, Sign sign, int standardSize, Organisation customerOrganisation,
-                 int transactionID, double transactionMoney, TypeOfWork typeOFWork, int workersCrew, Timestamp dateOfOrder,
+                 int transactionID, double transactionMoney, TypeOfWork typeOfWork, int workersCrew, Timestamp dateOfOrder,
                  Timestamp dateOfExecution, String info) {
         this.id = id;
         this.signList = signList;
@@ -53,7 +53,7 @@ public class Order implements Serializable, FactoryType, Cloneable {
         this.customerOrganisation = customerOrganisation;
         this.transactionID = transactionID;
         this.transactionMoney = transactionMoney;
-        this.typeOFWork = typeOFWork;
+        this.typeOfWork = typeOfWork;
         this.workersCrew = workersCrew;
         this.dateOfOrder = dateOfOrder;
         this.dateOfExecution = dateOfExecution;
@@ -118,14 +118,14 @@ public class Order implements Serializable, FactoryType, Cloneable {
         this.transactionMoney = transactionMoney;
     }
 
-    public TypeOfWork getTypeOFWork() {
+    public TypeOfWork getTypeOfWork() {
 
-        return (TypeOfWork) typeOFWork.clone();
+        return (TypeOfWork) typeOfWork.clone();
 
     }
 
-    public void setTypeOFWork(TypeOfWork typeOFWork) {
-        this.typeOFWork = typeOFWork;
+    public void setTypeOfWork(TypeOfWork typeOfWork) {
+        this.typeOfWork = typeOfWork;
     }
 
     public int getWorkersCrew() {
@@ -176,7 +176,7 @@ public class Order implements Serializable, FactoryType, Cloneable {
         if (sign != null ? !sign.equals(order.sign) : order.sign != null) return false;
         if (customerOrganisation != null ? !customerOrganisation.equals(order.customerOrganisation) : order.customerOrganisation != null)
             return false;
-        if (typeOFWork != null ? !typeOFWork.equals(order.typeOFWork) : order.typeOFWork != null) return false;
+        if (typeOfWork != null ? !typeOfWork.equals(order.typeOfWork) : order.typeOfWork != null) return false;
         if (dateOfOrder != null ? !dateOfOrder.equals(order.dateOfOrder) : order.dateOfOrder != null) return false;
         if (dateOfExecution != null ? !dateOfExecution.equals(order.dateOfExecution) : order.dateOfExecution != null)
             return false;
@@ -195,7 +195,7 @@ public class Order implements Serializable, FactoryType, Cloneable {
         result = 31 * result + transactionID;
         temp = Double.doubleToLongBits(transactionMoney);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (typeOFWork != null ? typeOFWork.hashCode() : 0);
+        result = 31 * result + (typeOfWork != null ? typeOfWork.hashCode() : 0);
         result = 31 * result + workersCrew;
         result = 31 * result + (dateOfOrder != null ? dateOfOrder.hashCode() : 0);
         result = 31 * result + (dateOfExecution != null ? dateOfExecution.hashCode() : 0);
@@ -213,7 +213,7 @@ public class Order implements Serializable, FactoryType, Cloneable {
         sb.append(", customerOrganisation=").append(customerOrganisation);
         sb.append(", transactionID=").append(transactionID);
         sb.append(", transactionMoney=").append(transactionMoney);
-        sb.append(", typeOFWork=").append(typeOFWork);
+        sb.append(", typeOfWork=").append(typeOfWork);
         sb.append(", workersCrew=").append(workersCrew);
         sb.append(", dateOfOrder=").append(dateOfOrder);
         sb.append(", dateOfExecution=").append(dateOfExecution);

@@ -30,6 +30,8 @@ public interface IOrdersControl {
 
     MapPoint$Orders[] getOrdersMapPoint() throws DAOException;
 
+    Order[] getOrdersMapPoint(String coordinates) throws DAOException;
+
     MapPoint$Orders[] getExecutedOrdersMapPoint() throws DAOException;
 
     MapPoint$Orders[] getUnExecutedOrdersMapPoint() throws DAOException;

@@ -20,7 +20,7 @@
 
     <script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
 
-    <script src='${pageContext.request.contextPath}/js/map.js?35' type="text/javascript" charset="UTF-8"></script>
+    <script src='${pageContext.request.contextPath}/js/map.js?40' type="text/javascript" charset="UTF-8"></script>
 
 
     <%--создать css: карта, стандартные объекты на ней--%>
@@ -82,8 +82,10 @@
     </c:otherwise>
 
     </c:choose>
+
     <%-- контент для роли 1 - одд --%>
-    <c:if test='${sessionScope.role==1}'>
+
+    <c:if test="${sessionScope.organisationRole==1}">
 
     <button id="addPointButton">добавить точку</button>
 
@@ -105,6 +107,16 @@
 <form>
     <input type="checkbox" id="change_local_sign_box" name="change_local_sign_box">
     <label for="change_local_sign_box">изменить знак</label>
+</form>
+
+<form>
+    <input type="checkbox" id="addSignOrder" name="addSignOrder">
+    <label for="addSignOrder">добавить заказ</label>
+</form>
+
+<form>
+    <input type="checkbox" id="execute_delete_order" name="execute_delete_order">
+    <label for="execute_delete_order">выполнить изменить заказ</label>
 </form>
     <%--  --%>
 
@@ -198,10 +210,75 @@
 </form>
 
 
+    <%--  добавляет  заказ --%>
+<form action='${pageContext.request.contextPath}/add_order' method="post" id='add_order_form' accept-charset="UTF-8">
+
+ <input type="text" id="customer_id" name="customer_id" value="${sessionScope.organisationID}" pattern="\d+" hidden required>
+
+    <label for="sign_list_order"> direction:</label><select name="sign_list" id='sign_list_order' required> </select>
+
+    <label for="pdd_sign_order"> pdd_sign:</label><select name="pdd_sign" id='pdd_sign_order' required> </select>
+
+    <label for="standard_size_order"> standard_size:</label><select name="standard_size" id='standard_size_order'
+                                                              required> </select>
+      <label for="type_of_work_order"> type of work:</label><select name="type_of_work" id='type_of_work_order'
+                                                              required>
+
+
+                               <c:forEach var="type_of_work" items='${types_of_work}'>
+
+                               <option value='${type_of_work.id}'>${type_of_work.typeOfWork}</option>
+
+                                </c:forEach>
+
+                        </select>
+
+
+    <label for="signAnnotation_order"> annotation:</label><input type="text" id="signAnnotation_order"
+                                                           name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
+
+
+
+    <br><input type="reset" value="сбросить">
+    <input type="submit" value="добавить">
+</form>
+
+     <%--  удаляет/изменяет заказ --%>
+<form action='${pageContext.request.contextPath}/change_delete_order' method="post" id='change_delete_order_form' accept-charset="UTF-8">
+
+
+  <label for="order_id"> order:</label><select name="order_id" id='order_id'
+                                                              required>      </select>
+
+ <label for="order_action"> action:</label><select name="order_action" id='order_action'
+                                                                required>
+    <%--   <c:if test="${sessionScope.organisationRole==1}">  --%>
+
+         <option value='delete'>удалить</option>
+
+      <%-- </select> </c:if>  <c:if test="${sessionScope.organisationRole==3?}">  --%>
+         <option value='execute'>выполнить</option>
+
+                                                                 </select>
+
+   <label for="workers_crews"> workers crew:</label><select name="workers_crew" id='workers_crews'
+                                                                required>      </select>
+
+     <label for="execute_order_info"> annotation:</label><input type="text" id="execute_order_info"
+                                                             name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
+ <%-- </c:if>    --%>
+    <br><input type="reset" value="сбросить">
+    <input type="submit" value="применить">
+</form>
+
     <%--<div id="map" style=" height: 500px"></div>--%>
 
 
 <button id="showEmptyPointsButton">показать пустые точки</button>
+
+<button id="showOrdersButton">показать все заказы</button>
+<button id="showOrdersExecutedButton">показать выполненные заказы</button>
+<button id="showOrdersUnExecutedButton">показать невыполненные заказы</button>
 
 </c:if>
 

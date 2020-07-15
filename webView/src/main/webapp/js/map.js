@@ -235,8 +235,8 @@ function init(ymaps) {
         clusterize: true
     });
 
-    objectManagerEP.objects.options.set('preset', 'islands#redCircleIcon'); //размеры сюда
-    objectManagerEP.clusters.options.set('preset', 'islands#redClusterIcons');
+//    objectManagerEP.objects.options.set('preset', 'islands#redCircleIcon'); //размеры сюда
+//    objectManagerEP.clusters.options.set('preset', 'islands#redClusterIcons');
 
     myMap.geoObjects.add(objectManager);
     myMap.geoObjects.add(objectManagerEP);
@@ -298,11 +298,14 @@ function init(ymaps) {
 
         let objectId = e.get('objectId');
         let coordinates = objectManager.objects.getById(objectId).properties.pointCoordinates;
-        updateSignsHistory(objectId);
+    //    updateSignsHistory(objectId);
+        updateSignsHistory(coordinates);
         updateSignChangeForm(coordinates);
         changeDirectionCoordinates(coordinates);
         updateAddSignForm(coordinates);
         updateDirectionsForm(coordinates);
+        updateAddOrderForm(coordinates);
+        changeOrder(coordinates);
 
     });
 
@@ -311,11 +314,14 @@ function init(ymaps) {
         let objectId = activeObjectMonitor.get('activeObject').id;
 
         let coordinates = objectManager.objects.getById(objectId).properties.pointCoordinates;
-        updateSignsHistory(objectId);
+//        updateSignsHistory(objectId);
+        updateSignsHistory(coordinates);
         updateSignChangeForm(coordinates);
         changeDirectionCoordinates(coordinates);
         updateAddSignForm(coordinates);
         updateDirectionsForm(coordinates);
+        updateAddOrderForm(coordinates);
+        changeOrder(coordinates);
     });
 
     let activeObjectMonitorEP = new ymaps.Monitor(objectManagerEP.clusters.state);
@@ -325,11 +331,14 @@ function init(ymaps) {
         let objectId = e.get('objectId');
 
         let coordinates = objectManagerEP.objects.getById(objectId).properties.pointCoordinates;
-        changeSignsHistoryDiv("empty point");
+//        changeSignsHistoryDiv("empty point");
+updateSignsHistory(coordinates);
         updateSignChangeForm(coordinates);
         changeDirectionCoordinates(coordinates);
         updateAddSignForm(coordinates);
         updateDirectionsForm(coordinates);
+        updateAddOrderForm(coordinates);
+        changeOrder(coordinates);
     });
 
     activeObjectMonitorEP.add('activeObject', function () {
@@ -337,11 +346,14 @@ function init(ymaps) {
         let objectId = activeObjectMonitorEP.get('activeObject').id;
 
         let coordinates = objectManagerEP.objects.getById(objectId).properties.pointCoordinates;
-        changeSignsHistoryDiv("empty point");
+//        changeSignsHistoryDiv("empty point");
+        updateSignsHistory(coordinates);
         updateSignChangeForm(coordinates);
         changeDirectionCoordinates(coordinates);
         updateAddSignForm(coordinates);
         updateDirectionsForm(coordinates);
+        updateAddOrderForm(coordinates);
+        changeOrder(coordinates);
     });
 
 
@@ -368,6 +380,15 @@ function init(ymaps) {
 // ----------------------- локализация карты- начало
 
 window.onload = function () {
+
+        changeDirectionForm = document.getElementById("direction_control_form");
+           changeSignForm = document.getElementById("sign_control_form");
+
+   updateAddSignForm(null);
+        updateDirectionsForm(null);
+        updateSignChangeForm(null);
+        updateAddOrderForm(null);
+        changeOrder(null);
 
     // Получим ссылки на элементы с тегом 'head' и id 'language'.
     let head = document.getElementsByTagName('head')[0];
@@ -490,15 +511,53 @@ window.onload = function () {
 
                 objectManagerEP.removeAll();
 
+  objectManagerEP.objects.options.set('preset', 'islands#redDotIcon'); //размеры сюда
+    objectManagerEP.clusters.options.set('preset', 'islands#invertedRedClusterIcons');
+
                 objectManagerEP.add(data);
             });
 
         });
 
+        //Заказы
+        $(document).on("click", "#showOrdersButton", function () {
+
+
+objectManagerEP.removeAll();
+
+  objectManagerEP.objects.options.set('preset', 'islands#orangeDotIcon'); //размеры сюда
+    objectManagerEP.clusters.options.set('preset', 'islands#invertedDarkOrangeClusterIcons');
+
+         showOrders("all");
+
+        });
+
+        $(document).on("click", "#showOrdersExecutedButton", function () {
+
+objectManagerEP.removeAll();
+
+  objectManagerEP.objects.options.set('preset', 'islands#darkGreenDotIcon'); //размеры сюда
+    objectManagerEP.clusters.options.set('preset', 'islands#invertedDarkGreenClusterIcons');
+
+         showOrders("executed");
+
+        });
+
+        $(document).on("click", "#showOrdersUnExecutedButton", function () {
+
+objectManagerEP.removeAll();
+
+  objectManagerEP.objects.options.set('preset', 'islands#redIcon'); //размеры сюда
+    objectManagerEP.clusters.options.set('preset', 'islands#redClusterIcons');
+
+         showOrders("unexecuted");
+
+        });
+        //заказы/
+
 
         //редактирование направления
         changeDirectionBox = document.getElementById("changeDirectionBox");
-        changeDirectionForm = document.getElementById("direction_control_form");
         oldDirectionsSelect = document.getElementById("old_direction");
 
         $(document).on("change", "#old_direction", function () {
@@ -509,7 +568,7 @@ window.onload = function () {
 
 //редактирование знака
         changeSignBox = document.getElementById("change_local_sign_box");
-        changeSignForm = document.getElementById("sign_control_form");
+
         selectedSign = document.getElementById("sign_info");
 
         $(document).on("change", "#sign_info", function () {
@@ -526,22 +585,21 @@ window.onload = function () {
 
         });
 
-        updateAddSignForm(null);
-        updateDirectionsForm(null);
-        updateSignChangeForm(null);
+
 
     }//add point button !=null
 
 
 }//window.onload;
 
-function updateSignsHistory(objectId) {
+function updateSignsHistory(coordinates) {
 
     if (document.getElementById("signsHistory").checked) {
 
         $.ajax({
             url: ctx + "/get_point_history",
-            data: {"pointCoordinates": objectManager.objects.getById(objectId).properties.pointCoordinates}
+//            data: {"pointCoordinates": objectManager.objects.getById(objectId).properties.pointCoordinates}
+            data: {"pointCoordinates": coordinates}
         }).done(function (data) {
             changeSignsHistoryDiv(data);
 
@@ -701,7 +759,7 @@ function updateDirectionsForm(coordinates) {
 
         changeDirectionForm.style.visibility = 'visible';
     } else {
-        if (changeDirectionBox != null) {
+        if (changeDirectionForm != null) {
             changeDirectionForm.style.visibility = 'hidden';
         }
     }
@@ -811,4 +869,208 @@ function fillDirectionsAdressAnnotation() {
 
 }
 
+function showOrders(request){
+  $.ajax({
 
+                url: ctx +"/show_orders/"+request
+
+            }).done(function (data) {
+
+                objectManagerEP.add(data);
+            });
+}
+
+
+function updateAddOrderForm(coordinates) {
+
+    let addOrderCheckbox = document.getElementById("addSignOrder");
+    let addOrderForm = document.getElementById("add_order_form");
+
+    if ((addOrderCheckbox != null) && (addOrderCheckbox.checked)) {
+
+        $.ajax({
+
+            url: ctx + "/get_sign_add_info",
+            data: {"pointCoordinates": coordinates}
+
+        }).done(function (data) {
+
+            let orderInfo = JSON.parse(data)
+            let receivedSignsLists = orderInfo.signsLists;
+            let receivedPddSigns = orderInfo.pddSigns;
+            let receivedStandardSizes = orderInfo.standardSizes;
+
+
+            let signListSelect = document.getElementById("sign_list_order");
+            let pddSignSelect = document.getElementById("pdd_sign_order");
+            let standardSizeSelect = document.getElementById("standard_size_order");
+
+
+
+            $("#sign_list_order").empty();
+            $("#pdd_sign_order").empty();
+            $("#standard_size_order").empty();
+
+
+            for (let k = 0; k < receivedSignsLists.length; k++) {
+
+                signListSelect.append(new Option(receivedSignsLists[k].direction, receivedSignsLists[k].id));
+
+            }
+
+            for (let k = 0; k < receivedPddSigns.length; k++) {
+
+
+                pddSignSelect.append(new Option(receivedPddSigns[k].sign, receivedPddSigns[k].id));
+
+            }
+
+            for (let k = 0; k < receivedStandardSizes.length; k++) {
+
+                standardSizeSelect.append(new Option(receivedStandardSizes[k].size, receivedStandardSizes[k].size));
+            }
+
+
+
+        }).fail(function () {
+
+            $("#direction").empty();
+            //exception
+
+        });
+
+        addOrderForm.style.visibility = 'visible';
+    } else {
+        if (addOrderForm != null) {
+            addOrderForm.style.visibility = 'hidden';
+        }
+    }
+
+function changeOrder(coordinates) {
+
+    let changeOrderBox = document.getElementById("execute_delete_order");
+    let changeOrderForm = document.getElementById("change_delete_order_form");
+
+    if ((changeOrderBox != null) && (changeOrderBox.checked)) {
+
+let crewsSelect=document.getElementById("workers_crews");
+
+if(workers_crews==null){
+
+ $.ajax({
+
+            url: ctx + "/get_orders_change_info/remove",
+            data: {"pointCoordinates": coordinates}
+
+        }).done(function (data) {
+
+            let orderInfo = JSON.parse(data)
+            let receivedSignsLists = orderInfo.signsLists;
+            let receivedPddSigns = orderInfo.pddSigns;
+            let receivedStandardSizes = orderInfo.standardSizes;
+
+
+            let signListSelect = document.getElementById("sign_list_order");
+            let pddSignSelect = document.getElementById("pdd_sign_order");
+            let standardSizeSelect = document.getElementById("standard_size_order");
+
+
+
+            $("#sign_list_order").empty();
+            $("#pdd_sign_order").empty();
+            $("#standard_size_order").empty();
+
+
+            for (let k = 0; k < receivedSignsLists.length; k++) {
+
+                signListSelect.append(new Option(receivedSignsLists[k].direction, receivedSignsLists[k].id));
+
+            }
+
+            for (let k = 0; k < receivedPddSigns.length; k++) {
+
+
+                pddSignSelect.append(new Option(receivedPddSigns[k].sign, receivedPddSigns[k].id));
+
+            }
+
+            for (let k = 0; k < receivedStandardSizes.length; k++) {
+
+                standardSizeSelect.append(new Option(receivedStandardSizes[k].size, receivedStandardSizes[k].size));
+            }
+
+
+
+        }).fail(function () {
+
+            $("#direction").empty();
+            //exception
+
+        });
+
+}else{
+
+
+ $.ajax({
+
+            url: ctx + "/get_orders_change_info/execute",
+            data: {"pointCoordinates": coordinates}
+
+        }).done(function (data) {
+
+            let orderInfo = JSON.parse(data)
+            let receivedSignsLists = orderInfo.signsLists;
+            let receivedPddSigns = orderInfo.pddSigns;
+            let receivedStandardSizes = orderInfo.standardSizes;
+
+
+            let signListSelect = document.getElementById("sign_list_order");
+            let pddSignSelect = document.getElementById("pdd_sign_order");
+            let standardSizeSelect = document.getElementById("standard_size_order");
+
+
+
+            $("#sign_list_order").empty();
+            $("#pdd_sign_order").empty();
+            $("#standard_size_order").empty();
+
+
+            for (let k = 0; k < receivedSignsLists.length; k++) {
+
+                signListSelect.append(new Option(receivedSignsLists[k].direction, receivedSignsLists[k].id));
+
+            }
+
+            for (let k = 0; k < receivedPddSigns.length; k++) {
+
+
+                pddSignSelect.append(new Option(receivedPddSigns[k].sign, receivedPddSigns[k].id));
+
+            }
+
+            for (let k = 0; k < receivedStandardSizes.length; k++) {
+
+                standardSizeSelect.append(new Option(receivedStandardSizes[k].size, receivedStandardSizes[k].size));
+            }
+
+
+
+        }).fail(function () {
+
+            $("#direction").empty();
+            //exception
+
+        });
+
+}
+
+
+
+        changeOrderForm.style.visibility = 'visible';
+    } else {
+        if (changeOrderForm != null) {
+            changeOrderForm.style.visibility = 'hidden';
+        }
+    }
+
+}

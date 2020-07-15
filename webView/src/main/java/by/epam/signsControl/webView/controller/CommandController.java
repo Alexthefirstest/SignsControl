@@ -4,6 +4,7 @@ import by.epam.signsControl.webView.filters.URLFilter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.Constants;
 
 import javax.servlet.ServletException;
 
@@ -12,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,6 +46,8 @@ public class CommandController extends HttpServlet {
 //        logger.info(req.getParameter("description"));
 //        logger.info(req.getParts());
 //        logger.info(req.getPart("picture"));
+//        Part part = req.getPart("image");
+//        logger.info(part);
         logger.info("inside servlet post2");
         process(req, resp);
 

@@ -39,10 +39,10 @@ public class LoginFormHandler implements Command {
 
 
             session.setAttribute("userID", user.getId());
-            session.setAttribute("role", user.getRole());
+            session.setAttribute("role", user.getRole().getId());
             session.setAttribute("username", user.getLogin());
             session.setAttribute("organisationID", user.getOrganisation().getId());
-            session.setAttribute("organisationRole", user.getOrganisation().getRole());
+            session.setAttribute("organisationRole", user.getOrganisation().getRole().getId());
 
 
             response.sendRedirect(request.getContextPath() + "/");

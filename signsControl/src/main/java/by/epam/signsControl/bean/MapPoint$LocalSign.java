@@ -8,7 +8,7 @@ public class MapPoint$LocalSign implements Serializable, FactoryType, Cloneable 
     private static final long serialVersionUID = -8012668349900341256L;
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    protected Object clone()  {
         return new MapPoint$LocalSign( (this.mapPoint==null? null: (MapPoint) this.mapPoint.clone()),
                 (this.listOfLocalSignsArrays==null? null : (ArrayList<ArrayList<LocalSign>>) this.listOfLocalSignsArrays.clone()));
     }

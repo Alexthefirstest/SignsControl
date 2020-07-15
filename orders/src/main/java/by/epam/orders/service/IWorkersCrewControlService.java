@@ -23,6 +23,8 @@ public interface IWorkersCrewControlService {
 
     WorkersCrew[] getWorkersCrews(int organisationID) throws ServiceException;
 
+    WorkersCrew[] getWorkersCrewsByUser(int userID) throws ServiceException;
+
     WorkersCrew[] getEmptyWorkersCrews() throws ServiceException;
 
 }

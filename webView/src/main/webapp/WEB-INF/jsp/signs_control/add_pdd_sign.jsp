@@ -30,7 +30,7 @@
                                                required>
     <label for="description"> pdd_description:</label><input type="text" name="description" id='description'
                                                              pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
-    <label for="picture"> pdd_picture:</label><input type="file" name="picture" id='picture' accept="image/*">
+    <label for="picture"> pdd_picture:</label><input type="file" name="image" id='picture' accept="image/*">
 
  <input name="name" value="Виктор">
 

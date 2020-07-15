@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class Sign implements Serializable, FactoryType, Cloneable {
 
     @Override
-    protected Object clone() {
+    public Object clone() {
         try {
             Sign sign = (Sign) super.clone();
             sign.picture =getPicture();
