@@ -26,9 +26,9 @@ public interface IOrdersControlService {
     Order[] getExecutedOrders() throws ServiceException;
 
     Order[] getUnExecutedOrders() throws ServiceException;
-
+    String getInfo(int orderID) throws ServiceException;
     MapPoint$Orders[] getOrdersMapPoint() throws ServiceException;
-    Order[] getOrdersMapPoint(String coordinates) throws ServiceException;
+    Order[] getUnExecutedOrders(String coordinates) throws ServiceException;
 
     MapPoint$Orders[] getExecutedOrdersMapPoint() throws ServiceException;
 

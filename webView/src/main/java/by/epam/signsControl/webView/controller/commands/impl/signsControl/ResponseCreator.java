@@ -30,7 +30,7 @@ public class ResponseCreator {
     private ResponseCreator() {
     }
 
-    static String createChangeSignJSON(Object[] objects) {
+    public static String createJSON(Object[] objects) {
 
        return gson.toJson(objects);
     }

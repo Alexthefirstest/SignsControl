@@ -511,8 +511,8 @@ window.onload = function () {
 
                 objectManagerEP.removeAll();
 
-  objectManagerEP.objects.options.set('preset', 'islands#redDotIcon'); //размеры сюда
-    objectManagerEP.clusters.options.set('preset', 'islands#invertedRedClusterIcons');
+  objectManagerEP.objects.options.set('preset', 'islands#darkOrangeCircleIcon'); //размеры сюда
+    objectManagerEP.clusters.options.set('preset', 'islands#darkOrangeClusterIcons');
 
                 objectManagerEP.add(data);
             });
@@ -547,8 +547,9 @@ objectManagerEP.removeAll();
 
 objectManagerEP.removeAll();
 
-  objectManagerEP.objects.options.set('preset', 'islands#redIcon'); //размеры сюда
-    objectManagerEP.clusters.options.set('preset', 'islands#redClusterIcons');
+  objectManagerEP.objects.options.set('preset', 'islands#redDotIcon'); //размеры сюда
+     objectManagerEP.clusters.options.set('preset', 'islands#invertedRedClusterIcons');
+
 
          showOrders("unexecuted");
 
@@ -785,8 +786,8 @@ function updateSignChangeForm(coordinates) {
 
             for (let i = 0; i < data.length; i++) {
 
-                let kind = data[i].kind;
-                let signNumber = (data[i].section + "." + data[i].sign + ((kind > -1) ? ("." + kind) : ""));
+
+                let signNumber = signToString(data[i].section,data[i].sign, data[i].kind);
 
                 selectedSign.append(new Option((signNumber + " : " + data[i].dateOfAdd + " : " + (data[i].dateOfRemove == null ? " - " : data[i].dateOfRemove)), data[i].localSignId));
             }
@@ -945,6 +946,7 @@ function updateAddOrderForm(coordinates) {
             addOrderForm.style.visibility = 'hidden';
         }
     }
+}
 
 function changeOrder(coordinates) {
 
@@ -953,7 +955,9 @@ function changeOrder(coordinates) {
 
     if ((changeOrderBox != null) && (changeOrderBox.checked)) {
 
+
 let crewsSelect=document.getElementById("workers_crews");
+let ordersSelect=document.getElementById("order_id");
 
 if(workers_crews==null){
 
@@ -964,46 +968,25 @@ if(workers_crews==null){
 
         }).done(function (data) {
 
-            let orderInfo = JSON.parse(data)
-            let receivedSignsLists = orderInfo.signsLists;
-            let receivedPddSigns = orderInfo.pddSigns;
-            let receivedStandardSizes = orderInfo.standardSizes;
 
+            let orderInfo = JSON.parse(data);
 
-            let signListSelect = document.getElementById("sign_list_order");
-            let pddSignSelect = document.getElementById("pdd_sign_order");
-            let standardSizeSelect = document.getElementById("standard_size_order");
+let orderString;
 
+            $("#order_id").empty();
 
+            for (let k = 0; k < orderInfo.length; k++) {
 
-            $("#sign_list_order").empty();
-            $("#pdd_sign_order").empty();
-            $("#standard_size_order").empty();
+orderString=orderInfo[k].id+" "+signToString(orderInfo[k].sign.section, orderInfo[k].sign.sign, orderInfo[k].sign.kind)+" "+orderInfo[k].dateOfOrder;
 
-
-            for (let k = 0; k < receivedSignsLists.length; k++) {
-
-                signListSelect.append(new Option(receivedSignsLists[k].direction, receivedSignsLists[k].id));
+ ordersSelect.append(new Option(orderString, orderInfo[k].id));
 
             }
-
-            for (let k = 0; k < receivedPddSigns.length; k++) {
-
-
-                pddSignSelect.append(new Option(receivedPddSigns[k].sign, receivedPddSigns[k].id));
-
-            }
-
-            for (let k = 0; k < receivedStandardSizes.length; k++) {
-
-                standardSizeSelect.append(new Option(receivedStandardSizes[k].size, receivedStandardSizes[k].size));
-            }
-
 
 
         }).fail(function () {
 
-            $("#direction").empty();
+            $("#order_id").empty();
             //exception
 
         });
@@ -1019,45 +1002,38 @@ if(workers_crews==null){
         }).done(function (data) {
 
             let orderInfo = JSON.parse(data)
-            let receivedSignsLists = orderInfo.signsLists;
-            let receivedPddSigns = orderInfo.pddSigns;
-            let receivedStandardSizes = orderInfo.standardSizes;
+            let orders = orderInfo.Orders;
+            let workersCrews = orderInfo.WorkersCrews;
+
+            $("#order_id").empty();
+            $("#workers_crews").empty();
 
 
-            let signListSelect = document.getElementById("sign_list_order");
-            let pddSignSelect = document.getElementById("pdd_sign_order");
-            let standardSizeSelect = document.getElementById("standard_size_order");
+         let orderString;
+           for (let k = 0; k < orders.length; k++) {
 
 
+          orderString=orders[k].id+" "+signToString(orders[k].sign.section, orders[k].sign.sign, orders[k].sign.kind)+" "+orders[k].dateOfOrder;
 
-            $("#sign_list_order").empty();
-            $("#pdd_sign_order").empty();
-            $("#standard_size_order").empty();
+           ordersSelect.append(new Option(orderString, orders[k].id));
 
+                      }
 
-            for (let k = 0; k < receivedSignsLists.length; k++) {
-
-                signListSelect.append(new Option(receivedSignsLists[k].direction, receivedSignsLists[k].id));
-
-            }
-
-            for (let k = 0; k < receivedPddSigns.length; k++) {
+            for (let k = 0; k < workersCrews.length; k++) {
 
 
-                pddSignSelect.append(new Option(receivedPddSigns[k].sign, receivedPddSigns[k].id));
+                crewsSelect.append(new Option(workersCrews[k].id, workersCrews[k].id));
 
             }
 
-            for (let k = 0; k < receivedStandardSizes.length; k++) {
 
-                standardSizeSelect.append(new Option(receivedStandardSizes[k].size, receivedStandardSizes[k].size));
-            }
 
 
 
         }).fail(function () {
 
-            $("#direction").empty();
+             $("#order_id").empty();
+                      $("#workers_crews").empty();
             //exception
 
         });
@@ -1072,5 +1048,10 @@ if(workers_crews==null){
             changeOrderForm.style.visibility = 'hidden';
         }
     }
+}
+
+function signToString(section, sign, kind){
+
+ return (section + "." + sign + ((kind > -1) ? ("." + kind) : ""));
 
 }

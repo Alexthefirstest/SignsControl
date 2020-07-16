@@ -49,7 +49,8 @@ public enum CommandName {
     SHOW_ORDERS,
     ORDERS,
     ADD_ORDER,
-    GET_ORDERS_CHANGE_INFO
+    GET_ORDERS_CHANGE_INFO,
+    CHANGE_DELETE_ORDER
 
 
 }

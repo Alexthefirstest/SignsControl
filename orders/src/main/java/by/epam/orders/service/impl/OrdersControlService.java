@@ -143,6 +143,18 @@ public class OrdersControlService implements IOrdersControlService {
     }
 
     @Override
+    public String getInfo(int orderID) throws ServiceException {
+        try {
+
+            return ordersControl.getInfo(orderID);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
     public MapPoint$Orders[] getOrdersMapPoint() throws ServiceException {
         try {
 
@@ -155,10 +167,10 @@ public class OrdersControlService implements IOrdersControlService {
     }
 
     @Override
-    public Order[] getOrdersMapPoint(String coordinates) throws ServiceException {
+    public Order[] getUnExecutedOrders(String coordinates) throws ServiceException {
         try {
 
-            return ordersControl.getOrdersMapPoint(coordinates);
+            return ordersControl.getUnExecutedOrders(coordinates);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

@@ -3,6 +3,7 @@ package by.epam.orders.dao;
 import by.epam.orders.bean.MapPoint$Orders;
 import by.epam.orders.bean.Order;
 import by.epam.orders.dao.exceptions.DAOException;
+import by.epam.signsControl.bean.MapPoint;
 
 public interface IOrdersControl {
 
@@ -22,6 +23,8 @@ public interface IOrdersControl {
 
     Boolean setInfo(int orderID, String info) throws DAOException;
 
+    String getInfo(int orderID) throws DAOException;
+
     Order[] getOrders() throws DAOException;
 
     Order[] getExecutedOrders() throws DAOException;
@@ -30,7 +33,7 @@ public interface IOrdersControl {
 
     MapPoint$Orders[] getOrdersMapPoint() throws DAOException;
 
-    Order[] getOrdersMapPoint(String coordinates) throws DAOException;
+    Order[] getUnExecutedOrders(String coordinates) throws DAOException;
 
     MapPoint$Orders[] getExecutedOrdersMapPoint() throws DAOException;
 

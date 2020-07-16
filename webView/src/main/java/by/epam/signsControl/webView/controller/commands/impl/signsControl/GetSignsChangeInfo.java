@@ -27,7 +27,7 @@ public class GetSignsChangeInfo implements Command {
         try {
 
             String responseJSON =//"{\"signs\":" +
-                    ResponseCreator.createChangeSignJSON(
+                    ResponseCreator.createJSON(
                     (ServiceFactory.getINSTANCE().getLocalSignsControlService().getSigns(request.getParameter("pointCoordinates"))))
                    ;// +"}";
 

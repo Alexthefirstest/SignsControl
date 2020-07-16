@@ -3,10 +3,6 @@ package by.epam.signsControl.webView.controller.commands.impl.orders;
 
 import by.epam.orders.bean.MapPoint$Orders;
 import by.epam.orders.bean.Order;
-import by.epam.orders.bean.TypeOfWork;
-import by.epam.signsControl.bean.Direction;
-import by.epam.signsControl.bean.Sign;
-import by.epam.signsControl.bean.StandardSize;
 import by.epam.signsControl.webView.controller.commands.impl.signsControl.ResponseCreator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,20 +18,63 @@ public class OrdersResponseCreator {
 
     private static final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
-    static String createAddPointInfoJSON(Direction[] directions, StandardSize[] standardSizes, Sign[] pddSigns, TypeOfWork[] typesOfWork) {
+
+    static String createJSON(Object[]... objects) {
 
         StringBuilder json = new StringBuilder("{");
 
+        logger.info(objects.length);
 
-        json.append("\"signsLists\" :").append(gson.toJson(directions)).append(",");
-        json.append("\"pddSigns\" : ").append(ResponseCreator.createSignJSONArr(pddSigns)).append(",");
-        json.append("\"standardSizes\" : ").append(gson.toJson(standardSizes));
-        json.append("\"typesOfWork\" : ").append(gson.toJson(typesOfWork));
+        for (int i = 0; i < objects.length; i++) {
 
 
-        json.append("}");
+            json.append('\"' + (objects[i].getClass().getSimpleName()).replaceAll("\\[]", "s") + "\":").append(gson.toJson(objects[i])).append(',');
+        }
 
-        return json.toString();
+        return json.substring(0, json.length() - 1) + '}';
+    }
+
+    private static String createBalloonStringForPoint(MapPoint$Orders mapPoints$Orders) {
+
+        StringBuilder sb = new StringBuilder();
+
+        ArrayList<Order> orders = mapPoints$Orders.getListOfOrders();
+
+        int j = 0;
+
+
+        int workersCrew;
+        Timestamp dateOfExecution;
+
+        for (int i = 0; i < orders.size(); i++) {
+
+            if (i == 0 || (orders.get(i).getSignList() != orders.get(i - 1).getSignList())) {
+
+                sb.append(mapPoints$Orders.getMapPoint().getAngles().get(j));
+                sb.append("<br><br>");
+
+                j++;
+            }
+
+
+            sb.append("| id: ").append(orders.get(i).getId());
+            sb.append("| sign: ").append(ResponseCreator.createSign(orders.get(i).getSign().getSection(),
+                    orders.get(i).getSign().getSign(),
+                    orders.get(i).getSign().getKind()));
+            sb.append("| standard size: ").append(orders.get(i).getStandardSize());
+            sb.append("| type of work: ").append(orders.get(i).getTypeOfWork().getTypeOfWork());
+            sb.append("| workers crew: ").append(((workersCrew = orders.get(i).getWorkersCrew()) == 0 ? "-" : workersCrew));
+            sb.append("| date of order: ").append(orders.get(i).getDateOfOrder());
+            sb.append("| date of execution: ").append(((dateOfExecution = orders.get(i).getDateOfExecution()) == null ? "-" : dateOfExecution));
+            sb.append("| info: ").append(orders.get(i).getInfo());
+            sb.append("<br>");
+
+        }
+
+
+        return sb.toString();
+
+
     }
 
     static String createPointsJSON(MapPoint$Orders[] mapPoints) {
@@ -59,6 +98,7 @@ public class OrdersResponseCreator {
 
     }
 
+
     private static String createPointJson(MapPoint$Orders mapPoint$Orders, int id) {
 
         StringBuilder jsonPoint = new StringBuilder(ResponseCreator.JSON_POINT_PATTERN);
@@ -74,50 +114,4 @@ public class OrdersResponseCreator {
 
         return jsonPoint.toString();
     }
-
-    private static String createBalloonStringForPoint(MapPoint$Orders mapPoints$Orders) {
-
-        StringBuilder sb = new StringBuilder();
-
-        ArrayList<Order> orders = mapPoints$Orders.getListOfOrders();
-
-        int j = 0;
-
-
-        int workersCrew;
-        Timestamp dateOfExecution;
-
-        for (int i = 0; i < orders.size(); i++) {
-
-            if (i == 0 || (orders.get(i).getSignList() != orders.get(i - 1).getSignList())) {
-
-                sb.append("<br><br>").append(mapPoints$Orders.getMapPoint().getAngles().get(j));
-                sb.append("<br><br>");
-
-                j++;
-            }
-
-
-            sb.append("| id: ").append(orders.get(i).getId());
-            sb.append("| sign: ").append(ResponseCreator.createSign(orders.get(i).getSign().getSection(),
-                    orders.get(i).getSign().getSign(),
-                    orders.get(i).getSign().getKind()));
-            sb.append("| standard size: ").append(orders.get(i).getStandardSize());
-            sb.append("| type of work: ").append(orders.get(i).getTypeOfWork().getTypeOfWork());
-            sb.append("| workers crew: ").append(((workersCrew = orders.get(i).getWorkersCrew()) == 0 ? "-" : workersCrew));
-            sb.append("| date of order: ").append(orders.get(i).getDateOfOrder());
-            sb.append("| date of execution: ").append(((dateOfExecution = orders.get(i).getDateOfExecution()) == null ? "-" : dateOfExecution));
-            sb.append("| info: ").append(orders.get(i).getInfo());
-            sb.append("<br>");
-
-            i++;
-
-        }
-
-
-        return sb.toString();
-
-
-    }
-
 }

@@ -10,6 +10,7 @@ import by.epam.signsControl.webView.controller.commands.impl.bank.CreateBankAcco
 import by.epam.signsControl.webView.controller.commands.impl.bank.ShowBankAccounts;
 import by.epam.signsControl.webView.controller.commands.impl.bank.ShowTransactionsHistory;
 import by.epam.signsControl.webView.controller.commands.impl.orders.AddOrderFormHandler;
+import by.epam.signsControl.webView.controller.commands.impl.orders.ChangeDeleteOrder;
 import by.epam.signsControl.webView.controller.commands.impl.orders.GetOrders;
 import by.epam.signsControl.webView.controller.commands.impl.orders.GetOrdersChangeInfo;
 import by.epam.signsControl.webView.controller.commands.impl.orders.GetOrdersJSP;
@@ -72,6 +73,7 @@ class CommandProvider {
         commands.put(CommandName.ORDERS, new GetOrdersJSP());
         commands.put(CommandName.ADD_ORDER, new AddOrderFormHandler());
         commands.put(CommandName.GET_ORDERS_CHANGE_INFO, new GetOrdersChangeInfo());
+        commands.put(CommandName.CHANGE_DELETE_ORDER, new ChangeDeleteOrder());
 
     }
 

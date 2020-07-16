@@ -10,6 +10,7 @@ import by.epam.orders.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.controller.RequestParser;
 import by.epam.signsControl.webView.controller.commands.Command;
 
+import by.epam.signsControl.webView.controller.commands.impl.signsControl.ResponseCreator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,25 +35,30 @@ public class GetOrdersChangeInfo implements Command {
 
         String command = RequestParser.getSecondCommandFromURI(request);
 
+        String coordinates = request.getParameter("pointCoordinates");
+
+        String result;
+
 
         try {
+
 
             switch (command) {
 
                 case "remove":
-
+                    result = ResponseCreator.createJSON(sf.getOrdersControlService().getUnExecutedOrders(coordinates));
                     break;
                 case "execute":
 
+
+                    result = OrdersResponseCreator.createJSON(sf.getWorkersCrewControlService().getWorkersCrewsByUser(102),
+                            sf.getOrdersControlService().getUnExecutedOrders(coordinates));
                     break;
 
                 default:
                     return;
             }
 
-            Order[] orders=sf.getOrdersControlService().getOrders();
-
-            String result = null;
 
             logger.info(result);
 
