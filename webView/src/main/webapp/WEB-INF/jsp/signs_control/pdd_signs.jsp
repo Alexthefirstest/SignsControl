@@ -41,7 +41,10 @@
         <c:out value='        '/>
         <c:out value='${sign.description}'/>
         <c:out value='        '/>
-        <c:out value='${sign.picture}'/>
+
+ <c:if test="${not empty sign.picture}">
+       <img src="${pageContext.request.contextPath}/upload?id=${sign.id}" />
+</c:if>
 
 <form action='${pageContext.request.contextPath}/change_pdd_sign' method="post">
     <input type="text" id="signID" name="signID" value='${sign.id}' hidden>

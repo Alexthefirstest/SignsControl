@@ -32,7 +32,7 @@ public class ResponseCreator {
 
     public static String createJSON(Object[] objects) {
 
-       return gson.toJson(objects);
+        return gson.toJson(objects);
     }
 
 //    static String createChangeSignJSON(LocalSign[] localSigns) {
@@ -248,11 +248,11 @@ public class ResponseCreator {
 
             sb.append("   " + localSignsWithCommonDirection.get(i).getName());
 
-            byte[] picture;
-            if ((picture = localSignsWithCommonDirection.get(i).getPicture()) != null) {
 
-                sb.append("   " + picture);
-            }
+//            sb.append((localSignsWithCommonDirection.get(i).getPicture() != null) ?
+//                    (" "+pictureStartPattern+contextPath+pictureMiddlePatter + localSignsWithCommonDirection.get(i).getId() + pictureFinishPattern)
+//                    : " -");
+
 
         }
 
@@ -271,7 +271,7 @@ public class ResponseCreator {
 
     }
 
-    public static String createPointHistory(LocalSign[] localSigns) {
+    public static String createPointHistory(LocalSign[] localSigns, String contextPath) {
 
         StringBuilder pointHistory = new StringBuilder();
 
@@ -279,7 +279,7 @@ public class ResponseCreator {
                 .append("|date of add").append("|date of remove").append("|annotation|picture<br />");
 
         for (LocalSign localSign : localSigns) {
-            pointHistory.append(createPointHistoryField(localSign)).append("<br/>");
+            pointHistory.append(createPointHistoryField(localSign, contextPath)).append("<br/>");
 
         }
 
@@ -287,13 +287,17 @@ public class ResponseCreator {
 
     }
 
-    private static String createPointHistoryField(LocalSign localSign) {
+    private static final String pictureStartPattern = "<img src=\"";
+           private static final String pictureMiddlePatter= "/upload?id=";
+    private static final String pictureFinishPattern = "\"/>";
+
+    private static String createPointHistoryField(LocalSign localSign, String contextPath) {
 
         StringBuilder sb = new StringBuilder();
 
         //   String description;
         Date dateOfRemove;
-        byte[] picture;
+
 
         sb.append(createSign(localSign.getSection(), localSign.getSign(), localSign.getKind()));
 
@@ -305,7 +309,9 @@ public class ResponseCreator {
         sb.append("|" + localSign.getDateOfAdd() + "|");
         sb.append(((dateOfRemove = localSign.getDateOfRemove()) != null) ? dateOfRemove + "|" : "-|");
         sb.append("|" + localSign.getAnnotation());
-        sb.append(((picture = localSign.getPicture()) != null) ? picture : "-");
+        sb.append((localSign.getPicture() != null) ?
+                (pictureStartPattern+contextPath+pictureMiddlePatter + localSign.getId() + pictureFinishPattern)
+                : "-");
         return sb.toString();
     }
 

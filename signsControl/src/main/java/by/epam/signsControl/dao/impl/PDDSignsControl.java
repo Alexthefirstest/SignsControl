@@ -173,13 +173,13 @@ public class PDDSignsControl implements IPDDSignsControl {
     }
 
     @Override
-    public boolean setPicture(int id, InputStream inputStream) throws DAOException {
+    public boolean setPicture(int id, InputStream inputStream, long imageSize) throws DAOException {
 
         Connection connection = CONNECTION_POOL.retrieveConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(SQL_INSERT_PICTURE)) {
 
-            ps.setBlob(1, inputStream);
+            ps.setBlob(1, inputStream, imageSize);
 
             ps.setInt(2, id);
 

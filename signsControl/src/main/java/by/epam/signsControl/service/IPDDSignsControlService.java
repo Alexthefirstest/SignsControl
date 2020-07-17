@@ -21,7 +21,7 @@ public interface IPDDSignsControlService {
 
     boolean updateKind(int id, int kind) throws ServiceException;
 
-    boolean setPicture(int id, InputStream inputStream) throws ServiceException;
+    boolean setPicture(int id, InputStream inputStream, long imageSize) throws ServiceException;
 
     byte[] getPicture(int id) throws ServiceException;
 

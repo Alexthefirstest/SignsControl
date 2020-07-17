@@ -101,13 +101,13 @@ public class PDDSignsControlService implements IPDDSignsControlService {
     }
 
     @Override
-    public boolean setPicture(int id, InputStream inputStream) throws ServiceException {
+    public boolean setPicture(int id, InputStream inputStream, long imageSize) throws ServiceException {
 
         InputValidation.nullCheck(inputStream);
 
         try {
 
-            return pddSignsControl.setPicture(id, inputStream);
+            return pddSignsControl.setPicture(id, inputStream, imageSize);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

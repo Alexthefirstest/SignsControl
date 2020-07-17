@@ -27,7 +27,8 @@ public class GetPointHistory implements Command {
         try {
 
             response.getWriter().write(ResponseCreator.createPointHistory
-                    (ServiceFactory.getINSTANCE().getLocalSignsControlService().getSigns(request.getParameter("pointCoordinates"))));
+                    (ServiceFactory.getINSTANCE().getLocalSignsControlService().getSigns(request.getParameter("pointCoordinates")),
+                            request.getContextPath()));
 
         } catch (ServiceException e) {
             logger.warn(e);

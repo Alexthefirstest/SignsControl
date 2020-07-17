@@ -21,7 +21,7 @@ public interface IPDDSignsControl {
     boolean updateName(int id, String name) throws DAOException;
     boolean updateDescription(int id, String info) throws DAOException;
 
-    boolean setPicture(int id, InputStream inputStream) throws DAOException;
+    boolean setPicture(int id, InputStream inputStream, long imageSize) throws DAOException;
 
     byte[] getPicture(int id) throws DAOException;
 

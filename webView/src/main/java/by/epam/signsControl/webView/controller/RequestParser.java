@@ -8,7 +8,8 @@ import java.util.regex.Pattern;
 
 public class RequestParser {
 
-    private RequestParser(){}
+    private RequestParser() {
+    }
 
     public static String getCommandFromURI(HttpServletRequest request) {
 
@@ -25,5 +26,6 @@ public class RequestParser {
 
         return matcher.find() ? matcher.group(1) : "main_page";
     }
+
 
 }

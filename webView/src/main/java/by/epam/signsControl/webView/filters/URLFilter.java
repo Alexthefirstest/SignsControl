@@ -1,6 +1,7 @@
 package by.epam.signsControl.webView.filters;
 
 
+import by.epam.signsControl.webView.controller.RequestParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,7 +24,6 @@ import java.util.regex.Pattern;
 @WebFilter(urlPatterns = "/*")
 public class URLFilter implements Filter {
 
-
     private static final String SERVLET_PATH = "/app";
     public static final String REQUIRED_URI = "uri";
     public static final String ROLE = "role";
@@ -45,14 +45,20 @@ public class URLFilter implements Filter {
             return;
         }
 
-        logger.info("filter start URI: " + httpRequest.getRequestURI());
+        String requestURI = httpRequest.getRequestURI();
 
-        request.setAttribute(REQUIRED_URI, httpRequest.getRequestURI());
+        logger.info("filter start URI: " + requestURI);
+
+        request.setAttribute(REQUIRED_URI, requestURI);
 
         logger.info("filter middle");
 
-        request.getRequestDispatcher(SERVLET_PATH).forward(request, response);
+        if ("upload".equals(RequestParser.getCommandFromURI(httpRequest))) {
+            chain.doFilter(request, response);
+        } else {
 
+            request.getRequestDispatcher(SERVLET_PATH).forward(request, response);
+        }
 
         logger.info("end of filter");
     }
