@@ -9,20 +9,31 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import java.io.IOException;
 
-public class RemovePDDSign implements Command {
-    private static final Logger logger = LogManager.getLogger(RemovePDDSign.class);
+public class SetSignImage implements Command {
+
+    private static Logger logger = LogManager.getLogger(SetSignImage.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ServiceException {
 
-
         logger.info("inside execute");
 
+        Part imagePart = request.getPart("image");
+        long imageSize = imagePart.getSize();
+
+        logger.info(imageSize);
+
+
         try {
-            ServiceFactory.getINSTANCE().getPddSignsControlService().
-                    removeSign(Integer.parseInt(request.getParameter("sign_id")));
+
+
+            if (imageSize > 0) {
+                ServiceFactory.getINSTANCE().getPddSignsControlService().
+                        setPicture(Integer.parseInt(request.getParameter("sign_id")), imagePart.getInputStream(), imageSize);
+            }
 
         } catch (by.epam.signsControl.service.exceptions.ServiceException e) {
             logger.warn(e);
@@ -30,5 +41,7 @@ public class RemovePDDSign implements Command {
 
 
         response.sendRedirect(request.getContextPath() + "/pdd_signs");
+
     }
+
 }

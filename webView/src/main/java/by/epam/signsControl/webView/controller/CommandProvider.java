@@ -58,6 +58,8 @@ class CommandProvider {
         commands.put(CommandName.REMOVE_PDD_SIGN, new RemovePDDSign());
         commands.put(CommandName.ADD_PDD_SIGN, new AddPDDSign());
         commands.put(CommandName.ADD_PDD_SIGN_FORM, new AddPDDSignFormHandler());
+        commands.put(CommandName.CHANGE_PDD_SIGN, new ChangePDDSign());
+        commands.put(CommandName.SET_SIGN_IMAGE, new SetSignImage());
 
         //bank
         commands.put(CommandName.BANK_ACCOUNTS, new ShowBankAccounts());

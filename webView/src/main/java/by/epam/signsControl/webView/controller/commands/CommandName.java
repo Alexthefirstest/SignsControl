@@ -35,7 +35,7 @@ public enum CommandName {
     CHANGE_PDD_SIGN,
     REMOVE_PDD_SIGN,
     ADD_PDD_SIGN_FORM,
-    CHANGE_PDD_SIGN_FORM,
+    SET_SIGN_IMAGE,
 
     //bank
     BANK_ACCOUNTS,

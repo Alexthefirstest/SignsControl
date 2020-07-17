@@ -46,14 +46,30 @@
        <img src="${pageContext.request.contextPath}/upload?id=${sign.id}" />
 </c:if>
 
-<form action='${pageContext.request.contextPath}/change_pdd_sign' method="post">
-    <input type="text" id="signID" name="signID" value='${sign.id}' hidden>
-    <input type="submit" value="change sign">
+<form action='${pageContext.request.contextPath}/upload/set_sign_image' method="post" accept-charset="UTF-8" enctype='multipart/form-data'>
+
+   <input type="text" name="sign_id" pattern="\d+" value="${sign.id}"  required hidden>
+    <label for="picture_set"> image:</label><input type="file" name="image" id='picture_set' accept="image/*" required>
+
+    <input type="submit" value="добавить">
 </form>
-<form action='${pageContext.request.contextPath}/remove_pdd_sign' method="post">
-    <input type="text" name="signID" value='${sign.id}' hidden>
-    <input type="submit" value="remove sign">
+
+<form action='${pageContext.request.contextPath}/change_pdd_sign' method="post" accept-charset="UTF-8">
+<input type="text" name="sign_id" pattern="\d+" value="${sign.id}"  required hidden>
+    <label for="name"> sign_name:</label><input type="text" name="name" value="${sign.name}" id='name' pattern="[\wА-Яа-я\s:!.,)(-?\d]+" required>
+    <label for="description"> pdd_description:</label><input type="text" name="description"  value="${sign.description}" id='description'
+                                                             pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
+
+    <br><input type="reset" value="сбросить">
+    <input type="submit" value="изменить знак">
 </form>
+
+<form action='${pageContext.request.contextPath}/remove_pdd_sign' method="post" accept-charset="UTF-8">
+
+   <input type="text" name="sign_id" pattern="\d+" value="${sign.id}"  required hidden>
+    <input type="submit" value="remove_sign">
+</form>
+
 
 <br>
 
