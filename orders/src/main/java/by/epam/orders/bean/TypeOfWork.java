@@ -18,13 +18,33 @@ public class TypeOfWork implements Serializable, FactoryType, Cloneable {
 
     private int id;
     private String typeOfWork;
+    private double price;
+    private boolean block;
+
+    public boolean isBlock() {
+        return block;
+    }
+
+    public void setBlock(boolean block) {
+        this.block = block;
+    }
 
     public TypeOfWork() {
     }
 
-    public TypeOfWork(int id, String typeOfWork) {
+    public TypeOfWork(int id, String typeOfWork, double price, boolean block) {
         this.id = id;
         this.typeOfWork = typeOfWork;
+        this.price=price;
+        this.block=block;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public int getId() {
@@ -51,13 +71,18 @@ public class TypeOfWork implements Serializable, FactoryType, Cloneable {
         TypeOfWork that = (TypeOfWork) o;
 
         if (id != that.id) return false;
+        if (Double.compare(that.price, price) != 0) return false;
         return typeOfWork != null ? typeOfWork.equals(that.typeOfWork) : that.typeOfWork == null;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result;
+        long temp;
+        result = id;
         result = 31 * result + (typeOfWork != null ? typeOfWork.hashCode() : 0);
+        temp = Double.doubleToLongBits(price);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 
@@ -66,6 +91,7 @@ public class TypeOfWork implements Serializable, FactoryType, Cloneable {
         final StringBuilder sb = new StringBuilder("TypeOfWork{");
         sb.append("id=").append(id);
         sb.append(", typeOfWork='").append(typeOfWork).append('\'');
+        sb.append(", price=").append(price);
         sb.append('}');
         return sb.toString();
     }

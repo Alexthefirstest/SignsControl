@@ -18,6 +18,8 @@
 <body>
 <jsp:include page="../header.jsp"/>
 
+    <a href="${pageContext.request.contextPath}/types_of_work">types_of_work</a>
+
  <form action='${pageContext.request.contextPath}/orders' method="get">
      <input type="text" name="orders_option" value='all' hidden>
      <input type="submit" value="show all">

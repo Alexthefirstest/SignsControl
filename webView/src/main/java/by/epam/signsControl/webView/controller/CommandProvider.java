@@ -9,11 +9,7 @@ import by.epam.signsControl.webView.controller.commands.impl.bank.ChangeBankAcco
 import by.epam.signsControl.webView.controller.commands.impl.bank.CreateBankAccount;
 import by.epam.signsControl.webView.controller.commands.impl.bank.ShowBankAccounts;
 import by.epam.signsControl.webView.controller.commands.impl.bank.ShowTransactionsHistory;
-import by.epam.signsControl.webView.controller.commands.impl.orders.AddOrderFormHandler;
-import by.epam.signsControl.webView.controller.commands.impl.orders.ChangeDeleteOrder;
-import by.epam.signsControl.webView.controller.commands.impl.orders.GetOrders;
-import by.epam.signsControl.webView.controller.commands.impl.orders.GetOrdersChangeInfo;
-import by.epam.signsControl.webView.controller.commands.impl.orders.GetOrdersJSP;
+import by.epam.signsControl.webView.controller.commands.impl.orders.*;
 import by.epam.signsControl.webView.controller.commands.impl.signsControl.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -76,6 +72,10 @@ class CommandProvider {
         commands.put(CommandName.ADD_ORDER, new AddOrderFormHandler());
         commands.put(CommandName.GET_ORDERS_CHANGE_INFO, new GetOrdersChangeInfo());
         commands.put(CommandName.CHANGE_DELETE_ORDER, new ChangeDeleteOrder());
+        commands.put(CommandName.REMOVE_TYPE_OF_WORK, new RemoveTypeOfWork());
+        commands.put(CommandName.ADD_TYPE_OF_WORK, new AddTypeOfWork());
+        commands.put(CommandName.TYPES_OF_WORK, new GetTypesOfWork());
+        commands.put(CommandName.CHANGE_TYPE_OF_WORK, new ChangeTypeOfWork());
 
     }
 

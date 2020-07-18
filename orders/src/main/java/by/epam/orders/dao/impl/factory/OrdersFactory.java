@@ -65,6 +65,8 @@ public class OrdersFactory {
 
             typeOfWork.setId(rs.getInt(1));
             typeOfWork.setTypeOfWork(rs.getString(2));
+            typeOfWork.setPrice(rs.getDouble(3));
+            typeOfWork.setBlock(rs.getBoolean(4));
 
             return typeOfWork;
 
@@ -88,7 +90,8 @@ public class OrdersFactory {
                     rs.getString(20)));
             order.setTransactionID(rs.getInt(21));
             order.setTransactionMoney(rs.getDouble(22));
-            order.setTypeOfWork(new TypeOfWork(rs.getInt(23), rs.getString(24)));
+            order.setTypeOfWork(new TypeOfWork(rs.getInt(23), rs.getString(24),
+                    rs.getDouble(25), rs.getBoolean(26)));
 
             return order;
 
@@ -175,7 +178,7 @@ public class OrdersFactory {
                                         new Role(rs.getInt(17), rs.getString(18)), rs.getBoolean(19),
                                         rs.getString(20)),
                                 rs.getInt(21), rs.getDouble(22),
-                                new TypeOfWork(rs.getInt(23), rs.getString(24)),
+                                new TypeOfWork(rs.getInt(23), rs.getString(24), rs.getDouble(29), rs.getBoolean(30)),
                                 rs.getInt(7), rs.getTimestamp(3),
                                 rs.getTimestamp(4), rs.getString(5))));
 
@@ -197,7 +200,7 @@ public class OrdersFactory {
             ArrayList<TypeOfWork> tow = new ArrayList<>();
 
             while (rs.next()) {
-                tow.add(new TypeOfWork(rs.getInt(1), rs.getString(2)));
+                tow.add(new TypeOfWork(rs.getInt(1), rs.getString(2), rs.getDouble(3), rs.getBoolean(4)));
             }
 
             return tow.toArray(new TypeOfWork[0]);
@@ -218,7 +221,7 @@ public class OrdersFactory {
                                         new Role(rs.getInt(17), rs.getString(18)), rs.getBoolean(19),
                                         rs.getString(20)),
                                 rs.getInt(21), rs.getDouble(22),
-                                new TypeOfWork(rs.getInt(23), rs.getString(24)),
+                                new TypeOfWork(rs.getInt(23), rs.getString(24), rs.getDouble(25), rs.getBoolean(26)),
                                 rs.getInt(7), rs.getTimestamp(3),
                                 rs.getTimestamp(4), rs.getString(5)));
             }

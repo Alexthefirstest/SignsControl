@@ -29,7 +29,9 @@ private static final String GET_INFO = "SELECT info FROM orders where id = ?";
                     "o1.id, o1.name, o1.role, orr1.role,  o1.is_blocked, o1.info, " +
                     "tr.id, tr.money, " +
                     "tow.id, " +
-                    "tow.type " +
+                    "tow.type, " +
+                    "tow.price, " +
+                    "tow.blocked " +
                     "FROM orders as ord  " +
                     "join pdd_signs as ps on ps.id = ord.sign " +
                     "join organisations as o1 on o1.id=ord.customer join organisation_roles as orr1 on o1.role=orr1.id " +
@@ -44,7 +46,9 @@ private static final String GET_INFO = "SELECT info FROM orders where id = ?";
                     "o1.id, o1.name, o1.role, orr1.role,  o1.is_blocked, o1.info, " +
                     "tr.id, tr.money, " +
                     "tow.id, " +
-                    "tow.type " +
+                    "tow.type, " +
+                    "tow.price, " +
+                    "tow.blocked " +
                     "FROM orders as ord  " +
                     "join pdd_signs as ps on ps.id = ord.sign " +
                     "join organisations as o1 on o1.id=ord.customer join organisation_roles as orr1 on o1.role=orr1.id " +
@@ -58,7 +62,9 @@ private static final String GET_INFO = "SELECT info FROM orders where id = ?";
                     "o1.id, o1.name, o1.role, orr1.role,  o1.is_blocked, o1.info, " +
                     "tr.id, tr.money, " +
                     "tow.id, " +
-                    "tow.type " +
+                    "tow.type, " +
+                    "tow.price, " +
+                    "tow.blocked " +
                     "FROM orders as ord  " +
                     "join pdd_signs as ps on ps.id = ord.sign " +
                     "join organisations as o1 on o1.id=ord.customer join organisation_roles as orr1 on o1.role=orr1.id " +
@@ -75,7 +81,9 @@ private static final String GET_INFO = "SELECT info FROM orders where id = ?";
                     " tr.id, tr.money,  " +
                     "tow.id,  " +
                     "tow.type, " +
-                    "ST_AsText(mp.coordinates) as coords, mp.address, directions.direction, mp.annotation " +
+                    "ST_AsText(mp.coordinates) as coords, mp.address, directions.direction, mp.annotation, " +
+                    "tow.price, " +
+                    "tow.blocked " +
                     "FROM orders as ord  " +
                     "join pdd_signs as ps on ps.id = ord.sign  " +
                     "join organisations as o1 on o1.id=ord.customer join organisation_roles as orr1 on o1.role=orr1.id  " +
@@ -90,7 +98,9 @@ private static final String GET_INFO = "SELECT info FROM orders where id = ?";
                     "o1.id, o1.name, o1.role, orr1.role,  o1.is_blocked, o1.info, " +
                     "tr.id, tr.money, " +
                     "tow.id, " +
-                    "tow.type " +
+                    "tow.type, " +
+                    "tow.price, " +
+                    "tow.blocked " +
                     "FROM orders as ord  " +
                     "join pdd_signs as ps on ps.id = ord.sign " +
                     "join organisations as o1 on o1.id=ord.customer join organisation_roles as orr1 on o1.role=orr1.id " +
@@ -106,7 +116,9 @@ private static final String GET_INFO = "SELECT info FROM orders where id = ?";
                     " tr.id, tr.money,  " +
                     "tow.id,  " +
                     "tow.type, " +
-                    "ST_AsText(mp.coordinates) as coords, mp.address, directions.direction, mp.annotation " +
+                    "ST_AsText(mp.coordinates) as coords, mp.address, directions.direction, mp.annotation, " +
+                    "tow.price, " +
+                    "tow.blocked " +
                     "FROM orders as ord  " +
                     "join pdd_signs as ps on ps.id = ord.sign  " +
                     "join organisations as o1 on o1.id=ord.customer join organisation_roles as orr1 on o1.role=orr1.id  " +
@@ -122,7 +134,9 @@ private static final String GET_INFO = "SELECT info FROM orders where id = ?";
                     "o1.id, o1.name, o1.role, orr1.role,  o1.is_blocked, o1.info, " +
                     "tr.id, tr.money, " +
                     "tow.id, " +
-                    "tow.type " +
+                    "tow.type, " +
+                    "tow.price, " +
+                    "tow.blocked " +
                     "FROM orders as ord  " +
                     "join pdd_signs as ps on ps.id = ord.sign " +
                     "join organisations as o1 on o1.id=ord.customer join organisation_roles as orr1 on o1.role=orr1.id " +
@@ -138,7 +152,9 @@ private static final String GET_INFO = "SELECT info FROM orders where id = ?";
                     " tr.id, tr.money,  " +
                     "tow.id,  " +
                     "tow.type, " +
-                    "ST_AsText(mp.coordinates) as coords, mp.address, directions.direction, mp.annotation " +
+                    "ST_AsText(mp.coordinates) as coords, mp.address, directions.direction, mp.annotation, " +
+                    "tow.price, " +
+                    "tow.blocked " +
                     "FROM orders as ord  " +
                     "join pdd_signs as ps on ps.id = ord.sign  " +
                     "join organisations as o1 on o1.id=ord.customer join organisation_roles as orr1 on o1.role=orr1.id  " +
@@ -154,7 +170,9 @@ private static final String GET_INFO = "SELECT info FROM orders where id = ?";
                     "o1.id, o1.name, o1.role, orr1.role,  o1.is_blocked, o1.info, " +
                     "tr.id, tr.money, " +
                     "tow.id, " +
-                    "tow.type " +
+                    "tow.type, " +
+                    "tow.price, " +
+                    "tow.blocked " +
                     "FROM orders as ord  " +
                     "join pdd_signs as ps on ps.id = ord.sign " +
                     "join organisations as o1 on o1.id=ord.customer join organisation_roles as orr1 on o1.role=orr1.id " +
@@ -188,7 +206,8 @@ private static final String GET_INFO = "SELECT info FROM orders where id = ?";
         try {
 
             return (Order) RequestExecutor.createFieldUseDifferentParameters
-                    (ADD_ORDER_WITH_TRANSACTION, GET_ORDERS_LAST_INSERTED_ID, new Order(), signList, sign, sign_standard_size, customer, typeOfWork, info, transaction);
+                    (ADD_ORDER_WITH_TRANSACTION, GET_ORDERS_LAST_INSERTED_ID, new Order(),
+                            signList, sign, sign_standard_size, customer, typeOfWork, info, transaction);
 
         } catch (SQLException ex) {
 

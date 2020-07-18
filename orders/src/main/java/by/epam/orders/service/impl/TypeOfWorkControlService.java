@@ -14,10 +14,10 @@ public class TypeOfWorkControlService implements ITypeOfWorkControlService {
     private static final ITypeOfWorkControl typeOfWorkControl = DaoFactory.getINSTANCE().getTypeOfWorkControl();
 
     @Override
-    public TypeOfWork addTypeOfWork(String name) throws ServiceException {
+    public TypeOfWork addTypeOfWork(String name, double price) throws ServiceException {
         try {
 
-            return typeOfWorkControl.addTypeOfWork(name);
+            return typeOfWorkControl.addTypeOfWork(name, price);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -26,7 +26,31 @@ public class TypeOfWorkControlService implements ITypeOfWorkControlService {
     }
 
     @Override
-    public TypeOfWork removeTypeOfWork(int id) throws ServiceException {
+    public boolean setBlock(int id, boolean block) throws ServiceException {
+        try {
+
+            return typeOfWorkControl.setBlock(id, block);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public boolean setPrice(int id, double price) throws ServiceException {
+        try {
+
+            return typeOfWorkControl.setPrice(id, price);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public boolean removeTypeOfWork(int id) throws ServiceException {
         try {
 
             return typeOfWorkControl.removeTypeOfWork(id);

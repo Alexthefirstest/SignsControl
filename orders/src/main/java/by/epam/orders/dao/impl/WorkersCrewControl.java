@@ -128,7 +128,7 @@ public class WorkersCrewControl implements IWorkersCrewControl {
     public boolean setDateOfRemove(int workersCrewId, String date) throws DAOException {
 
         try {
-            return by.epam.orders.dao.impl.RequestExecutor.setField(SET_DATE_OF_REMOVE, workersCrewId, date);
+            return RequestExecutor.setField(SET_DATE_OF_REMOVE, workersCrewId, date);
         } catch (SQLException ex) {
 
             throw new DAOException(ex);

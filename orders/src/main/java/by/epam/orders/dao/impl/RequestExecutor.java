@@ -57,6 +57,10 @@ class RequestExecutor {
             if (parameters[i] instanceof Character) {
                 ps.setString(i + 1, String.valueOf(parameters[i]));
             }
+
+            if (parameters[i] instanceof Double) {
+                ps.setDouble(i + 1, (Double) parameters[i]);
+            }
         }
 
         return ps;
@@ -113,6 +117,7 @@ class RequestExecutor {
         try (PreparedStatement psInsert = connection.prepareStatement(sqlInsert); PreparedStatement psSelect = connection.prepareStatement(sqlSelect)) {
 
             differentParametersInsideRequest(parameters, psInsert);
+
             psInsert.executeUpdate();
 
             rs = psSelect.executeQuery();
@@ -186,6 +191,50 @@ class RequestExecutor {
         try (PreparedStatement ps = connection.prepareStatement(request)) {
 
             ps.setString(1, info);
+            ps.setInt(2, id);
+
+            if (ps.executeUpdate() == 0) {
+                logger.info(" wrong id ");
+                return false;
+            }
+
+            return true;
+
+        } finally {
+            CONNECTION_POOL.releaseConnection(connection);
+        }
+
+    }
+
+    static boolean setField(String request, int id, boolean parameter) throws SQLException {
+
+        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(request)) {
+
+            ps.setBoolean(1, parameter);
+            ps.setInt(2, id);
+
+            if (ps.executeUpdate() == 0) {
+                logger.info(" wrong id ");
+                return false;
+            }
+
+            return true;
+
+        } finally {
+            CONNECTION_POOL.releaseConnection(connection);
+        }
+
+    }
+
+    static boolean setField(String request, int id, double parameter) throws SQLException {
+
+        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(request)) {
+
+            ps.setDouble(1, parameter);
             ps.setInt(2, id);
 
             if (ps.executeUpdate() == 0) {
