@@ -13,5 +13,7 @@ public interface ITypeOfWorkControl {
     boolean removeTypeOfWork(int id) throws DAOException;
 
     TypeOfWork[] getTypesOfWork() throws DAOException;
+    TypeOfWork[] getUnblockedTypesOfWork() throws DAOException;
+    TypeOfWork getTypeOfWork(int id) throws DAOException;
 
 }

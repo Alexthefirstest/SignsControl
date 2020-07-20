@@ -15,8 +15,26 @@ public class WorkersCrew implements Serializable , FactoryType {
     Date creationDate;
     Date removeDate;
     String info;
+    int organisationID;
+
+    public WorkersCrew(int id, ArrayList<User> workers, Date creationDate, Date removeDate, String info, int organisationID) {
+        this.id = id;
+        this.workers = workers;
+        this.creationDate = creationDate;
+        this.removeDate = removeDate;
+        this.info = info;
+        this.organisationID = organisationID;
+    }
 
     public WorkersCrew() {
+    }
+
+    public int getOrganisationID() {
+        return organisationID;
+    }
+
+    public void setOrganisationID(int organisationID) {
+        this.organisationID = organisationID;
     }
 
     public WorkersCrew(boolean setNewWorkersArray) {
@@ -91,6 +109,7 @@ public class WorkersCrew implements Serializable , FactoryType {
         WorkersCrew that = (WorkersCrew) o;
 
         if (id != that.id) return false;
+        if (organisationID != that.organisationID) return false;
         if (workers != null ? !workers.equals(that.workers) : that.workers != null) return false;
         if (creationDate != null ? !creationDate.equals(that.creationDate) : that.creationDate != null) return false;
         if (removeDate != null ? !removeDate.equals(that.removeDate) : that.removeDate != null) return false;
@@ -104,6 +123,7 @@ public class WorkersCrew implements Serializable , FactoryType {
         result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
         result = 31 * result + (removeDate != null ? removeDate.hashCode() : 0);
         result = 31 * result + (info != null ? info.hashCode() : 0);
+        result = 31 * result + organisationID;
         return result;
     }
 
@@ -115,6 +135,7 @@ public class WorkersCrew implements Serializable , FactoryType {
         sb.append(", creationDate=").append(creationDate);
         sb.append(", removeDate=").append(removeDate);
         sb.append(", info='").append(info).append('\'');
+        sb.append(", organisationID=").append(organisationID);
         sb.append('}');
         return sb.toString();
     }

@@ -35,6 +35,24 @@
      <input type="submit" value="show unexecuted">
  </form>
 
+  <form action='${pageContext.request.contextPath}/orders' method="get">
+     <input type="text" name="orders_option" value='show_by_org_id' hidden>
+
+
+  <label for="organisation_id"> организация:</label><select name="organisationID" id='organisation_id'
+                                                                required>
+
+                                 <c:forEach var="organisation" items='${allOrganisations}'>
+
+                                 <option value='${organisation.id}'>${organisation.name}</option>
+
+                                  </c:forEach>
+
+                          </select>
+
+
+     <input type="submit" value="показать заказы">
+ </form>
 
     <c:forEach var="order" items='${orders}'>
 
@@ -65,7 +83,9 @@
         <c:out value='        '/>
        <c:out value='|organisationinfo: ${order.customerOrganisation.info}'/>
         <c:out value='        '/>
-        <c:out value='|transactionID: ${order.standardSize}'/>
+        <c:out value='|standard size: ${order.standardSize}'/>
+          <c:out value='        '/>
+          <c:out value='|transactionID: ${order.transactionID}'/>
           <c:out value='        '/>
                 <c:out value='|money: ${order.transactionMoney}'/>
                   <c:out value='        '/>
@@ -79,6 +99,36 @@
          <c:out value='        '/>
         <c:out value='|info : ${order.info}'/>
 
+        <c:out value='|sesRoel : ${sessionScope.organisationRole}'/>
+        <c:out value='|org.Role : ${order.customerOrganisation.role.id}'/>
+        <c:out value='|org.tra : ${order.transactionID}'/>
+
+
+ <c:if test="${sessionScope.organisationRole==order.customerOrganisation.role.id && order.transactionID<1}">
+
+<form action='${pageContext.request.contextPath}/pay_order' method="post" id='pay_order_form' accept-charset="UTF-8">
+
+ <input type="text"  name="id" value='${order.id}' hidden required>
+
+<label for="organisations_order"> оплатить:</label><select name="organisationTo" id='organisations_order'
+                                                              required>
+
+                               <c:forEach var="organisation" items='${organisations}'>
+
+                               <option value='${organisation.id}'>${organisation.name}</option>
+
+                                </c:forEach>
+
+
+                        </select>
+
+<label for="acceptPrice">price: <label> <input type="text" id="acceptPrice" name="acceptPrice"  pattern="\d+(\.\d*)?">
+
+
+    <input type="submit" value="оплатить">
+</form>
+
+</c:if>
 
 <br><br>
 

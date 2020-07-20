@@ -20,12 +20,14 @@ public interface IOrdersControl {
     Boolean setDateOfExecution(int orderID, String dateOfExecution) throws DAOException;
 
     Boolean removeOrder(int orderID) throws DAOException;
+    Order getOrder(int orderID) throws DAOException;
 
     Boolean setInfo(int orderID, String info) throws DAOException;
 
     String getInfo(int orderID) throws DAOException;
 
     Order[] getOrders() throws DAOException;
+    Order[] getOrders(int organisationPerformerID) throws DAOException;
 
     Order[] getExecutedOrders() throws DAOException;
 

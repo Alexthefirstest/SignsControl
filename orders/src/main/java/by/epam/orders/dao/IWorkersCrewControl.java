@@ -5,9 +5,9 @@ import by.epam.orders.dao.exceptions.DAOException;
 
 public interface IWorkersCrewControl {
 
-    WorkersCrew addWorkersCrew(String creationDate) throws DAOException;
+    WorkersCrew addWorkersCrew(String creationDate, int organisationID) throws DAOException;
 
-    WorkersCrew addWorkersCrew(String creationDate, String info) throws DAOException;
+    WorkersCrew addWorkersCrew(String creationDate, String info, int organisationID) throws DAOException;
 
     boolean removeWorkersCrew(int id) throws DAOException;
 

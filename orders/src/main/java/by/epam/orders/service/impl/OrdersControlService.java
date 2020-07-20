@@ -92,6 +92,19 @@ public class OrdersControlService implements IOrdersControlService {
     }
 
     @Override
+    public Order getOrder(int orderID) throws ServiceException {
+
+        try {
+
+            return ordersControl.getOrder(orderID);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
     public Boolean setInfo(int orderID, String info) throws ServiceException {
         try {
 
@@ -109,6 +122,18 @@ public class OrdersControlService implements IOrdersControlService {
         try {
 
             return ordersControl.getOrders();
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public Order[] getOrders(int organisationPerformerID) throws ServiceException {
+        try {
+
+            return ordersControl.getOrders(organisationPerformerID);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

@@ -46,15 +46,26 @@ public class GetOrdersJSP implements Command {
                 case "unexecuted":
                     orders = ordersControl.getUnExecutedOrders();
                     break;
+                    case "show_by_org_id":
+                        int id= Integer.parseInt(request.getParameter("organisationID"));
+                    orders = ordersControl.getOrders(id);
+                    break;
                 default:
                     orders = ordersControl.getOrders();
                     break;
             }
             request.setAttribute("orders", orders);
 
+            request.setAttribute("organisations",
+                    by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory.getINSTANCE().getOrganisationsControllerService()
+                            .getUnblockedOrganisations(3));
+            request.setAttribute("allOrganisations",
+                    by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory.getINSTANCE().getOrganisationsControllerService()
+                            .getOrganisations());
+
             request.getRequestDispatcher("/WEB-INF/jsp/orders/orders.jsp").forward(request, response);
 
-        } catch (ServiceException e) {
+        } catch (ServiceException | by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException e) {
             logger.warn(e);
         }
     }

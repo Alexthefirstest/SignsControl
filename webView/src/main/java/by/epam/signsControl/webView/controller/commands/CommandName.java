@@ -54,7 +54,8 @@ public enum CommandName {
     REMOVE_TYPE_OF_WORK,
     ADD_TYPE_OF_WORK,
     TYPES_OF_WORK,
-    CHANGE_TYPE_OF_WORK
+    CHANGE_TYPE_OF_WORK,
+    PAY_ORDER
 
 
 }

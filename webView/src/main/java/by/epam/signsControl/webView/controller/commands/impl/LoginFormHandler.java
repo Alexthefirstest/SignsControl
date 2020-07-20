@@ -17,10 +17,17 @@ public class LoginFormHandler implements Command {
 
     private static final Logger logger = LogManager.getLogger(LoginFormHandler.class);
 
+    public static final String USER_ID = "userID";
+    public static final String USER_ROLE = "role";
+    public static final String USERNAME ="username" ;
+    public static final String ORGANISATION_ID = "organisationID";
+    public static final String ORGANISATION_ROLE = "organisationRole";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ServiceException {
 
         logger.info("inside execute");
+
 
 
         User user = ServiceFactory.getINSTANCE().getUsersControllerService()
@@ -38,12 +45,18 @@ public class LoginFormHandler implements Command {
             logger.warn("USER ELSE: " + user);
 
 
-            session.setAttribute("userID", user.getId());
-            session.setAttribute("role", user.getRole().getId());
-            session.setAttribute("username", user.getLogin());
-            session.setAttribute("organisationID", user.getOrganisation().getId());
-            session.setAttribute("organisationRole", user.getOrganisation().getRole().getId());
+            session.setAttribute(LoginFormHandler.USER_ID, user.getId());
+            session.setAttribute(LoginFormHandler.USER_ROLE, user.getRole().getId());
+            session.setAttribute(LoginFormHandler.USERNAME, user.getLogin());
+            session.setAttribute(LoginFormHandler.ORGANISATION_ID, user.getOrganisation().getId());
+            session.setAttribute(LoginFormHandler.ORGANISATION_ROLE, user.getOrganisation().getRole().getId());
 
+
+            logger.info(user.getId());
+            logger.info(user.getRole().getId());
+            logger.info(user.getLogin());
+            logger.info(user.getOrganisation().getId());
+            logger.info(user.getOrganisation().getRole().getId());
 
             response.sendRedirect(request.getContextPath() + "/");
         }

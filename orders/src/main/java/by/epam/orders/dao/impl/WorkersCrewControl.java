@@ -16,20 +16,20 @@ public class WorkersCrewControl implements IWorkersCrewControl {
 
     private static final String SQL_SELECT_USE_LAST_INSERTED_ID = "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked,  " +
             "  ui.name, ui.surname, ui.info,  " +
-            " c.id, c.creation_date, c.remove_date, c.info  " +
+            " c.id, c.creation_date, c.remove_date, c.info, c.organisation  " +
             " FROM workers_crews as wc right join crews as c on wc.workers_crew_id=c.id  " +
             " left join users as u on u.id=wc.worker left join user_info as ui on u.id=ui.id left join organisations as o on o.id=u.organisation left join user_roles as   " +
             " ur on u.role=ur.id left join organisation_roles as orr on o.role=orr.id  where c.id=last_insert_id();";
 
     private static final String SQL_SELECT_USE_ID = "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked,  " +
             "  ui.name, ui.surname, ui.info,  " +
-            " c.id, c.creation_date, c.remove_date, c.info  " +
+            " c.id, c.creation_date, c.remove_date, c.info, c.organisation  " +
             " FROM workers_crews as wc right join crews as c on wc.workers_crew_id=c.id  " +
             " left join users as u on u.id=wc.worker left join user_info as ui on u.id=ui.id left join organisations as o on o.id=u.organisation left join user_roles as   " +
             " ur on u.role=ur.id left join organisation_roles as orr on o.role=orr.id  where c.id=";
 
-    private static final String SQL_ADD_CREW = "INSERT INTO `crews` (`creation_date`) VALUES (?);";
-    private static final String SQL_ADD_CREW_WITH_INFO = "INSERT INTO `crews` (`creation_date`, info) VALUES (?, ?);";
+    private static final String SQL_ADD_CREW = "INSERT INTO `crews` (`creation_date`, organisation) VALUES (?,?);";
+    private static final String SQL_ADD_CREW_WITH_INFO = "INSERT INTO `crews` (`creation_date`, info, organisation) VALUES (?, ?,?);";
     private static final String SQL_DELETE_CREW = "DELETE FROM `crews` WHERE (`id` = ?);";
     private static final String SQL_DELETE_WORKER = "DELETE FROM workers_crews WHERE (workers_crew_id=? AND worker=?);";
 
@@ -37,44 +37,45 @@ public class WorkersCrewControl implements IWorkersCrewControl {
     private static final String ADD_WORKER = "INSERT INTO `workers_crews` (`workers_crew_number`, worker) VALUES (?,?); ";
     private static final String GET_WORKERS_CREWS = "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked,  " +
             "  ui.name, ui.surname, ui.info,  " +
-            " c.id, c.creation_date, c.remove_date, c.info  " +
+            " c.id, c.creation_date, c.remove_date, c.info, c.organisation  " +
             " FROM workers_crews as wc right join crews as c on wc.workers_crew_id=c.id  " +
             "  join users as u on u.id=wc.worker  join user_info as ui on u.id=ui.id  join organisations as o on o.id=u.organisation  join user_roles as   " +
             " ur on u.role=ur.id  join organisation_roles as orr on o.role=orr.id";
 
+
     private static final String GET_ACTIVE_WORKERS_CREWS = "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked,  " +
             "  ui.name, ui.surname, ui.info,  " +
-            " c.id, c.creation_date, c.remove_date, c.info  " +
+            " c.id, c.creation_date, c.remove_date, c.info, c.organisation  " +
             " FROM workers_crews as wc right join crews as c on wc.workers_crew_id=c.id  " +
             "  join users as u on u.id=wc.worker  join user_info as ui on u.id=ui.id  join organisations as o on o.id=u.organisation  join user_roles as   " +
             " ur on u.role=ur.id  join organisation_roles as orr on o.role=orr.id where c.remove_date is null";
     private static final String GET_WORKERS_CREWS_BY_ORGANISATION = "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked,  " +
             "  ui.name, ui.surname, ui.info,  " +
-            " c.id, c.creation_date, c.remove_date, c.info  " +
+            " c.id, c.creation_date, c.remove_date, c.info, c.organisation  " +
             " FROM workers_crews as wc right join crews as c on wc.workers_crew_id=c.id  " +
             "  join users as u on u.id=wc.worker  join user_info as ui on u.id=ui.id  join organisations as o on o.id=u.organisation  join user_roles as   " +
-            " ur on u.role=ur.id  join organisation_roles as orr on o.role=orr.id where o.id = ?";
+            " ur on u.role=ur.id  join organisation_roles as orr on o.role=orr.id where c.organisation=?";
 
   private static final String GET_WORKERS_CREWS_BY_USER = "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked,  " +
             "  ui.name, ui.surname, ui.info,  " +
-            " c.id, c.creation_date, c.remove_date, c.info  " +
+            " c.id, c.creation_date, c.remove_date, c.info, c.organisation  " +
             " FROM workers_crews as wc right join crews as c on wc.workers_crew_id=c.id  " +
             "  join users as u on u.id=wc.worker  join user_info as ui on u.id=ui.id  join organisations as o on o.id=u.organisation  join user_roles as   " +
             " ur on u.role=ur.id  join organisation_roles as orr on o.role=orr.id where u.id = ?";
 
     private static final String GET_EMPTY_WORKERS_CREWS = "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked,  " +
             "  ui.name, ui.surname, ui.info,  " +
-            " c.id, c.creation_date, c.remove_date, c.info  " +
+            " c.id, c.creation_date, c.remove_date, c.info, c.organisation  " +
             " FROM workers_crews as wc right join crews as c on wc.workers_crew_id=c.id  " +
             " left join users as u on u.id=wc.worker left join user_info as ui on u.id=ui.id left join organisations as o on o.id=u.organisation left join user_roles as   " +
             " ur on u.role=ur.id left join organisation_roles as orr on o.role=orr.id  where ui.name is null";
 
     @Override
-    public WorkersCrew addWorkersCrew(String creationDate) throws DAOException {
+    public WorkersCrew addWorkersCrew(String creationDate, int organisationID) throws DAOException {
         try {
 
             return (WorkersCrew) RequestExecutor.createFieldUseDifferentParameters
-                    (SQL_ADD_CREW, SQL_SELECT_USE_LAST_INSERTED_ID, new WorkersCrew(), creationDate);
+                    (SQL_ADD_CREW, SQL_SELECT_USE_LAST_INSERTED_ID, new WorkersCrew(), creationDate, organisationID);
 
         } catch (SQLException ex) {
 
@@ -90,11 +91,11 @@ public class WorkersCrewControl implements IWorkersCrewControl {
     }
 
     @Override
-    public WorkersCrew addWorkersCrew(String creationDate, String info) throws DAOException {
+    public WorkersCrew addWorkersCrew(String creationDate, String info, int organisationID) throws DAOException {
         try {
 
             return (WorkersCrew) RequestExecutor.createFieldUseDifferentParameters
-                    (SQL_ADD_CREW_WITH_INFO, SQL_SELECT_USE_LAST_INSERTED_ID, new WorkersCrew(), creationDate, info);
+                    (SQL_ADD_CREW_WITH_INFO, SQL_SELECT_USE_LAST_INSERTED_ID, new WorkersCrew(), creationDate, info, organisationID);
 
         } catch (SQLException ex) {
 

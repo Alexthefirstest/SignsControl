@@ -14,10 +14,10 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
     private static final IWorkersCrewControl workersCrewControl = DaoFactory.getINSTANCE().getWorkersCrewControl();
 
     @Override
-    public WorkersCrew addWorkersCrew(String creationDate) throws ServiceException {
+    public WorkersCrew addWorkersCrew(String creationDate, int organisationID) throws ServiceException {
         try {
 
-            return workersCrewControl.addWorkersCrew(creationDate);
+            return workersCrewControl.addWorkersCrew(creationDate, organisationID);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -26,10 +26,10 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
     }
 
     @Override
-    public WorkersCrew addWorkersCrew(String creationDate, String info) throws ServiceException {
+    public WorkersCrew addWorkersCrew(String creationDate, String info, int organisationID) throws ServiceException {
         try {
 
-            return workersCrewControl.addWorkersCrew(creationDate, info);
+            return workersCrewControl.addWorkersCrew(creationDate, info, organisationID);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

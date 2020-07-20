@@ -213,8 +213,6 @@
     <%--  добавляет  заказ --%>
 <form action='${pageContext.request.contextPath}/add_order' method="post" id='add_order_form' accept-charset="UTF-8">
 
- <input type="text" id="customer_id" name="customer_id" value="${sessionScope.organisationID}" pattern="\d+" hidden required>
-
     <label for="sign_list_order"> direction:</label><select name="sign_list" id='sign_list_order' required> </select>
 
     <label for="pdd_sign_order"> pdd_sign:</label><select name="pdd_sign" id='pdd_sign_order' required> </select>
@@ -224,15 +222,27 @@
       <label for="type_of_work_order"> type of work:</label><select name="type_of_work" id='type_of_work_order'
                                                               required>
 
-
                                <c:forEach var="type_of_work" items='${types_of_work}'>
 
-                               <option value='${type_of_work.id}'>${type_of_work.typeOfWork}</option>
+                               <option value='${type_of_work.id}'>${type_of_work.typeOfWork} ${type_of_work.price}</option>
 
                                 </c:forEach>
 
                         </select>
 
+  <label for="organisations_order"> оплатить:</label><select name="organisationTo" id='organisations_order'
+                                                              required>
+ <option value=0>нет</option>
+
+                               <c:forEach var="organisation" items='${organisations}'>
+
+                               <option value='${organisation.id}'>${organisation.name}</option>
+
+                                </c:forEach>
+
+                        </select>
+
+<label for="acceptPrice">price: </label> <input type="text" id="acceptPrice" name="acceptPrice"  pattern="\d+(\.\d*)?">
 
     <label for="signAnnotation_order"> annotation:</label><input type="text" id="signAnnotation_order"
                                                            name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">

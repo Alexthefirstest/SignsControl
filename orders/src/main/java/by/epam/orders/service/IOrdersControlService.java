@@ -18,10 +18,12 @@ public interface IOrdersControlService {
     Boolean setDateOfExecution(int orderID, String dateOfExecution) throws ServiceException;
 
     Boolean removeOrder(int orderID) throws ServiceException;
+    Order getOrder(int orderID) throws ServiceException;
 
     Boolean setInfo(int orderID, String info) throws ServiceException;
 
     Order[] getOrders() throws ServiceException;
+    Order[] getOrders(int organisationPerformerID) throws ServiceException;
 
     Order[] getExecutedOrders() throws ServiceException;
 

@@ -79,6 +79,19 @@ public class OrganisationsController implements IOrganisationsController {
             " info FROM organisations as org join organisation_roles as orgR on org.role=orgR.id order by org.name;";
 
     /**
+     * select request request in jdbc for {@link java.sql.PreparedStatement}
+     */
+    private static final String SQL_SELECT_BY_ROLE = "SELECT org.id, org.name, org.role, orgR.role, is_blocked," +
+            " info FROM organisations as org join organisation_roles as orgR on org.role=orgR.id where orgR.role=? order by org.name;";
+
+    /**
+     * select request request in jdbc for {@link java.sql.PreparedStatement}
+     */
+    private static final String SQL_SELECT_UNBLOCKED_BY_ROLE = "SELECT org.id, org.name, org.role, orgR.role, is_blocked," +
+            " info FROM organisations as org join organisation_roles as orgR on org.role=orgR.id where org.role=? AND is_blocked=0 order by org.name;";
+
+
+    /**
      * add organisation to jdbc table
      *
      * @param name organisation name
@@ -304,6 +317,50 @@ public class OrganisationsController implements IOrganisationsController {
         try {
 
             return (Organisation[]) RequestExecutor.getSignsStaff(SQL_SELECT_ALL, new Organisation());
+
+        } catch (SQLException ex) {
+
+            throw new DAOException(ex);
+
+        }
+    }
+
+    /**
+     * get array of organisation from jdbc with with role id
+     *
+     * @param organisationRole organisation id in jdbc
+     * @return array of organisation or empty array when nothing was find
+     * @throws DAOException when other exceptions during process occurred
+     * @see RequestExecutor#getSignsStaff(String, FactoryType, int...)
+     */
+    @Override
+    public Organisation[] getOrganisations(int organisationRole) throws DAOException {
+
+        try {
+
+            return (Organisation[]) RequestExecutor.getSignsStaff(SQL_SELECT_BY_ROLE, new Organisation(), organisationRole);
+
+        } catch (SQLException ex) {
+
+            throw new DAOException(ex);
+
+        }
+    }
+
+    /**
+     * get array of unblocked organisation from jdbc with with role id
+     *
+     * @param organisationRole organisation id in jdbc
+     * @return array of organisation or empty array when nothing was find
+     * @throws DAOException when other exceptions during process occurred
+     * @see RequestExecutor#getSignsStaff(String, FactoryType, int...)
+     */
+    @Override
+    public Organisation[] getUnblockedOrganisations(int organisationRole) throws DAOException {
+
+        try {
+
+            return (Organisation[]) RequestExecutor.getSignsStaff(SQL_SELECT_UNBLOCKED_BY_ROLE, new Organisation(), organisationRole);
 
         } catch (SQLException ex) {
 

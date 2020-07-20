@@ -66,6 +66,9 @@ public class OrdersResponseCreator {
             sb.append("| workers crew: ").append(((workersCrew = orders.get(i).getWorkersCrew()) == 0 ? "-" : workersCrew));
             sb.append("| date of order: ").append(orders.get(i).getDateOfOrder());
             sb.append("| date of execution: ").append(((dateOfExecution = orders.get(i).getDateOfExecution()) == null ? "-" : dateOfExecution));
+            sb.append("| : ").append(((dateOfExecution = orders.get(i).getDateOfExecution()) == null ? "-" : dateOfExecution));
+            sb.append("| оплачено: ").append((orders.get(i).getTransactionID()));
+            sb.append("| оплачено: ").append((orders.get(i).getTransactionID()<1));
             sb.append("| info: ").append(orders.get(i).getInfo());
             sb.append("<br>");
 

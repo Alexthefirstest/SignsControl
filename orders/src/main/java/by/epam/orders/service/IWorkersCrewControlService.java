@@ -5,9 +5,9 @@ import by.epam.orders.service.exceptions.ServiceException;
 
 public interface IWorkersCrewControlService {
 
-    WorkersCrew addWorkersCrew(String creationDate) throws ServiceException;
+    WorkersCrew addWorkersCrew(String creationDate, int organisationID) throws ServiceException;
 
-    WorkersCrew addWorkersCrew(String creationDate, String info) throws ServiceException;
+    WorkersCrew addWorkersCrew(String creationDate, String info, int organisationID) throws ServiceException;
 
     boolean removeWorkersCrew(int id) throws ServiceException;
 

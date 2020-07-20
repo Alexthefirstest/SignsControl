@@ -76,6 +76,7 @@ class CommandProvider {
         commands.put(CommandName.ADD_TYPE_OF_WORK, new AddTypeOfWork());
         commands.put(CommandName.TYPES_OF_WORK, new GetTypesOfWork());
         commands.put(CommandName.CHANGE_TYPE_OF_WORK, new ChangeTypeOfWork());
+        commands.put(CommandName.PAY_ORDER, new PayOrder());
 
     }
 

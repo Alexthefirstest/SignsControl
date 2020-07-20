@@ -23,7 +23,7 @@
 
 <form action='${pageContext.request.contextPath}/add_type_of_work' method="post"  accept-charset="UTF-8">
 <label for="work_name">type of work name: <label> <input type="text" id="work_name" name="name" pattern="[\wА-Яа-я\s:!.,)(-?\d]+" required>
-<label for="price">price: <label> <input type="text" id="price" name="price"  pattern="\d+(\\.\d*)?" required>
+<label for="price">price: <label> <input type="text" id="price" name="price"  pattern="\d+(\.\d*)?" required>
 <br><input type="reset" value="сбросить">
     <input type="submit" value="добавить">
 </form>

@@ -45,6 +45,7 @@ public class OrdersFactory {
             workersCrew.setCreationDate(rs.getDate(16));
             workersCrew.setRemoveDate(rs.getDate(17));
             workersCrew.setInfo(rs.getString(18));
+            workersCrew.setOrganisationID(rs.getInt(19));
 
             workersCrew.setNewWorkersArr();
 
@@ -125,6 +126,7 @@ public class OrdersFactory {
                 workersCrew.setCreationDate(rs.getDate(16));
                 workersCrew.setRemoveDate(rs.getDate(17));
                 workersCrew.setInfo(rs.getString(18));
+                workersCrew.setOrganisationID(rs.getInt(19));
 
                 workersCrew.setNewWorkersArr();
 

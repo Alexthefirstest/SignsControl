@@ -14,8 +14,10 @@ public class TypeOfWorkControl implements ITypeOfWorkControl {
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM type_of_work where id = ";
     private static final String SQL_DELETE = "DELETE FROM `type_of_work` WHERE (`id` =?);";
     private static final String SQL_SELECT_ALL = "SELECT * FROM type_of_work order by id;";
+    private static final String SQL_SELECT_UNBLOCKED = "SELECT * FROM type_of_work where blocked=0 order by id ";
     private static final String SET_BLOCK = "UPDATE `type_of_work` SET `blocked` = ? WHERE (`id` = ?);";
     private static final String SET_PRICE = "UPDATE `type_of_work` SET `price` = ? WHERE (`id` = ?);";
+    private static final String GET_TYPE_OF_WORK = "SELECT * FROM type_of_work where id = ?";
 
 
     @Override
@@ -78,6 +80,40 @@ public class TypeOfWorkControl implements ITypeOfWorkControl {
         try {
 
             return (TypeOfWork[]) RequestExecutor.getSignsStaff(SQL_SELECT_ALL, new TypeOfWork());
+
+        } catch (SQLException ex) {
+
+            throw new DAOException(ex);
+
+        }
+
+
+    }
+
+    @Override
+    public TypeOfWork[] getUnblockedTypesOfWork() throws DAOException {
+
+
+        try {
+
+            return (TypeOfWork[]) RequestExecutor.getSignsStaff(SQL_SELECT_UNBLOCKED, new TypeOfWork());
+
+        } catch (SQLException ex) {
+
+            throw new DAOException(ex);
+
+        }
+
+
+    }
+
+    @Override
+    public TypeOfWork getTypeOfWork(int id) throws DAOException {
+
+
+        try {
+
+            return (TypeOfWork) RequestExecutor.getOneSignsStaff(GET_TYPE_OF_WORK, new TypeOfWork(), id);
 
         } catch (SQLException ex) {
 

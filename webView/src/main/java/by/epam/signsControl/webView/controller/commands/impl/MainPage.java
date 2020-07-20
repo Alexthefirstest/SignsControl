@@ -27,9 +27,13 @@ public class MainPage implements Command {
 
             //if (request.getSession().getAttribute("role") != null) {
 
-            request.setAttribute("types_of_work", ServiceFactory.getINSTANCE().getTypeOfWorkControlService().getTypesOfWork());
+            request.setAttribute("types_of_work", ServiceFactory.getINSTANCE().getTypeOfWorkControlService().getUnblockedTypesOfWork());
+            request.setAttribute("organisations",
+                    by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory.getINSTANCE().getOrganisationsControllerService()
+            .getUnblockedOrganisations(3));
+
             // }
-        } catch (ServiceException e) {
+        } catch (ServiceException | by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException e) {
             logger.warn(e);
         }
         //get directions

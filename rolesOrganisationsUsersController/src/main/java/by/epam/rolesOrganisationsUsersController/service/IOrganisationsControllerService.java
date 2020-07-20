@@ -92,5 +92,18 @@ public interface IOrganisationsControllerService {
      */
     Organisation[] getOrganisations() throws ServiceException;
 
+    /**
+     * @param roleID - id of role in jdbc
+     * @return organisations array
+     * @throws ServiceException when get an exception during execution
+     */
+    Organisation[] getOrganisations(int roleID) throws ServiceException;
+
+    /**
+     * @param roleID - id of role in jdbc
+     * @return unblocked organisations array
+     * @throws ServiceException when get an exception during execution
+     */
+    Organisation[] getUnblockedOrganisations(int roleID) throws ServiceException;
 
 }

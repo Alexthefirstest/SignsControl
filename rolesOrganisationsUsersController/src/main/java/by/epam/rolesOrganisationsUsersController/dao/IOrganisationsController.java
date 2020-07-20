@@ -89,4 +89,18 @@ public interface IOrganisationsController {
      */
     Organisation[] getOrganisations() throws DAOException;
 
+    /**
+     * @param roleID - id of role in jdbc
+     * @return organisations array
+     * @throws DAOException when get an exception during execution
+     */
+    Organisation[] getOrganisations(int roleID) throws DAOException;
+
+    /**
+     * @param roleID - id of role in jdbc
+     * @return unblocked organisations array
+     * @throws DAOException when get an exception during execution
+     */
+    Organisation[] getUnblockedOrganisations(int roleID) throws DAOException;
+
 }

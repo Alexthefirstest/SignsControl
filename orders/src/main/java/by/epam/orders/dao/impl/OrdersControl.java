@@ -21,7 +21,7 @@ public class OrdersControl implements IOrdersControl {
     private static final String SET_DATE_OF_EXECUTION = "UPDATE `orders` SET `date_of_execution` = ? WHERE (`id` = ?)";
     private static final String REMOVE_ORDER = "DELETE FROM `orders` WHERE (`id` = ?);";
     private static final String SET_INFO = "UPDATE `orders` SET `info` = ? WHERE (`id` = ?)";
-private static final String GET_INFO = "SELECT info FROM orders where id = ?";
+    private static final String GET_INFO = "SELECT info FROM orders where id = ?";
 
     private static final String GET_ORDERS =
             "SELECT ord.id, ord.sign_list, ord.date_of_order, ord.date_of_execution, ord.info, ord.sign_standard_size, ord.workers_crew, " +
@@ -38,6 +38,22 @@ private static final String GET_INFO = "SELECT info FROM orders where id = ?";
                     "left join transactions as tr on ord.transaction = tr.id " +
                     "join type_of_work as tow on tow.id = ord.type_of_work " +
                     "order by ord.id DESC";
+
+    private static final String GET_ORDERS_BY_PERFORMER =
+            "SELECT ord.id, ord.sign_list, ord.date_of_order, ord.date_of_execution, ord.info, ord.sign_standard_size, ord.workers_crew, " +
+                    "ps.id, pdd_section, pdd_sign, pdd_kind, picture, ps.name, ps.description, " +
+                    "o1.id, o1.name, o1.role, orr1.role,  o1.is_blocked, o1.info, " +
+                    "tr.id, tr.money, " +
+                    "tow.id, " +
+                    "tow.type, " +
+                    "tow.price, " +
+                    "tow.blocked " +
+                    "FROM orders as ord  " +
+                    "join pdd_signs as ps on ps.id = ord.sign " +
+                    "join organisations as o1 on o1.id=ord.customer join organisation_roles as orr1 on o1.role=orr1.id " +
+                    "join transactions as tr on ord.transaction = tr.id " +
+                    "join type_of_work as tow on tow.id = ord.type_of_work " +
+                    " where tr.to=? order by ord.id DESC";
 
 
     private static final String GET_ORDERS_BY_ID =
@@ -273,6 +289,20 @@ private static final String GET_INFO = "SELECT info FROM orders where id = ?";
     }
 
     @Override
+    public Order getOrder(int orderID) throws DAOException {
+        try {
+
+            return (Order) RequestExecutor.getOneSignsStaff(GET_ORDERS_BY_ID+orderID, new Order());
+
+        } catch (SQLException ex) {
+
+
+            throw new DAOException(ex);
+
+        }
+    }
+
+    @Override
     public Boolean setInfo(int orderID, String info) throws DAOException {
         try {
             return by.epam.orders.dao.impl.RequestExecutor.setField(SET_INFO, orderID, info);
@@ -287,6 +317,20 @@ private static final String GET_INFO = "SELECT info FROM orders where id = ?";
         try {
 
             return (Order[]) RequestExecutor.getSignsStaff(GET_ORDERS, new Order());
+
+        } catch (SQLException ex) {
+
+
+            throw new DAOException(ex);
+
+        }
+    }
+
+    @Override
+    public Order[] getOrders(int organisationPerformerID) throws DAOException {
+        try {
+
+            return (Order[]) RequestExecutor.getSignsStaff(GET_ORDERS_BY_PERFORMER, new Order(), organisationPerformerID);
 
         } catch (SQLException ex) {
 

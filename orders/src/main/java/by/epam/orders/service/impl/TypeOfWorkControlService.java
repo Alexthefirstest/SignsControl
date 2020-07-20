@@ -72,4 +72,28 @@ public class TypeOfWorkControlService implements ITypeOfWorkControlService {
             throw new ServiceException(ex);
         }
     }
+
+    @Override
+    public TypeOfWork[] getUnblockedTypesOfWork() throws ServiceException {
+        try {
+
+            return typeOfWorkControl.getUnblockedTypesOfWork();
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public TypeOfWork getTypeOfWork(int id) throws ServiceException {
+        try {
+
+            return typeOfWorkControl.getTypeOfWork(id);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
 }

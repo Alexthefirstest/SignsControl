@@ -235,4 +235,46 @@ public class OrganisationsControllerService implements IOrganisationsControllerS
             throw new ServiceException(ex);
         }
     }
+
+    /**
+     * @return organisations array
+     * @throws ServiceValidationException when catch {@link DAOValidationException}
+     *                                    from {@link IOrganisationsController#getOrganisations()}
+     * @throws ServiceException           when catch {@link DAOException}
+     *                                    from {@link IOrganisationsController#getOrganisations()}
+     * @poram roleID
+     */
+    @Override
+    public Organisation[] getOrganisations(int roleID) throws ServiceException {
+        try {
+
+            return organisationsController.getOrganisations(roleID);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    /**
+     * @return unblocked organisations array
+     * @throws ServiceValidationException when catch {@link DAOValidationException}
+     *                                    from {@link IOrganisationsController#getOrganisations()}
+     * @throws ServiceException           when catch {@link DAOException}
+     *                                    from {@link IOrganisationsController#getOrganisations()}
+     * @poram roleID
+     */
+    @Override
+    public Organisation[] getUnblockedOrganisations(int roleID) throws ServiceException {
+        try {
+
+            return organisationsController.getUnblockedOrganisations(roleID);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+
 }
