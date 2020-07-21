@@ -408,10 +408,20 @@ public class UsersControllerService implements IUsersControllerService {
         }
     }
 
+    /**
+     * set new surname for user
+     *
+     * @param id   user id in jdbc
+     * @param role new  user role
+     * @return true if success, false - if no
+     * @throws ServiceValidationException catch {@link DAOValidationException}
+     *                                    from {@link IUsersController#setSurname(int, String)}
+     * @throws ServiceException           when catch {@link DAOException}
+     *                                    from {@link IUsersController#setSurname(int, String)}
+     */
     @Override
-    public boolean setRole(int id, String role) throws ServiceException {
+    public boolean setRole(int id, int role) throws ServiceException {
 
-        InputValidation.nullAndSymbolsCheckWithRus(role);
 
         try {
 

@@ -143,7 +143,7 @@ public interface IUsersController {
      * @return true if success, false - if no
      * @throws DAOException when get an exception during execution
      */
-    boolean setRole(int id, String role) throws DAOException;
+    boolean setRole(int id, int role) throws DAOException;
 
 
 }

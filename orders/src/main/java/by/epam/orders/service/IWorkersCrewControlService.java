@@ -12,6 +12,7 @@ public interface IWorkersCrewControlService {
     boolean removeWorkersCrew(int id) throws ServiceException;
 
     boolean setDateOfRemove(int workersCrewID, String date) throws ServiceException;
+    boolean setInfo(int workersCrewId, String info) throws ServiceException;
 
     WorkersCrew addWorker(int workersCrewId, int workersId) throws ServiceException;
 
@@ -26,5 +27,6 @@ public interface IWorkersCrewControlService {
     WorkersCrew[] getWorkersCrewsByUser(int userID) throws ServiceException;
 
     WorkersCrew[] getEmptyWorkersCrews() throws ServiceException;
+    WorkersCrew[] getEmptyWorkersCrews(int organisationID) throws ServiceException;
 
 }

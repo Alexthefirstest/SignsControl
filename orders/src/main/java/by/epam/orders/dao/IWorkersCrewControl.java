@@ -13,6 +13,8 @@ public interface IWorkersCrewControl {
 
     boolean setDateOfRemove(int workersCrewID, String date) throws DAOException;
 
+    boolean setInfo(int workersCrewId, String info) throws DAOException;
+
     WorkersCrew addWorker(int workersCrewId, int workersId) throws DAOException;
 
     WorkersCrew removeWorker(int workersCrewId, int workersId) throws DAOException;
@@ -22,8 +24,10 @@ public interface IWorkersCrewControl {
     WorkersCrew[] getActiveWorkersCrews() throws DAOException;
 
     WorkersCrew[] getWorkersCrews(int organisationID) throws DAOException;
+
     WorkersCrew[] getWorkersCrewsByUser(int userID) throws DAOException;
 
     WorkersCrew[] getEmptyWorkersCrews() throws DAOException;
+    WorkersCrew[] getEmptyWorkersCrews(int organisationID) throws DAOException;
 
 }

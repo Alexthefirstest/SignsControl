@@ -1,46 +1,41 @@
 package by.epam.orders.bean;
 
+import by.epam.rolesOrganisationsUsersController.bean.Organisation;
 import by.epam.rolesOrganisationsUsersController.bean.User;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class WorkersCrew implements Serializable , FactoryType {
+public class WorkersCrew implements Serializable, FactoryType {
 
     private static final long serialVersionUID = -5085596337299968847L;
 
     int id;
-    private ArrayList<User> workers;
+    private ArrayList<User> workers = new ArrayList<>();
     Date creationDate;
     Date removeDate;
     String info;
-    int organisationID;
+    Organisation organisation;
 
-    public WorkersCrew(int id, ArrayList<User> workers, Date creationDate, Date removeDate, String info, int organisationID) {
+    public WorkersCrew(int id, ArrayList<User> workers, Date creationDate, Date removeDate, String info, Organisation organisation) {
         this.id = id;
         this.workers = workers;
         this.creationDate = creationDate;
         this.removeDate = removeDate;
         this.info = info;
-        this.organisationID = organisationID;
+        this.organisation = organisation;
     }
 
     public WorkersCrew() {
     }
 
-    public int getOrganisationID() {
-        return organisationID;
+    public Organisation getOrganisation() {
+        return organisation==null? null :(Organisation) organisation.clone();
     }
 
-    public void setOrganisationID(int organisationID) {
-        this.organisationID = organisationID;
-    }
-
-    public WorkersCrew(boolean setNewWorkersArray) {
-        if (setNewWorkersArray) {
-            workers = new ArrayList<>();
-        }
+    public void setOrganisation(Organisation organisation) {
+        this.organisation = organisation;
     }
 
 
@@ -70,7 +65,7 @@ public class WorkersCrew implements Serializable , FactoryType {
     }
 
     public ArrayList<User> getWorkers() {
-        return (ArrayList<User>) workers.clone();
+        return workers==null? null : (ArrayList<User>) workers.clone();
     }
 
     public void setWorkers(ArrayList<User> workers) {
@@ -78,7 +73,7 @@ public class WorkersCrew implements Serializable , FactoryType {
     }
 
     public Date getCreationDate() {
-        return (Date) creationDate.clone();
+        return creationDate==null? null : (Date) creationDate.clone();
     }
 
     public void setCreationDate(Date creationDate) {
@@ -86,7 +81,7 @@ public class WorkersCrew implements Serializable , FactoryType {
     }
 
     public Date getRemoveDate() {
-        return (Date) removeDate.clone();
+        return removeDate==null? null :(Date) removeDate.clone();
     }
 
     public void setRemoveDate(Date removeDate) {
@@ -109,11 +104,11 @@ public class WorkersCrew implements Serializable , FactoryType {
         WorkersCrew that = (WorkersCrew) o;
 
         if (id != that.id) return false;
-        if (organisationID != that.organisationID) return false;
         if (workers != null ? !workers.equals(that.workers) : that.workers != null) return false;
         if (creationDate != null ? !creationDate.equals(that.creationDate) : that.creationDate != null) return false;
         if (removeDate != null ? !removeDate.equals(that.removeDate) : that.removeDate != null) return false;
-        return info != null ? info.equals(that.info) : that.info == null;
+        if (info != null ? !info.equals(that.info) : that.info != null) return false;
+        return organisation != null ? organisation.equals(that.organisation) : that.organisation == null;
     }
 
     @Override
@@ -123,7 +118,7 @@ public class WorkersCrew implements Serializable , FactoryType {
         result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
         result = 31 * result + (removeDate != null ? removeDate.hashCode() : 0);
         result = 31 * result + (info != null ? info.hashCode() : 0);
-        result = 31 * result + organisationID;
+        result = 31 * result + (organisation != null ? organisation.hashCode() : 0);
         return result;
     }
 
@@ -135,7 +130,7 @@ public class WorkersCrew implements Serializable , FactoryType {
         sb.append(", creationDate=").append(creationDate);
         sb.append(", removeDate=").append(removeDate);
         sb.append(", info='").append(info).append('\'');
-        sb.append(", organisationID=").append(organisationID);
+        sb.append(", organisation=").append(organisation);
         sb.append('}');
         return sb.toString();
     }

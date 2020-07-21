@@ -66,22 +66,7 @@
 <jsp:include page="header.jsp"/>
 
 <%-- контент с учетом роли --%>
-<c:choose>
 
-<c:when test="${empty sessionScope.role}">
-
-<p><a href="${pageContext.request.contextPath}/login">log in</a>
-
-    </c:when>
-
-
-    <c:otherwise>
-
-<p> User: ${sessionScope.username} <a href="${pageContext.request.contextPath}/logout">log out</a>
-
-    </c:otherwise>
-
-    </c:choose>
 
     <%-- контент для роли 1 - одд --%>
 
@@ -218,65 +203,66 @@
     <label for="pdd_sign_order"> pdd_sign:</label><select name="pdd_sign" id='pdd_sign_order' required> </select>
 
     <label for="standard_size_order"> standard_size:</label><select name="standard_size" id='standard_size_order'
-                                                              required> </select>
-      <label for="type_of_work_order"> type of work:</label><select name="type_of_work" id='type_of_work_order'
-                                                              required>
+                                                                    required> </select>
+    <label for="type_of_work_order"> type of work:</label><select name="type_of_work" id='type_of_work_order'
+                                                                  required>
 
-                               <c:forEach var="type_of_work" items='${types_of_work}'>
+    <c:forEach var="type_of_work" items='${types_of_work}'>
 
-                               <option value='${type_of_work.id}'>${type_of_work.typeOfWork} ${type_of_work.price}</option>
+        <option value='${type_of_work.id}'>${type_of_work.typeOfWork} ${type_of_work.price}</option>
 
-                                </c:forEach>
+    </c:forEach>
 
-                        </select>
+</select>
 
-  <label for="organisations_order"> оплатить:</label><select name="organisationTo" id='organisations_order'
-                                                              required>
- <option value=0>нет</option>
+    <label for="organisations_order"> оплатить:</label><select name="organisationTo" id='organisations_order'
+                                                               required>
+    <option value=0>нет</option>
 
-                               <c:forEach var="organisation" items='${organisations}'>
+    <c:forEach var="organisation" items='${organisations}'>
 
-                               <option value='${organisation.id}'>${organisation.name}</option>
+        <option value='${organisation.id}'>${organisation.name}</option>
 
-                                </c:forEach>
+    </c:forEach>
 
-                        </select>
+</select>
 
-<label for="acceptPrice">price: </label> <input type="text" id="acceptPrice" name="acceptPrice"  pattern="\d+(\.\d*)?">
+    <label for="acceptPrice">price: </label> <input type="text" id="acceptPrice" name="acceptPrice"
+                                                    pattern="\d+(\.\d*)?">
 
     <label for="signAnnotation_order"> annotation:</label><input type="text" id="signAnnotation_order"
-                                                           name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
-
+                                                                 name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
 
 
     <br><input type="reset" value="сбросить">
     <input type="submit" value="добавить">
 </form>
 
-     <%--  удаляет/изменяет заказ --%>
-<form action='${pageContext.request.contextPath}/change_delete_order' method="post" id='change_delete_order_form' accept-charset="UTF-8">
+    <%--  удаляет/изменяет заказ --%>
+<form action='${pageContext.request.contextPath}/change_delete_order' method="post" id='change_delete_order_form'
+      accept-charset="UTF-8">
 
 
-  <label for="order_id"> order:</label><select name="order_id" id='order_id'
-                                                              required>      </select>
+    <label for="order_id"> order:</label><select name="order_id" id='order_id'
+                                                 required> </select>
 
- <label for="order_action"> action:</label><select name="order_action" id='order_action'
-                                                                required>
-    <%--   <c:if test="${sessionScope.organisationRole==1}">  --%>
+    <label for="order_action"> action:</label><select name="order_action" id='order_action'
+                                                      required>
+        <%--   <c:if test="${sessionScope.organisationRole==1}">  --%>
 
-         <option value='delete'>удалить</option>
+    <option value='delete'>удалить</option>
 
-      <%-- </select> </c:if>  <c:if test="${sessionScope.organisationRole==3?}">  --%>
-         <option value='execute'>выполнить</option>
+        <%-- </select> </c:if>  <c:if test="${sessionScope.organisationRole==3?}">  --%>
+    <option value='execute'>выполнить</option>
 
-                                                                 </select>
+</select>
 
-   <label for="workers_crews"> workers crew:</label><select name="workers_crew" id='workers_crews'
-                                                                required>      </select>
+    <label for="workers_crews"> workers crew:</label><select name="workers_crew" id='workers_crews'
+                                                             required> </select>
 
-     <label for="execute_order_info"> annotation:</label><input type="text" id="execute_order_info"
-                                                             name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
- <%-- </c:if>    --%>
+    <label for="execute_order_info"> annotation:</label><input type="text" id="execute_order_info"
+                                                               name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
+        <%-- </c:if>    --%>
     <br><input type="reset" value="сбросить">
     <input type="submit" value="применить">
 </form>

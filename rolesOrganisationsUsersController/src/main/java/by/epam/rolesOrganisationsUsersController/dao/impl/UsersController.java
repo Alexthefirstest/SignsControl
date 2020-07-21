@@ -57,12 +57,13 @@ public class UsersController implements IUsersController {
     /**
      * sql select all users from db
      */
-    private static final String SQL_SELECT_ALL = "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked, ui.name, ui.surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation join user_roles as ur on u.role=ur.id join organisation_roles as orr on o.role=orr.id";
+    private static final String SQL_SELECT_ALL = "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked, ui.name, ui.surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation join user_roles as ur on u.role=ur.id join organisation_roles as orr on o.role=orr.id order by ui.surname, ui.name ";
 
     /**
      * sql select users by organisation from db
      */
-    private static final String SQL_SELECT_USE_ORGANISATION = "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked, ui.name, ui.surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation join user_roles as ur on u.role=ur.id join organisation_roles as orr on o.role=orr.id where u.organisation=? order by ui.surname, ui.name";
+    private static final String SQL_SELECT_USE_ORGANISATION =
+            "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked, ui.name, ui.surname, ui.info FROM users as u join user_info as ui on u.id=ui.id join organisations as o on o.id=u.organisation join user_roles as ur on u.role=ur.id join organisation_roles as orr on o.role=orr.id where u.organisation=? order by ui.surname, ui.name  ";
 
     /**
      * sql select user by id from db
@@ -93,7 +94,12 @@ public class UsersController implements IUsersController {
     /**
      * sql set organisation for user
      */
-    private static final String SQL_SET_ORGANISATION = "UPDATE users SET `is_blocked` = ? WHERE (`id` = ?);";
+    private static final String SQL_SET_ORGANISATION = "UPDATE users SET `organisation` = ? WHERE (`id` = ?);";    /**
+
+     /**
+     * sql set organisation for user
+     */
+    private static final String SQL_SET_ROLE = "UPDATE users SET `role` = ? WHERE (`id` = ?);";
 
 //    /**
 //     * sql get user organisation from db
@@ -501,8 +507,23 @@ public class UsersController implements IUsersController {
         }
     }
 
+    /**
+     * @param id      user id in jdbc
+     * @param role new  user role
+     * @return true if success, false - if no
+     * @throws DAOException when get an exception during execution
+     */
     @Override
-    public boolean setRole(int id, String role) throws DAOException {
-        return false;
+    public boolean setRole(int id, int role) throws DAOException {
+        try {
+
+            return RequestExecutor.setField(SQL_SET_ROLE, id, role);
+
+        } catch (SQLException ex) {
+
+            logger.warn("set role fail: " + role, ex);
+            throw new DAOException(ex);
+
+        }
     }
 }

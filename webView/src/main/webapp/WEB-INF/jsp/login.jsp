@@ -24,7 +24,7 @@
 <h3> Use latin latters and '_'</h3>
 <br>
 <form action='${pageContext.request.contextPath}/login_form' method="post">
-    <label for="fieldUser">Username:</label><br><input type="text" id="fieldUser" name="login"
+    <label for="fieldUser">Login:</label><br><input type="text" id="fieldUser" name="login"
                                                        pattern="\w+"
                                                        placeholder="max - 20 symbols" maxlength="20"
                                                        required>

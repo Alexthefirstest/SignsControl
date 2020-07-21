@@ -45,17 +45,19 @@ public class OrdersFactory {
             workersCrew.setCreationDate(rs.getDate(16));
             workersCrew.setRemoveDate(rs.getDate(17));
             workersCrew.setInfo(rs.getString(18));
-            workersCrew.setOrganisationID(rs.getInt(19));
+            workersCrew.setOrganisation(new Organisation(rs.getInt(19), rs.getString(20),
+                    new Role(rs.getInt(21), rs.getString(22)), rs.getBoolean(23),
+                    rs.getString(24)));
 
-            workersCrew.setNewWorkersArr();
+            if (rs.getInt(1) > 0) {
 
-            do {
-                workersCrew.addWorker(new User(rs.getInt(1), rs.getString(2), new Role(rs.getInt(3), rs.getString(4)),
-                        new Organisation(rs.getInt(5), rs.getString(6),
-                                new Role(rs.getInt(7), rs.getString(8)), rs.getBoolean(9), rs.getString(10)),
-                        rs.getBoolean(11), rs.getString(12), rs.getString(13), rs.getString(14)));
-            } while (rs.next());
-
+                do {
+                    workersCrew.addWorker(new User(rs.getInt(1), rs.getString(2), new Role(rs.getInt(3), rs.getString(4)),
+                            new Organisation(rs.getInt(5), rs.getString(6),
+                                    new Role(rs.getInt(7), rs.getString(8)), rs.getBoolean(9), rs.getString(10)),
+                            rs.getBoolean(11), rs.getString(12), rs.getString(13), rs.getString(14)));
+                } while (rs.next());
+            }
             return workersCrew;
 
         }
@@ -126,16 +128,24 @@ public class OrdersFactory {
                 workersCrew.setCreationDate(rs.getDate(16));
                 workersCrew.setRemoveDate(rs.getDate(17));
                 workersCrew.setInfo(rs.getString(18));
-                workersCrew.setOrganisationID(rs.getInt(19));
+                workersCrew.setOrganisation(new Organisation(rs.getInt(19), rs.getString(20),
+                        new Role(rs.getInt(21), rs.getString(22)), rs.getBoolean(23),
+                        rs.getString(24)));
 
                 workersCrew.setNewWorkersArr();
 
-                do {
-                    workersCrew.addWorker(new User(rs.getInt(1), rs.getString(2), new Role(rs.getInt(3), rs.getString(4)),
-                            new Organisation(rs.getInt(5), rs.getString(6),
-                                    new Role(rs.getInt(7), rs.getString(8)), rs.getBoolean(9), rs.getString(10)),
-                            rs.getBoolean(11), rs.getString(12), rs.getString(13), rs.getString(14)));
-                } while ((next = rs.next()) && workersCrew.getId() == rs.getInt(15));
+                if (rs.getInt(1) > 0) {
+
+                    do {
+                        workersCrew.addWorker(new User(rs.getInt(1), rs.getString(2), new Role(rs.getInt(3), rs.getString(4)),
+                                new Organisation(rs.getInt(5), rs.getString(6),
+                                        new Role(rs.getInt(7), rs.getString(8)), rs.getBoolean(9), rs.getString(10)),
+                                rs.getBoolean(11), rs.getString(12), rs.getString(13), rs.getString(14)));
+                    } while ((next = rs.next()) && workersCrew.getId() == rs.getInt(15));
+
+                } else {
+                    next = rs.next();
+                }
 
                 signsStaffArr.add(workersCrew);
 

@@ -62,6 +62,18 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
     }
 
     @Override
+    public boolean setInfo(int workersCrewId, String info) throws ServiceException {
+        try {
+
+            return workersCrewControl.setInfo(workersCrewId, info);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
     public WorkersCrew addWorker(int workersCrewId, int workersId) throws ServiceException {
         try {
 
@@ -135,6 +147,18 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
 
     @Override
     public WorkersCrew[] getEmptyWorkersCrews() throws ServiceException {
+        try {
+
+            return workersCrewControl.getEmptyWorkersCrews();
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public WorkersCrew[] getEmptyWorkersCrews(int organisationID) throws ServiceException {
         try {
 
             return workersCrewControl.getEmptyWorkersCrews();

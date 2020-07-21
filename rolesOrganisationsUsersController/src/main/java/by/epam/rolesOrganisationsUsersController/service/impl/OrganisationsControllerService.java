@@ -30,7 +30,7 @@ public class OrganisationsControllerService implements IOrganisationsControllerS
      * @param name organisation name
      * @param role organisation members role
      * @return {@link Organisation} if successfully added
-     * @throws ServiceValidationException when {@link InputValidation#nullAndSymbolsCheck(String)}
+     * @throws ServiceValidationException when {@link InputValidation#nullCheck(String)} (String)}
      *                                    or catch {@link DAOValidationException}
      *                                    from {@link IOrganisationsController#addOrganisation(String, int)}
      * @throws ServiceException           when catch {@link DAOException}
@@ -39,7 +39,7 @@ public class OrganisationsControllerService implements IOrganisationsControllerS
     @Override
     public Organisation addOrganisation(String name, int role) throws ServiceException {
 
-        InputValidation.nullAndSymbolsCheck(name);
+        InputValidation.nullCheck(name);
 
         try {
 
@@ -57,7 +57,7 @@ public class OrganisationsControllerService implements IOrganisationsControllerS
      * @param id   organisation id in jdbc
      * @param name new organisation name in jdbc
      * @return true if success, false - if no
-     * @throws ServiceValidationException when {@link InputValidation#nullAndSymbolsCheck(String)}
+     * @throws ServiceValidationException when {@link InputValidation#nullCheck(String)}
      *                                    or catch {@link DAOValidationException}
      *                                    from {@link IOrganisationsController#setName(int, String)} }
      * @throws ServiceException           when catch {@link DAOException}
@@ -66,7 +66,7 @@ public class OrganisationsControllerService implements IOrganisationsControllerS
     @Override
     public boolean setName(int id, String name) throws ServiceException {
 
-        InputValidation.nullAndSymbolsCheck(name);
+        InputValidation.nullCheck(name);
 
         try {
 
@@ -129,7 +129,7 @@ public class OrganisationsControllerService implements IOrganisationsControllerS
      * @param id   organisation id in jdbc
      * @param info new organisation info in jdbc
      * @return true if success, false - if no
-     * @throws ServiceValidationException when {@link InputValidation#nullAndSymbolsCheck(String)}
+     * @throws ServiceValidationException when {@link InputValidation#nullCheck(String)}
      *                                    or catch {@link DAOValidationException}
      *                                    from  {@link IOrganisationsController#setInfo(int, String)}
      * @throws ServiceException           when catch {@link DAOException}
@@ -138,11 +138,11 @@ public class OrganisationsControllerService implements IOrganisationsControllerS
     @Override
     public boolean setInfo(int id, String info) throws ServiceException {
 
-        InputValidation.nullAndSymbolsCheck(info);
+        InputValidation.nullCheck(info);
 
         try {
 
-            return organisationsController.setName(id, info);
+            return organisationsController.setInfo(id, info);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

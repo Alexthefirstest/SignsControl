@@ -18,7 +18,7 @@ public interface IUsersControllerService {
      *
      * @param login        user login
      * @param password     user password
-     * @param role user role
+     * @param role         user role
      * @param organisation user organisation
      * @param name         user name
      * @param surname      user surname
@@ -152,11 +152,11 @@ public interface IUsersControllerService {
     /**
      * set new role for user
      *
-     * @param id      user id in jdbc
+     * @param id   user id in jdbc
      * @param role new  user role
      * @return true if success, false - if no
      * @throws ServiceException when get an exception during execution
      */
-    boolean setRole(int id, String role) throws ServiceException;
+    boolean setRole(int id, int role) throws ServiceException;
 
 }

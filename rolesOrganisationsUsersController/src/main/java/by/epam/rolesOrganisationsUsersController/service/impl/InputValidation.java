@@ -81,7 +81,7 @@ public class InputValidation {
      */
     public static void nullAndSymbolsCheck(String string) throws ServiceValidationException {
         nullCheck(string);
-        validateString(string);
+//        validateString(string);
 
     }
 
@@ -94,7 +94,7 @@ public class InputValidation {
      */
     public static void nullAndSymbolsCheckWithRus(String string) throws ServiceValidationException {
         nullCheck(string);
-        validateStringRus(string);
+//        validateStringRus(string);
     }
 
 }

@@ -82,7 +82,7 @@ public class OrganisationsController implements IOrganisationsController {
      * select request request in jdbc for {@link java.sql.PreparedStatement}
      */
     private static final String SQL_SELECT_BY_ROLE = "SELECT org.id, org.name, org.role, orgR.role, is_blocked," +
-            " info FROM organisations as org join organisation_roles as orgR on org.role=orgR.id where orgR.role=? order by org.name;";
+            " info FROM organisations as org join organisation_roles as orgR on org.role=orgR.id where org.role=? order by org.name;";
 
     /**
      * select request request in jdbc for {@link java.sql.PreparedStatement}

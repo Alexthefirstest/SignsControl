@@ -9,6 +9,6 @@ import java.io.IOException;
 
 public interface Command {
 
-    void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ServiceException;
+    void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ServiceException, by.epam.orders.service.exceptions.ServiceException;
 
 }

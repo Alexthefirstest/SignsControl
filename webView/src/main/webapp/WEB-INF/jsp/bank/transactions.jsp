@@ -19,66 +19,65 @@
 <jsp:include page="../header.jsp"/>
 
 
-
-<form action='${pageContext.request.contextPath}/show_transactions_history' method="get" id='show_form' accept-charset="UTF-8">
+<form action='${pageContext.request.contextPath}/show_transactions_history' method="get" id='show_form'
+      accept-charset="UTF-8">
 
     <label for="findByOrgID">find by org</label>
-     <input type="radio" id="findByOrgID" name="findBy" value="OrgId">
+    <input type="radio" id="findByOrgID" name="findBy" value="OrgId">
 
-      <label for="accountsFrom"> account from:</label>
-      <select name="accountFrom" id='accountsFrom'>
+    <label for="accountsFrom"> account from:</label>
+    <select name="accountFrom" id='accountsFrom'>
 
-           <c:forEach var="bank_account" items='${bank_accounts}'>
+        <c:forEach var="bank_account" items='${bank_accounts}'>
 
-           <option value='${bank_account.organisation.id}'>${bank_account.organisation.name}</option>
+            <option value='${bank_account.organisation.id}'>${bank_account.organisation.name}</option>
+
+        </c:forEach>
+
+    </select>
+
+
+    <label for="accountsTo"> account to:</label>
+    <select name="accountTo" id='accountsTo'>
+
+        <option value='-1'>-</option>
+        <c:forEach var="bank_account" items='${bank_accounts}'>
+
+            <option value='${bank_account.organisation.id}'>${bank_account.organisation.name}</option>
+
+        </c:forEach>
+
+    </select>
+    <p>
+        <label for="findByDate">find by date</label>
+        <input type="radio" id="findByDate" name="findBy" value="date">
+
+
+        <label for="accountsFromDate"> account from:</label>
+        <select name="accountFromDate" id='accountsFromDate'>
+
+            <c:forEach var="bank_account" items='${bank_accounts}'>
+
+                <option value='${bank_account.organisation.id}'>${bank_account.organisation.name}</option>
 
             </c:forEach>
 
-    </select>
+        </select>
 
+        <label for="dateFrom"> date from:</label>
+        <input type="date" name="dateFrom" id="dateFrom">
 
-      <label for="accountsTo"> account to:</label>
-      <select name="accountTo" id='accountsTo'>
+        <label for="dateTo"> date to:</label>
+        <input type="date" name="dateTo" id="dateTo">
 
-           <option value='-1'>-</option>
-           <c:forEach var="bank_account" items='${bank_accounts}'>
+        <input type="reset" id="resetButton">
+    </p>
 
-           <option value='${bank_account.organisation.id}'>${bank_account.organisation.name}</option>
-
-            </c:forEach>
-
-    </select>
- <p>
-      <label for="findByDate">find by date</label>
-          <input type="radio" id="findByDate" name="findBy" value="date">
-
-
-      <label for="accountsFromDate"> account from:</label>
-         <select name="accountFromDate" id='accountsFromDate'>
-
-              <c:forEach var="bank_account" items='${bank_accounts}'>
-
-              <option value='${bank_account.organisation.id}'>${bank_account.organisation.name}</option>
-
-               </c:forEach>
-
-       </select>
-
-     <label for="dateFrom"> date from:</label>
-           <input type="date" name="dateFrom" id="dateFrom">
-
-          <label for="dateTo"> date to:</label>
-           <input type="date" name="dateTo" id="dateTo">
-
-           <input type="reset" id="resetButton">
-       </p>
-
-  <br><input type="reset" value="Reset">
+    <br><input type="reset" value="Reset">
     <input type="submit" value="submit">
 
 </form>
-    </p>
-
+</p>
 
 
 <p>
@@ -100,13 +99,10 @@
         <c:out value='money: ${transaction.money}'/>
 
 
+    <br>
 
 
-
-<br>
-
-
-</c:forEach>
+    </c:forEach>
 
 
 </body>

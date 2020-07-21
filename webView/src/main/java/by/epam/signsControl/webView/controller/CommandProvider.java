@@ -7,9 +7,11 @@ import by.epam.signsControl.webView.controller.commands.impl.bank.AddBankAccount
 import by.epam.signsControl.webView.controller.commands.impl.bank.AddMoney;
 import by.epam.signsControl.webView.controller.commands.impl.bank.ChangeBankAccountFormHandler;
 import by.epam.signsControl.webView.controller.commands.impl.bank.CreateBankAccount;
+import by.epam.signsControl.webView.controller.commands.impl.bank.ExecuteTransaction;
 import by.epam.signsControl.webView.controller.commands.impl.bank.ShowBankAccounts;
 import by.epam.signsControl.webView.controller.commands.impl.bank.ShowTransactionsHistory;
 import by.epam.signsControl.webView.controller.commands.impl.orders.*;
+import by.epam.signsControl.webView.controller.commands.impl.rolesOrganisationsUsersControl.*;
 import by.epam.signsControl.webView.controller.commands.impl.signsControl.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -65,6 +67,7 @@ class CommandProvider {
 
         commands.put(CommandName.SHOW_TRANSACTIONS_HISTORY, new ShowTransactionsHistory());
         commands.put(CommandName.ADD_MONEY, new AddMoney());
+        commands.put(CommandName.EXECUTE_TRANSACTION, new ExecuteTransaction());
 
         //orders
         commands.put(CommandName.SHOW_ORDERS, new GetOrders());
@@ -77,6 +80,22 @@ class CommandProvider {
         commands.put(CommandName.TYPES_OF_WORK, new GetTypesOfWork());
         commands.put(CommandName.CHANGE_TYPE_OF_WORK, new ChangeTypeOfWork());
         commands.put(CommandName.PAY_ORDER, new PayOrder());
+
+        commands.put(CommandName.WORKERS_CREWS, new WorkersCrews());
+        commands.put(CommandName.ADD_WORKERS_CREW, new AddWorkersCrew());
+        commands.put(CommandName.CHANGE_WORKER_CREW, new ChangeWorkersCrew());
+        commands.put(CommandName.ADD_WORKER_TO_CREW, new AddWorkerToCrew());
+
+        //usersOrganisations
+        commands.put(CommandName.ADD_ORGANISATION_FORM_HANDLER, new AddOrganisationFormHandler());
+        commands.put(CommandName.ADD_USER, new AddUser());
+        commands.put(CommandName.ADD_USER_FORM_HANDLER, new AddUserFormHandler());
+        commands.put(CommandName.CHANGE_LOGIN_PASSWORD, new ChangeLoginPasswordFormHandler());
+        commands.put(CommandName.CHANGE_ORGANISATION_FORM_HANDLER, new ChangeOrganisationFormHandler());
+        commands.put(CommandName.CHANGE_USER_FORM_HANDLER, new ChangeUserFormHandler());
+        commands.put(CommandName.ORGANISATIONS, new OrganisationsList());
+        commands.put(CommandName.USERS, new UsersList());
+        commands.put(CommandName.USER_PROFILE, new UserProfile());
 
     }
 
