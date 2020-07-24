@@ -144,7 +144,9 @@
 
     <label for="minBalance">минимальный допустимый баланс: </label> <input type="text" id="minBalance" name="minBalance"
                                                                            value='${bank_account.minAllowedBalance}'
-                                                                           pattern="-?\d+(.\d*)?" required>
+                                                                           pattern="-?\d+(.\d*)?" required
+                                                                           oninvalid="alert('wrong')" oninput="alert('WWRRONG')">
+
     <input type="submit" value="установить">
 </form>
 
@@ -180,14 +182,15 @@
 <form action='${pageContext.request.contextPath}/change_bank_account_form/set_info' method="post">
 
     <input type="text" id="orgIDsi" name="orgID" value='${bank_account.organisation.id}' hidden required>
-    <label for="orgInfo">информация: </label> <input type="text" value='${bank_account.info}' id="orgInfo"
-                                                     name="orgInfo" pattern="[\wА-Яа-я\s:!.,)(-?\d]+" required>
+    <label for="orgInfo">информация: </label> <textarea id="orgInfo"
+             name="orgInfo" pattern="[\wА-Яа-я\s:!.,)(-?\d]+" required
+         onload=" this.setCustomValidity('NEED TO ME FILL')"  >${bank_account.info}</textarea>
+
     <input type="submit" value="установить">
 </form>
 
 </p>
 <br>
-
 
 </c:forEach>
 

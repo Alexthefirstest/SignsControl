@@ -259,8 +259,6 @@ function init(ymaps) {
 
             coordinatesHtml.value = indicatePlacemark.geometry.getCoordinates();
 
-            alert("dragged");
-
             fillUnusedDirections();
 //ajax/
 
@@ -384,11 +382,11 @@ window.onload = function () {
         changeDirectionForm = document.getElementById("direction_control_form");
            changeSignForm = document.getElementById("sign_control_form");
 
-   updateAddSignForm(null);
-        updateDirectionsForm(null);
-        updateSignChangeForm(null);
-        updateAddOrderForm(null);
-        changeOrder(null);
+//   updateAddSignForm(null);
+//        updateDirectionsForm(null);
+//        updateSignChangeForm(null);
+//        updateAddOrderForm(null);
+//        changeOrder(null);
 
     // Получим ссылки на элементы с тегом 'head' и id 'language'.
     let head = document.getElementsByTagName('head')[0];
@@ -435,7 +433,7 @@ window.onload = function () {
 
         pointAjaxUrl = ctx + "/get_points_by_date";
 
-        select.createMap();
+         select.createMap();
 
     });
 
@@ -445,8 +443,8 @@ window.onload = function () {
 
         pointAjaxUrl = ctx + "/get_current_points";
 
-        select.createMap();
-
+       select.createMap();
+//setTimeout( select.createMap(), 200);
     });
 
 //points listeners fin
@@ -471,7 +469,8 @@ window.onload = function () {
     if (document.getElementById("addPointButton") != null) {
 
         point_form = document.getElementById("point_form");
-        point_form.style.visibility = 'hidden';
+       // point_form.style.visibility = 'hidden';
+        point_form.style.display = 'none';
         coordinatesHtml = document.getElementsByName('coordinatesToSend')[0];
 
 
@@ -483,7 +482,8 @@ window.onload = function () {
 
                 indicatePointCoordinates = e.get('coords');
                 coordinatesHtml.value = indicatePointCoordinates;
-                point_form.style.visibility = 'visible';
+               // point_form.style.visibility = 'visible';
+                point_form.style.display = 'block';
 
                 fillUnusedDirections();
 //ajax/
@@ -615,10 +615,10 @@ function changeSignsHistoryDiv(html) {
     if (document.getElementById("signsHistory").checked) {
 
         signsDiv.innerHTML = html;
-        signsDiv.style.visibility = 'visible';
+        signsDiv.style.display = 'block';
 
     } else {
-        signsDiv.style.visibility = 'hidden';
+        signsDiv.style.display = 'none';
     }
 
 
@@ -638,11 +638,11 @@ function changeDirectionCoordinates(coordinates) {
             fillUnusedDirections();
 
         }
-        point_form.style.visibility = 'visible';
+        point_form.style.display = 'block';
 
     } else {
         if (point_form != null) {
-            point_form.style.visibility = 'hidden';
+            point_form.style.display = 'none';
         }
     }
 
@@ -700,10 +700,10 @@ function updateAddSignForm(coordinates) {
 
         });
 
-        addSignForm.style.visibility = 'visible';
+        addSignForm.style.display = 'block';
     } else {
         if (addSignCheckbox != null) {
-            addSignForm.style.visibility = 'hidden';
+            addSignForm.style.display = 'none';
         }
     }
 
@@ -758,10 +758,10 @@ function updateDirectionsForm(coordinates) {
 
         });
 
-        changeDirectionForm.style.visibility = 'visible';
+        changeDirectionForm.style.display = 'block';
     } else {
         if (changeDirectionForm != null) {
-            changeDirectionForm.style.visibility = 'hidden';
+            changeDirectionForm.style.display = 'none';
         }
     }
 
@@ -802,7 +802,7 @@ function updateSignChangeForm(coordinates) {
             dateOfAddCh.value = data[selectedSign.options.selectedIndex].dateOfAdd;
             dateOfRemoveCh.value = data[selectedSign.options.selectedIndex].dateOfRemove;
 
-            changeSignForm.style.visibility = 'visible';
+            changeSignForm.style.display = 'block';
 
             changeSignLatestInfo = data;
 
@@ -816,7 +816,7 @@ function updateSignChangeForm(coordinates) {
 
     } else {
         if (changeSignForm != null) {
-            changeSignForm.style.visibility = 'hidden';
+            changeSignForm.style.display = 'none';
         }
     }
 
@@ -827,7 +827,7 @@ function fillUnusedDirections() {
     $.ajax({
 
         url: ctx + "/get_unused_directions",
-        data: {"pointCoordinates": coordinatesHtml}
+        data: {"pointCoordinates": coordinatesHtml.value}
 
     }).done(function (data) {
 
@@ -940,10 +940,10 @@ function updateAddOrderForm(coordinates) {
 
         });
 
-        addOrderForm.style.visibility = 'visible';
+        addOrderForm.style.display = 'block';
     } else {
         if (addOrderForm != null) {
-            addOrderForm.style.visibility = 'hidden';
+            addOrderForm.style.display = 'none';
         }
     }
 }
@@ -1042,10 +1042,10 @@ orderString=orderInfo[k].id+" "+signToString(orderInfo[k].sign.section, orderInf
 
 
 
-        changeOrderForm.style.visibility = 'visible';
+        changeOrderForm.style.display = 'block';
     } else {
         if (changeOrderForm != null) {
-            changeOrderForm.style.visibility = 'hidden';
+            changeOrderForm.style.display = 'none';
         }
     }
 }

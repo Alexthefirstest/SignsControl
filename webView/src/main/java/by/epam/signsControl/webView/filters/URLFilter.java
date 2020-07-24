@@ -45,6 +45,12 @@ public class URLFilter implements Filter {
             return;
         }
 
+
+        if (isXSSAttack(httpRequest.getPathInfo()) || isXSSAttack(((HttpServletRequest) request).getRequestURI())) {
+            return;
+        }
+
+
         String requestURI = httpRequest.getRequestURI();
 
         logger.info("filter start URI: " + requestURI);
@@ -62,6 +68,25 @@ public class URLFilter implements Filter {
 
         logger.info("end of filter");
     }
+
+    private boolean isXSSAttack(String path) {
+
+        if (path == null) {
+            return false;
+        }
+
+        logger.info("is xss: " + path);
+
+        if (path.contains("<") || path.contains(">")) {
+            logger.warn("!!!XSS!!!: " + path);
+
+            return true;
+
+        }
+
+        return false;
+    }
+
 
     @Override
     public void destroy() {

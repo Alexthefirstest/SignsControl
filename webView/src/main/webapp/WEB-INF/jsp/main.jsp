@@ -20,10 +20,9 @@
 
     <script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
 
-    <script src='${pageContext.request.contextPath}/js/map.js?46' type="text/javascript" charset="UTF-8"></script>
+    <script src='${pageContext.request.contextPath}/js/map.js?50' type="text/javascript" charset="UTF-8"></script>
 
-
-    <%--создать css: карта, стандартные объекты на ней--%>
+  <%--создать css: карта, стандартные объекты на ней--%>
     <style>
         html, body, #map {
             width: 100%;
@@ -31,25 +30,21 @@
             padding: 0;
             margin: 0;
         }
-
         #my-listbox {
             top: auto;
             left: auto;
         }
-
         #language {
             cursor: pointer;
             margin-left: 5px;
             font-size: 100%;
         }
-
         #point_form {
             width: 100%;
             height: 10%;
             padding: 0;
             margin: 0;
         }
-
         #signsHistoryTable {
             width: 100%;
             height: 10%;
@@ -59,6 +54,7 @@
     </style>
 
 
+    <%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">--%>
 </head>
 
 <body>
@@ -74,14 +70,11 @@
 
     <button id="addPointButton">добавить точку</button>
 
+<p>
+
 <form>
     <input type="checkbox" id="addDirectionForm" name="directionBox">
     <label for="addDirectionForm">добавить направление</label>
-</form>
-
-<form>
-    <input type="checkbox" id="addSignCBox" name="addSignBox">
-    <label for="addSignCBox">добавить знак</label>
 </form>
 
 <form>
@@ -89,10 +82,23 @@
     <label for="changeDirectionBox">изменить направление</label>
 </form>
 
+</p>
+
+<p>
+
+<form>
+    <input type="checkbox" id="addSignCBox" name="addSignBox">
+    <label for="addSignCBox">добавить знак</label>
+</form>
+
 <form>
     <input type="checkbox" id="change_local_sign_box" name="change_local_sign_box">
     <label for="change_local_sign_box">изменить знак</label>
 </form>
+
+</p>
+
+<p>
 
 <form>
     <input type="checkbox" id="addSignOrder" name="addSignOrder">
@@ -103,10 +109,11 @@
     <input type="checkbox" id="execute_delete_order" name="execute_delete_order">
     <label for="execute_delete_order">выполнить изменить заказ</label>
 </form>
-    <%--  --%>
+</p>
+
 
     <%-- добавляет точку иили направление --%>
-<form action='${pageContext.request.contextPath}/add_map_point' method="post" id='point_form' accept-charset="UTF-8">
+<form action='${pageContext.request.contextPath}/add_map_point' method="post" id='point_form' accept-charset="UTF-8" style="display: none">
 
     <input type="hidden" name="coordinatesToSend" value='null' required>
 
@@ -115,13 +122,6 @@
                                                  required>
     <label for="direction"> direction:</label><select name="direction" id='direction' required>
 
-
-        <%--<c:forEach var="cDirection" items='${directions}'> --%>
-
-        <%--        <option value='${cDirection.id}'>${cDirection.direction}</option> --%>
-
-
-        <%-- </c:forEach> --%>
 
 </select>
 
@@ -132,7 +132,7 @@
 </form>
 
     <%--  добавляет локальный знак --%>
-<form action='${pageContext.request.contextPath}/add_sign' method="post" id='addSign_form' accept-charset="UTF-8">
+<form action='${pageContext.request.contextPath}/add_sign' method="post" id='addSign_form' accept-charset="UTF-8" style="display: none">
 
     <label for="pdd_sign"> pdd_sign:</label><select name="pdd_sign" id='pdd_sign' required> </select>
 
@@ -155,7 +155,7 @@
 
     <%--  для изменения/удаления направления - удалить все направления = удалить точку --%>
 <form action='${pageContext.request.contextPath}/change_delete_direction' method="post" id='direction_control_form'
-      accept-charset="UTF-8">
+      accept-charset="UTF-8" style="display: none">
 
     <label for="old_direction"> old direction:</label><select name="old_direction" id='old_direction'
                                                               required> </select>
@@ -176,7 +176,7 @@
 
     <%--  для изменения/удаления знака --%>
 <form action='${pageContext.request.contextPath}/change_delete_local_sign' method="post" id='sign_control_form'
-      accept-charset="UTF-8">
+      accept-charset="UTF-8" style="display: none">
 
     <label for="sign_info"> sign:</label><select name="local_sign_id" id='sign_info'> </select>
 
@@ -196,7 +196,7 @@
 
 
     <%--  добавляет  заказ --%>
-<form action='${pageContext.request.contextPath}/add_order' method="post" id='add_order_form' accept-charset="UTF-8">
+<form action='${pageContext.request.contextPath}/add_order' method="post" id='add_order_form' accept-charset="UTF-8" style="display: none">
 
     <label for="sign_list_order"> direction:</label><select name="sign_list" id='sign_list_order' required> </select>
 
@@ -240,7 +240,7 @@
 
     <%--  удаляет/изменяет заказ --%>
 <form action='${pageContext.request.contextPath}/change_delete_order' method="post" id='change_delete_order_form'
-      accept-charset="UTF-8">
+      accept-charset="UTF-8" style="display: none">
 
 
     <label for="order_id"> order:</label><select name="order_id" id='order_id'
