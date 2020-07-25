@@ -4,6 +4,7 @@ import by.epam.rolesOrganisationsUsersController.bean.User;
 import by.epam.rolesOrganisationsUsersController.service.IUsersControllerService;
 import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
 import by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory;
+import by.epam.signsControl.webView.controller.RequestParser;
 import by.epam.signsControl.webView.controller.commands.Command;
 import by.epam.signsControl.webView.controller.commands.impl.LoginFormHandler;
 import org.apache.logging.log4j.LogManager;
@@ -22,15 +23,17 @@ public class UserProfile implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ServiceException {
 
+        logger.info("inside execute: ");
+
         //только для админов, для админов организации - только их  юзеры, для 1 - все+сортировка по организации
         //только для админов, для админов организации - только их  юзеры
 //контроль роли, иначе налл поинтер
-        int id = (Integer)request.getSession().getAttribute(LoginFormHandler.USER_ID);
+        int id = Integer.parseInt(RequestParser.getSecondCommandFromURI(request));
         IUsersControllerService usersControllerService = ServiceFactory.getINSTANCE().getUsersControllerService();
 
         request.setAttribute("user", usersControllerService.getUser(id));
 
-        logger.info("inside execute");
+
         //qq
 
         request.getRequestDispatcher("/WEB-INF/jsp/users_organisations_control/user_profile.jsp").forward(request, response);

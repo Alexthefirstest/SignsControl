@@ -18,24 +18,27 @@
 <body>
 <jsp:include page="../header.jsp"/>
 
-<a href="${pageContext.request.contextPath}/types_of_work">types_of_work</a>
+<a href="${pageContext.request.contextPath}/types_of_work">тип работ</a>
 
 <form action='${pageContext.request.contextPath}/orders' method="get">
     <input type="text" name="orders_option" value='all' hidden>
-    <input type="submit" value="show all">
+    <input type="submit" value="показать все">
 </form>
 
 <form action='${pageContext.request.contextPath}/orders' method="get">
     <input type="text" name="orders_option" value='executed' hidden>
-    <input type="submit" value="show executed">
+    <input type="submit" value="показать выполненные">
 </form>
 
 <form action='${pageContext.request.contextPath}/orders' method="get">
     <input type="text" name="orders_option" value='unexecuted' hidden>
-    <input type="submit" value="show unexecuted">
+    <input type="submit" value="показать невыполненные">
 </form>
 
-<form action='${pageContext.request.contextPath}/orders' method="get">
+<p>
+
+  <label for="show_by_id_form"> показать по организации-заказчику: </label>
+<form action='${pageContext.request.contextPath}/orders' method="get" id='show_by_id_form'>
     <input type="text" name="orders_option" value='show_by_org_id' hidden>
 
 
@@ -50,92 +53,117 @@
 
 </select>
 
-
     <input type="submit" value="показать заказы">
 </form>
 
+</p>
+
+<table>
+<thead>
+
+<tr>
+
+<th scope="col">id</th>
+<th scope="col">знак</th>
+<th scope="col">размер</th>
+<th scope="col">заказчик</th>
+<th scope="col">транзакция</th>
+<th scope="col">тип работ</th>
+<th scope="col">дата заказа</th>
+<th scope="col">дата выполнения</th>
+<th scope="col">бригада</th>
+<th scope="col">информация заказа</th>
+
+</tr>
+
+</thead>
+
+
+<tbody>
+
 <c:forEach var="order" items='${orders}'>
 
+<tr>
 
-    <c:out value='| ID: ${order.id}'/>
-    <c:out value='        '/>
+<td>${order.id}</td>
+<td>
 
-    <c:choose>
-
-
-        <c:when test='${order.sign.kind>-1}'>
-
-            <c:out value='${order.sign.section}'/>
-            <c:out value='.${order.sign.sign}'/>
-            <c:out value='.${order.sign.kind}'/>
-        </c:when>
-        <c:otherwise>
-            <c:out value='${order.sign.section}'/>
-            <c:out value='.${order.sign.sign}'/>
-        </c:otherwise>
-    </c:choose>
+<c:choose><c:when test='${order.sign.kind>-1}'>
+    ${order.sign.section}.${order.sign.sign}.${order.sign.kind}
+            </c:when>
+            <c:otherwise>
+               ${order.sign.section}.${order.sign.sign}
+            </c:otherwise>
+        </c:choose></td>
 
 
-    <c:out value='        '/>
-    <c:out value='|size: ${order.standardSize}'/>
-    <c:out value='        '/>
-    <c:out value='|organisationName: ${order.customerOrganisation.name}'/>
-    <c:out value='        '/>
-    <c:out value='|organisationinfo: ${order.customerOrganisation.info}'/>
-    <c:out value='        '/>
-    <c:out value='|standard size: ${order.standardSize}'/>
-    <c:out value='        '/>
-    <c:out value='|transactionID: ${order.transactionID}'/>
-    <c:out value='        '/>
-    <c:out value='|money: ${order.transactionMoney}'/>
-    <c:out value='        '/>
-    <c:out value='|typeOFWork: ${order.typeOfWork.typeOfWork}'/>
-    <c:out value='        '/>
-    <c:out value='|workers: ${order.workersCrew}'/>
-    <c:out value='        '/>
-    <c:out value='|date order: ${order.dateOfOrder}'/>
-    <c:out value='        '/>
-    <c:out value='|date execution: ${order.dateOfExecution}'/>
-    <c:out value='        '/>
-    <c:out value='|info : ${order.info}'/>
+<td>${order.standardSize}</td>
+<td>${order.customerOrganisation.name} -<br> ${order.customerOrganisation.info}</td>
 
-    <c:out value='|sesRoel : ${sessionScope.organisationRole}'/>
-    <c:out value='|org.Role : ${order.customerOrganisation.role.id}'/>
-    <c:out value='|org.tra : ${order.transactionID}'/>
+<c:choose><c:when test='${order.transactionID>0}'>
+  <td>id транзакции:${order.transactionID}<br>сумма: ${order.transactionMoney}</td>
+            </c:when>
+            <c:otherwise>
+              <td ><h4 style="color: red">не оплачено</h4>
+
+                  <c:if test="${sessionScope.organisationRole==order.customerOrganisation.role.id}">
+
+                      <form action='${pageContext.request.contextPath}/pay_order' method="post" id='pay_order_form'
+                            accept-charset="UTF-8">
 
 
-    <c:if test="${sessionScope.organisationRole==order.customerOrganisation.role.id && order.transactionID<1}">
 
-        <form action='${pageContext.request.contextPath}/pay_order' method="post" id='pay_order_form'
-              accept-charset="UTF-8">
+                          <input type="text" name="id" value='${order.id}' hidden required>
 
-            <input type="text" name="id" value='${order.id}' hidden required>
+                        <br>  <label for="organisations_order">Получатель перевода:</label><select name="organisationTo" id='organisations_order'
+                                                                                     required>
 
-            <label for="organisations_order"> оплатить:</label><select name="organisationTo" id='organisations_order'
-                                                                       required>
+                          <c:forEach var="organisation" items='${organisations}'>
 
-            <c:forEach var="organisation" items='${organisations}'>
+                              <option value='${organisation.id}'>${organisation.name}</option>
 
-                <option value='${organisation.id}'>${organisation.name}</option>
-
-            </c:forEach>
+                          </c:forEach>
 
 
-        </select>
+                      </select>
 
-            <label for="acceptPrice">price: </label> <input type="text" id="acceptPrice" name="acceptPrice"
-                                                            pattern="\d+(\.\d*)?">
+                          <br><label for="acceptPrice">Сумма: </label> <input type="text" id="acceptPrice" name="acceptPrice"
+                                                                          pattern="\d+(\.\d*)?">
+
+   <input type="submit" value="оплатить">
+
+                      </form>
+
+                  </c:if>
 
 
-            <input type="submit" value="оплатить">
-        </form>
+              </td>
+            </c:otherwise>
+        </c:choose>
 
-    </c:if>
 
-    <br><br>
+<td>${order.typeOfWork.typeOfWork}</td>
+<td>${order.dateOfOrder}</td>
+
+<c:choose><c:when test='${order.workersCrew>0}'>
+ <td>${order.dateOfExecution}</td>
+ <td>${order.workersCrew}</td>
+            </c:when>
+            <c:otherwise>
+           <td style="color: red">не выполнено</td>
+           <td>-</td>
+            </c:otherwise>
+        </c:choose>
+
+<td>${order.info}</td>
+
+
+</tr>
 
 </c:forEach>
 
+</tbody>
+</table>
 
 </body>
 

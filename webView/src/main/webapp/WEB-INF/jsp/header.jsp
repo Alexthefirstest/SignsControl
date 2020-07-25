@@ -13,8 +13,17 @@
    <h1 style="text-align: center"> SignsControl </h1>
 
  <h5 style="text-align: center">
-    <a href="${pageContext.request.contextPath}/user_profile" >user profile</a>
+
+ <c:if test='${not empty sessionScope.userID}'>
+
+    <a href="${pageContext.request.contextPath}/user_profile/${sessionScope.userID}" >user profile</a>
+
+ </c:if>
+
+
+
     <a href="${pageContext.request.contextPath}/" >main page</a>
+
 
      <c:choose>
 
