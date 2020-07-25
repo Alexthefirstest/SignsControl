@@ -2,7 +2,6 @@
 ***
 javadoc: connectionPoolForDataBase, rolesOrganisationsUsersController
 
-vebView use: connectionPoolForDataBase, rolesOrganisationsUsersController, signsControl(pictures wasn't added), bank, orders
 ***
 Основные идеи:
 1. Контроль дорожных знаков. Карта, на карте точке, ткнуть на точку - получить информацию об актуальных знаках, которые расположены в этой точке + дополнение в виде информации о дорожных знаках, которые уже сняты, но когда-то тут висели. 

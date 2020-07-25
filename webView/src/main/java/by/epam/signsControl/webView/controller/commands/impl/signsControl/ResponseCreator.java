@@ -241,12 +241,12 @@ public class ResponseCreator {
             }
 
 
-            sb.append("<br />" + createSign(localSignsWithCommonDirection.get(i).getSection(),
+            sb.append("<h5 >" + createSign(localSignsWithCommonDirection.get(i).getSection(),
                     localSignsWithCommonDirection.get(i).getSign(),
                     localSignsWithCommonDirection.get(i).getKind()));
 
 
-            sb.append("   " + localSignsWithCommonDirection.get(i).getName());
+            sb.append(" -  " + localSignsWithCommonDirection.get(i).getName() + "</h5>");
 
 
 //            sb.append((localSignsWithCommonDirection.get(i).getPicture() != null) ?
@@ -259,13 +259,13 @@ public class ResponseCreator {
 
         if (sb.length() > 0 && localSignsWithCommonDirection.get(0).getDateOfAdd() != null) {
 
-            sb.insert(0, "direction: " + localSignsWithCommonDirection.get(0).getAngle());
+            sb.insert(0, "<h3>      direction: " + localSignsWithCommonDirection.get(0).getAngle()+"</h3>");
 
             return sb.toString();
 
         } else {
 
-            return ("direction: " + localSignsWithCommonDirection.get(0).getAngle() + "<br /> no current signs for this direction");
+            return ("<h3>      direction: " + localSignsWithCommonDirection.get(0).getAngle() + "</h3><br />     no current points for this direction");
         }
 
 
@@ -275,20 +275,39 @@ public class ResponseCreator {
 
         StringBuilder pointHistory = new StringBuilder();
 
-        pointHistory.append("sign").append("|name").append("|description").append("|size").append("|direction")
-                .append("|date of add").append("|date of remove").append("|annotation|picture<br />");
+        pointHistory.append("<table>").append("<thead>").append("<tr>");
+
+        pointHistory.append("<th scope=\"col\">direct</th>")
+                .append("<th scope=\"col\">sign</th>")
+                .append("<th scope=\"col\">name</th>")
+                .append("<th scope=\"col\">description</th>")
+                .append("<th scope=\"col\">standard size</th>")
+                .append("<th scope=\"col\">date of add</th>")
+                .append("<th scope=\"col\">date of remove</th>")
+                .append("<th scope=\"col\">information</th>")
+                .append("<th scope=\"col\">image</th>");
+
+        pointHistory.append("</tr>").append("</thead>");
+
+        pointHistory.append("<tbody>");
 
         for (LocalSign localSign : localSigns) {
-            pointHistory.append(createPointHistoryField(localSign, contextPath)).append("<br/>");
+
+            pointHistory.append("<tr>")
+                    .append(createPointHistoryField(localSign, contextPath))
+                    .append("</tr>");
 
         }
+
+
+        pointHistory.append("</tbody>").append("</table>");
 
         return pointHistory.toString();
 
     }
 
     private static final String pictureStartPattern = "<img src=\"";
-           private static final String pictureMiddlePatter= "/upload?id=";
+    private static final String pictureMiddlePatter = "/upload?id=";
     private static final String pictureFinishPattern = "\"/>";
 
     private static String createPointHistoryField(LocalSign localSign, String contextPath) {
@@ -298,20 +317,20 @@ public class ResponseCreator {
         //   String description;
         Date dateOfRemove;
 
+        sb.append("<td>" + localSign.getAngle() + "</tb>");
+        sb.append("<td>" + createSign(localSign.getSection(), localSign.getSign(), localSign.getKind()) + "</tb>");
 
-        sb.append(createSign(localSign.getSection(), localSign.getSign(), localSign.getKind()));
-
-        sb.append("|" + localSign.getName() + "|");
+        sb.append("<td>" + localSign.getName() + "</tb>");
         //sb.append(((description = localSign.getDescription()) != null) ? description : "-");
-        sb.append(localSign.getDescription());
-        sb.append("|" + localSign.getStandardSize());
-        sb.append("|" + localSign.getAngle());
-        sb.append("|" + localSign.getDateOfAdd() + "|");
-        sb.append(((dateOfRemove = localSign.getDateOfRemove()) != null) ? dateOfRemove + "|" : "-|");
-        sb.append("|" + localSign.getAnnotation());
-        sb.append((localSign.getPicture() != null) ?
-                (pictureStartPattern+contextPath+pictureMiddlePatter + localSign.getId() + pictureFinishPattern)
-                : "-");
+        sb.append("<td>" + localSign.getDescription() + "</tb>");
+        sb.append("<td>" + localSign.getStandardSize() + "</tb>");
+
+        sb.append("<td>" + localSign.getDateOfAdd() + "</tb>");
+        sb.append("<td>" + (((dateOfRemove = localSign.getDateOfRemove()) != null) ? dateOfRemove  : "-") + "</tb>");
+        sb.append("<td>" + localSign.getAnnotation() + "</tb>");
+        sb.append("<td>" + ((localSign.getPicture() != null) ?
+                (pictureStartPattern + contextPath + pictureMiddlePatter + localSign.getId() + pictureFinishPattern)
+                : "-") + "</tb>");
         return sb.toString();
     }
 

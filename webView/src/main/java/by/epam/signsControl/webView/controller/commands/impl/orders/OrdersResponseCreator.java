@@ -46,34 +46,59 @@ public class OrdersResponseCreator {
         int workersCrew;
         Timestamp dateOfExecution;
 
+        sb.append("<table>")
+                .append("<thead>").append("<tr>");
+
+        sb.append("<th>id</th>")
+                .append("<th>sign</th>")
+                .append("<th>size</th>")
+                .append("<th>type of work</th>")
+                .append("<th>workers crew id</th>")
+                .append("<th>date of order</th>")
+                .append("<th>date of execution</th>")
+                .append("<th>pay</th>")
+                .append("<th>information</th>");
+
+        sb.append("</tr>").append("</thead>");
+
+        sb.append("<tbody>");
+
+
         for (int i = 0; i < orders.size(); i++) {
+
+
 
             if (i == 0 || (orders.get(i).getSignList() != orders.get(i - 1).getSignList())) {
 
-                sb.append(mapPoints$Orders.getMapPoint().getAngles().get(j));
-                sb.append("<br><br>");
+                sb.append("<tr><th><h4>      direction: " + mapPoints$Orders.getMapPoint().getAngles().get(j) + "<h4></th></tr>");
 
                 j++;
             }
-
-
-            sb.append("| id: ").append(orders.get(i).getId());
-            sb.append("| sign: ").append(ResponseCreator.createSign(orders.get(i).getSign().getSection(),
+            sb.append("<tr>");
+            sb.append("<td>" + orders.get(i).getId() + "</tb>");
+            sb.append("<td>" + (ResponseCreator.createSign(orders.get(i).getSign().getSection(),
                     orders.get(i).getSign().getSign(),
-                    orders.get(i).getSign().getKind()));
-            sb.append("| standard size: ").append(orders.get(i).getStandardSize());
-            sb.append("| type of work: ").append(orders.get(i).getTypeOfWork().getTypeOfWork());
-            sb.append("| workers crew: ").append(((workersCrew = orders.get(i).getWorkersCrew()) == 0 ? "-" : workersCrew));
-            sb.append("| date of order: ").append(orders.get(i).getDateOfOrder());
-            sb.append("| date of execution: ").append(((dateOfExecution = orders.get(i).getDateOfExecution()) == null ? "-" : dateOfExecution));
-            sb.append("| : ").append(((dateOfExecution = orders.get(i).getDateOfExecution()) == null ? "-" : dateOfExecution));
-            sb.append("| оплачено: ").append((orders.get(i).getTransactionID()));
-            sb.append("| оплачено: ").append((orders.get(i).getTransactionID()<1));
-            sb.append("| info: ").append(orders.get(i).getInfo());
-            sb.append("<br>");
+                    orders.get(i).getSign().getKind())) + "</tb>");
 
+            sb.append("<td>" + (orders.get(i).getStandardSize()) + "</tb>");
+
+            sb.append("<td>" + (orders.get(i).getTypeOfWork().getTypeOfWork()) + "</tb>");
+            sb.append("<td>" + (((workersCrew = orders.get(i).getWorkersCrew()) == 0 ? "-" : workersCrew)) + "</tb>");
+            sb.append("<td>" + (orders.get(i).getDateOfOrder()) + "</tb>");
+
+            sb.append("<td>" + (((dateOfExecution = orders.get(i).getDateOfExecution()) == null ? "-" : dateOfExecution)) + "</tb>");
+
+            sb.append(orders.get(i).getTransactionID() < 1 ?
+                    ("<td>!UNPAID!</tb>") :
+                    ("<td>paid</tb>"));
+
+            sb.append("<td>" + (orders.get(i).getInfo()) + "</tb>");
+
+            sb.append("/tr");
         }
 
+        sb.append("</tbody>")
+                .append("</table>");
 
         return sb.toString();
 

@@ -18,14 +18,15 @@
 <body>
 <jsp:include page="../header.jsp"/>
 
+<a href="${pageContext.request.contextPath}/show_transactions_history">Обновить</a>
 
 <form action='${pageContext.request.contextPath}/show_transactions_history' method="get" id='show_form'
       accept-charset="UTF-8">
 
-    <label for="findByOrgID">find by org</label>
+    <label for="findByOrgID">Найти по организцаиям: </label>
     <input type="radio" id="findByOrgID" name="findBy" value="OrgId">
 
-    <label for="accountsFrom"> account from:</label>
+    <label for="accountsFrom"> отправитель:</label>
     <select name="accountFrom" id='accountsFrom'>
 
         <c:forEach var="bank_account" items='${bank_accounts}'>
@@ -37,7 +38,7 @@
     </select>
 
 
-    <label for="accountsTo"> account to:</label>
+    <label for="accountsTo">получатель: </label>
     <select name="accountTo" id='accountsTo'>
 
         <option value='-1'>-</option>
@@ -49,11 +50,11 @@
 
     </select>
     <p>
-        <label for="findByDate">find by date</label>
+        <label for="findByDate">Найти по дате: </label>
         <input type="radio" id="findByDate" name="findBy" value="date">
 
 
-        <label for="accountsFromDate"> account from:</label>
+        <label for="accountsFromDate">отправитель:</label>
         <select name="accountFromDate" id='accountsFromDate'>
 
             <c:forEach var="bank_account" items='${bank_accounts}'>
@@ -64,46 +65,57 @@
 
         </select>
 
-        <label for="dateFrom"> date from:</label>
-        <input type="date" name="dateFrom" id="dateFrom">
+        <label for="dateFrom"> дата с:</label>
+        <input type="date" name="dateFrom" id="dateFrom" required>
 
-        <label for="dateTo"> date to:</label>
-        <input type="date" name="dateTo" id="dateTo">
+        <label for="dateTo"> дата по:</label>
+        <input type="date" name="dateTo" id="dateTo" required>
 
-        <input type="reset" id="resetButton">
+
     </p>
 
-    <br><input type="reset" value="Reset">
-    <input type="submit" value="submit">
+    <br><input type="reset" value="очистить">
+    <input type="submit" value="приенить">
 
 </form>
 </p>
 
 
-<p>
+<table>
+<thead>
+
+<tr>
+
+<th scope="col">Отправитель название</th>
+<th scope="col">Отправитель инфомрация</th>
+<th scope="col">Получатель название</th>
+<th scope="col">Получитель информация</th>
+<th scope="col">Дата транзакции</th>
+<th scope="col">Сумма</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+
 
     <c:forEach var="transaction" items='${transactions}'>
+<tr>
 
+<td>${transaction.from.name}</td>
+<td>${transaction.from.info}</td>
+<td>${transaction.to.name}</td>
+<td>${transaction.to.info}</td>
+<td>${transaction.date}</td>
+<td>${transaction.money}</td>
 
-        <c:out value='from : ${transaction.from.name}'/>
-        <c:out value='  ||      '/>
-        <c:out value='from info: ${transaction.from.info}'/>
-        <c:out value='    ||    '/>
-        <c:out value='to : ${transaction.to.name}'/>
-        <c:out value='    ||    '/>
-        <c:out value='to info: ${transaction.to.info}'/>
-        <c:out value='    ||    '/>
-
-        <c:out value='date: ${transaction.date}'/>
-        <c:out value='   ||   '/>
-        <c:out value='money: ${transaction.money}'/>
-
-
-    <br>
-
+</tr>
 
     </c:forEach>
 
+</tbody>
+</table>
 
 </body>
 

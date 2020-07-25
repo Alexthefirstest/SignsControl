@@ -10,17 +10,17 @@
 
 <header>
 
-   <h1> SignsControl </h1>
+   <h1 style="text-align: center"> SignsControl </h1>
 
- <h5>
-    <a href="${pageContext.request.contextPath}/user_profile" style="text-align: left">user profile</a>
-    <a href="${pageContext.request.contextPath}/" style="text-align: right">main page</a>
+ <h5 style="text-align: center">
+    <a href="${pageContext.request.contextPath}/user_profile" >user profile</a>
+    <a href="${pageContext.request.contextPath}/" >main page</a>
 
      <c:choose>
 
         <c:when test="${empty sessionScope.role}">
 
-        <a href="${pageContext.request.contextPath}/login" style="text-align: center">log in</a>
+        <a href="${pageContext.request.contextPath}/login" >log in</a>
 
             </c:when>
 
@@ -35,21 +35,18 @@
 
  </h5>
 
-   <h5>
+   <h5 style="text-align: center">
   <a href="${pageContext.request.contextPath}/pdd_signs" style="text-align: left">pdd signs</a>
+
       <a href="${pageContext.request.contextPath}/standard_sizes" style="text-align: right">standard sizes</a>
-   </h5>
+ </h5>
 
-    <h5>
-    <a href="${pageContext.request.contextPath}/bank_accounts">bank</a>
-    </h5>
+  <h5 style="text-align: center">
+    <a href="${pageContext.request.contextPath}/bank_accounts" style="text-align: center">bank</a>
 
-    <h5>
     <a href="${pageContext.request.contextPath}/users"  style="text-align: left">users</a>
     <a href="${pageContext.request.contextPath}/organisations" style="text-align: right">organisations</a>
-</h5>
 
-<h5>
     <a href="${pageContext.request.contextPath}/orders"  style="text-align: left">orders</a>
     <a href="${pageContext.request.contextPath}/workers_crews" style="text-align: right">workers crews</a>
 </h5>

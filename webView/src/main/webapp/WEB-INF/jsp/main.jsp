@@ -66,6 +66,8 @@
 
     <%-- контент для роли 1 - одд --%>
 
+  <%--display: inline      in css Для форму без переноса строки--%>
+
     <c:if test="${sessionScope.organisationRole==1}">
 
     <button id="addPointButton">добавить точку</button>
@@ -111,6 +113,7 @@
 </form>
 </p>
 
+<div style="position: fixed;  bottom: 1px; z-index: 4">
 
     <%-- добавляет точку иили направление --%>
 <form action='${pageContext.request.contextPath}/add_map_point' method="post" id='point_form' accept-charset="UTF-8" style="display: none">
@@ -266,39 +269,41 @@
     <br><input type="reset" value="сбросить">
     <input type="submit" value="применить">
 </form>
-
+</div>
     <%--<div id="map" style=" height: 500px"></div>--%>
 
-
+<p>
 <button id="showEmptyPointsButton">показать пустые точки</button>
+</p>
 
+<p>
 <button id="showOrdersButton">показать все заказы</button>
 <button id="showOrdersExecutedButton">показать выполненные заказы</button>
 <button id="showOrdersUnExecutedButton">показать невыполненные заказы</button>
-
+</p>
 </c:if>
 
 
 <%--<div id="map" style=" height: 500px"></div>--%>
+<p>
+<form>
+ <label for="chosenDate">Показать актуальные знаки для даты: </label>
+        <input type="date" name="calendar" max="2020-06-25" id="chosenDate">
 
-<br>
+        <input type="reset" id="resetButton" value="обновить карту">
+</form>
+
+<form>
+    <label for="signsHistory">показать историю знаков</label>
+    <input type="checkbox" id="signsHistory" name="historyBox">
+</form>
+
 <select id="language">
     <option selected value="ru">ru</option>
     <option value="en">en</option>
 </select>
 
-<form>
-    <p>Выберите дату:
-        <input type="date" name="calendar" max="2020-06-25" id="chosenDate">
-        <input type="reset" id="resetButton">
-    </p>
-</form>
-
-<form>
-    <input type="checkbox" id="signsHistory" name="historyBox">
-    <label for="signsHistory">показать историю знаков</label>
-</form>
-
+</p>
 
 <div id="map"></div>
 

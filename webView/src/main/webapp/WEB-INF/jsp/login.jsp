@@ -19,7 +19,7 @@
 
 <br>
 
-<h7> Use latin letters and '_'</h7>
+<h7> Use latin letters, numbers and '_' for login and password</h7>
 
 <br>
 
