@@ -19,27 +19,53 @@
 <jsp:include page="../header.jsp"/>
 <p><a href="${pageContext.request.contextPath}/add_standard_size">add st size</a>
 
+
+<table>
+
+<thead>
+
+
+<tr>
+
+
+<th scope="col">стандартый размер</th>
+<th scope="col">описание</th>
+<th scope="col">изменить стандартый размер</th>
+
+</tr>
+
+
+</thead>
+
+
+<tbody>
+
+
     <c:forEach var="standard_size" items='${standard_sizes}'>
-
-
-        <c:out value='${standard_size.size}'/>
-        <c:out value='        '/>
-        <c:out value='${standard_size.info}'/>
+<tr>
+<td>${standard_size.size}</td>
+<td>${standard_size.info}</td>
+<td>
 
 <form action='${pageContext.request.contextPath}/change_standard_size' method="post">
     <input type="text" id="size" name="size" value='${standard_size.size}' hidden>
-    <input type="submit" value="change size">
+    <input type="submit" value="изменить размер">
 </form>
+
 <form action='${pageContext.request.contextPath}/remove_standard_size' method="post">
     <input type="text" name="size" value='${standard_size.size}' hidden>
-    <input type="submit" value="remove st size">
+    <input type="submit" value="удалить размер">
 </form>
 
-<br>
+</td>
 
 
+
+</tr>
 </c:forEach>
 
+</tbody>
+</table>
 
 </body>
 

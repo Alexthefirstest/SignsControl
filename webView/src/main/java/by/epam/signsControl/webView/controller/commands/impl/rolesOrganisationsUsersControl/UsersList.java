@@ -42,7 +42,7 @@ public class UsersList implements Command {
         request.setAttribute("users", users);
         request.setAttribute("organisations", ServiceFactory.getINSTANCE().getOrganisationsControllerService().getOrganisations());
         logger.info(Arrays.toString(ServiceFactory.getINSTANCE().getOrganisationsControllerService().getOrganisations()));
-        request.setAttribute("roles", ServiceFactory.getINSTANCE().getRolesControllerService().getUsersRoles());
+
 
         logger.info("inside execute");
         //qq

@@ -20,18 +20,20 @@
 
 <body>
 <jsp:include page="../header.jsp"/>
+
+
 <form action='${pageContext.request.contextPath}/upload/add_pdd_sign_form' method="post" accept-charset="UTF-8"
       enctype='multipart/form-data'>
 
-    <label for="pdd_section"> pdd_section:</label><input type="text" name="pdd_section" id='pdd_section' pattern="\d+"
+    <label for="pdd_section"> секция:</label><input type="text" name="pdd_section" id='pdd_section' pattern="\d+"
                                                          required>
-    <label for="pdd_sign"> pdd_sign:</label><input type="text" name="pdd_sign" id='pdd_sign' pattern="\d+" required>
-    <label for="pdd_kind"> pdd_king:</label><input type="text" name="pdd_kind" id='pdd_kind' pattern="\d+">
-    <label for="name"> pdd_name:</label><input type="text" name="name" id='name' pattern="[\wА-Яа-я\s:!.,)(-?\d]+"
+    <label for="pdd_sign"> знак:</label><input type="text" name="pdd_sign" id='pdd_sign' pattern="\d+" required>
+    <label for="pdd_kind">подвид:</label><input type="text" name="pdd_kind" id='pdd_kind' pattern="\d+"  placeholder="не обязательно">
+    <label for="name"> название:</label><input type="text" name="name" id='name' pattern="[\wА-Яа-я\s:!.,)(-?\d]+"
                                                required>
-    <label for="description"> pdd_description:</label><input type="text" name="description" id='description'
+    <br><label for="description"> описание:</label><input type="text" name="description" id='description'
                                                              pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
-    <label for="picture"> pdd_picture:</label><input type="file" name="image" id='picture' accept="image/*">
+    <br><label for="picture"> pdd_picture:</label><input type="file" name="image" id='picture' accept="image/*">
 
 
     <br><input type="reset" value="сбросить">

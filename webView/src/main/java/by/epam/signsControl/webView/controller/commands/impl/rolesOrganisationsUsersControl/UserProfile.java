@@ -1,12 +1,10 @@
 package by.epam.signsControl.webView.controller.commands.impl.rolesOrganisationsUsersControl;
 
-import by.epam.rolesOrganisationsUsersController.bean.User;
 import by.epam.rolesOrganisationsUsersController.service.IUsersControllerService;
 import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
 import by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.controller.RequestParser;
 import by.epam.signsControl.webView.controller.commands.Command;
-import by.epam.signsControl.webView.controller.commands.impl.LoginFormHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,6 +30,8 @@ public class UserProfile implements Command {
         IUsersControllerService usersControllerService = ServiceFactory.getINSTANCE().getUsersControllerService();
 
         request.setAttribute("user", usersControllerService.getUser(id));
+        request.setAttribute("roles", ServiceFactory.getINSTANCE().getRolesControllerService().getUsersRoles());
+        request.setAttribute("organisations", ServiceFactory.getINSTANCE().getOrganisationsControllerService().getOrganisations());
 
 
         //qq

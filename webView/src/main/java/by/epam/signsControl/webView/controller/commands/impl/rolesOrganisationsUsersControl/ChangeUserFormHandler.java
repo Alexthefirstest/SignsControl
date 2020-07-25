@@ -74,6 +74,6 @@ public class ChangeUserFormHandler implements Command {
         }
 
 
-        response.sendRedirect(request.getContextPath() + "/users");
+        response.sendRedirect(request.getContextPath() + "/user_profile/"+id);
     }
 }

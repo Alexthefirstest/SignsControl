@@ -28,9 +28,10 @@
     <label for="fieldPasswordLog">Password:</label><br><input type="password" id="fieldPasswordLog"
                                                               name="password" pattern="\w+"
                                                               placeholder="max - 20 symbols" maxlength="20"
-                                                              required>
-
-    <select name="role" required>
+                                                    required>
+ <br><br>
+ <label for="role_user">Роль:</label>
+    <select name="role" required id="role_user">
 
         <c:forEach var="role" items='${roles}'>
 
@@ -40,13 +41,14 @@
 
     </select>
 
-    <label for="name">name: </label> <input type="text" id="name" name="name"
+    <label for="name">Имя: </label> <input type="text" id="name" name="name"
                                             required>
-
-    <label for="surname">: </label> <input type="text" id="surname" name="surname"
+<br>
+    <label for="surname">Фамилия: </label> <input type="text" id="surname" name="surname"
                                            required>
-
-    <select name="organisation" required>
+<br>
+ <label for="userOrg">Организация: </label>
+    <select name="organisation" required id="userOrg">
 
         <c:forEach var="organisation" items='${organisations}'>
 
@@ -56,10 +58,11 @@
 
     </select>
 
-    <label for="info">info: </label> <input type="text" id="info" name="info">
+<br>
+    <label for="info">информация: </label> <textarea id="info" name="info" pattern="[\wА-Яа-я\s:!.,)(-?\d]+"></textarea>
 
     <br><input type="reset" value="сбросить">
-    <input type="submit" value="submit">
+    <input type="submit" value="добавить">
 
 </form>
 

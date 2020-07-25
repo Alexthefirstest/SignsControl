@@ -17,49 +17,16 @@
 
 <body>
 <jsp:include page="../header.jsp"/>
-
-<form action='${pageContext.request.contextPath}/execute_transaction' method="post">
-
-    <label for="organisation_idtr"> получатель:</label><select name="organisationID" id='organisation_idtr'
-                                                               required>
-
-    <c:forEach var="organisation" items='${organisations}'>
-
-        <option value='${organisation.id}'>${organisation.name}</option>
-
-    </c:forEach>
-
-    <label for="priceCh">money: </label> <input type="text" id="priceCh" name="money" pattern="\d+(.\d*)?" required>
-
- <br><input type="reset" value="Reset">
-    <input type="submit" value="послать деняк">
-</select>
-</form>
-
-<a href="${pageContext.request.contextPath}/organisations">organisations</a>
-
-<form action='${pageContext.request.contextPath}/organisations' method="get" id='show_org_with_role'
-      accept-charset="UTF-8">
-
-    <select name="role" required>
-
-        <c:forEach var="role" items='${roles}'>
-
-            <option value='${role.id}'>${role.role}</option>
-
-        </c:forEach>
-
-    <br><input type="reset" value="Reset">
-    <input type="submit" value="посмотреть по роли">
-
-</form>
-
-<p>
-
+<br>
+ <label for="add_org"><h3>Добавить организацию:</h3></label>
 <form action='${pageContext.request.contextPath}/add_organisation_form_handler' method="post" id='add_org'
       accept-charset="UTF-8">
 
-    <select name="role" required>
+ <label for="nameAdd">название: </label> <input type="text" id="nameAdd" name="name"
+                                            required pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
+
+ <label for="roleAdd">роль</label>
+    <select name="role" required> id="roleAdd"
 
         <c:forEach var="role" items='${roles}'>
 
@@ -69,46 +36,124 @@
 
     </select>
 
-    <label for="nameAdd">name: </label> <input type="text" id="nameAdd" name="name"
-                                            required>
 
-    <label for="infoAdd">info: </label> <input type="text" id="infoAdd" name="info">
+
+    <label for="infoAdd">информация: </label> <input type="text" id="infoAdd" name="info" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
 
 <br><input type="reset" value="Reset">
 <input type="submit" value="добавить организация">
 </form>
+<br><hr>
+<br>
+  <label for="transactionForm"><h3>Выполнить транзакцию:<h3></label>
+<form action='${pageContext.request.contextPath}/execute_transaction' method="post" id="transactionForm">
+
+    <label for="organisation_idtr"> получатель:</label><select name="organisationID" id='organisation_idtr'
+                                                               required>
+
+    <c:forEach var="organisation" items='${organisations}'>
+
+        <option value='${organisation.id}'>${organisation.name}</option>
+
+    </c:forEach>
+</select>
+
+    <label for="priceCh">    Сумма: </label> <input type="text" id="priceCh" name="money" pattern="\d+(.\d*)?" required>
+
+ <br><input type="reset" value="сбросить">
+    <input type="submit" value="отправить">
+
+</form>
+<br><hr><br><br>
+<a href="${pageContext.request.contextPath}/organisations">Показать все организации</a>
+<br>
+<br><br>
+ <label for="show_org_with_role"><h3>Показать организации по роли: </h3></label>
+<form action='${pageContext.request.contextPath}/organisations' method="get" id='show_org_with_role'
+      accept-charset="UTF-8">
+
+     <label for="roleToShow">    роль: </label><select name="role" required id="roleToShow">
+
+        <c:forEach var="role" items='${roles}'>
+
+            <option value='${role.id}'>${role.role}</option>
+
+        </c:forEach>
+
+    <br><input type="reset" value="Reset">
+    <input type="submit" value="показать">
+
+</form>
+
+<p>
+
+
 
 
 
 
 
 <br>
+<table>
+<thead>
+
+
+<tr>
+
+
+<th scope="col">id</th>
+<th scope="col">название</th>
+<th scope="col">роль</th>
+<th scope="col">состояние</th>
+<th scope="col">информация</th>
+<th scope="col">изменить организацию</th>
+
+</tr>
+
+
+</thead>
+
+
+<tbody>
 
 <c:forEach var="organisation" items='${organisations}'>
 
+<tr>
 
-    <c:out value='id : ${organisation.id}'/>
-    <c:out value='  ||      '/>
-    <c:out value='name: ${organisation.name}'/>
-    <c:out value='    ||    '/>
-    <c:out value='role : ${organisation.role.role}'/>
-    <c:out value='    ||    '/>
-    <c:out value='block : ${organisation.blocked}'/>
-    <c:out value='    ||    '/>
-    <c:out value='info : ${organisation.info}'/>
-    <c:out value='    ||    '/>
+<td>${organisation.id}</td>
+<td>${organisation.name}</td>
+<td>${organisation.role.role}</td>
+<td>${organisation.blocked}
 
+
+<c:choose>
+    <c:when test="${organisation.blocked}=='true'}">
+
+ <h4 style="color: red">заблокирован</h4>
+
+    </c:when>
+
+    <c:otherwise>
+
+  <h4 style="color: green">не заблокирован</h4>
+
+    </c:otherwise>
+
+</c:choose>
+
+</td>
+<td>${organisation.info}</td>
+<td>
     <form action='${pageContext.request.contextPath}/change_organisation_form_handler' method="post" id='change_organisation'
           accept-charset="UTF-8">
 
         <input type="text" id="orgID" name="id" value='${organisation.id}' hidden required>
 
 
+    <label for="setRole">изменить роль</label>
     <input type="checkbox" id="setRole" name="setRole">
-    <label for="setRole">setRole</label>
 
-
-        <select name="role" required>
+   <select name="role" required>
 
             <c:forEach var="role" items='${roles}'>
 
@@ -117,23 +162,27 @@
             </c:forEach>
 
         </select>
+     <br>
+     <br>
 
 
+    <label for="setName">изменить название</label>
     <input type="checkbox" id="setName" name="setName">
-    <label for="setName">setName</label>
-
 
         <label for="name">name: </label> <input type="text" id="name" name="name"
                                                 value='${organisation.name}' required>
-
-
+ <br>
+     <br>
+    <label for="setInfo">изменить информацию</label>
     <input type="checkbox" id="setInfo" name="setInfo">
-    <label for="setInfo">setInfo</label>
 
-        <label for="info">info: </label> <input type="text" id="info" name="info"
+  <label for="info">info: </label> <input type="text" id="info" name="info"
                                                 value='${organisation.info}'>
 
 
+
+ <br>
+     <br>
         <c:if test='${organisation.blocked==true}'>
             <label for="unblock">разблокировать</label>
             <input type="radio" id="unblock" value='false' name="block">
@@ -145,13 +194,17 @@
         </c:if>
 
 
-        <br><input type="reset" value="Reset">
-        <input type="submit" value="submit">
+        <br><input type="reset" value="сбросить">
+        <input type="submit" value="изменить">
 
     </form>
-
+    </td>
+</tr>
 </c:forEach>
 
+
+</tbody>
+</table>
 
 </body>
 

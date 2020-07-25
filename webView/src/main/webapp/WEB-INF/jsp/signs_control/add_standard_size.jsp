@@ -22,10 +22,10 @@
 <jsp:include page="../header.jsp"/>
 <form action='${pageContext.request.contextPath}/add_standard_size_form' method="post" accept-charset="UTF-8">
 
-    <label for="sizeID"> size number:</label>
+    <label for="sizeID"> номер:</label>
     <input type="text" id="sizeID" name="size" pattern="\d+" required>
 
-    <label for="size_info"> signs description:</label>
+    <label for="size_info"> описание:</label>
     <input type="text" id="size_info" name="info" pattern="[\wА-Яа-я\s:!.,)(-?\d]+" required>
 
     <input type="submit" value="добавить">

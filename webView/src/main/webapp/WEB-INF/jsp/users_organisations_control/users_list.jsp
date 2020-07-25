@@ -18,12 +18,20 @@
 <body>
 <jsp:include page="../header.jsp"/>
 
+<br>
+<br>
 <a href="${pageContext.request.contextPath}/users">show all</a>
+<br>
+<br>
 <a href="${pageContext.request.contextPath}/add_user">add user</a>
+<br>
+<br>
 
+ <label for="show_organisations">Показат по организации</label>
 <form action='${pageContext.request.contextPath}/users' method="get" id='show_organisations' accept-charset="UTF-8">
 
-    <select name="id" required>
+ <label for="show_organisations_select">организация</label>
+    <select name="id" required id="show_organisations_select">
 
         <c:forEach var="organisation" items='${organisations}'>
 
@@ -34,113 +42,70 @@
     </select>
 
     <br>
-    <input type="submit" value="submit">
+    <input type="submit" value="применить">
 
 </form>
 </p>
 
+<br>
+<br>
 
-<p>
+<table>
+<thead>
+
+
+<tr>
+
+
+<th scope="col">id</th>
+<th scope="col">login</th>
+<th scope="col">name</th>
+<th scope="col">surname</th>
+<th scope="col">role</th>
+<th scope="col">organisation</th>
+<th scope="col">block condition</th>
+<th scope="col">info</th>
+
+</tr>
+
+
+</thead>
+
+
+<tbody>
 
     <c:forEach var="user" items='${users}'>
 
 
-            <c:out value='id : ${user.id}'/>
-            <c:out value='  ||      '/>
-            <c:out value='login: ${user.login}'/>
-            <c:out value='    ||    '/>
-            <c:out value='role : ${user.role.role}'/>
-            <c:out value='    ||    '/>
-            <c:out value='organisation: ${user.organisation.name}'/>
-            <c:out value='    ||    '/>
+<tr>
 
-            <c:out value='block: ${user.block}'/>
-            <c:out value='   ||   '/>
-            <c:out value='name: ${user.name}'/>
-            <c:out value='   ||   '/>
-            <c:out value='surname: ${user.surname}'/>
-            <c:out value='   ||   '/>
-            <c:out value='info: ${user.info}'/>
+<td>${user.id}</td>
+<td><a href="${pageContext.request.contextPath}/user_profile/${user.id}" >${user.login}</a></td>
+<td>${user.name}</td>
+<td>${user.surname}</td>
+<td>${user.role.role}</td>
+<td>${user.organisation.name}</td>
+<td>
 
-<form action='${pageContext.request.contextPath}/change_user_form_handler' method="post" id='change_user'
-      accept-charset="UTF-8">
+<c:choose>
+    <c:when test="${user.block=='true'}">
 
+ <h4 style="color: red">заблокирован</h4>
 
-    <input type="text" id="userID" name="id" value='${user.id}' hidden required>
+    </c:when>
 
+    <c:otherwise>
 
+  <h4 style="color: green">не заблокирован</h4>
 
-    <input type="checkbox" id="setRole" name="setRole">
-    <label for="setRole">setRole</label>
+    </c:otherwise>
 
+</c:choose>
 
-    <select name="role" required>
+</td>
+<td>${user.info}</td>
 
-        <c:forEach var="role" items='${roles}'>
-
-            <option value='${role.id}'>${role.role}</option>
-
-        </c:forEach>
-
-    </select>
-
-
-    <input type="checkbox" id="setName" name="setName">
-    <label for="setName">setName</label>
-
-
-    <label for="name">name: </label> <input type="text" id="name" name="name"
-                                            value='${user.name}' required>
-
-
-    <input type="checkbox" id="setSurname" name="setSurname">
-    <label for="setSurname">setSurname</label>
-
-
-    <label for="surname">: </label> <input type="text" id="surname" name="surname"
-                                           value='${user.surname}' required>
-
-
-    <input type="checkbox" id="setOrganisation" name="setOrganisation">
-    <label for="setOrganisation">setOrganisation</label>
-
-
-    <select name="organisation" required>
-
-        <c:forEach var="organisation" items='${organisations}'>
-
-            <option value='${organisation.id}'>${organisation.name}</option>
-
-        </c:forEach>
-
-    </select>
-
-
-    <input type="checkbox" id="setInfo" name="setInfo">
-    <label for="setInfo">setInfo</label>
-
-    <label for="info">info: </label> <input type="text" id="info" name="info"
-                                            value='${user.info}'>
-
-    <c:if test='${user.block==true}'>
-        <label for="unblock">разблокировать</label>
-        <input type="radio" id="unblock" value='false' name="block">
-    </c:if>
-
-    <c:if test='${user.block==false}'>
-        <label for="block">заблокировать</label>
-        <input type="radio" id="block" value='true' name="block">
-    </c:if>
-
-
-    <br><input type="reset" value="Reset">
-    <input type="submit" value="submit">
-
-</form>
-
-
-<br>
-
+</tr>
 
 </c:forEach>
 

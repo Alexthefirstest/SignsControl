@@ -37,7 +37,7 @@
 
 <p>
 
-  <label for="show_by_id_form"> показать по организации-заказчику: </label>
+  <label for="show_by_id_form"> показать по организации-исполнителю: </label>
 <form action='${pageContext.request.contextPath}/orders' method="get" id='show_by_id_form'>
     <input type="text" name="orders_option" value='show_by_org_id' hidden>
 

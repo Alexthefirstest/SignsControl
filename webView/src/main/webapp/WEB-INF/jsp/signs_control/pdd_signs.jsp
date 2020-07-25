@@ -17,66 +17,97 @@
 
 <body>
 <jsp:include page="../header.jsp"/>
+
 <p><a href="${pageContext.request.contextPath}/add_pdd_sign">add sign</a>
+<br>
+
+<table>
+<thead>
+
+
+<tr>
+
+
+<th scope="col">номер знака</th>
+<th scope="col">название</th>
+<th scope="col">описание</th>
+<th scope="col">изображение</th>
+<th scope="col">изменить знак</th>
+
+</tr>
+
+
+</thead>
+
+
+<tbody>
 
     <c:forEach var="sign" items='${pdd_signs}'>
+<tr>
 
-    <c:choose>
+<td>
 
+<c:choose><c:when test='${sign.kind>-1}'>
+    ${sign.section}.${sign.sign}.${sign.kind}
+            </c:when>
+            <c:otherwise>
+               ${sign.section}.${sign.sign}
+            </c:otherwise>
+        </c:choose>
 
-    <c:when test='${sign.kind>-1}'>
+        </td>
 
-        <c:out value='${sign.section}'/>
-        <c:out value='.${sign.sign}'/>
-        <c:out value='.${sign.kind}'/>
-    </c:when>
-    <c:otherwise>
-        <c:out value='${sign.section}'/>
-        <c:out value='.${sign.sign}'/>
-    </c:otherwise>
-    </c:choose>
+   <td>${sign.name}</td>
+   <td>${sign.description}</td>
 
-        <c:out value='        '/>
-        <c:out value='${sign.name}'/>
-        <c:out value='        '/>
-        <c:out value='${sign.description}'/>
-        <c:out value='        '/>
-
+ <td>
     <c:if test="${not empty sign.picture}">
     <img src="${pageContext.request.contextPath}/upload?id=${sign.id}"/>
     </c:if>
 
-<form action='${pageContext.request.contextPath}/upload/set_sign_image' method="post" accept-charset="UTF-8"
-      enctype='multipart/form-data'>
+</td>
+
+ <td>
+  <form action='${pageContext.request.contextPath}/upload/set_sign_image' method="post" accept-charset="UTF-8"
+          enctype='multipart/form-data'>
 
     <input type="text" name="sign_id" pattern="\d+" value="${sign.id}" required hidden>
-    <label for="picture_set"> image:</label><input type="file" name="image" id='picture_set' accept="image/*" required>
+        <label for="picture_set"> image:</label><input type="file" name="image" id='picture_set' accept="image/*" required>
 
-    <input type="submit" value="добавить">
-</form>
+        <input type="submit" value="добавить изображение">
+    </form>
+<br>
 
-<form action='${pageContext.request.contextPath}/change_pdd_sign' method="post" accept-charset="UTF-8">
+
+<label for="changeNameDesc"> изменить название и описание:</label>
+<form action='${pageContext.request.contextPath}/change_pdd_sign' method="post" accept-charset="UTF-8" id="changeNameDesc">
     <input type="text" name="sign_id" pattern="\d+" value="${sign.id}" required hidden>
-    <label for="name"> sign_name:</label><input type="text" name="name" value="${sign.name}" id='name'
+    <label for="name"> название:</label><input type="text" name="name" value="${sign.name}" id='name'
                                                 pattern="[\wА-Яа-я\s:!.,)(-?\d]+" required>
-    <label for="description"> pdd_description:</label><input type="text" name="description" value="${sign.description}"
+    <label for="description"> описание:</label><input type="text" name="description" value="${sign.description}"
                                                              id='description'
                                                              pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
 
     <br><input type="reset" value="сбросить">
-    <input type="submit" value="изменить знак">
+    <input type="submit" value="применить изменения">
 </form>
-
+<br>
 <form action='${pageContext.request.contextPath}/remove_pdd_sign' method="post" accept-charset="UTF-8">
 
     <input type="text" name="sign_id" pattern="\d+" value="${sign.id}" required hidden>
-    <input type="submit" value="remove_sign">
+    <input type="submit" value="удалить знак">
 </form>
 
+</td>
 
-<br>
+</tr>
 
 </c:forEach>
+
+
+
+</tbody>
+</table>
 
 </body>
 
