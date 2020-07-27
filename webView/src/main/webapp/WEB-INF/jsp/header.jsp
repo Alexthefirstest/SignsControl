@@ -8,24 +8,36 @@
 
 <body>
 
-<header>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css?1">
 
-   <h1 style="text-align: center"> SignsControl </h1>
+<header >
 
- <h5 style="text-align: center">
-
- <c:if test='${not empty sessionScope.userID}'>
-
-    <a href="${pageContext.request.contextPath}/user_profile/${sessionScope.userID}" >user profile</a>
-
- </c:if>
+<br>
+<br>
+   <h1 style=" float: left;"> SignsControl </h1>
 
 
 
-    <a href="${pageContext.request.contextPath}/" >main page</a>
+
+<table style=" float: right; ">
+<tbody>
+<tr>
+
+<td>
+<img src="${pageContext.request.contextPath}/images/headerImage.jpg" style="width: 150px; height: 75px;">
+</td>
+
+<td>
 
 
-     <c:choose>
+
+  <a href="${pageContext.request.contextPath}/" >main page</a>
+
+</td>
+
+<td>
+
+  <c:choose>
 
         <c:when test="${empty sessionScope.role}">
 
@@ -36,29 +48,50 @@
 
             <c:otherwise>
 
-        User: ${sessionScope.username} <a href="${pageContext.request.contextPath}/logout" style="text-align: center">log out</a>
+       ${sessionScope.username} <br><a href="${pageContext.request.contextPath}/logout" >log out</a>
+<br>
+    <a href="${pageContext.request.contextPath}/user_profile/${sessionScope.userID}" >user profile</a>
 
             </c:otherwise>
 
             </c:choose>
 
- </h5>
 
-   <h5 style="text-align: center">
-  <a href="${pageContext.request.contextPath}/pdd_signs" style="text-align: left">pdd signs</a>
+</td>
 
-      <a href="${pageContext.request.contextPath}/standard_sizes" style="text-align: right">standard sizes</a>
- </h5>
 
-  <h5 style="text-align: center">
-    <a href="${pageContext.request.contextPath}/bank_accounts" style="text-align: center">bank</a>
 
-    <a href="${pageContext.request.contextPath}/users"  style="text-align: left">users</a>
-    <a href="${pageContext.request.contextPath}/organisations" style="text-align: right">organisations</a>
 
-    <a href="${pageContext.request.contextPath}/orders"  style="text-align: left">orders</a>
-    <a href="${pageContext.request.contextPath}/workers_crews" style="text-align: right">workers crews</a>
-</h5>
+
+
+
+<td>
+
+  <a href="${pageContext.request.contextPath}/pdd_signs" >pdd signs</a>
+<br>
+      <a href="${pageContext.request.contextPath}/standard_sizes" >standard sizes</a>
+</td>
+
+ <td>
+    <a href="${pageContext.request.contextPath}/bank_accounts" >bank</a>
+</td>
+
+<td>
+    <a href="${pageContext.request.contextPath}/users"  >users</a>
+<br>
+    <a href="${pageContext.request.contextPath}/organisations" >organisations</a>
+</td><td>
+    <a href="${pageContext.request.contextPath}/orders"  >orders</a>
+<br>
+    <a href="${pageContext.request.contextPath}/workers_crews" >workers crews</a>
+ </td>
+
+
+
+</tr>
+</tbody>
+</table>
+
 
 </header>
 

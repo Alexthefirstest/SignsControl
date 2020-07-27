@@ -15,18 +15,19 @@
 
 </head>
 
-<body>
+<body class="auto_center center">
 <jsp:include page="../header.jsp"/>
 
+<br><hr><br>
 <a href="${pageContext.request.contextPath}/show_transactions_history">Показать транзакции</a>
-<br>
+<br><hr><br>
 <form action='${pageContext.request.contextPath}/add_bank_account' method="post">
     <input type="submit" value="добавить аккаунт">
 </form>
 
-<br>
+<br><hr>
 <label for="add_money_form"><h3>добавить денег на счет</h3></label>
-<form action='${pageContext.request.contextPath}/add_money' method="post" id="add_money_form">
+<form action='${pageContext.request.contextPath}/add_money' method="post" id="add_money_form" >
 
         <label for="addMoneyOrg">Организация - получатель:</label>
         <select name="addMoneyOrg" id='addMoneyOrg'>
@@ -48,7 +49,7 @@
 
 </form>
 
-<br>
+<br><hr>
 <br>
 
 <form action='${pageContext.request.contextPath}/bank_accounts' method="get" id='show_form' accept-charset="UTF-8">
@@ -80,7 +81,7 @@
         >
     </p>
 
-
+<hr>
    <h3>Сортировать:</h3>
     <p>
         <label for="blockedSort">по блокировке</label>
@@ -121,7 +122,7 @@
 </form>
 
 
-
+<hr>
 
 <table>
 <thead>

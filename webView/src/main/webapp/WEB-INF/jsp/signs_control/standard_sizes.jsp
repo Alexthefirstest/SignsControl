@@ -20,7 +20,7 @@
 <p><a href="${pageContext.request.contextPath}/add_standard_size">add st size</a>
 
 
-<table>
+<table class="auto_center center">
 
 <thead>
 
@@ -47,7 +47,7 @@
 <td>${standard_size.info}</td>
 <td>
 
-<form action='${pageContext.request.contextPath}/change_standard_size' method="post">
+<form action='${pageContext.request.contextPath}/change_standard_size' method="post" >
     <input type="text" id="size" name="size" value='${standard_size.size}' hidden>
     <input type="submit" value="изменить размер">
 </form>

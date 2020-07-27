@@ -18,14 +18,14 @@
 <body>
 <jsp:include page="../header.jsp"/>
 
-<form action='${pageContext.request.contextPath}/add_user_form_handler' method="post">
+<form action='${pageContext.request.contextPath}/add_user_form_handler' method="post" class="fullwidthblock center">
 
-    <label for="fieldUserPass">Login:</label><br><input type="text" id="fieldUserPass" name="login"
+    <label for="fieldUserPass">Login:</label><br><input class="fullwidthblock" type="text" id="fieldUserPass" name="login"
                                                         pattern="\w+"
                                                         placeholder="max - 20 symbols" maxlength="20"
                                                         required>
     <br><br>
-    <label for="fieldPasswordLog">Password:</label><br><input type="password" id="fieldPasswordLog"
+    <label for="fieldPasswordLog">Password:</label><br><input class="fullwidthblock" type="password" id="fieldPasswordLog"
                                                               name="password" pattern="\w+"
                                                               placeholder="max - 20 symbols" maxlength="20"
                                                     required>
@@ -41,10 +41,10 @@
 
     </select>
 
-    <label for="name">Имя: </label> <input type="text" id="name" name="name"
+    <label for="name">Имя: </label> <input class="fullwidthblock" type="text" id="name" name="name"
                                             required>
 <br>
-    <label for="surname">Фамилия: </label> <input type="text" id="surname" name="surname"
+    <label for="surname">Фамилия: </label> <input  class="fullwidthblock" type="text" id="surname" name="surname"
                                            required>
 <br>
  <label for="userOrg">Организация: </label>
@@ -61,8 +61,8 @@
 <br>
     <label for="info">информация: </label> <textarea id="info" name="info" pattern="[\wА-Яа-я\s:!.,)(-?\d]+"></textarea>
 
-    <br><input type="reset" value="сбросить">
-    <input type="submit" value="добавить">
+    <br><input type="reset" value="сбросить" class="registerbtn">
+    <input type="submit" value="добавить" class="registerbtn">
 
 </form>
 

@@ -15,7 +15,7 @@
 
 </head>
 
-<body>
+<body class="auto_center center">
 <jsp:include page="../header.jsp"/>
 <br>
  <label for="add_org"><h3>Добавить организацию:</h3></label>

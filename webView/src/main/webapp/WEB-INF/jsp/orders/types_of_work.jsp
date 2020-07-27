@@ -15,7 +15,7 @@
 
 </head>
 
-<body>
+<body class="auto_center center">
 
 <jsp:include page="../header.jsp"/>
 
@@ -28,7 +28,7 @@
     <input type="submit" value="добавить">
 </form>
 <br>
-
+<hr>
 <table>
 <thead>
 

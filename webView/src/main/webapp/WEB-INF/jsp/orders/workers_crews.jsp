@@ -15,13 +15,13 @@
 
 </head>
 
-<body>
+<body class="auto_center center">
 <jsp:include page="../header.jsp"/>
 
 <a href="${pageContext.request.contextPath}/workers_crews">показать все</a>
-
-<br><label for="choose_by_organisation_form">Показать бригады организации: </label>
-<form action='${pageContext.request.contextPath}/workers_crews' method="get" id='show_crews' accept-charset="UTF-8" id="choose_by_organisation_form">
+<hr><br>
+<br><label for="choose_by_organisation_form" class="inline">Показать бригады организации: </label>
+<form action='${pageContext.request.contextPath}/workers_crews'  class="inline auto_center center" method="get" id='show_crews' accept-charset="UTF-8" id="choose_by_organisation_form">
 
 <label for="choose_by_organisation">Организация: </label>
     <select name="organisationID" required id="choose_by_organisation">
@@ -43,11 +43,11 @@
 
 
 <br>
-<br>
+<hr>
 <br>
 
 
-<form action='${pageContext.request.contextPath}/add_workers_crew' method="post" id='add_crew'
+<form action='${pageContext.request.contextPath}/add_workers_crew' method="post" id='add_crew' class="auto_center center"
       accept-charset="UTF-8">
 
    <input type="submit" value="Добавить бригаду    ">
@@ -58,7 +58,7 @@
 </form>
 
 
-<table>
+<table class="auto_center center">
 <thead>
 
 

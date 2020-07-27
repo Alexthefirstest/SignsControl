@@ -15,11 +15,11 @@
 
 </head>
 
-<body>
+<body class="auto_center center">
 <jsp:include page="../header.jsp"/>
 
 <a href="${pageContext.request.contextPath}/types_of_work">тип работ</a>
-
+<hr><br>
 <form action='${pageContext.request.contextPath}/orders' method="get">
     <input type="text" name="orders_option" value='all' hidden>
     <input type="submit" value="показать все">
@@ -34,7 +34,7 @@
     <input type="text" name="orders_option" value='unexecuted' hidden>
     <input type="submit" value="показать невыполненные">
 </form>
-
+<hr>
 <p>
 
   <label for="show_by_id_form"> показать по организации-исполнителю: </label>
@@ -57,8 +57,8 @@
 </form>
 
 </p>
-
-<table>
+<hr>
+<table class="auto_center center">
 <thead>
 
 <tr>

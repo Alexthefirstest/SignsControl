@@ -20,15 +20,15 @@
 
 <body>
 <jsp:include page="../header.jsp"/>
-<form action='${pageContext.request.contextPath}/add_standard_size_form' method="post" accept-charset="UTF-8">
+<form action='${pageContext.request.contextPath}/add_standard_size_form' method="post" accept-charset="UTF-8" class="auto_center center">
 
     <label for="sizeID"> номер:</label>
-    <input type="text" id="sizeID" name="size" pattern="\d+" required>
+    <input type="text" id="sizeID" name="size" pattern="\d+" required class="fullwidthblock">
 
     <label for="size_info"> описание:</label>
-    <input type="text" id="size_info" name="info" pattern="[\wА-Яа-я\s:!.,)(-?\d]+" required>
+    <input type="text" id="size_info" name="info" pattern="[\wА-Яа-я\s:!.,)(-?\d]+" required class="fullwidthblock">
 
-    <input type="submit" value="добавить">
+    <input type="submit" value="добавить" class="registerbtn">
 
 </form>
 

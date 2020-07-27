@@ -1,0 +1,236 @@
+html, body {
+	 width: 100%;
+                height: 80%;
+                padding: 0;
+                margin: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #6E6E6E;
+}
+
+
+
+div {
+ margin: 10px 20px;
+ }
+
+table {
+   border-spacing: 0 10px;
+   font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+ }
+
+th {
+padding: 10px 20px;
+background: #56433D;
+color: #F9C941;
+border: 2px solid;
+font-size: 0.9em;
+}
+
+img{
+
+width: 75px;
+height: 75px;
+}
+
+
+td {
+vertical-align: middle;
+padding: 10px;
+font-size: 14px;
+text-align: center;
+border: 2px solid #56433D;
+}
+
+header {
+ background: #DCDCDC;
+ height: 150px;
+ padding-right: 10%;
+ padding-left: 10%;
+}
+
+header table {
+border: 0;
+}
+
+header td {
+border: 0;
+border-right: 2px solid 	#F0FFFF;
+}
+
+header th {
+border: 0;
+}
+
+
+button:hover {
+	cursor: pointer;
+}
+
+  #map {
+            width: 100%;
+            height: 90%;
+            padding: 0;
+            margin: 0;
+        }
+
+        #language {
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 100%;
+        }
+
+
+
+#chTable {
+border: 0;
+}
+
+#chTable td {
+border: 0;
+border-right: 2px solid 	#F0FFFF;
+}
+
+#chTable th {
+border: 0;
+}
+
+
+
+h1, h2, h3 {
+	margin: 0;
+	padding: 0;
+	font-family: 'Arvo', serif;
+	font-weight: normal;
+	color: #611F0D;
+}
+
+h1 {
+	font-size: 2em;
+}
+
+h2 {
+	font-size: 2.8em;
+}
+
+h3 {
+	font-size: 1.6em;
+}
+
+p, ul, ol {
+	margin-top: 0;
+	line-height: 240%;
+}
+
+ul, ol {
+}
+
+form{
+  background-color: white;
+padding: 2px;
+
+
+}
+
+a {
+
+	color: dodgerblue;
+}
+
+a:focus {
+ color: #DA70D6;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+button, input[type="submit"] {
+  cursor: pointer;
+}
+
+
+
+/* Full-width input fields */
+.registration input[type=text], .registration input[type=password] {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+
+.fullwidthblock {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Overwrite default styles of hr */
+hr {
+  border: 1px solid #f1f1f1;
+  margin-bottom: 25px;
+}
+
+/* Set a style for the submit/register button */
+.registerbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+
+.registerbtn:hover {
+  opacity:1;
+}
+
+
+
+/* Set a grey background color and center the text of the "sign in" section */
+input, button, #output {
+  background-color: #f1f1f1;
+  text-align: center;
+}
+/*registr*/
+
+
+
+
+
+
+
+
+
+.center{
+
+text-align: center;
+
+}
+
+.auto_center{
+
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.inline{
+
+display: inline;
+
+}
+

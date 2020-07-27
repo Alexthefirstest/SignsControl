@@ -19,85 +19,85 @@
 <jsp:include page="../header.jsp"/>
 
 
-<p>
+<div class="auto_center center">
 
-   <h3>id : ${user.id} </h3>
-   <br>
-    <h3>login: ${user.login} </h3>
-     <br>
-  <h3>role : ${user.role.role} </h3>
-    <br>
-    <h3>organisation: ${user.organisation.name} </h3>
-      <br>
+   <h3 class="fullwidthblock">id : ${user.id} </h3>
+   <hr>
+    <h3 class="fullwidthblock">login: ${user.login} </h3>
+    <hr>
+  <h3 class="fullwidthblock">role : ${user.role.role} </h3>
+   <hr>
+    <h3 class="fullwidthblock">organisation: ${user.organisation.name} </h3>
+    <hr>
 
-    <h3>block:  </h3>
+    <h3 class="fullwidthblock inline">block:  </h3>
     <c:choose>
 
            <c:when test="${user.block=='true'}">
 
-        <h3 style="color: red" >заблокирован</h3>
+        <h3 class="fullwidthblock inline" style="color: red" >  заблокирован</h3>
 
            </c:when>
 
            <c:otherwise>
-           <h3  style="color: green" >не заблокирован</h3>
+           <h3  class="fullwidthblock inline" style="color: green" >  не заблокирован</h3>
 
            </c:otherwise>
 
        </c:choose>
 
-  <br>
-   <h3>name: ${user.name} </h3>
-     <br>
-    <h3>surname: ${user.surname} </h3>
-     <br>
-    <h3>info: ${user.info} </h3>
+ <hr>
+   <h3 class="fullwidthblock">name: ${user.name} </h3>
+   <hr>
+    <h3 class="fullwidthblock">surname: ${user.surname} </h3>
+ <hr>
+    <h3 class="fullwidthblock">info: ${user.info} </h3>
 
 
 <form action='${pageContext.request.contextPath}/change_login_password/login' method="post">
-    <label for="fieldUser">Login:</label><br><input type="text" id="fieldUser" name="login"
+    <label for="fieldUser">Login:</label><br><input type="text" id="fieldUser" name="login"  class="fullwidthblock"
                                                     pattern="\w+"
                                                     placeholder="max - 20 symbols" maxlength="20"
                                                     required>
-    <br><br>
-    <label for="fieldPassword">Password:</label><br><input type="password" id="fieldPassword"
+    <br> <hr><br>
+    <label for="fieldPassword">Password:</label><br><input type="password" id="fieldPassword"  class="fullwidthblock"
                                                            name="password" pattern="\w+"
                                                            placeholder="max - 20 symbols" maxlength="20"
                                                            required>
 
-    <label for="newLogin">Login:</label><br><input type="text" id="newLogin" name="newLogin"
+    <label for="newLogin">Login:</label><br><input type="text" id="newLogin" name="newLogin"  class="fullwidthblock"
                                                    pattern="\w+"
                                                    placeholder="max - 20 symbols" maxlength="20"
                                                    required>
-    <br><input type="reset" value="Reset">
-    <input type="submit" value=" set">
+    <br><input type="reset" value="Reset" class="registerbtn">
+    <input type="submit" value=" set" class="registerbtn">
 </form>
-<br><br>
+<br> <hr><br>
 <form action='${pageContext.request.contextPath}/change_login_password/password' method="post">
-    <label for="fieldUserPass">Login:</label><br><input type="text" id="fieldUserPass" name="login"
+    <label for="fieldUserPass">Login:</label><br><input type="text" id="fieldUserPass" name="login"  class="fullwidthblock"
                                                         pattern="\w+"
                                                         placeholder="max - 20 symbols" maxlength="20"
                                                         required>
-    <br><br>
-    <label for="fieldPasswordLog">Password:</label><br><input type="password" id="fieldPasswordLog"
+    <br> <br>
+    <label for="fieldPasswordLog">Password:</label><br><input type="password" id="fieldPasswordLog"  class="fullwidthblock"
                                                               name="password" pattern="\w+"
                                                               placeholder="max - 20 symbols" maxlength="20"
                                                               required>
-    <br><br>
-    <label for="newPassword">Password:</label><br><input type="password" id="newPassword"
+    <br> <br>
+    <label for="newPassword">Password:</label><br><input type="password" id="newPassword"  class="fullwidthblock"
                                                          name="newPassword" pattern="\w+"
                                                          placeholder="max - 20 symbols" maxlength="20"
                                                          required>
 
-    <br><input type="reset" value="Reset">
-    <input type="submit" value="set">
+    <br><input type="reset" value="Reset" class="registerbtn">
+    <input type="submit" value="set" class="registerbtn">
 </form>
 
-<br>
+<br> <hr>
 <br>
 
 <form action='${pageContext.request.contextPath}/change_user_form_handler' method="post" id='change_user'
-      accept-charset="UTF-8">
+      accept-charset="UTF-8" >
 
 
     <input type="text" id="userID" name="id" value='${user.id}' hidden required>
@@ -105,7 +105,7 @@
 
 
     <label for="setRole">изменить роль</label>
-    <input type="checkbox" id="setRole" name="setRole">
+    <input type="checkbox" id="setRole" name="setRole" >
  <label for="roleSelect">роль:</label>
     <select name="role" required id=roleSelect>
 
@@ -123,7 +123,7 @@
     <input type="checkbox" id="setName" name="setName">
 
 
-    <label for="name">имя: </label> <input type="text" id="name" name="name"
+    <label for="name">имя: </label> <input type="text" id="name" name="name"  class="fullwidthblock"
                                             value='${user.name}' required>
 
 <br>
@@ -131,7 +131,7 @@
     <label for="setSurname">изменить фамилию</label>
     <input type="checkbox" id="setSurname" name="setSurname">
  <label for="surname">фамилия: </label>
-<input type="text" id="surname" name="surname"
+<input type="text" id="surname" name="surname"  class="fullwidthblock"
                                            value='${user.surname}' required>
 
 <br>
@@ -171,11 +171,11 @@
     </c:if>
 
 
-    <br><input type="reset" value="сбросить">
-    <input type="submit" value="применить">
-
+    <br><input type="reset" value="сбросить" class="registerbtn">
+    <input type="submit" value="применить" class="registerbtn">
 </form>
 
+</div>
 </body>
 
 </html>

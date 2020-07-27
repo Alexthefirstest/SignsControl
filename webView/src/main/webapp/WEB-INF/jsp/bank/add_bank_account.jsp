@@ -18,7 +18,7 @@
 <body>
 <jsp:include page="../header.jsp"/>
 
-<table>
+<table class="fullwidthblock">
 <thead>
 
 <tr>

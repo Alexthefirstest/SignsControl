@@ -22,39 +22,9 @@
 
     <script src='${pageContext.request.contextPath}/js/map.js?50' type="text/javascript" charset="UTF-8"></script>
 
-  <%--создать css: карта, стандартные объекты на ней--%>
-    <style>
-        html, body, #map {
-            width: 100%;
-            height: 80%;
-            padding: 0;
-            margin: 0;
-        }
-        #my-listbox {
-            top: auto;
-            left: auto;
-        }
-        #language {
-            cursor: pointer;
-            margin-left: 5px;
-            font-size: 100%;
-        }
-        #point_form {
-            width: 100%;
-            height: 10%;
-            padding: 0;
-            margin: 0;
-        }
-        #signsHistoryTable {
-            width: 100%;
-            height: 10%;
-            padding: 0;
-            margin: 0;
-        }
-    </style>
 
 
-    <%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">--%>
+
 </head>
 
 <body>
@@ -70,10 +40,12 @@
 
     <c:if test="${sessionScope.organisationRole==1}">
 
-    <button id="addPointButton">добавить точку</button>
 
-<p>
 
+
+<table class="auto_center chTable">
+<tr>
+<td>
 <form>
     <input type="checkbox" id="addDirectionForm" name="directionBox">
     <label for="addDirectionForm">добавить направление</label>
@@ -84,9 +56,9 @@
     <label for="changeDirectionBox">изменить направление</label>
 </form>
 
-</p>
 
-<p>
+</td>
+<td>
 
 <form>
     <input type="checkbox" id="addSignCBox" name="addSignBox">
@@ -98,9 +70,9 @@
     <label for="change_local_sign_box">изменить знак</label>
 </form>
 
-</p>
+</td>
 
-<p>
+<td>
 
 <form>
     <input type="checkbox" id="addSignOrder" name="addSignOrder">
@@ -111,11 +83,18 @@
     <input type="checkbox" id="execute_delete_order" name="execute_delete_order">
     <label for="execute_delete_order">выполнить изменить заказ</label>
 </form>
-</p>
+</td>
+<td>
+ <button id="addPointButton">добавить точку</button>
+</td>
+</tr>
+</table>
+
 
 <div style="position: fixed;  bottom: 1px; z-index: 4">
 
     <%-- добавляет точку иили направление --%>
+<p class="center">
 <form action='${pageContext.request.contextPath}/add_map_point' method="post" id='point_form' accept-charset="UTF-8" style="display: none">
 
     <input type="hidden" name="coordinatesToSend" value='null' required>
@@ -269,41 +248,43 @@
     <br><input type="reset" value="сбросить">
     <input type="submit" value="применить">
 </form>
+  </p>
 </div>
-    <%--<div id="map" style=" height: 500px"></div>--%>
 
-<p>
+
+
+<p class="center">
 <button id="showEmptyPointsButton">показать пустые точки</button>
 </p>
 
-<p>
+<p class="center">
 <button id="showOrdersButton">показать все заказы</button>
 <button id="showOrdersExecutedButton">показать выполненные заказы</button>
 <button id="showOrdersUnExecutedButton">показать невыполненные заказы</button>
 </p>
 </c:if>
 
-
-<%--<div id="map" style=" height: 500px"></div>--%>
-<p>
-<form>
+<div class="auto_center">
+<form class ="inline">
  <label for="chosenDate">Показать актуальные знаки для даты: </label>
         <input type="date" name="calendar" max="2020-06-25" id="chosenDate">
 
         <input type="reset" id="resetButton" value="обновить карту">
 </form>
 
-<form>
+<form  class ="inline">
     <label for="signsHistory">показать историю знаков</label>
     <input type="checkbox" id="signsHistory" name="historyBox">
 </form>
 
+
+<label for="language"> Язык карты: </label>
 <select id="language">
     <option selected value="ru">ru</option>
     <option value="en">en</option>
 </select>
+</div>
 
-</p>
 
 <div id="map"></div>
 

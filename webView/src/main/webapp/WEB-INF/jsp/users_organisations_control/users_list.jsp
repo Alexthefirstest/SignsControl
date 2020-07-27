@@ -26,9 +26,9 @@
 <a href="${pageContext.request.contextPath}/add_user">add user</a>
 <br>
 <br>
-
+<hr>
  <label for="show_organisations">Показат по организации</label>
-<form action='${pageContext.request.contextPath}/users' method="get" id='show_organisations' accept-charset="UTF-8">
+<form action='${pageContext.request.contextPath}/users' method="get" id='show_organisations' accept-charset="UTF-8" class="auto_center center">
 
  <label for="show_organisations_select">организация</label>
     <select name="id" required id="show_organisations_select">
@@ -46,11 +46,11 @@
 
 </form>
 </p>
-
+<hr>
 <br>
 <br>
 
-<table>
+<table class="auto_center center">
 <thead>
 
 

@@ -15,11 +15,13 @@
 
 </head>
 
-<body>
+<body class="auto_center center">
 <jsp:include page="../header.jsp"/>
 
 <a href="${pageContext.request.contextPath}/show_transactions_history">Обновить</a>
-
+<br>
+<hr>
+<br>
 <form action='${pageContext.request.contextPath}/show_transactions_history' method="get" id='show_form'
       accept-charset="UTF-8">
 
@@ -80,7 +82,9 @@
 </form>
 </p>
 
-
+<br>
+<hr>
+<br>
 <table>
 <thead>
 
