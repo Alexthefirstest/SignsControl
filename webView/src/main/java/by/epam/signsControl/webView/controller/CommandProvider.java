@@ -29,6 +29,7 @@ class CommandProvider {
         commands.put(CommandName.LOGOUT, new Logout());
         commands.put(CommandName.WRONG_COMMAND, new WrongCommand());
         commands.put(CommandName.LOGIN_FORM, new LoginFormHandler());
+        commands.put(CommandName.SET_LOCALE, new SetLocale());
 
         commands.put(CommandName.GET_CURRENT_POINTS, new GetCurrentPoints());
         commands.put(CommandName.GET_POINTS_BY_DATE, new GetPointsByDate());

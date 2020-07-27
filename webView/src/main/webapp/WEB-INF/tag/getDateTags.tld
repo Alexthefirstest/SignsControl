@@ -3,10 +3,14 @@
 
     <tlib-version>1.0</tlib-version>
     <jsp-version>2/3</jsp-version>
-    <short-name>tags</short-name>
+    <short-name>date</short-name>
+    <uri>getDate</uri>
+
     <tag>
         <name>getCurrentDate</name>
-<!--        <tag-class>by.epam.signsControl.webView.tags.GetCurrentDate</tag-class>-->
+        <tag-class>by.epam.signsControl.webView.tags.GetCurrentDate</tag-class>
         <body-content>empty</body-content>
+        <info>get current date from service</info>
     </tag>
+
 </taglib>

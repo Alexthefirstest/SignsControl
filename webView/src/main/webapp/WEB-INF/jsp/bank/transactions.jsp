@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="date" uri="/WEB-INF/tag/getDateTags.tld" %>
 
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
@@ -68,10 +69,10 @@
         </select>
 
         <label for="dateFrom"> дата с:</label>
-        <input type="date" name="dateFrom" id="dateFrom" required>
+        <input type="date" name="dateFrom" max=<date:getCurrentDate/> id="dateFrom" required>
 
         <label for="dateTo"> дата по:</label>
-        <input type="date" name="dateTo" id="dateTo" required>
+        <input type="date" name="dateTo" max=<date:getCurrentDate/> id="dateTo" required>
 
 
     </p>
@@ -85,7 +86,7 @@
 <br>
 <hr>
 <br>
-<table>
+<table class="auto_center center">
 <thead>
 
 <tr>

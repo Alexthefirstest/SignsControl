@@ -14,9 +14,6 @@
     <!--        <location></location>-->
     <!--    </error-page>-->
 
-<!--    <multipart-config>-->
-<!--        <location>/tmp</location>-->
-<!--    </multipart-config>-->
 
     <error-page>
         <exception-type>java.lang.Exception</exception-type>

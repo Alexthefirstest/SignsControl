@@ -1,4 +1,24 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page isELIgnored="false" %>
+
+<c:choose>
+
+        <c:when test="${empty sessionScope.locale}">
+
+        <fmt:setLocale value="ru"/>
+
+            </c:when>
+
+            <c:otherwise> <fmt:setLocale value="${sessionScope.locale}"/> </c:otherwise>
+
+           </c:choose>
+
+<fmt:setBundle basename="messages"/>
+
+
+
 <!DOCTYPE html>
 
 <html>
@@ -19,13 +39,13 @@
 
 
 <div class="fullwidthblock center">
-<h3 > Input login and password</h3>
+<h3 ><fmt:message key="label.login.input" /></h3>
 <br>
-<h3 > Use latin letters, numbers and '_'</h3>
+<h3 ><fmt:message key="label.login.symbols" /></h3>
 <br><br>
 <c:if test='${second_form==true}'>
 
-   <h6 style="color: red; text-align: center" > wrong login or password </h6>
+   <h6 style="color: red; text-align: center" ><fmt:message key="label.login.wrong_data" /></h6>
 
     <c:set var="second_form" scope="session" value="false"/>
 
@@ -34,17 +54,17 @@
 <hr>
 
 <form action='${pageContext.request.contextPath}/login_form' method="post" class="registration" class="center">
-    <label for="fieldUser">Login:</label><br><input type="text" id="fieldUser" name="login"
+    <label for="fieldUser"><fmt:message key="label.login" />:</label><br><input type="text" id="fieldUser" name="login"
                                                        pattern="\w+"
                                                        placeholder="max - 20 symbols" maxlength="20"
                                                        required autocomplete="off">
 <br><br>
-    <label for="fieldPassword">Password:</label><br><input type="password" id="fieldPassword"
+    <label for="fieldPassword"><fmt:message key="label.password" />:</label><br><input type="password" id="fieldPassword"
                                                            name="password" pattern="\w+"
                                                            placeholder="max - 20 symbols" maxlength="20"
                                                            required autocomplete="new-password">
 
-    <input type="submit" value="Log in" class="registerbtn">
+    <input type="submit" class="registerbtn" value=<fmt:message key="label.log_in" />>
 </form>
 
 

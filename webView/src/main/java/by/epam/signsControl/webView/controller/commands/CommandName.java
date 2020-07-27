@@ -7,6 +7,7 @@ public enum CommandName {
     MAIN_PAGE,
     LOGIN_FORM,
     LOGOUT,
+    SET_LOCALE,
 
     GET_CURRENT_POINTS,
     GET_POINTS_BY_DATE,

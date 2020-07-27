@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="date" uri="/WEB-INF/tag/getDateTags.tld" %>
 
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
@@ -32,7 +33,6 @@
 <jsp:include page="header.jsp"/>
 
 <%-- контент с учетом роли --%>
-
 
     <%-- контент для роли 1 - одд --%>
 
@@ -128,8 +128,8 @@
     <label for="signAnnotation"> annotation:</label><input type="text" id="signAnnotation"
                                                            name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
 
-    <label for="date_of_add">date_of_add: </label> <input type="date" name="date_of_add" id="date_of_add">
-    <label for="date_of_remove">date_of_remove: </label><input type="date" name="date_of_remove" id="date_of_remove">
+    <label for="date_of_add">date_of_add: </label> <input type="date" max=<date:getCurrentDate/> name="date_of_add" id="date_of_add">
+    <label for="date_of_remove">date_of_remove: </label><input type="date" max=<date:getCurrentDate/> name="date_of_remove" id="date_of_remove">
 
     <br><input type="reset" value="сбросить">
     <input type="submit" value="добавить">
@@ -165,8 +165,8 @@
     <label for="sign_annotation_change"> annotation:</label><input type="text" id="sign_annotation_change"
                                                                    name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
 
-    <label for="date_of_add_change">date_of_add: </label> <input type="date" name="date_of_add" id="date_of_add_change">
-    <label for="date_of_remove_change">date_of_remove: </label><input type="date" name="date_of_remove"
+    <label for="date_of_add_change">date_of_add: </label> <input type="date" max=<date:getCurrentDate/> name="date_of_add" id="date_of_add_change">
+    <label for="date_of_remove_change">date_of_remove: </label><input type="date" max=<date:getCurrentDate/> name="date_of_remove"
                                                                       id="date_of_remove_change">
 
     <input type="checkbox" id="deleteSign" name="deleteSign" value="delete_sign">
@@ -267,7 +267,7 @@
 <div class="auto_center">
 <form class ="inline">
  <label for="chosenDate">Показать актуальные знаки для даты: </label>
-        <input type="date" name="calendar" max="2020-06-25" id="chosenDate">
+        <input type="date" name="calendar" max=<date:getCurrentDate/> id="chosenDate">
 
         <input type="reset" id="resetButton" value="обновить карту">
 </form>
