@@ -17,18 +17,36 @@ import java.util.ArrayList;
 
 public class SignsControlFactory {
 
+    /*
+     * logger for this class
+     */
     private static Logger logger = LogManager.getLogger(SignsControlFactory.class);
 
+    /**
+     * this class instance
+     */
+    private static final SignsControlFactory INSTANCE = new SignsControlFactory();
+
+    /**
+     * private constructor
+     */
     private SignsControlFactory() {
     }
 
-    private static final SignsControlFactory INSTANCE = new SignsControlFactory();
-
+    /**
+     * create an {@link FactoryType} object from result statement
+     *
+     * @param rs         result statement
+     * @param signsStaff object to set it with parameters from rs
+     * @return {@link FactoryType} object or null if can't find object constructor
+     * @throws SQLException           when {@link ResultSet} throw it
+     * @throws DAOValidationException if rs.next=false
+     */
     public FactoryType createSignStaff(ResultSet rs, FactoryType signsStaff) throws SQLException, DAOValidationException {
 
 
         if (!rs.next()) {
-            logger.info("rs.next = false");
+
             throw new DAOValidationException("cant find new object or it's wasn't created");
         }
 
@@ -104,6 +122,15 @@ public class SignsControlFactory {
 
     }
 
+
+    /**
+     * create an array of {@link FactoryType} objects from result statement
+     *
+     * @param rs         result statement
+     * @param signsStaff object to know concrete type
+     * @return an array of {@link FactoryType} objects or null if can't find object constructor
+     * @throws SQLException           when {@link ResultSet} throw it
+     */
     public FactoryType[] createSignStaffArr(ResultSet rs, FactoryType signsStaff) throws SQLException {
 
 
@@ -243,7 +270,9 @@ public class SignsControlFactory {
 
     }
 
-
+    /**
+     * @return this class instance
+     */
     public static SignsControlFactory getINSTANCE() {
         return INSTANCE;
     }

@@ -2,6 +2,7 @@ package by.epam.signsControl.dao.impl;
 
 import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
 import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
+import by.epam.signsControl.bean.FactoryType;
 import by.epam.signsControl.bean.Sign;
 import by.epam.signsControl.dao.IPDDSignsControl;
 import by.epam.signsControl.dao.exceptions.DAOException;
@@ -15,35 +16,111 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * jsbc communication class
+ */
 public class PDDSignsControl implements IPDDSignsControl {
 
-
+    /**
+     * logger
+     */
     private static Logger logger = LogManager.getLogger(PDDSignsControl.class);
+
+    /**
+     * connection pool instance
+     */
     private static final IConnectionPool CONNECTION_POOL = ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
 
+    /**
+     * select use last inserted id
+     */
     private static final String SQL_SELECT_USE_LAST_INSERT_ID = "SELECT * FROM `pdd_signs` where id=LAST_INSERT_ID();";
+
+    /**
+     * insert with unique check
+     */
     private static final String SQL_INSERT_UNIQUE = "INSERT INTO `pdd_signs` (`pdd_section`, `pdd_sign`, `pdd_kind`, name) " +
             "SELECT * FROM (SELECT ? as se, ? as si, ? as ki, ? as na) as rt " +
             "where not exists(SELECT `pdd_section`, `pdd_sign`, `pdd_kind` FROM pdd_signs where `pdd_section`=? AND `pdd_sign`=? AND `pdd_kind`=? ) LIMIT 1";
-
+    /**
+     * insert with info and with unique check
+     */
     private static final String SQL_INSERT_UNIQUE_WITH_INFO =
             "INSERT INTO `pdd_signs` (`pdd_section`, `pdd_sign`, `pdd_kind`, name, description) " +
                     "SELECT * FROM (SELECT ? as se, ? as si, ? as ki, ? as na, ? as des) as rt " +
                     "where not exists(SELECT `pdd_section`, `pdd_sign`, `pdd_kind` " +
                     "FROM pdd_signs where `pdd_section`=? AND `pdd_sign`=? AND `pdd_kind`=? ) LIMIT 1";
+
+    /**
+     * delete from table
+     */
     private static final String SQL_DELETE = "DELETE FROM `pdd_signs` WHERE (`id` = ?);";
+
+    /**
+     * find by id
+     */
     private static final String SQL_FIND_BY_ID = "SELECT * FROM pdd_signs where id=";
+
+    /**
+     * set section
+     */
     private static final String SQL_SET_SECTION = "UPDATE `pdd_signs` SET `pdd_section` = ? WHERE (`id` = ?);";
+
+    /**
+     * set sign number of Sign
+     */
     private static final String SQL_SET_SIGN = "UPDATE `pdd_signs` SET `pdd_sign` = ? WHERE (`id` = ?);";
+
+    /**
+     * set kind
+     */
     private static final String SQL_SET_KIND = "UPDATE `pdd_signs` SET `pdd_kind` = ? WHERE (`id` = ?);";
+
+    /**
+     * set name
+     */
     private static final String SQL_SET_NAME = "UPDATE `pdd_signs` SET `name` = ? WHERE (`id` = ?);";
+
+    /**
+     * set description
+     */
     private static final String SQL_SET_DESCRIPTION = "UPDATE `pdd_signs` SET `description` = ? WHERE (`id` = ?);";
+
+    /**
+     * select all
+     */
     private static final String SQL_SELECT_ALL = "SELECT * FROM pdd_signs order by pdd_section, pdd_sign, pdd_kind";
+
+    /**
+     * select all by section
+     */
     private static final String SQL_SELECT_BY_SECTION = "SELECT * FROM pdd_signs WHERE pdd_section=? order by pdd_section, pdd_sign, pdd_kind";
+
+    /**
+     * select all by section and sign
+     */
     private static final String SQL_SELECT_BY_SECTION_AND_SIGN = "SELECT * FROM pdd_signs WHERE pdd_section=? AND pdd_sign=? order by pdd_section, pdd_sign, pdd_kind";
+
+    /**
+     * insert picture
+     */
     private static final String SQL_INSERT_PICTURE = "UPDATE `pdd_signs` SET `picture` = ? WHERE (`id` = ?);";
+
+    /**
+     * select picture
+     */
     private static final String SQL_SELECT_PICTURE = "SELECT picture from pdd_signs where id=?";
 
+    /**
+     * add sign to table
+     *
+     * @param section sign section
+     * @param number  sign number
+     * @param kind    sign kind
+     * @param name    sign name
+     * @return object if success or null if not
+     * @throws DAOException when catch exception from {@link RequestExecutor#createFieldWithExistingCheck(String, String, FactoryType, Object...)}
+     */
     @Override
     public Sign addSign(int section, int number, int kind, String name) throws DAOException {
 
@@ -54,13 +131,23 @@ public class PDDSignsControl implements IPDDSignsControl {
 
         } catch (SQLException ex) {
 
-            logger.warn("add sign fail: section, number, kind: " + section + ", " + number + ", " + kind, ex);
             throw new DAOException(ex);
 
         }
 
     }
 
+    /**
+     * add sign to table
+     *
+     * @param section     sign section
+     * @param number      sign number
+     * @param kind        sign kind
+     * @param name        sign name
+     * @param description sign description
+     * @return object if success or null if not
+     * @throws DAOException when catch exception from {@link RequestExecutor#createFieldWithExistingCheck(String, String, FactoryType, Object...)}
+     */
     @Override
     public Sign addSign(int section, int number, int kind, String name, String description) throws DAOException {
 
@@ -72,18 +159,33 @@ public class PDDSignsControl implements IPDDSignsControl {
 
         } catch (SQLException ex) {
 
-            logger.warn("add sign fail: section, number, kind: " + section + ", " + number + ", " + kind, ex);
             throw new DAOException(ex);
 
         }
 
     }
 
+    /**
+     * add sign to table
+     *
+     * @param section sign section
+     * @param number  sign number
+     * @param name    sign name
+     * @return object if success or null if not
+     * @throws DAOException when catch exception from {@link RequestExecutor#createFieldWithExistingCheck(String, String, FactoryType, Object...)}
+     */
     @Override
     public Sign addSign(int section, int number, String name) throws DAOException {
         return addSign(section, number, -1, name);
     }
 
+    /**
+     * remove sign from table
+     *
+     * @param id sign id to remove
+     * @return null if success
+     * @throws DAOException when catch exception from {@link RequestExecutor#createField(String, String, FactoryType, int...)}
+     */
     @Override
     public boolean removeSign(int id) throws DAOException {
         try {
@@ -95,12 +197,17 @@ public class PDDSignsControl implements IPDDSignsControl {
             return true;
         } catch (SQLException ex) {
 
-            logger.warn("remove sign fail: id: " + id, ex);
             throw new DAOException(ex);
 
         }
     }
 
+    /**
+     * @param id      sign id where set
+     * @param section section to set
+     * @return true if success or false in other case
+     * @throws DAOException when catch exception from {@link RequestExecutor#setField(String, int, int)}
+     */
     @Override
     public boolean updateSection(int id, int section) throws DAOException {
         try {
@@ -109,12 +216,17 @@ public class PDDSignsControl implements IPDDSignsControl {
 
         } catch (SQLException ex) {
 
-            logger.warn("updateSection sign fail: id: " + id, ex);
             throw new DAOException(ex);
 
         }
     }
 
+    /**
+     * @param id     sign id where set
+     * @param number of sign in section to set
+     * @return true if success or false in other case
+     * @throws DAOException when catch exception from {@link RequestExecutor#setField(String, int, int)}
+     */
     @Override
     public boolean updateNumber(int id, int number) throws DAOException {
         try {
@@ -123,13 +235,18 @@ public class PDDSignsControl implements IPDDSignsControl {
 
         } catch (SQLException ex) {
 
-            logger.warn("updateNumber fail: id: " + id, ex);
             throw new DAOException(ex);
 
         }
 
     }
 
+    /**
+     * @param id   sign id where set
+     * @param kind to set
+     * @return true if success or false in other case
+     * @throws DAOException when catch exception from {@link RequestExecutor#setField(String, int, int)}
+     */
     @Override
     public boolean updateKind(int id, int kind) throws DAOException {
         try {
@@ -138,12 +255,17 @@ public class PDDSignsControl implements IPDDSignsControl {
 
         } catch (SQLException ex) {
 
-            logger.warn("updateKind fail: id: " + id, ex);
             throw new DAOException(ex);
 
         }
     }
 
+    /**
+     * @param id   sign id where set
+     * @param name to set
+     * @return true if success or false in other case
+     * @throws DAOException when catch exception from {@link RequestExecutor#setField(String, int, String)}
+     */
     @Override
     public boolean updateName(int id, String name) throws DAOException {
         try {
@@ -152,12 +274,17 @@ public class PDDSignsControl implements IPDDSignsControl {
 
         } catch (SQLException ex) {
 
-            logger.warn("update name fail: id: " + id, ex);
             throw new DAOException(ex);
 
         }
     }
 
+    /**
+     * @param id   sign id where set
+     * @param info to set
+     * @return true if success or false in other case
+     * @throws DAOException when catch exception from {@link RequestExecutor#setField(String, int, String)}
+     */
     @Override
     public boolean updateDescription(int id, String info) throws DAOException {
         try {
@@ -166,12 +293,17 @@ public class PDDSignsControl implements IPDDSignsControl {
 
         } catch (SQLException ex) {
 
-            logger.warn("update description fail: id: " + id, ex);
             throw new DAOException(ex);
 
         }
     }
 
+    /**
+     * @param id          sign id where set
+     * @param inputStream of picture to set
+     * @return true if success or false in other case
+     * @throws DAOException when catch  {@link SQLException} from {@link PreparedStatement}
+     */
     @Override
     public boolean setPicture(int id, InputStream inputStream, long imageSize) throws DAOException {
 
@@ -187,7 +319,6 @@ public class PDDSignsControl implements IPDDSignsControl {
 
         } catch (SQLException ex) {
 
-            logger.warn("updatePicture fail: id: " + id + "inputStream: " + inputStream, ex);
             throw new DAOException(ex);
         } finally {
             CONNECTION_POOL.releaseConnection(connection);
@@ -195,6 +326,11 @@ public class PDDSignsControl implements IPDDSignsControl {
 
     }
 
+    /**
+     * @param id sign id where get
+     * @return picture of sign if success or null
+     * @throws DAOException when catch  {@link SQLException} from {@link PreparedStatement} or{@link ResultSet}
+     */
     @Override
     public byte[] getPicture(int id) throws DAOException {
 
@@ -216,7 +352,6 @@ public class PDDSignsControl implements IPDDSignsControl {
 
         } catch (SQLException ex) {
 
-            logger.warn("return picture fail fail: id: " + id, ex);
             throw new DAOException(ex);
 
         } finally {
@@ -233,6 +368,7 @@ public class PDDSignsControl implements IPDDSignsControl {
         }
     }
 
+    /*get signs from jdbc*/
     private Sign[] getPddSignsDef(String sql, int... parameters) throws DAOException {
         try {
 
@@ -240,23 +376,43 @@ public class PDDSignsControl implements IPDDSignsControl {
 
         } catch (SQLException ex) {
 
-            logger.warn("getSigns fail ", ex);
             throw new DAOException(ex);
 
         }
     }
 
+    /**
+     * get all signs
+     *
+     * @return {@link Sign} array
+     * @throws DAOException when catch  exception from {@link RequestExecutor#getSignsStaff(String, FactoryType, int...)}
+     */
     @Override
     public Sign[] getPddSigns() throws DAOException {
 
         return getPddSignsDef(SQL_SELECT_ALL);
     }
 
+    /**
+     * get signs with section number
+     *
+     * @param section to find signs
+     * @return {@link Sign} array
+     * @throws DAOException when catch  exception from {@link RequestExecutor#getSignsStaff(String, FactoryType, int...)}
+     */
     @Override
     public Sign[] getPddSigns(int section) throws DAOException {
         return getPddSignsDef(SQL_SELECT_BY_SECTION, section);
     }
 
+    /**
+     * get signs with section number
+     *
+     * @param section to find signs
+     * @param number  to find signs
+     * @return {@link Sign} array
+     * @throws DAOException when catch  exception from {@link RequestExecutor#getSignsStaff(String, FactoryType, int...)}
+     */
     @Override
     public Sign[] getPddSigns(int section, int number) throws DAOException {
         return getPddSignsDef(SQL_SELECT_BY_SECTION_AND_SIGN, section, number);

@@ -3,8 +3,60 @@ package by.epam.signsControl.bean;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * bean for jdbc
+ * <p>
+ * extends {@link Sign}
+ *
+ * @author Bulgak Alexander
+ * @see FactoryType
+ * @see Serializable
+ */
 public class LocalSign extends Sign implements Serializable, FactoryType, Cloneable {
 
+    /*
+     *created by Intellij IDEA
+     */
+    private static final long serialVersionUID = 4513518075537237951L;
+
+    /**
+     * jdbc local sign id field
+     */
+    private int localSignId;
+
+    /**
+     * jdbc sign list id field
+     */
+    private int signListId;
+
+    /**
+     * jdbc standard size field
+     */
+    private int standardSize;
+
+    /**
+     * date of remove field
+     */
+    private Date dateOfAdd;
+
+    /**
+     * date of add field
+     */
+    private Date dateOfRemove;
+
+    /**
+     * annotation of sign field
+     */
+    private String annotation;
+
+    /**
+     * direction field char
+     */
+    private char angle;
+
+    /**
+     * @return clone of this object
+     */
     @Override
     public Object clone() {
 
@@ -15,9 +67,30 @@ public class LocalSign extends Sign implements Serializable, FactoryType, Clonea
 
     }
 
+    /**
+     * empty constructor
+     */
     public LocalSign() {
     }
 
+    /**
+     * constructor with all parameters
+     *
+     * @param localSignId  {@link LocalSign#localSignId}
+     * @param signListId   {@link LocalSign#signListId
+     * @param pddSignId    {@link Sign#id}
+     * @param section      {@link Sign#section}
+     * @param sign         {@link Sign#sign}
+     * @param kind         {@link Sign#kind}
+     * @param picture      {@link Sign#picture}
+     * @param standardSize {@link LocalSign#standardSize}
+     * @param dateOfAdd    {@link LocalSign#dateOfAdd}
+     * @param dateOfRemove {@link LocalSign#dateOfRemove}
+     * @param annotation   {@link LocalSign#annotation}
+     * @param angle        {@link LocalSign#angle}
+     * @param name         {@link LocalSign#name}
+     * @param description  {@link LocalSign#description}
+     */
     public LocalSign(int localSignId, int signListId, int pddSignId, int section, int sign, int kind, byte[] picture,
                      int standardSize, Date dateOfAdd, Date dateOfRemove, String annotation, char angle, String name, String description) {
         super(pddSignId, section, sign, kind, picture, name, description);
@@ -29,72 +102,101 @@ public class LocalSign extends Sign implements Serializable, FactoryType, Clonea
         this.annotation = annotation;
         this.angle = angle;
     }
-//анотация не нужна
-    private static final long serialVersionUID = 4513518075537237951L;
 
-    private int localSignId;
-    private int signListId;
-    private int standardSize;
-    private Date dateOfAdd;
-    private Date dateOfRemove;
-
-    private String annotation;
-    private char angle;
-
-
+    /**
+     * @return {@link LocalSign#angle}
+     */
     public char getAngle() {
         return angle;
     }
 
+    /**
+     * @param angle {@link LocalSign#angle}
+     */
     public void setAngle(char angle) {
         this.angle = angle;
     }
 
+    /**
+     * @return {@link LocalSign#localSignId}
+     */
     public int getLocalSignId() {
         return localSignId;
     }
 
-
+    /**
+     * @param id {@link LocalSign#localSignId}
+     */
     public void setLocalSignId(int id) {
         this.localSignId = id;
     }
 
+    /**
+     * @return {@link LocalSign#signListId}
+     */
     public int getSignListId() {
         return signListId;
     }
 
+    /**
+     * @param signListId {@link LocalSign#signListId}
+     */
     public void setSignListId(int signListId) {
         this.signListId = signListId;
     }
 
+    /**
+     * @return {@link LocalSign#standardSize}
+     */
     public int getStandardSize() {
         return standardSize;
     }
 
+    /**
+     * @param standardSize {@link LocalSign#standardSize}
+     */
     public void setStandardSize(int standardSize) {
         this.standardSize = standardSize;
     }
 
+    /**
+     * @return {@link LocalSign#dateOfAdd}
+     */
     public Date getDateOfAdd() {
-        return dateOfAdd==null?  null: (Date)dateOfAdd.clone();
+        return dateOfAdd == null ? null : (Date) dateOfAdd.clone();
     }
 
+    /**
+     * @param dateOfAdd {@link LocalSign#dateOfAdd}
+     */
     public void setDateOfAdd(Date dateOfAdd) {
         this.dateOfAdd = dateOfAdd;
     }
 
+    /**
+     * @return {@link LocalSign#dateOfRemove}
+     */
     public Date getDateOfRemove() {
-        return dateOfRemove==null? null : (Date) dateOfRemove.clone();
+        return dateOfRemove == null ? null : (Date) dateOfRemove.clone();
     }
 
+    /**
+     * @param dateOfRemove {@link LocalSign#dateOfRemove}
+     */
     public void setDateOfRemove(Date dateOfRemove) {
         this.dateOfRemove = dateOfRemove;
     }
 
+    /**
+     * @return {@link LocalSign#annotation}
+     */
     public String getAnnotation() {
         return annotation;
     }
 
+    /**
+     * @param annotation {@link LocalSign#annotation}
+     */
     public void setAnnotation(String annotation) {
         this.annotation = annotation;
     }
