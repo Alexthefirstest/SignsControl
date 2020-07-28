@@ -19,7 +19,7 @@
 <jsp:include page="../header.jsp"/>
 
 <br><hr><br>
-<a href="${pageContext.request.contextPath}/show_transactions_history">Показать транзакции</a>
+<a href="${pageContext.request.contextPath}/show_transactions_history/1">Показать транзакции</a>
 <br><hr><br>
 <form action='${pageContext.request.contextPath}/add_bank_account' method="post">
     <input type="submit" value="добавить аккаунт">

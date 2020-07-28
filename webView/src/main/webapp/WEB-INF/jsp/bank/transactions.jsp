@@ -69,10 +69,10 @@
         </select>
 
         <label for="dateFrom"> дата с:</label>
-        <input type="date" name="dateFrom" max=<date:getCurrentDate/> id="dateFrom" required>
+        <input type="date" name="dateFrom" max=<date:getCurrentDate/> id="dateFrom" >
 
         <label for="dateTo"> дата по:</label>
-        <input type="date" name="dateTo" max=<date:getCurrentDate/> id="dateTo" required>
+        <input type="date" name="dateTo" max=<date:getCurrentDate/> id="dateTo" >
 
 
     </p>
@@ -120,6 +120,41 @@
     </c:forEach>
 
 </tbody>
+</table>
+
+
+<c:set var="parameters" scope="page" value="findBy=${param.findBy}&accountFrom=${param.accountFrom}&accountTo=${param.accountTo}&accountFromDate=${param.accountFromDate}&dateFrom=${param.dateFrom}&dateTo=${param.dateTo}"/>
+
+
+
+<table id="chTable" class="auto_center center">
+<tr>
+<c:if test='${startPage>0}'>
+<td><a href="${pageContext.request.contextPath}/show_transactions_history/${startPage}?${parameters}">${startPage}</a></td>
+<td>...<td>
+</c:if>
+
+<c:forEach var="page" items='${startPages}'>
+
+<td><a href="${pageContext.request.contextPath}/show_transactions_history/${page}?${parameters}">${page}</a></td>
+
+</c:forEach>
+
+<td><a href="${pageContext.request.contextPath}/show_transactions_history/${currentPage}?${parameters}"><h3><b>${currentPage}</b></h3></a></td>
+
+<c:forEach var="page" items='${finishPages}'>
+
+<td><a href="${pageContext.request.contextPath}/show_transactions_history/${page}?${parameters}">${page}</a></td>
+
+</c:forEach>
+
+<c:if test='${finishPage>0}'>
+<td>...<td>
+<td><a href="${pageContext.request.contextPath}/show_transactions_history/${finishPage}?${parameters}">${finishPage}</a></td>
+
+</c:if>
+
+</tr>
 </table>
 
 </body>

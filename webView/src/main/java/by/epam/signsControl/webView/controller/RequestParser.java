@@ -24,7 +24,7 @@ public class RequestParser {
         Pattern pattern = Pattern.compile(request.getContextPath() + "/[^/]+/([^/]+)");
         Matcher matcher = pattern.matcher(request.getAttribute(URLFilter.REQUIRED_URI).toString());
 
-        return matcher.find() ? matcher.group(1) : "main_page";
+        return matcher.find() ? matcher.group(1) : null;
     }
 
 

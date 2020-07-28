@@ -29,6 +29,7 @@ public class TransactionsDeliver implements ITransactionsDeliver {
                     "FROM transactions as t join organisations as o1 on t.from=o1.id join organisations as o2 on t.to=o2.id " +
                     "join organisation_roles as orr1 on o1.role=orr1.id join organisation_roles as orr2 on o2.role=orr2.id";
 
+    private static final String SQL_FIELDS_COUNT = " SELECT count(id) FROM transactions as t ";
     private static final String SQL_ORDER_BY_ID = " order by t.id DESC";
     private static final String SQL_WHERE_ID = " where t.id=?";
     private static final String SQL_WHERE_ID_FROM = " where t.from=?";
@@ -36,9 +37,16 @@ public class TransactionsDeliver implements ITransactionsDeliver {
     private static final String SQL_WHERE_ID_FROM_DATE = "  WHERE t.from=? " +
             "AND date_time BETWEEN STR_TO_DATE(?, '%Y.%m.%d %H:%i:%s') AND STR_TO_DATE(?, '%Y.%m.%d %H:%i:%s') ";
 
+    private static final String SQL_LIMIT = " LIMIT ?,? ";
+
     @Override
     public Transaction[] getTransactions() throws DAOException {
         return executeRequest(SQL_GET_TRANSACTIONS + SQL_ORDER_BY_ID);
+    }
+
+    @Override
+    public Transaction[] getTransactions(int startPosition, int count) throws DAOException {
+        return executeRequest(SQL_GET_TRANSACTIONS + SQL_ORDER_BY_ID + SQL_LIMIT, startPosition, count);
     }
 
     @Override
@@ -51,6 +59,12 @@ public class TransactionsDeliver implements ITransactionsDeliver {
         return executeRequest(SQL_GET_TRANSACTIONS + SQL_WHERE_ID_FROM + SQL_ORDER_BY_ID, idFrom);
     }
 
+    @Override
+    public Transaction[] findTransactionsByFrom(int idFrom, int startPosition, int count) throws DAOException {
+        return executeRequest(SQL_GET_TRANSACTIONS + SQL_WHERE_ID_FROM + SQL_ORDER_BY_ID + SQL_LIMIT,
+                idFrom, startPosition, count);
+    }
+
 
     @Override
     public Transaction[] findTransactionsByFromAndTo(int idFrom, int idTo) throws DAOException {
@@ -58,17 +72,64 @@ public class TransactionsDeliver implements ITransactionsDeliver {
     }
 
     @Override
+    public Transaction[] findTransactionsByFromAndTo(int idFrom, int idTo, int startPosition, int count) throws DAOException {
+        return executeRequest(SQL_GET_TRANSACTIONS + SQL_WHERE_ID_FROM_ID_TO + SQL_ORDER_BY_ID + SQL_LIMIT,
+                idFrom, idTo, startPosition, count);
+    }
+
+    @Override
     public Transaction[] findTransactionsByDate(int idFrom, String dateFrom, String dateTo) throws DAOException {
+        return findTransactionsByDateSQL(SQL_GET_TRANSACTIONS + SQL_WHERE_ID_FROM_DATE + SQL_ORDER_BY_ID,
+                idFrom, dateFrom, dateTo, -1, -1);
+    }
+
+    @Override
+    public int getFieldsCount() throws DAOException {
+
+        return getFieldsCount(SQL_FIELDS_COUNT);
+    }
+
+    @Override
+    public int getFieldsCountByFrom(int idFrom) throws DAOException {
+        return getFieldsCount(SQL_FIELDS_COUNT + SQL_WHERE_ID_FROM, idFrom);
+    }
+
+    @Override
+    public int getFieldsCountByFromAndTo(int idFrom, int idTo) throws DAOException {
+        return getFieldsCount(SQL_FIELDS_COUNT + SQL_WHERE_ID_FROM_ID_TO, idFrom, idTo);
+    }
+
+    @Override
+    public int getFieldsCountByDate(int idFrom, String dateFrom, String dateTo) throws DAOException {
+        return getFieldsCount(SQL_FIELDS_COUNT + SQL_WHERE_ID_FROM_DATE,
+                idFrom, dateFrom, dateTo);
+    }
+
+
+    @Override
+    public Transaction[] findTransactionsByDate(int idFrom, String dateFrom, String dateTo, int startPosition, int count) throws DAOException {
+        return findTransactionsByDateSQL(SQL_GET_TRANSACTIONS + SQL_WHERE_ID_FROM_DATE + SQL_ORDER_BY_ID + SQL_LIMIT,
+                idFrom, dateFrom, dateTo, startPosition, count);
+    }
+
+
+    private Transaction[] findTransactionsByDateSQL(String sql, int idFrom, String dateFrom, String dateTo,
+                                                    int startPosition, int count) throws DAOException {
 
         Connection connection = CONNECTION_POOL.retrieveConnection();
 
         ResultSet rs = null;
 
-        try (PreparedStatement ps = connection.prepareStatement(SQL_GET_TRANSACTIONS + SQL_WHERE_ID_FROM_DATE + SQL_ORDER_BY_ID)) {
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setInt(1, idFrom);
             ps.setString(2, dateFrom);
             ps.setString(3, dateTo);
+
+            if (startPosition > -1) {
+                ps.setInt(4, startPosition);
+                ps.setInt(5, count);
+            }
 
             rs = ps.executeQuery();
 
@@ -110,7 +171,6 @@ public class TransactionsDeliver implements ITransactionsDeliver {
             rs = ps.executeQuery();
 
 
-
             return resultSetToArray(rs);
 
         } catch (SQLException ex) {
@@ -147,5 +207,51 @@ public class TransactionsDeliver implements ITransactionsDeliver {
         }
 
         return transactions.toArray(new Transaction[0]);
+    }
+
+
+    private int getFieldsCount(String request, Object... parameters) throws DAOException {
+
+        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        ResultSet rs = null;
+
+        try (PreparedStatement ps = connection.prepareStatement(request)) {
+
+            for (int i = 0; i < parameters.length; i++) {
+                if (parameters[i] instanceof Integer) {
+                    ps.setInt(i + 1, (Integer) parameters[i]);
+                }
+                if (parameters[i] instanceof String) {
+                    ps.setString(i + 1, parameters[i].toString());
+                }
+            }
+
+            rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+
+
+        } catch (SQLSyntaxErrorException ex) {
+            logger.warn("wrong syntax " + ex);
+            throw new DAOValidationException("wrong syntax");
+
+        } catch (SQLException ex) {
+            logger.warn("find by date method " + ex);
+            throw new DAOException(ex);
+
+
+        } finally {
+
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    logger.warn("ResultStatement close exception ", e);
+                }
+            }
+
+            CONNECTION_POOL.releaseConnection(connection);
+        }
     }
 }
