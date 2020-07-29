@@ -259,13 +259,15 @@ public class ResponseCreator {
 
         if (sb.length() > 0 && localSignsWithCommonDirection.get(0).getDateOfAdd() != null) {
 
-            sb.insert(0, "<h3>      direction: " + localSignsWithCommonDirection.get(0).getAngle()+"</h3>");
+            sb.insert(0, "<h3>      \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435: " + localSignsWithCommonDirection.get(0).getAngle()+"</h3>");
+//            sb.insert(0, "<h3>      direction: " + localSignsWithCommonDirection.get(0).getAngle()+"</h3>");
 
             return sb.toString();
 
         } else {
 
-            return ("<h3>      direction: " + localSignsWithCommonDirection.get(0).getAngle() + "</h3><br />     no current points for this direction");
+            return ("<h3>      \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435: " + localSignsWithCommonDirection.get(0).getAngle() + "</h3><br />     \u043d\u0435\u0442 \u0430\u043a\u0442\u0443\u0430\u043b\u044c\u043d\u044b\u0445 \u0437\u043d\u0430\u043a\u043e\u0432 \u0434\u043b\u044f \u044d\u0442\u043e\u0433\u043e \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f");
+//            return ("<h3>      direction: " + localSignsWithCommonDirection.get(0).getAngle() + "</h3><br />     no current points for this direction");
         }
 
 
@@ -277,15 +279,25 @@ public class ResponseCreator {
 
         pointHistory.append("<table>").append("<thead>").append("<tr>");
 
-        pointHistory.append("<th scope=\"col\">direct</th>")
-                .append("<th scope=\"col\">sign</th>")
-                .append("<th scope=\"col\">name</th>")
-                .append("<th scope=\"col\">description</th>")
-                .append("<th scope=\"col\">standard size</th>")
-                .append("<th scope=\"col\">date of add</th>")
-                .append("<th scope=\"col\">date of remove</th>")
-                .append("<th scope=\"col\">information</th>")
-                .append("<th scope=\"col\">image</th>");
+//        pointHistory.append("<th scope=\"col\">direct</th>")
+//                .append("<th scope=\"col\">sign</th>")
+//                .append("<th scope=\"col\">name</th>")
+//                .append("<th scope=\"col\">description</th>")
+//                .append("<th scope=\"col\">standard size</th>")
+//                .append("<th scope=\"col\">date of add</th>")
+//                .append("<th scope=\"col\">date of remove</th>")
+//                .append("<th scope=\"col\">information</th>")
+//                .append("<th scope=\"col\">image</th>");
+
+        pointHistory.append("<th scope=\"col\">\u043d\u0430\u043f\u0440.</th>")
+                .append("<th scope=\"col\">\u0437\u043d\u0430\u043a</th>")
+                .append("<th scope=\"col\">\u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435</th>")
+                .append("<th scope=\"col\">\u043e\u043f\u0438\u0441\u0430\u043d\u0438\u0435</th>")
+                .append("<th scope=\"col\">\u0442\u0438\u043f\u043e\u0440\u0430\u0437\u043c\u0435\u0440</th>")
+                .append("<th scope=\"col\">\u0434\u0430\u0442\u0430 \u0434\u043e\u0431\u0430\u0432\u043b\u0435\u043d\u0438\u044f</th>")
+                .append("<th scope=\"col\">\u0434\u0430\u0442\u0430 \u0441\u043d\u044f\u0442\u0438\u044f</th>")
+                .append("<th scope=\"col\">\u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f</th>")
+                .append("<th scope=\"col\">\u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u0435</th>");
 
         pointHistory.append("</tr>").append("</thead>");
 
