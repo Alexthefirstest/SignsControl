@@ -15,6 +15,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -29,6 +30,11 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Bulgak Alexander
  */
 public class ConnectionPool implements IConnectionPool {
+
+    /**
+     * destroyConnectionPoolCondition
+     */
+    private static boolean destroy = false;
 
     /**
      * field logger log4j2
@@ -79,6 +85,12 @@ public class ConnectionPool implements IConnectionPool {
      * private constructor
      * start {@link ConnectionPool@initConnectionPool()}
      */
+
+    /**
+     * get retrieve timeout from config
+     */
+    private final int retrieveTimeout = dbConfigs.getRetrieveTimeout();
+
     private ConnectionPool() {
 
         initConnectionPool();
@@ -178,9 +190,23 @@ public class ConnectionPool implements IConnectionPool {
      * @return {@link Connection}
      */
     @Override
-    public Connection retrieveConnection() {
+    public Connection retrieveConnection() throws ConnectionPoolException {
 
-        retrieveLocker.lock();
+        try {
+
+            if (isDestroy()) {
+                throw new ConnectionPoolException("connection pool was destroyed");
+            }
+
+            if (!retrieveLocker.tryLock(retrieveTimeout, TimeUnit.SECONDS)) {
+                logger.warn("Connection pool timeout on retrieve is up: " + retrieveTimeout + " seconds");
+                throw destroy ? new ConnectionPoolException("connection pool was destroyed")
+                        : new ConnectionPoolException("Connection pool timeout on retrieve is up" + retrieveTimeout + " seconds");
+            }
+
+        } catch (InterruptedException ex) {
+            throw new ConnectionPoolException("thread interrupted");
+        }
 
         Connection connection;
 
@@ -237,11 +263,14 @@ public class ConnectionPool implements IConnectionPool {
     @Override
     public boolean releaseConnection(Connection connection) {
 
+        if (connection == null || destroy) {
+            return false;
+        }
 
         try {
-            if (connection != null) {
-                connection.setAutoCommit(true);
-            }
+
+            connection.setAutoCommit(true);
+
         } catch (SQLException ex) {
             logger.warn("setAutoCommitWarn" + ex);
         }
@@ -280,21 +309,14 @@ public class ConnectionPool implements IConnectionPool {
     }
 
     /**
-     * destroy connection pool using {@link ConnectionPool#finalize()}
-     */
-    @Override
-    public void destroyConnectionPool() {
-        finalize();
-    }
-
-    /**
      * destroy connection pool
      * <p>
      * fully lock {@link ConnectionPool#releaseLocker} and {@link ConnectionPool#retrieveLocker}
      * shutdown all connection from {@link ConnectionPool#availableConnections} and {@link ConnectionPool#takenConnections}
      * using {@link ConnectionPool#shutDownConnection(Connection)}
      */
-    protected void finalize() {
+    @Override
+    public void destroyConnectionPool() {
 
         logger.info("destroying connection pool started");
 
@@ -305,6 +327,8 @@ public class ConnectionPool implements IConnectionPool {
             shutDownConnection(availableConnections.poll());
             shutDownConnection(takenConnections.poll());
         }
+
+        destroy = true;
 
         logger.info("destroying connection pool finished");
     }
@@ -327,6 +351,11 @@ public class ConnectionPool implements IConnectionPool {
                 .append((availableConnections.remainingCapacity() - takenConnections.size()));
         sb.append('}');
         return sb.toString();
+    }
+
+    @Override
+    public boolean isDestroy() {
+        return destroy;
     }
 
 }

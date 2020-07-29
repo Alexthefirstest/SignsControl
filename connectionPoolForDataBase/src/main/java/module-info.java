@@ -7,4 +7,5 @@ module connectionPoolForDataBase {
 
     exports by.epam.connectionPoolForDataBase.connectionPool;
     exports by.epam.connectionPoolForDataBase.connectionPool.factory;
+    exports by.epam.connectionPoolForDataBase.connectionPool.exceptions;
 }

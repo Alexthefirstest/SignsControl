@@ -5,6 +5,7 @@ import by.epam.bank.dao.IFinanceOperationsManager;
 import by.epam.bank.dao.exceptions.DAOException;
 import by.epam.bank.dao.exceptions.DAOValidationException;
 import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
+import by.epam.connectionPoolForDataBase.connectionPool.exceptions.ConnectionPoolException;
 import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
 import by.epam.rolesOrganisationsUsersController.bean.Organisation;
 import by.epam.rolesOrganisationsUsersController.bean.Role;
@@ -35,14 +36,20 @@ public class SQLFinanceOperationsManager implements IFinanceOperationsManager {
                     "FROM transactions as t join organisations as o1 on t.from=o1.id join organisations as o2 on t.to=o2.id " +
                     "join organisation_roles as orr1 on o1.role=orr1.id join organisation_roles as orr2 on o2.role=orr2.id where t.id=LAST_INSERT_ID()";
 
-    private static final IConnectionPool connectionPool = ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
+    private static final IConnectionPool CONNECTION_POOL = ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
 
 
     //return transaction id
     @Override
     public Transaction transferMoney(int organisationIDFrom, int organisationIDTo, double money) throws DAOException {
 
-        Connection connection = connectionPool.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         ResultSet rs = null;
 
@@ -146,7 +153,7 @@ public class SQLFinanceOperationsManager implements IFinanceOperationsManager {
             } catch (SQLException ex) {
                 logger.warn("setAutoCommit fail", ex);
             }
-            connectionPool.releaseConnection(connection);
+            CONNECTION_POOL.releaseConnection(connection);
         }
 
 
@@ -155,7 +162,13 @@ public class SQLFinanceOperationsManager implements IFinanceOperationsManager {
     @Override
     public Transaction addMoney(int bankID, int organisationID, double money) throws DAOException {
 
-        Connection connection = connectionPool.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         ResultSet rs = null;
 
@@ -238,7 +251,7 @@ public class SQLFinanceOperationsManager implements IFinanceOperationsManager {
             } catch (SQLException ex) {
                 logger.warn("setAutoCommit fail", ex);
             }
-            connectionPool.releaseConnection(connection);
+            CONNECTION_POOL.releaseConnection(connection);
         }
 
     }

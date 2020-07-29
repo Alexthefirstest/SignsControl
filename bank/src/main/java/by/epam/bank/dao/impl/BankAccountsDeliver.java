@@ -6,6 +6,7 @@ import by.epam.bank.dao.IRequest;
 import by.epam.bank.dao.exceptions.DAOException;
 import by.epam.bank.dao.exceptions.DAOValidationException;
 import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
+import by.epam.connectionPoolForDataBase.connectionPool.exceptions.ConnectionPoolException;
 import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
 import by.epam.rolesOrganisationsUsersController.bean.Organisation;
 import by.epam.rolesOrganisationsUsersController.bean.Role;
@@ -32,7 +33,15 @@ public class BankAccountsDeliver implements IBankAccountsDeliver {
 
     public BankAccount[] executeRequest(IRequest selectRequestHolder) throws DAOException {
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
+
 
         ArrayList<BankAccount> bankAccounts = new ArrayList<>();
 

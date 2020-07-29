@@ -57,6 +57,11 @@ public class DBConfiguration {
      */
     private int poolIncreaseStep = 2;
 
+    /**
+     * Connection pool timeout on retrieve
+     */
+    private int timeOnRetrieve = 40;
+
     /*
      * private constructor
      * start {@link DBConfiguration#initPropert}
@@ -106,6 +111,12 @@ public class DBConfiguration {
                 logger.info("init pool increase step load from db.properties started");
                 poolIncreaseStep = Integer.parseInt(properties.getProperty("poolIncreaseStep"));
                 logger.info("init pool increase step load from db.properties finished");
+            }
+
+            if (properties.getProperty("dbRetrieveTimeOut") != null) {
+                logger.info("timeout load started");
+                timeOnRetrieve = Integer.parseInt(properties.getProperty("dbRetrieveTimeOut"));
+                logger.info("timeout load finished");
             }
 
             logger.info("init finished");
@@ -164,6 +175,13 @@ public class DBConfiguration {
      */
     public int getPoolIncreaseStep() {
         return poolIncreaseStep;
+    }
+
+    /**
+     * @return {@link DBConfiguration#poolIncreaseStep}
+     */
+    public int getRetrieveTimeout() {
+        return timeOnRetrieve;
     }
 
     @Override

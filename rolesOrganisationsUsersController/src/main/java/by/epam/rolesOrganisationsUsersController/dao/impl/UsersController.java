@@ -1,6 +1,7 @@
 package by.epam.rolesOrganisationsUsersController.dao.impl;
 
 import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
+import by.epam.connectionPoolForDataBase.connectionPool.exceptions.ConnectionPoolException;
 import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
 import by.epam.rolesOrganisationsUsersController.bean.FactoryType;
 import by.epam.rolesOrganisationsUsersController.bean.User;
@@ -143,14 +144,20 @@ public class UsersController implements IUsersController {
      * @return {@link User} if success
      * @throws DAOValidationException when user with this login are already exist,
      *                                when wrong organisation id, when {@link Factory#createSignStaff(ResultSet, FactoryType)} throw it
-     * @throws DAOException           when other exceptions during process occurred
+     * @throws DAOException           when connection pool throw exception when other exceptions during process occurred
      */
     @Override
     public User addUser(String login, String password, int role, int organisation, String name, String surname) throws DAOException {
 
         ResultSet rs = null;
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement psInsertUserInfo = connection.prepareStatement(SQL_INSERT_USER_INFO);
              PreparedStatement psInsertUser = connection.prepareStatement(SQL_INSERT_USER);

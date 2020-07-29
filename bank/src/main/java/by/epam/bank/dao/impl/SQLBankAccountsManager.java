@@ -5,6 +5,7 @@ import by.epam.bank.dao.IBankAccountsManager;
 import by.epam.bank.dao.exceptions.DAOException;
 import by.epam.bank.dao.exceptions.DAOValidationException;
 import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
+import by.epam.connectionPoolForDataBase.connectionPool.exceptions.ConnectionPoolException;
 import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
 
 import by.epam.rolesOrganisationsUsersController.bean.Organisation;
@@ -47,7 +48,15 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
     @Override
     public BankAccount createBankAccount(int organisationID) throws DAOException {
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        } catch (ConnectionPoolException ex) {
+            throw new DAOException(ex.getMessage());
+        }
+
 
         ResultSet rs = null;
 
@@ -114,7 +123,15 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
      */
     private boolean setBlock(int organisationID, boolean blockToSet) throws DAOException {
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        } catch (ConnectionPoolException ex) {
+            throw new DAOException(ex.getMessage());
+        }
+
 
         try (PreparedStatement ps = connection.prepareStatement(SQL_SET_BLOCK)) {
             ps.setBoolean(1, blockToSet);
@@ -152,7 +169,15 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
 
         ResultSet rs = null;
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        } catch (ConnectionPoolException ex) {
+            throw new DAOException(ex.getMessage());
+        }
+
 
         try (PreparedStatement ps = connection.prepareStatement(SQL_SELECT_IS_BLOCKED)) {
             ps.setInt(1, organisationID);
@@ -195,7 +220,13 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
 
         ResultSet rs = null;
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        } catch (ConnectionPoolException ex) {
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(SQL_SELECT_IS_BLOCKED)) {
 
@@ -234,7 +265,13 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
     @Override
     public boolean setInfo(int organisationID, String info) throws DAOException {
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        } catch (ConnectionPoolException ex) {
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(SQL_SET_INFO)) {
             ps.setString(1, info);
@@ -261,7 +298,13 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
     public String getInfo(int organisationID) throws DAOException {
         ResultSet rs = null;
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        } catch (ConnectionPoolException ex) {
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(SQL_SELECT_INFO)) {
             ps.setInt(1, organisationID);
@@ -302,7 +345,13 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
     private double selectBalanceOrMinAllowedBalance(int organisationID, String select) throws DAOException {
         ResultSet rs = null;
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        } catch (ConnectionPoolException ex) {
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(select)) {
             ps.setInt(1, organisationID);
@@ -355,7 +404,14 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
 
     @Override
     public boolean setMinAllowedBalance(int organisationID, double minAllowedBalance) throws DAOException {
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        } catch (ConnectionPoolException ex) {
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(SQL_SET_MIN_ALLOWED_BALANCE)) {
             ps.setDouble(1, minAllowedBalance);
@@ -387,7 +443,13 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
     public BankAccount getBankAccount(int organisationID) throws DAOException {
         ResultSet rs = null;
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        } catch (ConnectionPoolException ex) {
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(SQL_SELECT_ACCOUNT)) {
             ps.setInt(1, organisationID);

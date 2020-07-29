@@ -2,6 +2,8 @@ package by.epam.bank.dao.impl;
 
 import by.epam.bank.dao.IOrganisationsDeliver;
 import by.epam.bank.dao.exceptions.DAOException;
+import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
+import by.epam.connectionPoolForDataBase.connectionPool.exceptions.ConnectionPoolException;
 import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
 import by.epam.rolesOrganisationsUsersController.bean.Organisation;
 import by.epam.rolesOrganisationsUsersController.bean.Role;
@@ -22,11 +24,21 @@ public class OrganisationDeliver implements IOrganisationsDeliver {
             " org.info FROM organisations as org left join bank_accounts on bank_accounts.organisation_id=org.id join organisation_roles as orgR on org.role=orgR.id " +
             " where bank_accounts.balance is null order by org.name ";
 
+    private static final IConnectionPool CONNECTION_POOL=ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
+
     @Override
     public Organisation[] showOrganisationsWithoutBankAccounts() throws DAOException {
         ResultSet rs = null;
 
-        Connection connection = ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance().retrieveConnection();
+
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
+
 
         try (PreparedStatement ps = connection.prepareStatement(GET_ORGANISATIONS_WITHOUT_BANK_ACCOUNTS)) {
 

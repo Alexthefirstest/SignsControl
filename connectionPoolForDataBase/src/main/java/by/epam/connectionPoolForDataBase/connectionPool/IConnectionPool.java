@@ -1,5 +1,7 @@
 package by.epam.connectionPoolForDataBase.connectionPool;
 
+import by.epam.connectionPoolForDataBase.connectionPool.exceptions.ConnectionPoolException;
+
 import java.sql.Connection;
 
 /**
@@ -12,7 +14,7 @@ public interface IConnectionPool {
     /**
      * @return {@link Connection} for using
      */
-    Connection retrieveConnection();
+    Connection retrieveConnection() throws ConnectionPoolException;
 
     /**
      * @param connection return param to the connections storage
@@ -24,4 +26,9 @@ public interface IConnectionPool {
      * shutdown all connections in storage of connection pool and do not allow create new
      */
     void destroyConnectionPool();
+
+    /**
+     * destroy condition
+     */
+    boolean isDestroy();
 }

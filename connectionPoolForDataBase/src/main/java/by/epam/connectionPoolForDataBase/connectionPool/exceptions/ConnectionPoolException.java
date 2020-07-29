@@ -17,4 +17,13 @@ public class ConnectionPoolException extends Exception {
         super(message, ex);
     }
 
+    /**
+     * call {@link Exception} constructor
+     *
+     * @param message {@link String} message
+     */
+    public ConnectionPoolException(String message) {
+        super(message);
+    }
+
 }

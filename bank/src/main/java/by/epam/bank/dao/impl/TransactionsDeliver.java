@@ -5,6 +5,7 @@ import by.epam.bank.dao.ITransactionsDeliver;
 import by.epam.bank.dao.exceptions.DAOException;
 import by.epam.bank.dao.exceptions.DAOValidationException;
 import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
+import by.epam.connectionPoolForDataBase.connectionPool.exceptions.ConnectionPoolException;
 import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
 import by.epam.rolesOrganisationsUsersController.bean.Organisation;
 import by.epam.rolesOrganisationsUsersController.bean.Role;
@@ -116,7 +117,13 @@ public class TransactionsDeliver implements ITransactionsDeliver {
     private Transaction[] findTransactionsByDateSQL(String sql, int idFrom, String dateFrom, String dateTo,
                                                     int startPosition, int count) throws DAOException {
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         ResultSet rs = null;
 
@@ -158,7 +165,13 @@ public class TransactionsDeliver implements ITransactionsDeliver {
 
     private Transaction[] executeRequest(String request, int... parameters) throws DAOException {
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         ResultSet rs = null;
 
@@ -212,7 +225,13 @@ public class TransactionsDeliver implements ITransactionsDeliver {
 
     private int getFieldsCount(String request, Object... parameters) throws DAOException {
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         ResultSet rs = null;
 

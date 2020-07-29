@@ -1,6 +1,7 @@
 package by.epam.signsControl.dao.impl;
 
 import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
+import by.epam.connectionPoolForDataBase.connectionPool.exceptions.ConnectionPoolException;
 import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
 import by.epam.signsControl.bean.FactoryType;
 import by.epam.signsControl.bean.Sign;
@@ -307,7 +308,13 @@ public class PDDSignsControl implements IPDDSignsControl {
     @Override
     public boolean setPicture(int id, InputStream inputStream, long imageSize) throws DAOException {
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        } catch (ConnectionPoolException ex) {
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(SQL_INSERT_PICTURE)) {
 
@@ -330,11 +337,18 @@ public class PDDSignsControl implements IPDDSignsControl {
      * @param id sign id where get
      * @return picture of sign if success or null
      * @throws DAOException when catch  {@link SQLException} from {@link PreparedStatement} or{@link ResultSet}
+     * @throws DAOException when {@link IConnectionPool} throw exception
      */
     @Override
     public byte[] getPicture(int id) throws DAOException {
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        } catch (ConnectionPoolException ex) {
+            throw new DAOException(ex.getMessage());
+        }
 
         ResultSet rs = null;
 
@@ -386,6 +400,7 @@ public class PDDSignsControl implements IPDDSignsControl {
      *
      * @return {@link Sign} array
      * @throws DAOException when catch  exception from {@link RequestExecutor#getSignsStaff(String, FactoryType, int...)}
+     * @throws DAOException when {@link IConnectionPool} throw exception
      */
     @Override
     public Sign[] getPddSigns() throws DAOException {

@@ -1,10 +1,11 @@
 package by.epam.orders.dao.impl;
 
 import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
+import by.epam.connectionPoolForDataBase.connectionPool.exceptions.ConnectionPoolException;
 import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
+import by.epam.orders.dao.exceptions.DAOException;
 import by.epam.orders.dao.impl.factory.OrdersFactory;
 import by.epam.orders.bean.FactoryType;
-import by.epam.orders.dao.exceptions.DAOValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -82,11 +83,17 @@ class RequestExecutor {
     }
 
 
-    static FactoryType createField(String sqlInsert, String sqlSelect, FactoryType signsStaff, int... parameters) throws SQLException, DAOValidationException {
+    static FactoryType createField(String sqlInsert, String sqlSelect, FactoryType signsStaff, int... parameters) throws SQLException, DAOException {
 
         ResultSet rs = null;
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement psInsert = connection.prepareStatement(sqlInsert); PreparedStatement psSelect = connection.prepareStatement(sqlSelect)) {
 
@@ -108,11 +115,17 @@ class RequestExecutor {
 
 
 
-    static FactoryType createFieldUseDifferentParameters(String sqlInsert, String sqlSelect, FactoryType signsStaff, Object... parameters) throws SQLException, DAOValidationException {
+    static FactoryType createFieldUseDifferentParameters(String sqlInsert, String sqlSelect, FactoryType signsStaff, Object... parameters) throws SQLException, DAOException {
 
         ResultSet rs = null;
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement psInsert = connection.prepareStatement(sqlInsert); PreparedStatement psSelect = connection.prepareStatement(sqlSelect)) {
 
@@ -131,11 +144,17 @@ class RequestExecutor {
 
     }
 
-    static FactoryType createFieldWithExistingCheckUseDifferentParameters(String sqlInsert, String sqlSelect, FactoryType signsStaff, Object... parameters) throws SQLException, DAOValidationException {
+    static FactoryType createFieldWithExistingCheckUseDifferentParameters(String sqlInsert, String sqlSelect, FactoryType signsStaff, Object... parameters) throws SQLException, DAOException {
 
         ResultSet rs = null;
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement psInsert = connection.prepareStatement(sqlInsert); PreparedStatement psSelect = connection.prepareStatement(sqlSelect)) {
 
@@ -157,11 +176,17 @@ class RequestExecutor {
 
     }
 
-    static FactoryType createFieldWithExistingCheck(String sqlInsert, String sqlSelect, FactoryType signsStaff, int... parameters) throws SQLException, DAOValidationException {
+    static FactoryType createFieldWithExistingCheck(String sqlInsert, String sqlSelect, FactoryType signsStaff, int... parameters) throws SQLException, DAOException {
 
         ResultSet rs = null;
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement psInsert = connection.prepareStatement(sqlInsert); PreparedStatement psSelect = connection.prepareStatement(sqlSelect)) {
 
@@ -184,9 +209,15 @@ class RequestExecutor {
     }
 
 
-    static boolean setField(String request, int id, String info) throws SQLException {
+    static boolean setField(String request, int id, String info) throws SQLException, DAOException {
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(request)) {
 
@@ -206,9 +237,15 @@ class RequestExecutor {
 
     }
 
-    static boolean setField(String request, int id, boolean parameter) throws SQLException {
+    static boolean setField(String request, int id, boolean parameter) throws SQLException, DAOException {
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(request)) {
 
@@ -228,9 +265,15 @@ class RequestExecutor {
 
     }
 
-    static boolean setField(String request, int id, double parameter) throws SQLException {
+    static boolean setField(String request, int id, double parameter) throws SQLException, DAOException {
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(request)) {
 
@@ -250,9 +293,15 @@ class RequestExecutor {
 
     }
 
-    static boolean setFields(String request, Object...parameters) throws SQLException {
+    static boolean setFields(String request, Object...parameters) throws SQLException, DAOException {
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(request)) {
 
@@ -271,9 +320,15 @@ differentParametersInsideRequest(parameters, ps);
 
     }
 
-    static boolean setField(String request, int id, int parameter) throws SQLException {
+    static boolean setField(String request, int id, int parameter) throws SQLException, DAOException {
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(request)) {
 
@@ -293,9 +348,15 @@ differentParametersInsideRequest(parameters, ps);
 
     }
 
-    static boolean setField(String request, int id, Timestamp parameter) throws SQLException {
+    static boolean setField(String request, int id, Timestamp parameter) throws SQLException, DAOException {
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(request)) {
 
@@ -316,9 +377,15 @@ differentParametersInsideRequest(parameters, ps);
 
     }
 
-    static boolean setField(String request, int id, Date parameter) throws SQLException {
+    static boolean setField(String request, int id, Date parameter) throws SQLException, DAOException {
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(request)) {
 
@@ -339,11 +406,17 @@ differentParametersInsideRequest(parameters, ps);
 
     }
 
-    static String getString(String request, int id) throws SQLException {
+    static String getString(String request, int id) throws SQLException, DAOException {
 
         ResultSet rs = null;
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(request)) {
 
@@ -359,11 +432,17 @@ differentParametersInsideRequest(parameters, ps);
 
     }
 
-    static FactoryType[] getSignsStaff(String request, FactoryType signsStaff, Object... parameters) throws SQLException {
+    static FactoryType[] getSignsStaff(String request, FactoryType signsStaff, Object... parameters) throws SQLException, DAOException {
 
         ResultSet rs = null;
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(request)) {
 
@@ -380,11 +459,17 @@ differentParametersInsideRequest(parameters, ps);
 
     }
 
-    static FactoryType[] getSignsStaffWithDifferentParameters(String request, FactoryType signsStaff, Object... parameters) throws SQLException {
+    static FactoryType[] getSignsStaffWithDifferentParameters(String request, FactoryType signsStaff, Object... parameters) throws SQLException, DAOException {
 
         ResultSet rs = null;
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(request)) {
 
@@ -401,11 +486,17 @@ differentParametersInsideRequest(parameters, ps);
 
     }
 
-    static FactoryType getOneSignsStaff(String request, FactoryType signsStaff, String... parameters) throws SQLException, DAOValidationException {
+    static FactoryType getOneSignsStaff(String request, FactoryType signsStaff, String... parameters) throws SQLException, DAOException {
 
         ResultSet rs = null;
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(request)) {
 
@@ -423,11 +514,17 @@ differentParametersInsideRequest(parameters, ps);
 
     }
 
-    static FactoryType getOneSignsStaff(String request, FactoryType signsStaff, Object... parameters) throws SQLException, DAOValidationException {
+    static FactoryType getOneSignsStaff(String request, FactoryType signsStaff, Object... parameters) throws SQLException, DAOException {
 
         ResultSet rs = null;
 
-        Connection connection = CONNECTION_POOL.retrieveConnection();
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        }catch (ConnectionPoolException ex){
+            throw new DAOException(ex.getMessage());
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(request)) {
 
