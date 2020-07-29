@@ -9,10 +9,24 @@ import by.epam.signsControl.service.IStandardSizesControlService;
 import by.epam.signsControl.service.exceptions.ServiceException;
 import by.epam.signsControl.service.exceptions.ServiceValidationException;
 
+/**
+ * class for communication with dao layer
+ */
 public class StandardSizesControlService implements IStandardSizesControlService {
 
+    /**
+     * {@link IStandardSizesControl} instance
+     */
     private final IStandardSizesControl standardSizesControl = DaoFactory.getINSTANCE().getStandardSizesControl();
 
+    /**
+     * sql add standard size to sql table
+     *
+     * @param size size to add
+     * @return {@link StandardSize} if success or null if duplicate entry
+     * @throws ServiceValidationException when {@link IStandardSizesControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IStandardSizesControl} throw {@link DAOException}
+     */
     @Override
     public StandardSize addStandardSize(int size) throws ServiceException {
         try {
@@ -25,6 +39,16 @@ public class StandardSizesControlService implements IStandardSizesControlService
         }
     }
 
+    /**
+     * sql add standard size to sql table
+     *
+     * @param size size to add
+     * @param info info to add
+     * @return {@link StandardSize} if success or null if duplicate entry
+     * @throws ServiceValidationException when {@link IStandardSizesControl} throw {@link DAOValidationException}
+     *                                    data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IStandardSizesControl} throw {@link DAOException}
+     */
     @Override
     public StandardSize addStandardSize(int size, String info) throws ServiceException {
 
@@ -40,6 +64,14 @@ public class StandardSizesControlService implements IStandardSizesControlService
         }
     }
 
+    /**
+     * remove st size
+     *
+     * @param size size to remove
+     * @return null if success
+     * @throws ServiceValidationException when {@link IStandardSizesControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IStandardSizesControl} throw {@link DAOException}
+     */
     @Override
     public boolean removeStandardSize(int size) throws ServiceException {
         try {
@@ -52,6 +84,16 @@ public class StandardSizesControlService implements IStandardSizesControlService
         }
     }
 
+    /**
+     * set info
+     *
+     * @param id   size to set
+     * @param info to set
+     * @return true if success or false in not
+     * @throws ServiceValidationException when {@link IStandardSizesControl} throw {@link DAOValidationException}
+     *                                    data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IStandardSizesControl} throw {@link DAOException}
+     */
     @Override
     public boolean setInfo(int id, String info) throws ServiceException {
 
@@ -67,6 +109,15 @@ public class StandardSizesControlService implements IStandardSizesControlService
         }
     }
 
+    /**
+     * set info
+     *
+     * @param oldSize size to set
+     * @param newSize new size
+     * @return true if success or false in not
+     * @throws ServiceValidationException when {@link IStandardSizesControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IStandardSizesControl} throw {@link DAOException}
+     */
     @Override
     public boolean setSize(int oldSize, int newSize) throws ServiceException {
         try {
@@ -79,6 +130,14 @@ public class StandardSizesControlService implements IStandardSizesControlService
         }
     }
 
+    /**
+     * get info
+     *
+     * @param id size to get
+     * @return info
+     * @throws ServiceValidationException when {@link IStandardSizesControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IStandardSizesControl} throw {@link DAOException}
+     */
     @Override
     public String getInfo(int id) throws ServiceException {
         try {
@@ -91,6 +150,13 @@ public class StandardSizesControlService implements IStandardSizesControlService
         }
     }
 
+    /**
+     * get all standard sizes
+     *
+     * @return {@link StandardSize} array
+     * @throws ServiceValidationException when {@link IStandardSizesControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IStandardSizesControl} throw {@link DAOException}
+     */
     @Override
     public StandardSize[] getStandardSizes() throws ServiceException {
         try {

@@ -11,13 +11,35 @@ import by.epam.signsControl.service.exceptions.ServiceValidationException;
 
 import java.io.InputStream;
 
+/**
+ * class for communicate with dao and validate input
+ */
 public class PDDSignsControlService implements IPDDSignsControlService {
 
+    /**
+     * {@link IPDDSignsControl} instance
+     */
     private final IPDDSignsControl pddSignsControl = DaoFactory.getINSTANCE().getPddSignsControl();
 
-
+    /**
+     * add sign to table
+     *
+     * @param section     sign section
+     * @param number      sign number
+     * @param kind        sign kind
+     * @param name        sign name
+     * @param description sign description
+     * @return object if success or null if not
+     * @throws ServiceValidationException when {@link IPDDSignsControl} throw {@link DAOValidationException}
+     *                                    data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IPDDSignsControl} throw {@link DAOException}
+     */
     @Override
     public Sign addSign(int section, int number, int kind, String name, String description) throws ServiceException {
+
+        InputValidation.nullCheck(name);
+        InputValidation.nullCheck(description);
+
         try {
 
             return pddSignsControl.addSign(section, number, kind, name, description);
@@ -28,8 +50,23 @@ public class PDDSignsControlService implements IPDDSignsControlService {
         }
     }
 
+    /**
+     * add sign to table
+     *
+     * @param section sign section
+     * @param number  sign number
+     * @param kind    sign kind
+     * @param name    sign name
+     * @return object if success or null if not
+     * @throws ServiceValidationException when {@link IPDDSignsControl} throw {@link DAOValidationException}
+     *                                    data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IPDDSignsControl} throw {@link DAOException}
+     */
     @Override
     public Sign addSign(int section, int number, int kind, String name) throws ServiceException {
+
+        InputValidation.nullCheck(name);
+
         try {
 
             return pddSignsControl.addSign(section, number, kind, name);
@@ -40,8 +77,22 @@ public class PDDSignsControlService implements IPDDSignsControlService {
         }
     }
 
+    /**
+     * add sign to table
+     *
+     * @param section sign section
+     * @param number  sign number
+     * @param name    sign name
+     * @return object if success or null if not
+     * @throws ServiceValidationException when {@link IPDDSignsControl} throw {@link DAOValidationException}
+     *                                    data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IPDDSignsControl} throw {@link DAOException}
+     */
     @Override
     public Sign addSign(int section, int number, String name) throws ServiceException {
+
+        InputValidation.nullCheck(name);
+
         try {
 
             return pddSignsControl.addSign(section, number, name);
@@ -52,6 +103,14 @@ public class PDDSignsControlService implements IPDDSignsControlService {
         }
     }
 
+    /**
+     * remove sign from table
+     *
+     * @param id sign id to remove
+     * @return null if success
+     * @throws ServiceValidationException when {@link IPDDSignsControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IPDDSignsControl} throw {@link DAOException}
+     */
     @Override
     public boolean removeSign(int id) throws ServiceException {
         try {
@@ -64,6 +123,13 @@ public class PDDSignsControlService implements IPDDSignsControlService {
         }
     }
 
+    /**
+     * @param id      sign id where set
+     * @param section section to set
+     * @return true if success or false in other case
+     * @throws ServiceValidationException when {@link IPDDSignsControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IPDDSignsControl} throw {@link DAOException}
+     */
     @Override
     public boolean updateSection(int id, int section) throws ServiceException {
         try {
@@ -76,6 +142,13 @@ public class PDDSignsControlService implements IPDDSignsControlService {
         }
     }
 
+    /**
+     * @param id     sign id where set
+     * @param number of sign in section to set
+     * @return true if success or false in other case
+     * @throws ServiceValidationException when {@link IPDDSignsControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IPDDSignsControl} throw {@link DAOException}
+     */
     @Override
     public boolean updateNumber(int id, int number) throws ServiceException {
         try {
@@ -88,6 +161,13 @@ public class PDDSignsControlService implements IPDDSignsControlService {
         }
     }
 
+    /**
+     * @param id   sign id where set
+     * @param kind to set
+     * @return true if success or false in other case
+     * @throws ServiceValidationException when {@link IPDDSignsControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IPDDSignsControl} throw {@link DAOException}
+     */
     @Override
     public boolean updateKind(int id, int kind) throws ServiceException {
         try {
@@ -100,6 +180,14 @@ public class PDDSignsControlService implements IPDDSignsControlService {
         }
     }
 
+    /**
+     * @param id          sign id where set
+     * @param inputStream of picture to set
+     * @return true if success or false in other case
+     * @throws ServiceValidationException when {@link IPDDSignsControl} throw {@link DAOValidationException}
+     *                                    data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IPDDSignsControl} throw {@link DAOException}
+     */
     @Override
     public boolean setPicture(int id, InputStream inputStream, long imageSize) throws ServiceException {
 
@@ -115,6 +203,12 @@ public class PDDSignsControlService implements IPDDSignsControlService {
         }
     }
 
+    /**
+     * @param id sign id where get
+     * @return picture of sign if success or null
+     * @throws ServiceValidationException when {@link IPDDSignsControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IPDDSignsControl} throw {@link DAOException}
+     */
     @Override
     public byte[] getPicture(int id) throws ServiceException {
         try {
@@ -127,8 +221,19 @@ public class PDDSignsControlService implements IPDDSignsControlService {
         }
     }
 
+    /**
+     * @param id   sign id where set
+     * @param name to set
+     * @return true if success or false in other case
+     * @throws ServiceValidationException when {@link IPDDSignsControl} throw {@link DAOValidationException}
+     *                                    data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IPDDSignsControl} throw {@link DAOException}
+     */
     @Override
     public boolean updateName(int id, String name) throws ServiceException {
+
+        InputValidation.nullCheck(name);
+
         try {
 
             return pddSignsControl.updateName(id, name);
@@ -139,8 +244,19 @@ public class PDDSignsControlService implements IPDDSignsControlService {
         }
     }
 
+    /**
+     * @param id   sign id where set
+     * @param info to set
+     * @return true if success or false in other case
+     * @throws ServiceValidationException when {@link IPDDSignsControl} throw {@link DAOValidationException}
+     *                                    data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IPDDSignsControl} throw {@link DAOException}
+     */
     @Override
     public boolean updateDescription(int id, String info) throws ServiceException {
+
+        InputValidation.nullCheck(info);
+
         try {
 
             return pddSignsControl.updateDescription(id, info);
@@ -151,6 +267,13 @@ public class PDDSignsControlService implements IPDDSignsControlService {
         }
     }
 
+    /**
+     * get all signs
+     *
+     * @return {@link Sign} array
+     * @throws ServiceValidationException when {@link IPDDSignsControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IPDDSignsControl} throw {@link DAOException}
+     */
     @Override
     public Sign[] getPddSigns() throws ServiceException {
         try {
@@ -163,6 +286,14 @@ public class PDDSignsControlService implements IPDDSignsControlService {
         }
     }
 
+    /**
+     * get signs with section number
+     *
+     * @param section to find signs
+     * @return {@link Sign} array
+     * @throws ServiceValidationException when {@link IPDDSignsControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IPDDSignsControl} throw {@link DAOException}
+     */
     @Override
     public Sign[] getPddSigns(int section) throws ServiceException {
         try {
@@ -175,6 +306,15 @@ public class PDDSignsControlService implements IPDDSignsControlService {
         }
     }
 
+    /**
+     * get signs with section number
+     *
+     * @param section to find signs
+     * @param number  to find signs
+     * @return {@link Sign} array
+     * @throws ServiceValidationException when {@link IPDDSignsControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IPDDSignsControl} throw {@link DAOException}
+     */
     @Override
     public Sign[] getPddSigns(int section, int number) throws ServiceException {
         try {

@@ -11,8 +11,20 @@ import by.epam.signsControl.service.exceptions.ServiceValidationException;
 
 public class MapPointsControlService implements IMapPointsControlService {
 
+    /**
+     * {@link IMapPointsControl} instance
+     */
     private final IMapPointsControl mapPointsControl = DaoFactory.getINSTANCE().getMapPointsControl();
 
+    /**
+     * get map point by coordinates
+     *
+     * @param coordinates to find
+     * @return {@link MapPoint} with coordinates
+     * @throws ServiceValidationException when {@link IMapPointsControl} throw {@link DAOValidationException}
+     *                                    data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IMapPointsControl} throw {@link DAOException}
+     */
     @Override
     public MapPoint getMapPoint(String coordinates) throws ServiceException {
 
@@ -28,9 +40,16 @@ public class MapPointsControlService implements IMapPointsControlService {
         }
     }
 
+    /**
+     * get map point by sign list
+     *
+     * @param signsList to find
+     * @return {@link MapPoint} with sign list param
+     * @throws ServiceValidationException when {@link IMapPointsControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IMapPointsControl} throw {@link DAOException}
+     */
     @Override
     public MapPoint getMapPoint(int signsList) throws ServiceException {
-
 
 
         try {
@@ -43,10 +62,21 @@ public class MapPointsControlService implements IMapPointsControlService {
         }
     }
 
+    /**
+     * add map point
+     *
+     * @param point      to set
+     * @param address    to set
+     * @param signsAngle to set
+     * @return {@link MapPoint} if success
+     * @throws ServiceValidationException when {@link IMapPointsControl} throw {@link DAOValidationException}
+     *                                    data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IMapPointsControl} throw {@link DAOException}
+     */
     @Override
     public MapPoint addMapPoint(String point, String address, int signsAngle) throws ServiceException {
 
-      String checkedPoint = StringTransformer.coordinatesOrPointToPointWithCheck(point);
+        String checkedPoint = StringTransformer.coordinatesOrPointToPointWithCheck(point);
 
         InputValidation.nullCheck(address);
 
@@ -60,6 +90,18 @@ public class MapPointsControlService implements IMapPointsControlService {
         }
     }
 
+    /**
+     * add map point
+     *
+     * @param point      to set
+     * @param address    to set
+     * @param signsAngle to set
+     * @param annotation to set
+     * @return {@link MapPoint} if success
+     * @throws ServiceValidationException when {@link IMapPointsControl} throw {@link DAOValidationException}
+     *                                    data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IMapPointsControl} throw {@link DAOException}
+     */
     @Override
     public MapPoint addMapPoint(String point, String address, int signsAngle, String annotation) throws ServiceException {
 
@@ -77,6 +119,13 @@ public class MapPointsControlService implements IMapPointsControlService {
         }
     }
 
+    /**
+     * get all map points
+     *
+     * @return {@link MapPoint} array
+     * @throws ServiceValidationException when {@link IMapPointsControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IMapPointsControl} throw {@link DAOException}
+     */
     @Override
     public MapPoint[] getMapPoints() throws ServiceException {
         try {
@@ -89,6 +138,13 @@ public class MapPointsControlService implements IMapPointsControlService {
         }
     }
 
+    /**
+     * get  map points with no signs
+     *
+     * @return {@link MapPoint} array
+     * @throws ServiceValidationException when {@link IMapPointsControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IMapPointsControl} throw {@link DAOException}
+     */
     @Override
     public MapPoint[] getEmptyMapPoints() throws ServiceException {
         try {
@@ -101,6 +157,14 @@ public class MapPointsControlService implements IMapPointsControlService {
         }
     }
 
+    /**
+     * delete map with sign list point from db
+     *
+     * @param signsList to remove
+     * @return true if success
+     * @throws ServiceValidationException when {@link IMapPointsControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IMapPointsControl} throw {@link DAOException}
+     */
     @Override
     public boolean removeMapPoint(int signsList) throws ServiceException {
         try {
@@ -113,8 +177,24 @@ public class MapPointsControlService implements IMapPointsControlService {
         }
     }
 
+    /**
+     * set direction, address, annotation
+     *
+     * @param signs_list   sign list id where set
+     * @param newDirection direction to set
+     * @param address      address to set
+     * @param annotation   annotation to set
+     * @return true if success
+     * @throws ServiceValidationException when {@link IMapPointsControl} throw {@link DAOValidationException}
+     *                                    data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IMapPointsControl} throw {@link DAOException}
+     */
     @Override
     public boolean setParameters(int signs_list, int newDirection, String address, String annotation) throws ServiceException {
+
+        InputValidation.nullCheck(address);
+        InputValidation.nullCheck(annotation);
+
         try {
 
             return mapPointsControl.setParameters(signs_list, newDirection, address, annotation);
@@ -125,8 +205,23 @@ public class MapPointsControlService implements IMapPointsControlService {
         }
     }
 
+    /**
+     * set direction, address, annotation
+     *
+     * @param signs_list sign list id where set
+     * @param address    address to set
+     * @param annotation annotation to set
+     * @return true if success
+     * @throws ServiceValidationException when {@link IMapPointsControl} throw {@link DAOValidationException}
+     *                                    data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IMapPointsControl} throw {@link DAOException}
+     */
     @Override
     public boolean setParameters(int signs_list, String address, String annotation) throws ServiceException {
+
+        InputValidation.nullCheck(address);
+        InputValidation.nullCheck(annotation);
+
         try {
 
             return mapPointsControl.setParameters(signs_list, address, annotation);
@@ -137,6 +232,16 @@ public class MapPointsControlService implements IMapPointsControlService {
         }
     }
 
+    /**
+     * set address
+     *
+     * @param signs_list sign list where set
+     * @param address    address to set
+     * @return true if success
+     * @throws ServiceValidationException when {@link IMapPointsControl} throw {@link DAOValidationException}
+     *                                    data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IMapPointsControl} throw {@link DAOException}
+     */
     @Override
     public boolean setAddress(int signs_list, String address) throws ServiceException {
 
@@ -152,6 +257,15 @@ public class MapPointsControlService implements IMapPointsControlService {
         }
     }
 
+    /**
+     * set angle
+     *
+     * @param signs_list sign list id where set
+     * @param angle      angle to set
+     * @return true if success
+     * @throws ServiceValidationException when {@link IMapPointsControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IMapPointsControl} throw {@link DAOException}
+     */
     @Override
     public boolean setAngle(int signs_list, int angle) throws ServiceException {
         try {
@@ -164,6 +278,16 @@ public class MapPointsControlService implements IMapPointsControlService {
         }
     }
 
+    /**
+     * set annotation
+     *
+     * @param signs_list sign list id where set
+     * @param annotation annotation to set
+     * @return true if success
+     * @throws ServiceValidationException when {@link IMapPointsControl} throw {@link DAOValidationException}
+     *                                    data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IMapPointsControl} throw {@link DAOException}
+     */
     @Override
     public boolean setAnnotation(int signs_list, String annotation) throws ServiceException {
 
