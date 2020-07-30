@@ -20,17 +20,39 @@ import java.sql.SQLException;
 import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
 
+/**
+ * class for supply bank accounts
+ * <p>
+ * have a method to execute {@link IRequest}
+ */
 public class BankAccountsDeliver implements IBankAccountsDeliver {
 
+    /**
+     * empty constructor
+     */
     public BankAccountsDeliver() {
 
     }
 
+    /**
+     * logger
+     */
     private Logger logger = LogManager.getLogger(BankAccountsDeliver.class);
 
+    /**
+     * {@link IConnectionPool} instance
+     */
     private static final IConnectionPool CONNECTION_POOL = ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
 
-
+    /**
+     * execute {@link IRequest}
+     *
+     * @param selectRequestHolder {@link IRequest}
+     * @return {@link BankAccount} array
+     * @throws DAOValidationException when wrong {@link IRequest}
+     * @throws DAOException           when catch {@link SQLException} from {@link ResultSet} or {@link PreparedStatement}
+     * @throws DAOException           when {@link IConnectionPool} throw exception
+     */
     public BankAccount[] executeRequest(IRequest selectRequestHolder) throws DAOException {
 
 
@@ -38,7 +60,7 @@ public class BankAccountsDeliver implements IBankAccountsDeliver {
 
         try {
             connection = CONNECTION_POOL.retrieveConnection();
-        }catch (ConnectionPoolException ex){
+        } catch (ConnectionPoolException ex) {
             throw new DAOException(ex.getMessage());
         }
 

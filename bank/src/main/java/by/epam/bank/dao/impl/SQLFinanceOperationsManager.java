@@ -20,26 +20,61 @@ import java.sql.SQLIntegrityConstraintViolationException;
 
 import java.util.regex.Pattern;
 
+/**
+ * class for transact money
+ */
 public class SQLFinanceOperationsManager implements IFinanceOperationsManager {
 
+    /**
+     * logger
+     */
     private static Logger logger = LogManager.getLogger(SQLFinanceOperationsManager.class);
 
+    /**
+     * {@link IConnectionPool} instance
+     */
+    private static final IConnectionPool CONNECTION_POOL = ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
+
+    /**
+     * get money from bank account in case it't enough to do it  and not blocked
+     */
     private static final String SQL_UPDATE_TRANSACTION_TAKE_FROM =
             " UPDATE bank_accounts SET balance = if(balance-?>=min_allowed_balance AND is_blocked=false, balance-?, null) " +
                     "WHERE (organisation_id = ?);";
+
+    /**
+     * add money to account if it's wasn't blocked
+     */
     private static final String SQL_UPDATE_TRANSACTION_SEND_TO =
             "UPDATE bank_accounts SET balance = if(is_blocked=false, balance+?, null) WHERE (organisation_id = ?);";
 
+    /**
+     * create transaction table row
+     */
     private static final String SQL_ADD_TRANSACTION = "INSERT INTO `transactions` (`from`, `to`, `money`) VALUES (?, ?, ?);";
+
+    /**
+     * select last inserted transaction
+     */
     private static final String SQL_SELECT_LAST_INSERT_ID =
             "SELECT t.id, money, date_time, o1.id, o1.name, o1.role, orr1.role,  o1.is_blocked, o1.info, o2.id, o2.name, o2.role, orr2.role, o2.is_blocked, o2.info " +
                     "FROM transactions as t join organisations as o1 on t.from=o1.id join organisations as o2 on t.to=o2.id " +
                     "join organisation_roles as orr1 on o1.role=orr1.id join organisation_roles as orr2 on o2.role=orr2.id where t.id=LAST_INSERT_ID()";
 
-    private static final IConnectionPool CONNECTION_POOL = ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
 
 
-    //return transaction id
+    /**
+     *
+     * transact money, create transaction to the history
+     *
+     * @param organisationIDFrom sender
+     * @param organisationIDTo  payee
+     * @param money summ of money to transact
+     * @return {@link Transaction} if success
+     * @throws DAOValidationException when organisation from or to do not exist, bank account blocked or haven't enough money
+     * @throws DAOException when catch {@link SQLException} from {@link ResultSet} or {@link PreparedStatement}
+     * @throws DAOException when {@link IConnectionPool} throw exception
+     */
     @Override
     public Transaction transferMoney(int organisationIDFrom, int organisationIDTo, double money) throws DAOException {
 
@@ -159,6 +194,16 @@ public class SQLFinanceOperationsManager implements IFinanceOperationsManager {
 
     }
 
+    /**
+     *  add money to account with organisation id param
+     *
+     * @param bankID id of bank for transactions history sender - do not withdraw money from it's account
+     * @param organisationID to add money
+     * @param money sum of money to add
+     * @return {@link Transaction} if success
+     * @throws DAOException when catch {@link SQLException} from {@link ResultSet} or {@link PreparedStatement}
+     * @throws DAOException when {@link IConnectionPool} throw exception
+     */
     @Override
     public Transaction addMoney(int bankID, int organisationID, double money) throws DAOException {
 

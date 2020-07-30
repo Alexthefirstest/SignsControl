@@ -9,13 +9,26 @@ import by.epam.bank.service.IBankAccountsManagerService;
 import by.epam.bank.service.exceptions.ServiceException;
 import by.epam.bank.service.exceptions.ServiceValidationException;
 
-
+/**
+ * service for working with {@link BankAccount} and {@link by.epam.bank.dao.IBankAccountsManager},
+ * get, add, set parameters to sql table
+ */
 public class BankAccountsManagerService implements IBankAccountsManagerService {
 
+    /**
+     * {@link IBankAccountsManager} instance
+     */
     private static IBankAccountsManager bam = DaoFactory.getINSTANCE().getBankAccountsManager();
 
+    /**
+     * @param organisationID to create account
+     * @return {@link BankAccount} if success or null if wrong organisation id or account already exist
+     * @throws ServiceValidationException when {@link IBankAccountsManager} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IBankAccountsManager} throw {@link DAOException}
+     */
     @Override
     public BankAccount createBankAccount(int organisationID) throws ServiceException {
+
         try {
             return bam.createBankAccount(organisationID);
         } catch (DAOValidationException ex) {
@@ -23,8 +36,17 @@ public class BankAccountsManagerService implements IBankAccountsManagerService {
         } catch (DAOException ex) {
             throw new ServiceException(ex);
         }
+
     }
 
+    /**
+     * set block is true for bank account
+     *
+     * @param organisationID where set
+     * @return true if success or false is not
+     * @throws ServiceValidationException when {@link IBankAccountsManager} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IBankAccountsManager} throw {@link DAOException}
+     */
     @Override
     public boolean blockBankAccounts(int organisationID) throws ServiceException {
         try {
@@ -36,6 +58,14 @@ public class BankAccountsManagerService implements IBankAccountsManagerService {
         }
     }
 
+    /**
+     * set block is false for bank account
+     *
+     * @param organisationID where set
+     * @return true if success or false is not
+     * @throws ServiceValidationException when {@link IBankAccountsManager} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IBankAccountsManager} throw {@link DAOException}
+     */
     @Override
     public boolean unblockBankAccounts(int organisationID) throws ServiceException {
         try {
@@ -47,6 +77,12 @@ public class BankAccountsManagerService implements IBankAccountsManagerService {
         }
     }
 
+    /**
+     * @param organisationID where need to check
+     * @return block condition
+     * @throws ServiceValidationException when {@link IBankAccountsManager} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IBankAccountsManager} throw {@link DAOException}
+     */
     @Override
     public boolean isBlock(int organisationID) throws ServiceException {
         try {
@@ -58,6 +94,12 @@ public class BankAccountsManagerService implements IBankAccountsManagerService {
         }
     }
 
+    /**
+     * @param organisationID to check
+     * @return true if exist or false if not
+     * @throws ServiceValidationException when {@link IBankAccountsManager} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IBankAccountsManager} throw {@link DAOException}
+     */
     @Override
     public boolean isExist(int organisationID) throws ServiceException {
         try {
@@ -69,6 +111,14 @@ public class BankAccountsManagerService implements IBankAccountsManagerService {
         }
     }
 
+    /**
+     * @param organisationID where need to check
+     * @param info           to set
+     * @return true if success
+     * @throws ServiceValidationException when {@link IBankAccountsManager} throw {@link DAOValidationException}
+     *                                    or data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IBankAccountsManager} throw {@link DAOException}
+     */
     @Override
     public boolean setInfo(int organisationID, String info) throws ServiceException {
 
@@ -83,6 +133,14 @@ public class BankAccountsManagerService implements IBankAccountsManagerService {
         }
     }
 
+    /**
+     * get info
+     *
+     * @param organisationID where need to find
+     * @return info
+     * @throws ServiceValidationException when {@link IBankAccountsManager} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IBankAccountsManager} throw {@link DAOException}
+     */
     @Override
     public String getInfo(int organisationID) throws ServiceException {
         try {
@@ -94,6 +152,14 @@ public class BankAccountsManagerService implements IBankAccountsManagerService {
         }
     }
 
+    /**
+     * return balance from data base
+     *
+     * @param organisationID where need to find
+     * @return balance
+     * @throws ServiceValidationException when {@link IBankAccountsManager} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IBankAccountsManager} throw {@link DAOException}
+     */
     @Override
     public double getBalance(int organisationID) throws ServiceException {
         try {
@@ -105,6 +171,14 @@ public class BankAccountsManagerService implements IBankAccountsManagerService {
         }
     }
 
+    /**
+     * return min allowed balance from data base
+     *
+     * @param organisationID where need to find
+     * @return min allowed balance
+     * @throws ServiceValidationException when {@link IBankAccountsManager} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IBankAccountsManager} throw {@link DAOException}
+     */
     @Override
     public double getMinAllowedBalance(int organisationID) throws ServiceException {
         try {
@@ -116,6 +190,13 @@ public class BankAccountsManagerService implements IBankAccountsManagerService {
         }
     }
 
+    /**
+     * @param organisationID    where need to set
+     * @param minAllowedBalance to set
+     * @return true if success
+     * @throws ServiceValidationException when {@link IBankAccountsManager} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IBankAccountsManager} throw {@link DAOException}
+     */
     @Override
     public boolean setMinAllowedBalance(int organisationID, double minAllowedBalance) throws ServiceException {
         try {
@@ -127,6 +208,14 @@ public class BankAccountsManagerService implements IBankAccountsManagerService {
         }
     }
 
+    /**
+     * return bank account with organisation id param
+     *
+     * @param organisationID to find
+     * @return {@link BankAccount} or null if do not exist
+     * @throws ServiceValidationException when {@link IBankAccountsManager} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IBankAccountsManager} throw {@link DAOException}
+     */
     @Override
     public BankAccount getBankAccount(int organisationID) throws ServiceException {
         try {

@@ -21,29 +21,73 @@ import java.sql.SQLIntegrityConstraintViolationException;
 
 import java.util.regex.Pattern;
 
+/**
+ * class for working with bank account sql field
+ */
 public class SQLBankAccountsManager implements IBankAccountsManager {
 
+    /**
+     * logger
+     */
     private static Logger logger = LogManager.getLogger(SQLBankAccountsManager.class);
 
+    /**
+     * {@link IConnectionPool} instance
+     */
     private static final IConnectionPool CONNECTION_POOL = ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
 
+    /**
+     * insert bank account request
+     */
     private static final String SQL_INSERT = "INSERT INTO bank_accounts (organisation_id) VALUES (?)";
+
+    /**
+     * set block to bank accounts
+     */
     private static final String SQL_SET_BLOCK = "UPDATE bank_accounts SET is_blocked = ? WHERE (organisation_id = ?)";
+
+    /**
+     * select block condition
+     */
     private static final String SQL_SELECT_IS_BLOCKED = "SELECT is_blocked FROM bank_accounts WHERE organisation_id = ?";
+
+    /**
+     * set info
+     */
     private static final String SQL_SET_INFO = "UPDATE bank_accounts SET info = ? WHERE (organisation_id = ?)";
+
+    /**
+     * select info
+     */
     private static final String SQL_SELECT_INFO = "SELECT info FROM bank_accounts WHERE organisation_id = ?";
+
+    /**
+     * select balance
+     */
     private static final String SQL_SELECT_BALANCE = "SELECT balance FROM bank_accounts WHERE organisation_id = ?";
+
+    /**
+     * select min allowed balance
+     */
     private static final String SQL_SELECT_MIN_ALLOWED_BALANCE = "SELECT balance FROM bank_accounts WHERE organisation_id = ?";
+
+    /**
+     * set min allowed balance
+     */
     private static final String SQL_SET_MIN_ALLOWED_BALANCE = "UPDATE bank_accounts SET min_allowed_balance = ? WHERE (organisation_id = ?)";
+
+    /**
+     * select all bank accounts
+     */
     private static final String SQL_SELECT_ACCOUNT =
             "SELECT ba.balance, ba.min_allowed_balance, ba.is_blocked, ba.info, o.id, o.name, o.role, orr.role, o.is_blocked, o.info " +
                     "FROM bank_accounts as ba join organisations as o on id=organisation_id join organisation_roles as orr on o.role=orr.id where organisation_id=?";
 
-    /*
-     *
-     * true - if created successfully
-     * false - if already exist
-     *
+    /**
+     * @param organisationID to create account
+     * @return {@link BankAccount} if success or null if wrong organisation id or account already exist
+     * @throws DAOException when catch {@link SQLException} from {@link ResultSet} or {@link PreparedStatement}
+     * @throws DAOException when {@link IConnectionPool} throw exception
      */
     @Override
     public BankAccount createBankAccount(int organisationID) throws DAOException {
@@ -117,9 +161,7 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
     }
 
     /*
-     *
-     *return false - if user don't exist
-     *
+     * set block condition to bank account
      */
     private boolean setBlock(int organisationID, boolean blockToSet) throws DAOException {
 
@@ -152,18 +194,41 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
         return true;
     }
 
+    /**
+     * set block is true for bank account
+     *
+     * @param organisationID where set
+     * @return true if success or false is not
+     * @throws DAOException when catch {@link SQLException} from {@link PreparedStatement}
+     * @throws DAOException when {@link IConnectionPool} throw exception
+     */
     @Override
     public boolean blockBankAccounts(int organisationID) throws DAOException {
 
         return setBlock(organisationID, true);
     }
 
+    /**
+     * set block is false for bank account
+     *
+     * @param organisationID where set
+     * @return true if success or false is not
+     * @throws DAOException when catch {@link SQLException} from {@link PreparedStatement}
+     * @throws DAOException when {@link IConnectionPool} throw exception
+     */
     @Override
     public boolean unblockBankAccounts(int organisationID) throws DAOException {
         return setBlock(organisationID, false);
     }
 
 
+    /**
+     * @param organisationID where need to check
+     * @return block condition
+     * @throws DAOValidationException when wrong organisationID
+     * @throws DAOException           when catch {@link SQLException} from {@link ResultSet} or {@link PreparedStatement}
+     * @throws DAOException           when {@link IConnectionPool} throw exception
+     */
     @Override
     public boolean isBlock(int organisationID) throws DAOException {
 
@@ -215,6 +280,12 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
 
     }
 
+    /**
+     * @param organisationID to check
+     * @return true if exist or false if not
+     * @throws DAOException when catch {@link SQLException} from {@link ResultSet} or {@link PreparedStatement}
+     * @throws DAOException when {@link IConnectionPool} throw exception
+     */
     @Override
     public boolean isExist(int organisationID) throws DAOException {
 
@@ -257,10 +328,12 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
         }
     }
 
-    /*
-     *
-     *return false - if user don't exist
-     *
+    /**
+     * @param organisationID where need to check
+     * @param info           to set
+     * @return true if success
+     * @throws DAOException when catch {@link SQLException} from  {@link PreparedStatement}
+     * @throws DAOException when {@link IConnectionPool} throw exception
      */
     @Override
     public boolean setInfo(int organisationID, String info) throws DAOException {
@@ -293,7 +366,15 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
         return true;
     }
 
-
+    /**
+     * get info
+     *
+     * @param organisationID where need to find
+     * @return info
+     * @throws DAOValidationException when wrong organisationID
+     * @throws DAOException           when catch {@link SQLException} from {@link ResultSet} or {@link PreparedStatement}
+     * @throws DAOException           when {@link IConnectionPool} throw exception
+     */
     @Override
     public String getInfo(int organisationID) throws DAOException {
         ResultSet rs = null;
@@ -342,6 +423,9 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
 
     }
 
+    /*
+     * select double parameter from db table
+     */
     private double selectBalanceOrMinAllowedBalance(int organisationID, String select) throws DAOException {
         ResultSet rs = null;
 
@@ -389,6 +473,15 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
         }
     }
 
+    /**
+     * return balance from data base
+     *
+     * @param organisationID where need to find
+     * @return balance
+     * @throws DAOValidationException when wrong organisationID
+     * @throws DAOException           when catch {@link SQLException} from {@link ResultSet} or {@link PreparedStatement}
+     * @throws DAOException           when {@link IConnectionPool} throw exception
+     */
     @Override
     public double getBalance(int organisationID) throws DAOException {
 
@@ -396,12 +489,29 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
 
     }
 
+
+    /**
+     * return min allowed balance from data base
+     *
+     * @param organisationID where need to find
+     * @return min allowed balance
+     * @throws DAOValidationException when wrong organisationID
+     * @throws DAOException           when catch {@link SQLException} from {@link ResultSet} or {@link PreparedStatement}
+     * @throws DAOException           when {@link IConnectionPool} throw exception
+     */
     @Override
     public double getMinAllowedBalance(int organisationID) throws DAOException {
         return selectBalanceOrMinAllowedBalance(organisationID, SQL_SELECT_MIN_ALLOWED_BALANCE);
     }
 
 
+    /**
+     * @param organisationID    where need to set
+     * @param minAllowedBalance to set
+     * @return true if success
+     * @throws DAOException when catch {@link SQLException} from  {@link PreparedStatement}
+     * @throws DAOException when {@link IConnectionPool} throw exception
+     */
     @Override
     public boolean setMinAllowedBalance(int organisationID, double minAllowedBalance) throws DAOException {
 
@@ -434,10 +544,13 @@ public class SQLBankAccountsManager implements IBankAccountsManager {
     }
 
 
-    /*
+    /**
+     * return bank account with organisation id param
      *
-     *return null - if organization don't exist
-     *
+     * @param organisationID to find
+     * @return {@link BankAccount} or null if do not exist
+     * @throws DAOException when catch {@link SQLException} from {@link ResultSet} or {@link PreparedStatement}
+     * @throws DAOException when {@link IConnectionPool} throw exception
      */
     @Override
     public BankAccount getBankAccount(int organisationID) throws DAOException {

@@ -1,6 +1,5 @@
 # SignsControl
 ***
-javadoc: connectionPoolForDataBase, rolesOrganisationsUsersController, signsControl
 
 ***
 Основные идеи:

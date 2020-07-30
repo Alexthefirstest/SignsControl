@@ -16,16 +16,35 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * class for supply organisations from data base
+ */
 public class OrganisationDeliver implements IOrganisationsDeliver {
 
+    /**
+     * logger
+     */
     private static Logger logger = LogManager.getLogger(OrganisationDeliver.class);
 
+    /**
+     * get organisation with no bank accounts request
+     */
     private static final String GET_ORGANISATIONS_WITHOUT_BANK_ACCOUNTS = " SELECT org.id, org.name, org.role, orgR.role, org.is_blocked, " +
             " org.info FROM organisations as org left join bank_accounts on bank_accounts.organisation_id=org.id join organisation_roles as orgR on org.role=orgR.id " +
             " where bank_accounts.balance is null order by org.name ";
 
-    private static final IConnectionPool CONNECTION_POOL=ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
+    /**
+     * {@link IConnectionPool} instance
+     */
+    private static final IConnectionPool CONNECTION_POOL = ConnectionPoolFactory.getINSTANCE().getConnectionPoolInstance();
 
+    /**
+     * get organisations with no bank accounts
+     *
+     * @return {@link Organisation}
+     * @throws DAOException when catch {@link SQLException} from {@link ResultSet} or {@link PreparedStatement}
+     * @throws DAOException when {@link IConnectionPool} throw exception
+     */
     @Override
     public Organisation[] showOrganisationsWithoutBankAccounts() throws DAOException {
         ResultSet rs = null;
@@ -35,7 +54,7 @@ public class OrganisationDeliver implements IOrganisationsDeliver {
 
         try {
             connection = CONNECTION_POOL.retrieveConnection();
-        }catch (ConnectionPoolException ex){
+        } catch (ConnectionPoolException ex) {
             throw new DAOException(ex.getMessage());
         }
 

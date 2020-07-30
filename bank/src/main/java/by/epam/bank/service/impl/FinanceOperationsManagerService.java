@@ -9,10 +9,28 @@ import by.epam.bank.service.IFinanceOperationsManagerService;
 import by.epam.bank.service.exceptions.ServiceException;
 import by.epam.bank.service.exceptions.ServiceValidationException;
 
+/**
+ * service for working with {@link by.epam.bank.dao.IFinanceOperationsManager}
+ * get, add, set parameters to sql table
+ */
 public class FinanceOperationsManagerService implements IFinanceOperationsManagerService {
 
+    /**
+     * {@link IFinanceOperationsManager}
+     */
     private static IFinanceOperationsManager fom = DaoFactory.getINSTANCE().getFinanceOperationsManager();
 
+    /**
+     *
+     * transact money, create transaction to the history
+     *
+     * @param organisationIDFrom sender
+     * @param organisationIDTo  payee
+     * @param money summ of money to transact
+     * @return {@link Transaction} if success
+     * @throws ServiceValidationException when {@link IFinanceOperationsManager} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IFinanceOperationsManager} throw {@link DAOException}
+     */
     @Override
     public Transaction transferMoney(int organisationIDFrom, int organisationIDTo, double money) throws ServiceException {
         try {
@@ -24,6 +42,16 @@ public class FinanceOperationsManagerService implements IFinanceOperationsManage
         }
     }
 
+    /**
+     *  add money to account with organisation id param
+     *
+     * @param bankID id of bank for transactions history sender - do not withdraw money from it's account
+     * @param organisationID to add money
+     * @param money sum of money to add
+     * @return {@link Transaction} if success
+     * @throws ServiceValidationException when {@link IFinanceOperationsManager} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IFinanceOperationsManager} throw {@link DAOException}
+     */
     @Override
     public Transaction addMoney(int bankID, int organisationID, double money) throws ServiceException {
         try {
