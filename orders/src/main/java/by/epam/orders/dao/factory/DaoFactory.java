@@ -32,12 +32,12 @@ public class DaoFactory {
     private final IOrdersControl ordersControl = new OrdersControl();
 
     /**
-     * {@link by.epam.orders.dao.ITypeOfWorkControl} realisation
+     * {@link ITypeOfWorkControl} realisation
      */
     private final ITypeOfWorkControl typeOfWorkControl = new TypeOfWorkControl();
 
     /**
-     * {@link by.epam.orders.dao.IWorkersCrewControl} realisation
+     * {@link IWorkersCrewControl} realisation
      */
     private final IWorkersCrewControl workersCrewControl = new WorkersCrewControl();
 
@@ -48,14 +48,23 @@ public class DaoFactory {
         return INSTANCE;
     }
 
+    /**
+     * @return {@link IOrdersControl} realisation
+     */
     public IOrdersControl getOrdersControl() {
         return ordersControl;
     }
 
+    /**
+     * @return {@link ITypeOfWorkControl} instance
+     */
     public ITypeOfWorkControl getTypeOfWorkControl() {
         return typeOfWorkControl;
     }
 
+    /**
+     * @return {@link IWorkersCrewControl} instance
+     */
     public IWorkersCrewControl getWorkersCrewControl() {
         return workersCrewControl;
     }

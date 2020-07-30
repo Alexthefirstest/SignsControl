@@ -47,6 +47,7 @@ public class DirectionsControlService implements IDirectionsControlService {
     }
 
     /**
+     * @param coordinates coordinates search
      * @return unused direction for point with coordinates param
      * @throws ServiceValidationException when {@link IDirectionsControl} throw {@link DAOValidationException}
      *                                    data invalid {@link InputValidation}
@@ -69,6 +70,7 @@ public class DirectionsControlService implements IDirectionsControlService {
     }
 
     /**
+     * @param coordinates coordinates to search
      * @return jdbc sign list like {@link Direction id param} and direction like {@link Direction direction param}
      * @throws ServiceValidationException when {@link IDirectionsControl} throw {@link DAOValidationException}
      *                                    data invalid {@link InputValidation}

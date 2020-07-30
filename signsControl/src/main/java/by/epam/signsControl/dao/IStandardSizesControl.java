@@ -31,7 +31,7 @@ public interface IStandardSizesControl {
      * remove st size
      *
      * @param size size to remove
-     * @return null if success
+     * @return true if success
      * @throws DAOException when exception occur during execution
      */
     boolean removeStandardSize(int size) throws DAOException;

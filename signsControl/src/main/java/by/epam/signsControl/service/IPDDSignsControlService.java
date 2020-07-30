@@ -47,7 +47,7 @@ public interface IPDDSignsControlService {
      * remove sign from table
      *
      * @param id sign id to remove
-     * @return null if success
+     * @return true if success
      * @throws ServiceException when get an exception during execution
      */
     boolean removeSign(int id) throws ServiceException;

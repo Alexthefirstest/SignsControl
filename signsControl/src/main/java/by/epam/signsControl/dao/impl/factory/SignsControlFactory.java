@@ -15,6 +15,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+
+/**
+ * factory to produce {@link FactoryType} objects
+ */
 public class SignsControlFactory {
 
     /*

@@ -68,7 +68,7 @@ public class StandardSizesControlService implements IStandardSizesControlService
      * remove st size
      *
      * @param size size to remove
-     * @return null if success
+     * @return true if success
      * @throws ServiceValidationException when {@link IStandardSizesControl} throw {@link DAOValidationException}
      * @throws ServiceException           ex when {@link IStandardSizesControl} throw {@link DAOException}
      */

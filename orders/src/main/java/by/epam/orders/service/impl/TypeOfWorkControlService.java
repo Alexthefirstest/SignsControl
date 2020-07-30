@@ -9,12 +9,31 @@ import by.epam.orders.service.ITypeOfWorkControlService;
 import by.epam.orders.service.exceptions.ServiceException;
 import by.epam.orders.service.exceptions.ServiceValidationException;
 
+/**
+ * service for working with {@link TypeOfWork}, get, add, set parameters of order
+ */
 public class TypeOfWorkControlService implements ITypeOfWorkControlService {
 
+    /**
+     * {@link ITypeOfWorkControl} instance
+     */
     private static final ITypeOfWorkControl typeOfWorkControl = DaoFactory.getINSTANCE().getTypeOfWorkControl();
 
+    /**
+     * add type of work
+     *
+     * @param name  type of work
+     * @param price for execution
+     * @return {@link TypeOfWork} if success
+     * @throws ServiceValidationException when {@link ITypeOfWorkControl} throw {@link DAOValidationException}
+     *                                    or data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link ITypeOfWorkControl} throw {@link DAOException}
+     */
     @Override
     public TypeOfWork addTypeOfWork(String name, double price) throws ServiceException {
+
+        InputValidation.nullCheck(name);
+
         try {
 
             return typeOfWorkControl.addTypeOfWork(name, price);
@@ -25,8 +44,19 @@ public class TypeOfWorkControlService implements ITypeOfWorkControlService {
         }
     }
 
+
+    /**
+     * set block
+     *
+     * @param id    where set
+     * @param block to set
+     * @return true if success
+     * @throws ServiceValidationException when {@link ITypeOfWorkControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link ITypeOfWorkControl} throw {@link DAOException}
+     */
     @Override
     public boolean setBlock(int id, boolean block) throws ServiceException {
+
         try {
 
             return typeOfWorkControl.setBlock(id, block);
@@ -35,8 +65,18 @@ public class TypeOfWorkControlService implements ITypeOfWorkControlService {
         } catch (DAOException ex) {
             throw new ServiceException(ex);
         }
+
     }
 
+    /**
+     * set price
+     *
+     * @param id    where set
+     * @param price to set
+     * @return true if success
+     * @throws ServiceValidationException when {@link ITypeOfWorkControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link ITypeOfWorkControl} throw {@link DAOException}
+     */
     @Override
     public boolean setPrice(int id, double price) throws ServiceException {
         try {
@@ -49,6 +89,14 @@ public class TypeOfWorkControlService implements ITypeOfWorkControlService {
         }
     }
 
+    /**
+     * remove type of work
+     *
+     * @param id what remove
+     * @return true if success
+     * @throws ServiceValidationException when {@link ITypeOfWorkControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link ITypeOfWorkControl} throw {@link DAOException}
+     */
     @Override
     public boolean removeTypeOfWork(int id) throws ServiceException {
         try {
@@ -61,8 +109,17 @@ public class TypeOfWorkControlService implements ITypeOfWorkControlService {
         }
     }
 
+
+    /**
+     * get all types of work
+     *
+     * @return {@link TypeOfWork} array
+     * @throws ServiceValidationException when {@link ITypeOfWorkControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link ITypeOfWorkControl} throw {@link DAOException}
+     */
     @Override
     public TypeOfWork[] getTypesOfWork() throws ServiceException {
+
         try {
 
             return typeOfWorkControl.getTypesOfWork();
@@ -71,8 +128,16 @@ public class TypeOfWorkControlService implements ITypeOfWorkControlService {
         } catch (DAOException ex) {
             throw new ServiceException(ex);
         }
+
     }
 
+    /**
+     * get types  of work where block is false
+     *
+     * @return {@link TypeOfWork} array
+     * @throws ServiceValidationException when {@link ITypeOfWorkControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link ITypeOfWorkControl} throw {@link DAOException}
+     */
     @Override
     public TypeOfWork[] getUnblockedTypesOfWork() throws ServiceException {
         try {
@@ -85,8 +150,18 @@ public class TypeOfWorkControlService implements ITypeOfWorkControlService {
         }
     }
 
+
+    /**
+     * get type of work with id param
+     *
+     * @param id id to find
+     * @return {@link TypeOfWork}
+     * @throws ServiceValidationException when {@link ITypeOfWorkControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link ITypeOfWorkControl} throw {@link DAOException}
+     */
     @Override
     public TypeOfWork getTypeOfWork(int id) throws ServiceException {
+
         try {
 
             return typeOfWorkControl.getTypeOfWork(id);
@@ -96,4 +171,5 @@ public class TypeOfWorkControlService implements ITypeOfWorkControlService {
             throw new ServiceException(ex);
         }
     }
+
 }

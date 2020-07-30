@@ -20,7 +20,9 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
-
+/**
+ * exequte request user {@link ResultSet} and {@link SignsControlFactory}
+ */
 class RequestExecutor {
 
     /*

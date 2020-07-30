@@ -184,7 +184,7 @@ public class PDDSignsControl implements IPDDSignsControl {
      * remove sign from table
      *
      * @param id sign id to remove
-     * @return null if success
+     * @return true if success
      * @throws DAOException when catch exception from {@link RequestExecutor#createField(String, String, FactoryType, int...)}
      */
     @Override

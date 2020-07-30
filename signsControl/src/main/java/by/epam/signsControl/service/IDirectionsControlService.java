@@ -17,12 +17,14 @@ public interface IDirectionsControlService {
     Direction[] getDirections() throws ServiceException;
 
     /**
+     * @param coordinates coordinates to search
      * @return unused direction for point with coordinates param
      * @throws ServiceException when get an exception during execution
      */
     Direction[] getUnusedDirections(String coordinates) throws ServiceException;
 
     /**
+     * @param coordinates coordinates to search
      * @return jdbc sign list like {@link Direction id param} and direction like {@link Direction direction param}
      * @throws ServiceException when get an exception during execution
      */

@@ -107,7 +107,7 @@ public class PDDSignsControlService implements IPDDSignsControlService {
      * remove sign from table
      *
      * @param id sign id to remove
-     * @return null if success
+     * @return true if success
      * @throws ServiceValidationException when {@link IPDDSignsControl} throw {@link DAOValidationException}
      * @throws ServiceException           ex when {@link IPDDSignsControl} throw {@link DAOException}
      */

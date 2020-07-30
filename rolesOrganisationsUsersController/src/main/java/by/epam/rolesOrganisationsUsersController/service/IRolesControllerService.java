@@ -13,26 +13,6 @@ import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceExcep
  */
 public interface IRolesControllerService {
 
-
-//    /**
-//     * add role to jdbc table
-//     *
-//     * @param name role name
-//     * @return {@link Role} if successfully added
-//     * @throws ServiceException when get an exception during execution
-//     */
-//    Role addRole(String name) throws ServiceException;
-//
-//    /**
-//     * delete role from jdbc table
-//     *
-//     * @param id role id
-//     * @return true if success, false - if no
-//     * @throws ServiceException when get an exception during execution
-//     */
-//    boolean deleteRole(int id) throws ServiceException;
-
-
     /**
      * get array of all {@link by.epam.rolesOrganisationsUsersController.bean.Organisation} roles
      *

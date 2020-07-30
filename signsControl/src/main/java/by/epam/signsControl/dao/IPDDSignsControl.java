@@ -51,7 +51,7 @@ public interface IPDDSignsControl {
      * remove sign from table
      *
      * @param id sign id to remove
-     * @return null if success
+     * @return true if success
      * @throws DAOException when get an exception during execution
      */
     boolean removeSign(int id) throws DAOException;

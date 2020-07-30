@@ -123,7 +123,7 @@ public class StandardSizesControl implements IStandardSizesControl {
      * remove st size
      *
      * @param size size to remove
-     * @return null if success
+     * @return true if success
      * @throws DAOException when catch exception from {@link RequestExecutor#createField(String, String, FactoryType, int...)}
      */
     @Override

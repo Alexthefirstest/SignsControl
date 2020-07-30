@@ -28,7 +28,7 @@ public interface IStandardSizesControlService {
      * remove st size
      *
      * @param size size to remove
-     * @return null if success
+     * @return true if success
      * @throws ServiceException when get an exception during execution
      */
     boolean removeStandardSize(int size) throws ServiceException;

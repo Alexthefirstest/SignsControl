@@ -10,12 +10,35 @@ import by.epam.orders.service.IOrdersControlService;
 import by.epam.orders.service.exceptions.ServiceException;
 import by.epam.orders.service.exceptions.ServiceValidationException;
 
+/**
+ * service for working with {@link Order}, get, add, set parameters of order
+ */
 public class OrdersControlService implements IOrdersControlService {
 
+    /**
+     * {@link IOrdersControl} instance
+     */
     private static final IOrdersControl ordersControl = DaoFactory.getINSTANCE().getOrdersControl();
 
+
+    /**
+     * add order
+     *
+     * @param signList           sign list id to add
+     * @param sign               sign id
+     * @param sign_standard_size standard size id
+     * @param customer           customer id
+     * @param typeOfWork         type of work id
+     * @param info               order info
+     * @return {@link Order} if success
+     * @throws ServiceValidationException when {@link IOrdersControl} throw {@link DAOValidationException}
+     *                                    or data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IOrdersControl} throw {@link DAOException}
+     */
     @Override
     public Order addOrder(int signList, int sign, int sign_standard_size, int customer, int typeOfWork, String info) throws ServiceException {
+
+        InputValidation.nullCheck(info);
 
         try {
 
@@ -27,8 +50,26 @@ public class OrdersControlService implements IOrdersControlService {
         }
     }
 
+
+    /**
+     * add order
+     *
+     * @param signList           sign list id to add
+     * @param sign               sign id
+     * @param sign_standard_size standard size id
+     * @param customer           customer id
+     * @param typeOfWork         type of work id
+     * @param info               order info
+     * @param transaction        transaction id
+     * @return {@link Order} if success
+     * @throws ServiceValidationException when {@link IOrdersControl} throw {@link DAOValidationException}
+     *                                    or data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IOrdersControl} throw {@link DAOException}
+     */
     @Override
     public Order addOrder(int signList, int sign, int sign_standard_size, int customer, int typeOfWork, String info, int transaction) throws ServiceException {
+
+        InputValidation.nullCheck(info);
 
         try {
 
@@ -40,8 +81,16 @@ public class OrdersControlService implements IOrdersControlService {
         }
     }
 
+
+    /**
+     * @param orderID       order id to set
+     * @param transactionID transaction to set
+     * @return true if success or false in other option
+     * @throws ServiceValidationException when {@link IOrdersControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IOrdersControl} throw {@link DAOException}
+     */
     @Override
-    public Boolean setTransaction(int orderID, int transactionID) throws ServiceException {
+    public boolean setTransaction(int orderID, int transactionID) throws ServiceException {
 
         try {
 
@@ -53,8 +102,16 @@ public class OrdersControlService implements IOrdersControlService {
         }
     }
 
+
+    /**
+     * @param orderID       order id to set
+     * @param workersCrewID to set
+     * @return true if success or false in other option
+     * @throws ServiceValidationException when {@link IOrdersControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IOrdersControl} throw {@link DAOException}
+     */
     @Override
-    public Boolean setWorkersCrew(int orderID, int workersCrewID) throws ServiceException {
+    public boolean setWorkersCrew(int orderID, int workersCrewID) throws ServiceException {
 
         try {
 
@@ -66,8 +123,20 @@ public class OrdersControlService implements IOrdersControlService {
         }
     }
 
+
+    /**
+     * @param orderID         order id to set
+     * @param dateOfExecution date of execution to set
+     * @return true if success or false in other option
+     * @throws ServiceValidationException when {@link IOrdersControl} throw {@link DAOValidationException}
+     *                                    or data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IOrdersControl} throw {@link DAOException}
+     */
     @Override
-    public Boolean setDateOfExecution(int orderID, String dateOfExecution) throws ServiceException {
+    public boolean setDateOfExecution(int orderID, String dateOfExecution) throws ServiceException {
+
+        InputValidation.nullAndDateCheck(dateOfExecution);
+
         try {
 
             return ordersControl.setDateOfExecution(orderID, dateOfExecution);
@@ -78,12 +147,20 @@ public class OrdersControlService implements IOrdersControlService {
         }
     }
 
+
+    /**
+     * @param orderID order id to remove
+     * @return true if success
+     * @throws ServiceValidationException when {@link IOrdersControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IOrdersControl} throw {@link DAOException}
+     */
     @Override
-    public Boolean removeOrder(int orderID) throws ServiceException {
+    public boolean removeOrder(int orderID) throws ServiceException {
 
         try {
 
             return ordersControl.removeOrder(orderID);
+
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -91,6 +168,13 @@ public class OrdersControlService implements IOrdersControlService {
         }
     }
 
+
+    /**
+     * @param orderID order id to find
+     * @return {@link Order} if success
+     * @throws ServiceValidationException when {@link IOrdersControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IOrdersControl} throw {@link DAOException}
+     */
     @Override
     public Order getOrder(int orderID) throws ServiceException {
 
@@ -104,8 +188,20 @@ public class OrdersControlService implements IOrdersControlService {
         }
     }
 
+
+    /**
+     * @param orderID order id to set
+     * @param info    info to set
+     * @return true if success or false in other option
+     * @throws ServiceValidationException when {@link IOrdersControl} throw {@link DAOValidationException}
+     *                                    or data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IOrdersControl} throw {@link DAOException}
+     */
     @Override
-    public Boolean setInfo(int orderID, String info) throws ServiceException {
+    public boolean setInfo(int orderID, String info) throws ServiceException {
+
+        InputValidation.nullCheck(info);
+
         try {
 
             return ordersControl.setInfo(orderID, info);
@@ -116,12 +212,21 @@ public class OrdersControlService implements IOrdersControlService {
         }
     }
 
+
+    /**
+     * get all orders
+     *
+     * @return {@link Order} array
+     * @throws ServiceValidationException when {@link IOrdersControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IOrdersControl} throw {@link DAOException}
+     */
     @Override
     public Order[] getOrders() throws ServiceException {
 
         try {
 
             return ordersControl.getOrders();
+
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -129,6 +234,15 @@ public class OrdersControlService implements IOrdersControlService {
         }
     }
 
+
+    /**
+     * get orders with organisation performer id
+     *
+     * @param organisationPerformerID id to find
+     * @return {@link Order} array
+     * @throws ServiceValidationException when {@link IOrdersControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IOrdersControl} throw {@link DAOException}
+     */
     @Override
     public Order[] getOrders(int organisationPerformerID) throws ServiceException {
         try {
@@ -141,6 +255,14 @@ public class OrdersControlService implements IOrdersControlService {
         }
     }
 
+
+    /**
+     * get executed orders - where date of execution is not null
+     *
+     * @return {@link Order} array
+     * @throws ServiceValidationException when {@link IOrdersControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IOrdersControl} throw {@link DAOException}
+     */
     @Override
     public Order[] getExecutedOrders() throws ServiceException {
 
@@ -154,6 +276,14 @@ public class OrdersControlService implements IOrdersControlService {
         }
     }
 
+
+    /**
+     * get un executed orders - where date of execution is null
+     *
+     * @return {@link Order} array
+     * @throws ServiceValidationException when {@link IOrdersControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IOrdersControl} throw {@link DAOException}
+     */
     @Override
     public Order[] getUnExecutedOrders() throws ServiceException {
 
@@ -167,6 +297,15 @@ public class OrdersControlService implements IOrdersControlService {
         }
     }
 
+
+    /**
+     * get info
+     *
+     * @param orderID id to find info
+     * @return info
+     * @throws ServiceValidationException when {@link IOrdersControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IOrdersControl} throw {@link DAOException}
+     */
     @Override
     public String getInfo(int orderID) throws ServiceException {
         try {
@@ -179,6 +318,14 @@ public class OrdersControlService implements IOrdersControlService {
         }
     }
 
+
+    /**
+     * get all orders combined with map points
+     *
+     * @return {@link MapPoint$Orders} array
+     * @throws ServiceValidationException when {@link IOrdersControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IOrdersControl} throw {@link DAOException}
+     */
     @Override
     public MapPoint$Orders[] getOrdersMapPoint() throws ServiceException {
         try {
@@ -191,11 +338,24 @@ public class OrdersControlService implements IOrdersControlService {
         }
     }
 
+
+    /**
+     * get un executed orders - where date of execution is null
+     *
+     * @param point point coordinates to find
+     * @return {@link Order} array
+     * @throws ServiceValidationException when {@link IOrdersControl} throw {@link DAOValidationException}
+     *                                    or data invalid {@link InputValidation}
+     * @throws ServiceException           ex when {@link IOrdersControl} throw {@link DAOException}
+     */
     @Override
-    public Order[] getUnExecutedOrders(String coordinates) throws ServiceException {
+    public Order[] getUnExecutedOrders(String point) throws ServiceException {
+
+        InputValidation.pointCheck(point);
+
         try {
 
-            return ordersControl.getUnExecutedOrders(coordinates);
+            return ordersControl.getUnExecutedOrders(point);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -203,6 +363,14 @@ public class OrdersControlService implements IOrdersControlService {
         }
     }
 
+
+    /**
+     * get executed orders combined with map points - where date of execution is not null
+     *
+     * @return {@link MapPoint$Orders} array
+     * @throws ServiceValidationException when {@link IOrdersControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IOrdersControl} throw {@link DAOException}
+     */
     @Override
     public MapPoint$Orders[] getExecutedOrdersMapPoint() throws ServiceException {
         try {
@@ -215,6 +383,14 @@ public class OrdersControlService implements IOrdersControlService {
         }
     }
 
+
+    /**
+     * get un executed orders combined with map point - where date of execution is null
+     *
+     * @return {@link MapPoint$Orders} array
+     * @throws ServiceValidationException when {@link IOrdersControl} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link IOrdersControl} throw {@link DAOException}
+     */
     @Override
     public MapPoint$Orders[] getUnExecutedOrdersMapPoint() throws ServiceException {
         try {
@@ -225,5 +401,8 @@ public class OrdersControlService implements IOrdersControlService {
         } catch (DAOException ex) {
             throw new ServiceException(ex);
         }
+
     }
+
+
 }
