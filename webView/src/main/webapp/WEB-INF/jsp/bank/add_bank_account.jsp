@@ -4,6 +4,24 @@
 
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
+
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page isELIgnored="false" %>
+
+<c:choose>
+
+        <c:when test="${empty sessionScope.locale}">
+
+        <fmt:setLocale value="ru"/>
+
+            </c:when>
+
+            <c:otherwise> <fmt:setLocale value="${sessionScope.locale}"/> </c:otherwise>
+
+           </c:choose>
+
+<fmt:setBundle basename="messages"/>
+
 <html>
 
 <head>
@@ -18,15 +36,15 @@
 <body>
 <jsp:include page="../header.jsp"/>
 
-<table class="fullwidthblock">
+<table class="auto_center center">
 <thead>
 
 <tr>
 
-<th scope="col">Название организации</th>
-<th scope="col">Состояние</th>
-<th scope="col">Информация</th>
-<th scope="col">Добавить банковский аккаунт</th>
+<th scope="col"><fmt:message key="label.organisation_name" /></th>
+<th scope="col"><fmt:message key="label.block_condition" /></th>
+<th scope="col"><fmt:message key="label.info" /></th>
+<th scope="col"><fmt:message key="label.add" /> <fmt:message key="label.bank_account" /></th>
 
 </tr>
 
@@ -44,12 +62,12 @@
 
        <c:when test="${organisation.blocked=='true'}">
 
-   <td style="color: red" >заблокирована</td>
+   <td style="color: red" ><fmt:message key="label.block" /></td>
 
        </c:when>
 
        <c:otherwise>
-      <td style="color: green" >не заблокирована</td>
+      <td style="color: green" ><fmt:message key="label.active" /></td>
 
        </c:otherwise>
 
@@ -63,17 +81,17 @@
     <form action='${pageContext.request.contextPath}/add_bank_account_form' method="post">
         <input type="text" id="orgID" name="orgID" value='${organisation.id}' hidden required>
 
-     <p>   <label for="minBalance">минимальный допустимый баланс</label> <input type="text" id="minBalance"
+     <p>   <label for="minBalance"><fmt:message key="label.min_balance" /></label> <input type="text" id="minBalance"
                                                                              name="minBalance"
                                                                              pattern="-?\d+(\.\d*)?">
 </p><p>
-        <label for="blocked">заблокировать: </label> <input type="checkbox" id="blocked" name="blocked" value="true">
+        <label for="blocked"><fmt:message key="label.block_action" />: </label> <input type="checkbox" id="blocked" name="blocked" value="true">
 </p>
 <p>
-        <label for="orgInfo">информация: </label> <input type="text" id="orgInfo" name="orgInfo"
+        <label for="orgInfo"><fmt:message key="label.info" />: </label> <input type="text" id="orgInfo" name="orgInfo"
                                                          pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
 </p>
-        <input type="submit" value="добавить">
+        <input type="submit" value=<fmt:message key="label.add" />>
     </form>
 
     </td>

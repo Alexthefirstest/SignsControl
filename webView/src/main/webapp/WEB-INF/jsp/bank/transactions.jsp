@@ -3,7 +3,26 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="date" uri="/WEB-INF/tag/getDateTags.tld" %>
 
+
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page isELIgnored="false" %>
+
+<c:choose>
+
+        <c:when test="${empty sessionScope.locale}">
+
+        <fmt:setLocale value="ru"/>
+
+            </c:when>
+
+            <c:otherwise> <fmt:setLocale value="${sessionScope.locale}"/> </c:otherwise>
+
+           </c:choose>
+
+<fmt:setBundle basename="messages"/>
 
 <html>
 
@@ -19,17 +38,17 @@
 <body class="auto_center center">
 <jsp:include page="../header.jsp"/>
 
-<a href="${pageContext.request.contextPath}/show_transactions_history">Обновить</a>
+<a href="${pageContext.request.contextPath}/show_transactions_history"><fmt:message key="label.update" /></a>
 <br>
 <hr>
 <br>
 <form action='${pageContext.request.contextPath}/show_transactions_history' method="get" id='show_form'
       accept-charset="UTF-8">
 
-    <label for="findByOrgID">Найти по организцаиям: </label>
+    <label for="findByOrgID"><fmt:message key="label.find.by_organisation" />: </label>
     <input type="radio" id="findByOrgID" name="findBy" value="OrgId">
 
-    <label for="accountsFrom"> отправитель:</label>
+    <label for="accountsFrom"><fmt:message key="label.sender" />:</label>
     <select name="accountFrom" id='accountsFrom'>
 
         <c:forEach var="bank_account" items='${bank_accounts}'>
@@ -41,7 +60,7 @@
     </select>
 
 
-    <label for="accountsTo">получатель: </label>
+    <label for="accountsTo"><fmt:message key="label.payee" />: </label>
     <select name="accountTo" id='accountsTo'>
 
         <option value='-1'>-</option>
@@ -53,11 +72,11 @@
 
     </select>
     <p>
-        <label for="findByDate">Найти по дате: </label>
+        <label for="findByDate"><fmt:message key="label.find.by_date" />: </label>
         <input type="radio" id="findByDate" name="findBy" value="date">
 
 
-        <label for="accountsFromDate">отправитель:</label>
+        <label for="accountsFromDate"><fmt:message key="label.sender" />:</label>
         <select name="accountFromDate" id='accountsFromDate'>
 
             <c:forEach var="bank_account" items='${bank_accounts}'>
@@ -68,17 +87,17 @@
 
         </select>
 
-        <label for="dateFrom"> дата с:</label>
+        <label for="dateFrom"><fmt:message key="label.find.date_from" />:</label>
         <input type="date" name="dateFrom" max=<date:getCurrentDate/> id="dateFrom" >
 
-        <label for="dateTo"> дата по:</label>
+        <label for="dateTo"><fmt:message key="label.find.date_to" />:</label>
         <input type="date" name="dateTo" max=<date:getCurrentDate/> id="dateTo" >
 
 
     </p>
 
-    <br><input type="reset" value="очистить">
-    <input type="submit" value="приенить">
+    <br><input type="reset" value=<fmt:message key="label.reset" />>
+    <input type="submit" value=<fmt:message key="label.accept" />>
 
 </form>
 </p>
@@ -91,12 +110,12 @@
 
 <tr>
 
-<th scope="col">Отправитель название</th>
-<th scope="col">Отправитель инфомрация</th>
-<th scope="col">Получатель название</th>
-<th scope="col">Получитель информация</th>
-<th scope="col">Дата транзакции</th>
-<th scope="col">Сумма</th>
+<th scope="col"><fmt:message key="label.sender" /> - <fmt:message key="label.organisation_name" /></th>
+<th scope="col"><fmt:message key="label.sender" /> - <fmt:message key="label.info" /></th>
+<th scope="col"><fmt:message key="label.payee" /> - <fmt:message key="label.organisation_name" /></th>
+<th scope="col"><fmt:message key="label.payee" /> - <fmt:message key="label.info" /></th>
+<th scope="col"><fmt:message key="label.transaction_date" /></th>
+<th scope="col"><fmt:message key="label.amount" /></th>
 </tr>
 
 </thead>

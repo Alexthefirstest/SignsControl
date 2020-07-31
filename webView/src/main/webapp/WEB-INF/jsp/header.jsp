@@ -29,11 +29,11 @@
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css?3">
 
-<header >
+<header  class="auto_center center">
 
 <br>
 <br>
-   <h1 class ="inline"> SignsControl </h1>
+   <h1 class ="inline" > SignsControl </h1>
 
 
 

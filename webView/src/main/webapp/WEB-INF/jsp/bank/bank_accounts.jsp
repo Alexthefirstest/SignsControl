@@ -4,6 +4,24 @@
 
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
+
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page isELIgnored="false" %>
+
+<c:choose>
+
+        <c:when test="${empty sessionScope.locale}">
+
+        <fmt:setLocale value="ru"/>
+
+            </c:when>
+
+            <c:otherwise> <fmt:setLocale value="${sessionScope.locale}"/> </c:otherwise>
+
+           </c:choose>
+
+<fmt:setBundle basename="messages"/>
+
 <html>
 
 <head>
@@ -19,17 +37,17 @@
 <jsp:include page="../header.jsp"/>
 
 <br><hr><br>
-<a href="${pageContext.request.contextPath}/show_transactions_history/1">Показать транзакции</a>
+<a href="${pageContext.request.contextPath}/show_transactions_history/1"><fmt:message key="label.show" /> <fmt:message key="label.transactions" /></a>
 <br><hr><br>
 <form action='${pageContext.request.contextPath}/add_bank_account' method="post">
-    <input type="submit" value="добавить аккаунт">
+    <input type="submit" value='<fmt:message key="label.add" /> <fmt:message key="label.bank_account" />' >
 </form>
 
 <br><hr>
-<label for="add_money_form"><h3>добавить денег на счет</h3></label>
+<label for="add_money_form"><h3><fmt:message key="label.add_money_to_the_bank_account" /></h3></label>
 <form action='${pageContext.request.contextPath}/add_money' method="post" id="add_money_form" >
 
-        <label for="addMoneyOrg">Организация - получатель:</label>
+        <label for="addMoneyOrg"><fmt:message key="label.organisation" /> - <fmt:message key="label.payee" />:</label>
         <select name="addMoneyOrg" id='addMoneyOrg'>
 
             <c:forEach var="bank_account" items='${bank_accounts}'>
@@ -40,11 +58,11 @@
 
         </select>
 
-        <label for="addMoneyValue">Сумма:</label>
+        <label for="addMoneyValue"><fmt:message key="label.amount" /> :</label>
         <input type="text" id="addMoneyValue" name="addMoneyValue"
                pattern="-?\d+(\.\d*)?" placeholder=". to double" required>
 
- <input type="submit" value="добавить денег">
+ <input type="submit" value=<fmt:message key="label.transfer_money" />>
 
 
 </form>
@@ -55,69 +73,70 @@
 <form action='${pageContext.request.contextPath}/bank_accounts' method="get" id='show_form' accept-charset="UTF-8">
 
     <p>
-        <label for="blocked">показать заблокированные</label>
+        <label for="blocked"><fmt:message key="label.show.blocked" /></label>
         <input type="radio" id="blocked" name="blocked" value=1>
 
-        <label for="unblocked">показать незаблокированные</label>
+        <label for="unblocked"><fmt:message key="label.show.unblocked" /></label>
         <input type="radio" id="unblocked" name="blocked" value=0>
     </p>
     <p>
-        <label for="positiveBalance">показать с положительным балансом</label>
+        <label for="positiveBalance"><fmt:message key="label.show.with_positive_balance" /></label>
         <input type="radio" id="positiveBalance" name="balance" value="positive">
 
 
-        <label for="negativeBalance">показать с отрицательным балансом</label>
+        <label for="negativeBalance"><fmt:message key="label.show.with_negative_balance" /></label>
         <input type="radio" id="negativeBalance" name="balance" value="negative">
     </p>
     <p>
-        <label for="balanceMoreThenValue">баланс выше значения:</label>
+        <label for="balanceMoreThenValue"><fmt:message key="label.show.with_balance_more_then" /> :</label>
         <input type="text" id="balanceMoreThenValue" name="balanceMoreThenValue"
-               pattern="-?\d+" placeholder="integer number"
+               pattern="-?\d+" placeholder=<fmt:message key="label.integer_number" />
         >
 
-        <label for="balanceLessThenValue">баланс ниже значения:</label>
+        <label for="balanceLessThenValue"><fmt:message key="label.show.with_balance_less_then" />:</label>
         <input type="text" id="balanceLessThenValue" name="balanceLessThenValue"
-               pattern="-?\d+" placeholder="integer number"
+               pattern="-?\d+" placeholder=<fmt:message key="label.integer_number" />
         >
     </p>
 
 <hr>
-   <h3>Сортировать:</h3>
+   <h3><fmt:message key="label.sort.action" />:</h3>
     <p>
-        <label for="blockedSort">по блокировке</label>
+        <label for="blockedSort"><fmt:message key="label.sort.by_block" /></label>
         <select name="blockedSort" id="blockedSort">
-            <option value=null>нет</option>
-            <option value='max'>сначала заблокированные</option>
-            <option value='min'>сначала незаблокированные</option>
+            <option value=null><fmt:message key="label.no" /></option>
+            <option value='max'><fmt:message key="label.at_first.blocked" /></option>
+            <option value='min'><fmt:message key="label.at_first.unblocked" /></option>
         </select>
 
 
-        <label for="minAllowedBalanceSort">по минимально допустимому балансу</label>
+        <label for="minAllowedBalanceSort"><fmt:message key="label.sort.min_allowed_balance" /></label>
         <select name="minAllowedBalanceSort" id="minAllowedBalanceSort">
-            <option value=null>нет</option>
-            <option value='min'>сначала минимальный</option>
-            <option value='max'>сначала максимальный</option>
+            <option value=null><fmt:message key="label.no" /></option>
+            <option value='min'><fmt:message key="label.at_first.minimum" /></option>
+            <option value='max'><fmt:message key="label.at_first.maximum" /></option>
         </select>
 
-
-        <label for="balanceSort">по балансу</label>
+<br>
+        <label for="balanceSort"><fmt:message key="label.sort.by_balance" /></label>
         <select name="balanceSort" id="balanceSort">
-            <option value=null>нет</option>
-            <option value='min'>сначала минимальный</option>
-            <option value='max'>сначала максимальный</option>
+            <option value=null><fmt:message key="label.no" />нет</option>
+            <option value='min'><fmt:message key="label.at_first.minimum" /></option>
+            <option value='max'><fmt:message key="label.at_first.maximum" /></option>
         </select>
 
 
-        <label for="orgNameSort">по имени организации</label>
+        <label for="orgNameSort"><fmt:message key="label.sort.by_organisation_name" /></label>
         <select name="orgNameSort" id="orgNameSort">
-            <option value=null>нет</option>
-            <option value='min'>по алфавиту</option>
-            <option value='max'>обратно алфавиту</option>
+            <option value=null><fmt:message key="label.no" /></option>
+            <option value='min'><fmt:message key="label.alphabetically" /></option>
+            <option value='max'><fmt:message key="label.alphabetically.reverse" /></option>
         </select>
     </p>
-    <p>
-        <br><input type="reset" value="Reset">
-        <input type="submit" value="сортировать">
+    <hr>  <p>
+
+        <br><input type="reset" value=<fmt:message key="label.reset" />>
+        <input type="submit" value=<fmt:message key="label.sort.action" />>
     </p>
 </form>
 
@@ -129,13 +148,13 @@
 
 <tr>
 
-<th scope="col">Название организации</th>
-<th scope="col">Состояние блокировки организации</th>
-<th scope="col">Информация об организцаии</th>
-<th scope="col">Баланс</th>
-<th scope="col">Миинмально допустимый баланс</th>
-<th scope="col">Состояние блокировки банковского аккаунта</th>
-<th scope="col">Информация о банковском аккаунте</th>
+<th scope="col"><fmt:message key="label.organisation_name" /></th>
+<th scope="col"><fmt:message key="label.organisation.block_condition" /></th>
+<th scope="col"><fmt:message key="label.organisation.info" /></th>
+<th scope="col"><fmt:message key="label.balance" /></th>
+<th scope="col"><fmt:message key="label.min_balance" /></th>
+<th scope="col"><fmt:message key="label.bank_account.block_condition" /></th>
+<th scope="col"><fmt:message key="label.bank_account.info" /></th>
 
 </tr>
 
@@ -152,12 +171,12 @@
 
        <c:when test="${bank_account.organisation.blocked=='true'}">
 
-   <td style="color: red" >заблокирована</td>
+   <td style="color: red" ><fmt:message key="label.block" /></td>
 
        </c:when>
 
        <c:otherwise>
-      <td style="color: green" >не заблокирована</td>
+      <td style="color: green" ><fmt:message key="label.active" /></td>
 
        </c:otherwise>
 
@@ -171,12 +190,12 @@
 
       <input type="text" id="orgID" name="orgID" value='${bank_account.organisation.id}' hidden required>
 
-      <label for="minBalance">минимальный допустимый баланс: </label><br> <input type="text" id="minBalance" name="minBalance"
+      <label for="minBalance"><fmt:message key="label.min_balance" /> : </label><br> <input type="text" id="minBalance" name="minBalance"
                                                                              value='${bank_account.minAllowedBalance}'
                                                                              pattern="-?\d+(\.\d*)?" required
                                                                              oninvalid="alert('wrong')">
 
-      <input type="submit" value="изменить">
+      <input type="submit" value=<fmt:message key="label.change" />>
   </form>
 
   </td>
@@ -185,13 +204,13 @@
 <c:choose>
     <c:when test="${bank_account.blocked=='true'}">
 
- <td> <h4 style="color: red">заблокирован</h4>
+ <td> <h4 style="color: red"><fmt:message key="label.block" /></h4>
 
         <form action='${pageContext.request.contextPath}/change_bank_account_form/set_block' method="post">
 
             <input type="text" id="orgIDsb" name="orgID" value='${bank_account.organisation.id}' hidden>
             <input type="text" id="blocksb" name="block" value='false' hidden>
-            <input type="submit" value="разблокировать">
+            <input type="submit" value=<fmt:message key="label.unblock_action" />>
         </form>
 </td>
 
@@ -200,13 +219,13 @@
 
     <c:otherwise>
 
- <td> <h4 style="color: green">не заблокирован</h4>
+ <td> <h4 style="color: green"><fmt:message key="label.active" /></h4>
 
         <form action='${pageContext.request.contextPath}/change_bank_account_form/set_block' method="post">
 
             <input type="text" id="orgIDsb2" name="orgID" value='${bank_account.organisation.id}' hidden>
             <input type="text" id="blocksb2" name="block" value='true' hidden>
-            <input type="submit" value="заблокировать">
+            <input type="submit" value=<fmt:message key="label.block_action" />>
         </form>
 </td>
     </c:otherwise>
@@ -218,12 +237,12 @@
 <form action='${pageContext.request.contextPath}/change_bank_account_form/set_info' method="post">
 
     <input type="text" id="orgIDsi" name="orgID" value='${bank_account.organisation.id}' hidden required>
-    <label for="orgInfo">Информация: </label><br/>
+    <label for="orgInfo"><fmt:message key="label.info" />: </label><br/>
     <textarea id="orgInfo"
              name="orgInfo" pattern="[\wА-Яа-я\s:!.,)(-?\d]+" required
            >${bank_account.info}</textarea>
 
-    <input type="submit" value="изменить">
+    <input type="submit" value=<fmt:message key="label.change" />>
 
     </td>
 
