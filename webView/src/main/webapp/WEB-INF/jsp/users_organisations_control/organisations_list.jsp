@@ -4,6 +4,22 @@
 
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page isELIgnored="false" %>
+
+<c:choose>
+
+        <c:when test="${empty sessionScope.locale}">
+
+        <fmt:setLocale value="ru"/>
+
+            </c:when>
+
+            <c:otherwise> <fmt:setLocale value="${sessionScope.locale}"/> </c:otherwise>
+
+           </c:choose>
+
+<fmt:setBundle basename="messages"/>
 <html>
 
 <head>
@@ -18,14 +34,14 @@
 <body class="auto_center center">
 <jsp:include page="../header.jsp"/>
 <br>
- <label for="add_org"><h3>Добавить организацию:</h3></label>
+ <label for="add_org"><h3><fmt:message key="label.add.organisation" />:</h3></label>
 <form action='${pageContext.request.contextPath}/add_organisation_form_handler' method="post" id='add_org'
       accept-charset="UTF-8">
 
- <label for="nameAdd">название: </label> <input type="text" id="nameAdd" name="name"
+ <label for="nameAdd"><fmt:message key="label.name" />: </label> <input type="text" id="nameAdd" name="name"
                                             required pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
 
- <label for="roleAdd">роль</label>
+ <label for="roleAdd"><fmt:message key="label.role" /></label>
     <select name="role" required> id="roleAdd"
 
         <c:forEach var="role" items='${roles}'>
@@ -38,17 +54,17 @@
 
 
 
-    <label for="infoAdd">информация: </label> <input type="text" id="infoAdd" name="info" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
+    <label for="infoAdd"><fmt:message key="label.info" />: </label> <input type="text" id="infoAdd" name="info" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
 
-<br><input type="reset" value="Reset">
-<input type="submit" value="добавить организация">
+<br><input type="reset" value=<fmt:message key="label.reset" />>
+<input type="submit" value='<fmt:message key="label.add.organisation" />'>
 </form>
 <br><hr>
 <br>
-  <label for="transactionForm"><h3>Выполнить транзакцию:<h3></label>
+  <label for="transactionForm"><h3><fmt:message key="label.execute_transaction" />:<h3></label>
 <form action='${pageContext.request.contextPath}/execute_transaction' method="post" id="transactionForm">
 
-    <label for="organisation_idtr"> получатель:</label><select name="organisationID" id='organisation_idtr'
+    <label for="organisation_idtr"> <fmt:message key="label.payee" />:</label><select name="organisationID" id='organisation_idtr'
                                                                required>
 
     <c:forEach var="organisation" items='${organisations}'>
@@ -58,21 +74,21 @@
     </c:forEach>
 </select>
 
-    <label for="priceCh">    Сумма: </label> <input type="text" id="priceCh" name="money" pattern="\d+(.\d*)?" required>
+    <label for="priceCh">    <fmt:message key="label.amount" />: </label> <input type="text" id="priceCh" name="money" pattern="\d+(.\d*)?" required>
 
  <br><input type="reset" value="сбросить">
     <input type="submit" value="отправить">
 
 </form>
 <br><hr><br><br>
-<a href="${pageContext.request.contextPath}/organisations">Показать все организации</a>
+<a href="${pageContext.request.contextPath}/organisations"><fmt:message key="label.show" /> <fmt:message key="label.all" /> <fmt:message key="label.organisation" /></a>
 <br>
 <br><br>
- <label for="show_org_with_role"><h3>Показать организации по роли: </h3></label>
+ <label for="show_org_with_role"><h3><fmt:message key="label.show.organisations_by_role" />: </h3></label>
 <form action='${pageContext.request.contextPath}/organisations' method="get" id='show_org_with_role'
       accept-charset="UTF-8">
 
-     <label for="roleToShow">    роль: </label><select name="role" required id="roleToShow">
+     <label for="roleToShow">    <fmt:message key="label.role" />: </label><select name="role" required id="roleToShow">
 
         <c:forEach var="role" items='${roles}'>
 
@@ -80,8 +96,8 @@
 
         </c:forEach>
 
-    <br><input type="reset" value="Reset">
-    <input type="submit" value="показать">
+    <br><input type="reset" value=<fmt:message key="label.reset" />>
+    <input type="submit" value=<fmt:message key="label.show" />>
 
 </form>
 
@@ -102,11 +118,11 @@
 
 
 <th scope="col">id</th>
-<th scope="col">название</th>
-<th scope="col">роль</th>
-<th scope="col">состояние</th>
-<th scope="col">информация</th>
-<th scope="col">изменить организацию</th>
+<th scope="col"><fmt:message key="label.name" /></th>
+<th scope="col"><fmt:message key="label.role" /></th>
+<th scope="col"><fmt:message key="label.block_condition" /></th>
+<th scope="col"><fmt:message key="label.info" /></th>
+<th scope="col"><fmt:message key="label.change.organisation" /></th>
 
 </tr>
 
@@ -123,19 +139,19 @@
 <td>${organisation.id}</td>
 <td>${organisation.name}</td>
 <td>${organisation.role.role}</td>
-<td>${organisation.blocked}
+<td>
 
 
 <c:choose>
-    <c:when test="${organisation.blocked}=='true'}">
+    <c:when test='${organisation.blocked==true}'>
 
- <h4 style="color: red">заблокирован</h4>
+ <h4 style="color: red"><fmt:message key="label.block" /></h4>
 
     </c:when>
 
     <c:otherwise>
 
-  <h4 style="color: green">не заблокирован</h4>
+  <h4 style="color: green"><fmt:message key="label.active" /></h4>
 
     </c:otherwise>
 
@@ -150,7 +166,7 @@
         <input type="text" id="orgID" name="id" value='${organisation.id}' hidden required>
 
 
-    <label for="setRole">изменить роль</label>
+    <label for="setRole"><fmt:message key="label.change" /> <fmt:message key="label.role" /></label>
     <input type="checkbox" id="setRole" name="setRole">
 
    <select name="role" required>
@@ -166,17 +182,17 @@
      <br>
 
 
-    <label for="setName">изменить название</label>
+    <label for="setName"><fmt:message key="label.change" /> <fmt:message key="label.name" /></label>
     <input type="checkbox" id="setName" name="setName">
 
-        <label for="name">name: </label> <input type="text" id="name" name="name"
+        <label for="name"><fmt:message key="label.name" />: </label> <input type="text" id="name" name="name"
                                                 value='${organisation.name}' required>
  <br>
      <br>
-    <label for="setInfo">изменить информацию</label>
+    <label for="setInfo"><fmt:message key="label.change.info" /></label>
     <input type="checkbox" id="setInfo" name="setInfo">
 
-  <label for="info">info: </label> <input type="text" id="info" name="info"
+  <label for="info"><fmt:message key="label.info" />: </label> <input type="text" id="info" name="info"
                                                 value='${organisation.info}'>
 
 
@@ -184,18 +200,18 @@
  <br>
      <br>
         <c:if test='${organisation.blocked==true}'>
-            <label for="unblock">разблокировать</label>
+            <label for="unblock"><fmt:message key="label.unblock_action" /></label>
             <input type="radio" id="unblock" value='false' name="block">
         </c:if>
 
         <c:if test='${organisation.blocked==false}'>
-            <label for="block">заблокировать</label>
+            <label for="block"><fmt:message key="label.block_action" /></label>
             <input type="radio" id="block" value='true' name="block">
         </c:if>
 
 
-        <br><input type="reset" value="сбросить">
-        <input type="submit" value="изменить">
+        <br><input type="reset" value=<fmt:message key="label.reset" />>
+        <input type="submit" value=<fmt:message key="label.change" />>
 
     </form>
     </td>

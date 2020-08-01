@@ -4,6 +4,22 @@
 
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page isELIgnored="false" %>
+
+<c:choose>
+
+        <c:when test="${empty sessionScope.locale}">
+
+        <fmt:setLocale value="ru"/>
+
+            </c:when>
+
+            <c:otherwise> <fmt:setLocale value="${sessionScope.locale}"/> </c:otherwise>
+
+           </c:choose>
+
+<fmt:setBundle basename="messages"/>
 <html>
 
 <head>
@@ -20,17 +36,17 @@
 
 <br>
 <br>
-<a href="${pageContext.request.contextPath}/users">show all</a>
+<a href="${pageContext.request.contextPath}/users"><fmt:message key="label.show.all.he" /> </a>
 <br>
 <br>
-<a href="${pageContext.request.contextPath}/add_user">add user</a>
+<a href="${pageContext.request.contextPath}/add_user"><fmt:message key="label.add.user" /></a>
 <br>
 <br>
 <hr>
- <label for="show_organisations">Показат по организации</label>
+ <label for="show_organisations"><fmt:message key="label.show.by_organisation" /></label>
 <form action='${pageContext.request.contextPath}/users' method="get" id='show_organisations' accept-charset="UTF-8" class="auto_center center">
 
- <label for="show_organisations_select">организация</label>
+ <label for="show_organisations_select"><fmt:message key="label.organisation" /></label>
     <select name="id" required id="show_organisations_select">
 
         <c:forEach var="organisation" items='${organisations}'>
@@ -42,7 +58,7 @@
     </select>
 
     <br>
-    <input type="submit" value="применить">
+    <input type="submit" value=<fmt:message key="label.accept" />>
 
 </form>
 </p>
@@ -58,13 +74,13 @@
 
 
 <th scope="col">id</th>
-<th scope="col">login</th>
-<th scope="col">name</th>
-<th scope="col">surname</th>
-<th scope="col">role</th>
-<th scope="col">organisation</th>
-<th scope="col">block condition</th>
-<th scope="col">info</th>
+<th scope="col"><fmt:message key="label.login" /></th>
+<th scope="col"><fmt:message key="label.user_name" /></th>
+<th scope="col"><fmt:message key="label.surname" /></th>
+<th scope="col"><fmt:message key="label.role" /></th>
+<th scope="col"><fmt:message key="label.organisation" /></th>
+<th scope="col"><fmt:message key="label.block_condition" /></th>
+<th scope="col"><fmt:message key="label.info" /></th>
 
 </tr>
 
@@ -90,13 +106,13 @@
 <c:choose>
     <c:when test="${user.block=='true'}">
 
- <h4 style="color: red">заблокирован</h4>
+ <h4 style="color: red"><fmt:message key="label.block" /></h4>
 
     </c:when>
 
     <c:otherwise>
 
-  <h4 style="color: green">не заблокирован</h4>
+  <h4 style="color: green"><fmt:message key="label.active" /></h4>
 
     </c:otherwise>
 

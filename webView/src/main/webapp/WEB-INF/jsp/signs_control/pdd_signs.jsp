@@ -4,6 +4,22 @@
 
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page isELIgnored="false" %>
+
+<c:choose>
+
+        <c:when test="${empty sessionScope.locale}">
+
+        <fmt:setLocale value="ru"/>
+
+            </c:when>
+
+            <c:otherwise> <fmt:setLocale value="${sessionScope.locale}"/> </c:otherwise>
+
+           </c:choose>
+
+<fmt:setBundle basename="messages"/>
 <html>
 
 <head>
@@ -18,7 +34,7 @@
 <body>
 <jsp:include page="../header.jsp"/>
 
-<p><a href="${pageContext.request.contextPath}/add_pdd_sign">add sign</a>
+<p><a href="${pageContext.request.contextPath}/add_pdd_sign"><fmt:message key="label.add" /> <fmt:message key="label.sign" /></a>
 <br>
 
 <table>
@@ -28,11 +44,11 @@
 <tr>
 
 
-<th scope="col">номер знака</th>
-<th scope="col">название</th>
-<th scope="col">описание</th>
-<th scope="col">изображение</th>
-<th scope="col">изменить знак</th>
+<th scope="col"><fmt:message key="label.sign" /></th>
+<th scope="col"><fmt:message key="label.name" /></th>
+<th scope="col"><fmt:message key="label.description" /></th>
+<th scope="col"><fmt:message key="label.image" /></th>
+<th scope="col"><fmt:message key="label.change" /> <fmt:message key="label.sign" /></th>
 
 </tr>
 
@@ -74,28 +90,28 @@
     <input type="text" name="sign_id" pattern="\d+" value="${sign.id}" required hidden>
         <label for="picture_set"> image:</label><input type="file" name="image" id='picture_set' accept="image/*" required>
 
-        <input type="submit" value="добавить изображение">
+        <input type="submit" value='<fmt:message key="label.add" /> <fmt:message key="label.image" />'>
     </form>
 <br>
 
 
-<label for="changeNameDesc"> изменить название и описание:</label>
+<label for="changeNameDesc"> <fmt:message key="label.change" /> <fmt:message key="label.name" /> <fmt:message key="label.and" /> <fmt:message key="label.description" />:</label>
 <form action='${pageContext.request.contextPath}/change_pdd_sign' method="post" accept-charset="UTF-8" id="changeNameDesc">
     <input type="text" name="sign_id" pattern="\d+" value="${sign.id}" required hidden>
-    <label for="name"> название:</label><input type="text" name="name" value="${sign.name}" id='name'
+    <label for="name"> <fmt:message key="label.name" />:</label><input type="text" name="name" value="${sign.name}" id='name'
                                                 pattern="[\wА-Яа-я\s:!.,)(-?\d]+" required>
-    <label for="description"> описание:</label><input type="text" name="description" value="${sign.description}"
+    <label for="description"> <fmt:message key="label.description" />:</label><input type="text" name="description" value="${sign.description}"
                                                              id='description'
                                                              pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
 
-    <br><input type="reset" value="сбросить">
-    <input type="submit" value="применить изменения">
+    <br><input type="reset" value=<fmt:message key="label.reset" />>
+    <input type="submit" value=<fmt:message key="label.accept" />>
 </form>
 <br>
 <form action='${pageContext.request.contextPath}/remove_pdd_sign' method="post" accept-charset="UTF-8">
 
     <input type="text" name="sign_id" pattern="\d+" value="${sign.id}" required hidden>
-    <input type="submit" value="удалить знак">
+    <input type="submit" value='<fmt:message key="label.delete"/> <fmt:message key="label.sign" />'>
 </form>
 
 </td>

@@ -4,6 +4,22 @@
 
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page isELIgnored="false" %>
+
+<c:choose>
+
+        <c:when test="${empty sessionScope.locale}">
+
+        <fmt:setLocale value="ru"/>
+
+            </c:when>
+
+            <c:otherwise> <fmt:setLocale value="${sessionScope.locale}"/> </c:otherwise>
+
+           </c:choose>
+
+<fmt:setBundle basename="messages"/>
 <html>
 
 <head>
@@ -22,27 +38,27 @@
 <hr><br>
 <form action='${pageContext.request.contextPath}/orders' method="get">
     <input type="text" name="orders_option" value='all' hidden>
-    <input type="submit" value="показать все">
+    <input type="submit" value='<fmt:message key="label.show" /> <fmt:message key="label.all" />'>
 </form>
 
 <form action='${pageContext.request.contextPath}/orders' method="get">
     <input type="text" name="orders_option" value='executed' hidden>
-    <input type="submit" value="показать выполненные">
+    <input type="submit" value='<fmt:message key="label.show" /> <fmt:message key="label.executed" />'>
 </form>
 
 <form action='${pageContext.request.contextPath}/orders' method="get">
     <input type="text" name="orders_option" value='unexecuted' hidden>
-    <input type="submit" value="показать невыполненные">
+    <input type="submit" value='<fmt:message key="label.show" /> <fmt:message key="label.un_executed" />'>
 </form>
 <hr>
 <p>
 
-  <label for="show_by_id_form"> показать по организации-исполнителю: </label>
+  <label for="show_by_id_form"> <fmt:message key="label.show.by_organisation_performer" />: </label>
 <form action='${pageContext.request.contextPath}/orders' method="get" id='show_by_id_form'>
     <input type="text" name="orders_option" value='show_by_org_id' hidden>
 
 
-    <label for="organisation_id"> организация:</label><select name="organisationID" id='organisation_id'
+    <label for="organisation_id"> <fmt:message key="label.organisation_performer" />:</label><select name="organisationID" id='organisation_id'
                                                               required>
 
     <c:forEach var="organisation" items='${allOrganisations}'>
@@ -53,7 +69,7 @@
 
 </select>
 
-    <input type="submit" value="показать заказы">
+    <input type="submit" value='<fmt:message key="label.show" /> <fmt:message key="label.orders" />'>
 </form>
 
 </p>
@@ -64,15 +80,15 @@
 <tr>
 
 <th scope="col">id</th>
-<th scope="col">знак</th>
-<th scope="col">размер</th>
-<th scope="col">заказчик</th>
-<th scope="col">транзакция</th>
-<th scope="col">тип работ</th>
-<th scope="col">дата заказа</th>
-<th scope="col">дата выполнения</th>
-<th scope="col">бригада</th>
-<th scope="col">информация заказа</th>
+<th scope="col"><fmt:message key="label.sign" /></th>
+<th scope="col"><fmt:message key="label.standard_size" /></th>
+<th scope="col"><fmt:message key="label.organisation_customer" /></th>
+<th scope="col"><fmt:message key="label.transaction" /></th>
+<th scope="col"><fmt:message key="label.type_of_work" /></th>
+<th scope="col"><fmt:message key="label.date_of_order" /></th>
+<th scope="col"><fmt:message key="label.date_of_execution" /></th>
+<th scope="col"><fmt:message key="label.workers_crew" /></th>
+<th scope="col"><fmt:message key="label.info" /></th>
 
 </tr>
 
@@ -101,10 +117,10 @@
 <td>${order.customerOrganisation.name} -<br> ${order.customerOrganisation.info}</td>
 
 <c:choose><c:when test='${order.transactionID>0}'>
-  <td>id транзакции:${order.transactionID}<br>сумма: ${order.transactionMoney}</td>
+  <td><fmt:message key="label.transaction_id" />:${order.transactionID}<br><fmt:message key="label.amount" />: ${order.transactionMoney}</td>
             </c:when>
             <c:otherwise>
-              <td ><h4 style="color: red">не оплачено</h4>
+              <td ><h4 style="color: red"><fmt:message key="label.not_paid" /></h4>
 
                   <c:if test="${sessionScope.organisationRole==order.customerOrganisation.role.id}">
 
@@ -115,7 +131,7 @@
 
                           <input type="text" name="id" value='${order.id}' hidden required>
 
-                        <br>  <label for="organisations_order">Получатель перевода:</label><select name="organisationTo" id='organisations_order'
+                        <br>  <label for="organisations_order"><fmt:message key="label.payee" />:</label><select name="organisationTo" id='organisations_order'
                                                                                      required>
 
                           <c:forEach var="organisation" items='${organisations}'>
@@ -127,10 +143,10 @@
 
                       </select>
 
-                          <br><label for="acceptPrice">Сумма: </label> <input type="text" id="acceptPrice" name="acceptPrice"
+                          <br><label for="acceptPrice"><fmt:message key="label.amount" />: </label> <input type="text" id="acceptPrice" name="acceptPrice"
                                                                           pattern="\d+(\.\d*)?">
 
-   <input type="submit" value="оплатить">
+   <input type="submit" value=<fmt:message key="label.pay" />>
 
                       </form>
 
@@ -150,7 +166,7 @@
  <td>${order.workersCrew}</td>
             </c:when>
             <c:otherwise>
-           <td style="color: red">не выполнено</td>
+           <td style="color: red"><fmt:message key="label.un_executed" /></td>
            <td>-</td>
             </c:otherwise>
         </c:choose>

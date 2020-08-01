@@ -4,6 +4,22 @@
 
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page isELIgnored="false" %>
+
+<c:choose>
+
+        <c:when test="${empty sessionScope.locale}">
+
+        <fmt:setLocale value="ru"/>
+
+            </c:when>
+
+            <c:otherwise> <fmt:setLocale value="${sessionScope.locale}"/> </c:otherwise>
+
+           </c:choose>
+
+<fmt:setBundle basename="messages"/>
 <html>
 
 <head>
@@ -19,13 +35,13 @@
 
 <jsp:include page="../header.jsp"/>
 
-  <label for="add_type_form">Добавить тип работ: </label>
+  <label for="add_type_form"><fmt:message key="label.add" /> <fmt:message key="label.type_of_work" />: </label>
 <form action='${pageContext.request.contextPath}/add_type_of_work' method="post" accept-charset="UTF-8" id="add_type_form">
-    <label for="work_name">Название: </label> <input type="text" id="work_name" name="name"
+    <label for="work_name"><fmt:message key="label.name" />: </label> <input type="text" id="work_name" name="name"
                                                               pattern="[\wА-Яа-я\s:!.,)(-?\d]+" required>
     <label for="price">стоимость: </label> <input type="text" id="price" name="price" pattern="\d+(\.\d*)?" required>
-    <br><input type="reset" value="сбросить">
-    <input type="submit" value="добавить">
+    <br><input type="reset" value=<fmt:message key="label.reset" />>
+    <input type="submit" value=<fmt:message key="label.add" />>
 </form>
 <br>
 <hr>
@@ -35,9 +51,9 @@
 
 <tr>
 
-<th scope="col">название</th>
-<th scope="col">стоимость</th>
-<th scope="col">состояние блокировки</th>
+<th scope="col"><fmt:message key="label.name" /></th>
+<th scope="col"><fmt:message key="label.price" /></th>
+<th scope="col"><fmt:message key="label.block_condition" /></th>
 
 
 </tr>
@@ -57,7 +73,7 @@
    <form action="${pageContext.request.contextPath}/remove_type_of_work" method="post" accept-charset="UTF-8">
         <input type="text" name="id" pattern="\d+" value="${type_of_work.id}" required hidden>
         <br>
-        <input type="submit" value="удалить">
+        <input type="submit" value=<fmt:message key="label.delete" />>
     </form>
 </td>
 <td>${type_of_work.price}<br><br>
@@ -66,8 +82,8 @@
 
         <br>
         <input type="text" name="id" pattern="\d+" value="${type_of_work.id}" required hidden>
-        <label for="priceCh">новая цена: </label> <input type="text" id="priceCh" name="price"  pattern="-?\d+(\.\d*)?" required>
-           <input type="submit" value="установить цену">
+        <label for="priceCh"><fmt:message key="label.new.she" /> <fmt:message key="label.price" />: </label> <input type="text" id="priceCh" name="price"  pattern="-?\d+(\.\d*)?" required>
+           <input type="submit" value='<fmt:message key="label.set.price" />'>
     </form>
 </td>
 
@@ -75,13 +91,13 @@
 
         <c:when test="${type_of_work.block=='true'}">
 
-  <td> <h4 style="color: red" >заблокирована</h4><br>
+  <td> <h4 style="color: red" ><fmt:message key="label.block" /></h4><br>
 
             <form action='${pageContext.request.contextPath}/change_type_of_work/unblock' method="post">
 
                 <input type="text" name="id" pattern="\d+" value="${type_of_work.id}" required hidden>
 
-                <input type="submit" value="разблокировать">
+                <input type="submit" value=<fmt:message key="label.unblock_action" />>
             </form>
  </td>
         </c:when>
@@ -89,11 +105,11 @@
 
         <c:otherwise>
 
- <td ><h4 style="color: green" >активен</h4><br>
+ <td ><h4 style="color: green" ><fmt:message key="label.active" /></h4><br>
 
             <form action='${pageContext.request.contextPath}/change_type_of_work/block' method="post">
                 <input type="text" name="id" pattern="\d+" value="${type_of_work.id}" required hidden>
-                <input type="submit" value="заблокировать">
+                <input type="submit" value=<fmt:message key="label.block_action" />>
             </form>
 </td>
         </c:otherwise>
