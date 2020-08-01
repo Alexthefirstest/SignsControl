@@ -3,6 +3,8 @@ package by.epam.connectionPoolForDataBase.connectionPool;
 import by.epam.connectionPoolForDataBase.config.DBConfiguration;
 import by.epam.connectionPoolForDataBase.connectionPool.exceptions.ConnectionPoolException;
 import by.epam.connectionPoolForDataBase.connectionPool.impl.ConnectionPool;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.*;
 
 import static org.junit.Assert.*;
@@ -20,17 +22,19 @@ public class ConnectionPoolTest {
 
     private static Connection[] connections;
 
+    private static final Logger logger = LogManager.getLogger(ConnectionPoolTest.class);
 
     @BeforeClass
     public static void beforeClass() {
 
-        System.out.println("before class start");
+        System.out.println("connection pool test before class start");
+        logger.info("connection pool test before class start");
 
         dbConfigs = DBConfiguration.getInstance();
         connectionPool = ConnectionPool.getConnectionPoolInstance();
 
         System.out.println("before class finish");
-        System.out.println("isDestroy: "+connectionPool.isDestroy());
+
     }
 
     @AfterClass
@@ -38,13 +42,16 @@ public class ConnectionPoolTest {
 
         System.out.println("after class start");
 
-        connectionPool.destroyConnectionPool();
-        connectionPool = null;
+        Assert.assertEquals(connectionPool.getTakenConnectionsQuantity(), 0);
+
         dbConfigs = null;
         connection = null;
         connections = null;
+        connectionPool = null;
 
-        System.out.println("after class finish");
+        System.out.println("connection pool test after class finish");
+        logger.info("connection pool test after class finish");
+
     }
 
     @After
@@ -100,6 +107,7 @@ public class ConnectionPoolTest {
 
     }
 
+    @Ignore
     @Test(timeout = 60_000)
     public void connectionPoolSizeTest() throws ConnectionPoolException {
 

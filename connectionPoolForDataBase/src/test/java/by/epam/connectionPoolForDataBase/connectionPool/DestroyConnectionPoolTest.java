@@ -6,19 +6,25 @@ import org.junit.*;
 
 import java.sql.Connection;
 
+@Ignore
 public class DestroyConnectionPoolTest {
 
     public static ConnectionPool connectionPool;
 
+
     @BeforeClass
     public static void beforeClass() {
+
         connectionPool = ConnectionPool.getConnectionPoolInstance();
+        System.out.println("Destroy connection pool start is destroy: "+connectionPool.isDestroy());
         connectionPool.destroyConnectionPool();
         System.out.println("is destroy: "+connectionPool.isDestroy());
     }
 
+
     @AfterClass
     public static void afterClass() {
+        System.out.println("is destroy: "+connectionPool.isDestroy());
         connectionPool = null;
     }
 

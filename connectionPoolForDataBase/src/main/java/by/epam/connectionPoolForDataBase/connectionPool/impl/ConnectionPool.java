@@ -358,4 +358,11 @@ public class ConnectionPool implements IConnectionPool {
         return destroy;
     }
 
+    public int getAvailableQuantity() {
+        return availableConnections.size();
+    }
+
+    public int getTakenConnectionsQuantity() {
+        return takenConnections.size();
+    }
 }
