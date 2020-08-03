@@ -1,5 +1,6 @@
 package by.epam.connectionPoolForDataBase.connectionPool.factory;
 
+import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,6 +19,7 @@ public class ConnectionPoolFactoryTest {
     @Test
     public void getConnectionPoolInstance() {
         Assert.assertNotNull(connectionPoolFactory.getConnectionPoolInstance());
+        Assert.assertTrue(connectionPoolFactory instanceof IConnectionPool);
     }
 
 }

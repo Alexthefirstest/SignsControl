@@ -3,10 +3,15 @@ package by.epam.signsControl.webView.controller.commands.impl.rolesOrganisations
 import by.epam.rolesOrganisationsUsersController.bean.User;
 import by.epam.rolesOrganisationsUsersController.service.IUsersControllerService;
 import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
+import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceValidationException;
 import by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory;
+import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.RequestParser;
 import by.epam.signsControl.webView.controller.commands.Command;
+import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
 import by.epam.signsControl.webView.controller.commands.impl.LoginFormHandler;
+import by.epam.signsControl.webView.exceptions.CommandControllerException;
+import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,59 +26,92 @@ public class ChangeUserFormHandler implements Command {
 
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ServiceException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CommandControllerException {
 
-        logger.info("inside execute");
-        //qq
+        try {
+            logger.info("inside execute");
+            //qq
 
-        IUsersControllerService usersControllerService = ServiceFactory.getINSTANCE().getUsersControllerService();
+            IUsersControllerService usersControllerService = ServiceFactory.getINSTANCE().getUsersControllerService();
 
 
-        int id = Integer.parseInt(request.getParameter("id"));
-        int role = Integer.parseInt(request.getParameter("role"));
-        String name = request.getParameter("name");
-        String surname = request.getParameter("surname");
-        int organisation = Integer.parseInt(request.getParameter("organisation"));
-        String info = request.getParameter("info");
-        String blockStr = request.getParameter("block");
+            int id = Integer.parseInt(request.getParameter("id"));
+            int role = Integer.parseInt(request.getParameter("role"));
+            String name = request.getParameter("name");
+            String surname = request.getParameter("surname");
+            int organisation = Integer.parseInt(request.getParameter("organisation"));
+            String info = request.getParameter("info");
+            String blockStr = request.getParameter("block");
 
-        if (request.getParameter("setName") != null) {
-            logger.info("name" + name);
-            usersControllerService.setName(id, name);
-        }
 
-        if (request.getParameter("setSurname") != null) {
-            logger.info("surn" + surname);
-            usersControllerService.setSurname(id, surname);
-        }
-        if (blockStr != null) {
+            User user = ServiceFactory.getINSTANCE().getUsersControllerService().getUser(id);
 
-            logger.info("block" + blockStr);
-
-            if ("true".equals(blockStr)) {
-                logger.info("true");
-                usersControllerService.setBlock(id, true);
-            } else if ("false".equals(blockStr)) {
-                logger.info("false");
-                usersControllerService.setBlock(id, false);
+            if (user == null) {
+                throw new CommandControllerValidationException("wrong user id");
             }
 
-        }
-        if (request.getParameter("setInfo") != null) {
-            logger.info("inf " + info);
-            usersControllerService.setInfo(id, info);
+            if (AccessRulesChecker.organisationRoleCheckBool(request, Constants.ADMINISTRATORS_ORGANISATION_ID)) {
 
-        }
-        if (request.getParameter("setOrganisation") != null) {
-            logger.info("org" + organisation);
-            usersControllerService.setOrganisation(id, organisation);
-        }
-        if (request.getParameter("setRole") != null) {
-            logger.info("rol" + role);
-            usersControllerService.setRole(id, role);
-        }
+                if (user.getOrganisation().getId() != Constants.ADMINISTRATORS_ORGANISATION_ID
+                        && user.getRole().getId() != Constants.ADMINISTRATOR_ROLE
+                        || user.getOrganisation().getId() == Constants.ADMINISTRATORS_ORGANISATION_ID
+                        && !AccessRulesChecker.userRoleCheckBool(request, Constants.ADMINISTRATOR_ROLE)) {
+                    logger.warn("wrong action if");
+                    throw new CommandControllerValidationException("wrong action if");
+                }
+
+            } else {
+                AccessRulesChecker.userRoleCheck(request, Constants.ADMINISTRATOR_ROLE);
+                if (user.getOrganisation().getId() != (Integer) request.getSession().getAttribute(Constants.ORGANISATION_ID)) {
+                    throw new CommandControllerValidationException("wrong action else");
+                }
+            }
 
 
-        response.sendRedirect(request.getContextPath() + "/user_profile/"+id);
+            if (request.getParameter("setName") != null) {
+                logger.info("name" + name);
+                usersControllerService.setName(id, name);
+            }
+
+            if (request.getParameter("setSurname") != null) {
+                logger.info("surn" + surname);
+                usersControllerService.setSurname(id, surname);
+            }
+            if (blockStr != null) {
+
+                logger.info("block" + blockStr);
+
+                if ("true".equals(blockStr)) {
+                    logger.info("true");
+                    usersControllerService.setBlock(id, true);
+                } else if ("false".equals(blockStr)) {
+                    logger.info("false");
+                    usersControllerService.setBlock(id, false);
+                }
+
+            }
+            if (request.getParameter("setInfo") != null) {
+                logger.info("inf " + info);
+                usersControllerService.setInfo(id, info);
+
+            }
+            if (request.getParameter("setOrganisation") != null) {
+                logger.info("org" + organisation);
+                usersControllerService.setOrganisation(id, organisation);
+            }
+            if (request.getParameter("setRole") != null) {
+                logger.info("rol" + role);
+                usersControllerService.setRole(id, role);
+            }
+
+
+            response.sendRedirect(request.getContextPath() + "/user_profile/" + id);
+
+        } catch (ServiceValidationException e) {
+            throw new CommandControllerValidationException(e);
+        } catch (ServiceException e) {
+            throw new CommandControllerException(e);
+        }
+
     }
 }

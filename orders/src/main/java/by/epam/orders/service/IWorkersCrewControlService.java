@@ -33,47 +33,53 @@ public interface IWorkersCrewControlService {
     /**
      * delete crew
      *
+     * @param id                       to delete
+     * @param deletingUserOrganisation organisation of user that delete crew
      * @return true if success
      * @throws ServiceException when get an exception during execution
      */
-    boolean removeWorkersCrew(int id) throws ServiceException;
+    boolean removeWorkersCrew(int id, int deletingUserOrganisation) throws ServiceException;
 
     /**
-     * @param workersCrewID where set
-     * @param date          to set
+     * @param workersCrewID           where set
+     * @param date                    to set
+     * @param settingUserOrganisation organisation of user that set date
      * @return true if success
      * @throws ServiceException when get an exception during execution
      */
-    boolean setDateOfRemove(int workersCrewID, String date) throws ServiceException;
+    boolean setDateOfRemove(int workersCrewID, String date, int settingUserOrganisation) throws ServiceException;
 
     /**
-     * @param workersCrewId where set
-     * @param info          to set
+     * @param workersCrewId           where set
+     * @param info                    to set
+     * @param settingUserOrganisation organisation of user that set info
      * @return true if success
      * @throws ServiceException when get an exception during execution
      */
 
-    boolean setInfo(int workersCrewId, String info) throws ServiceException;
+    boolean setInfo(int workersCrewId, String info, int settingUserOrganisation) throws ServiceException;
 
     /**
-     * add worker to workers crew
+     * add worker to workers in case of worker organisation = workers crew organisation
      *
-     * @param workersCrewId where set
-     * @param workersId     to set
+     * @param workersCrewId          where set
+     * @param workerId               to set
+     * @param addingUserOrganisation user that add new worker organisation
      * @return {@link WorkersCrew}
      * @throws ServiceException when get an exception during execution
      */
-    WorkersCrew addWorker(int workersCrewId, int workersId) throws ServiceException;
+    WorkersCrew addWorker(int workersCrewId, int workerId, int addingUserOrganisation) throws ServiceException;
 
     /**
      * remove worker
      *
      * @param workersCrewId where set
      * @param workersId     to set
+     * @param deletingUserOrganisation organisation of user that delete
      * @return {@link WorkersCrew}
      * @throws ServiceException when get an exception during execution
      */
-    WorkersCrew removeWorker(int workersCrewId, int workersId) throws ServiceException;
+    WorkersCrew removeWorker(int workersCrewId, int workersId, int deletingUserOrganisation) throws ServiceException;
 
     /**
      * get all workers crews

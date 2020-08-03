@@ -237,6 +237,46 @@ public class OrganisationsControllerService implements IOrganisationsControllerS
     }
 
     /**
+     * @param id to find
+     * @return organisation like first element of array with id or empty array
+     * @throws ServiceValidationException when catch {@link DAOValidationException}
+     *                                    from {@link IOrganisationsController#getOrganisation(int)}
+     * @throws ServiceException           when catch {@link DAOException}
+     *                                    from {@link IOrganisationsController#getOrganisation(int)}
+     */
+    @Override
+    public Organisation[] getOrganisation(int id) throws ServiceException {
+        try {
+
+            return organisationsController.getOrganisation(id);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    /**
+     * @param id to not hsow
+     * @return organisations array without organisation with id param
+     * @throws ServiceValidationException when catch {@link DAOValidationException}
+     *                                    from {@link IOrganisationsController#getOrganisationsBeside(int)}
+     * @throws ServiceException           when catch {@link DAOException}
+     *                                    from {@link IOrganisationsController#getOrganisationsBeside(int)}
+     */
+    @Override
+    public Organisation[] getOrganisationsBeside(int id) throws ServiceException {
+        try {
+
+            return organisationsController.getOrganisationsBeside(id);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    /**
      * @return organisations array
      * @throws ServiceValidationException when catch {@link DAOValidationException}
      *                                    from {@link IOrganisationsController#getOrganisations()}

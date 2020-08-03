@@ -62,11 +62,21 @@ public class TransactionsDeliver implements ITransactionsDeliver {
      */
     private static final String SQL_WHERE_ID_FROM = " where t.from=?";
 
+    /**
+     * sql additional request find by organisation sender id
+     */
+    private static final String SQL_WHERE_ID_TO = " where t.to=?";
+
 
     /**
      * sql additional request find by organisation sender id and organisation payee id
      */
     private static final String SQL_WHERE_ID_FROM_ID_TO = " where t.from=? AND t.to=?";
+
+    /**
+     * sql additional request find by organisation sender id and organisation payee id
+     */
+    private static final String SQL_WHERE_ID_FROM_OR_ID_TO = " where t.from=? OR t.to=?";
 
     /**
      * sql additional request find by date between parameters
@@ -152,6 +162,35 @@ public class TransactionsDeliver implements ITransactionsDeliver {
     }
 
     /**
+     * find transaction by organisation payee id order by id
+     *
+     * @param idTo payee id
+     * @return {@link Transaction} array
+     * @throws DAOException when catch {@link SQLException} from {@link ResultSet} or {@link PreparedStatement}
+     * @throws DAOException when {@link IConnectionPool} throw exception
+     */
+    @Override
+    public Transaction[] findTransactionsByTo(int idTo) throws DAOException {
+        return executeRequest(SQL_GET_TRANSACTIONS + SQL_WHERE_ID_TO + SQL_ORDER_BY_ID, idTo);
+    }
+
+    /**
+     * get transaction by organisation payee id from position param count param order by id
+     *
+     * @param idTo          payee id
+     * @param startPosition start position to show from table
+     * @param count         count to show
+     * @return {@link Transaction} array
+     * @throws DAOException when catch {@link SQLException} from {@link ResultSet} or {@link PreparedStatement}
+     * @throws DAOException when {@link IConnectionPool} throw exception
+     */
+    @Override
+    public Transaction[] findTransactionsByTo(int idTo, int startPosition, int count) throws DAOException {
+        return executeRequest(SQL_GET_TRANSACTIONS + SQL_WHERE_ID_TO + SQL_ORDER_BY_ID + SQL_LIMIT,
+                idTo, startPosition, count);
+    }
+
+    /**
      * get transaction by organisation sender id and organisation payee order by id
      *
      * @param idFrom sender id
@@ -180,6 +219,35 @@ public class TransactionsDeliver implements ITransactionsDeliver {
     public Transaction[] findTransactionsByFromAndTo(int idFrom, int idTo, int startPosition, int count) throws DAOException {
         return executeRequest(SQL_GET_TRANSACTIONS + SQL_WHERE_ID_FROM_ID_TO + SQL_ORDER_BY_ID + SQL_LIMIT,
                 idFrom, idTo, startPosition, count);
+    }
+
+    /**
+     * get transaction by organisation id where it sender or payee order by id
+     *
+     * @param id sender or payee id
+     * @return {@link Transaction} array
+     * @throws DAOException when catch {@link SQLException} from {@link ResultSet} or {@link PreparedStatement}
+     * @throws DAOException when {@link IConnectionPool} throw exception
+     */
+    @Override
+    public Transaction[] findTransactionsByFromOrTo(int id) throws DAOException {
+        return executeRequest(SQL_GET_TRANSACTIONS + SQL_WHERE_ID_FROM_OR_ID_TO + SQL_ORDER_BY_ID, id, id);
+    }
+
+    /**
+     * get transaction by orby organisation id where it sender or payee from position param count param order by id
+     *
+     * @param id sender or payee id
+     * @param startPosition start position to show from table
+     * @param count         count to show
+     * @return {@link Transaction} array
+     * @throws DAOException when catch {@link SQLException} from {@link ResultSet} or {@link PreparedStatement}
+     * @throws DAOException when {@link IConnectionPool} throw exception
+     */
+    @Override
+    public Transaction[] findTransactionsByFromOrTo(int id, int startPosition, int count) throws DAOException {
+        return executeRequest(SQL_GET_TRANSACTIONS + SQL_WHERE_ID_FROM_OR_ID_TO + SQL_ORDER_BY_ID + SQL_LIMIT,
+                id, id, startPosition, count);
     }
 
     /**
@@ -226,6 +294,19 @@ public class TransactionsDeliver implements ITransactionsDeliver {
     }
 
     /**
+     * get transactions count with payee id
+     *
+     * @param idTo payee id
+     * @return fields count
+     * @throws DAOException when catch {@link SQLException} from {@link ResultSet} or {@link PreparedStatement}
+     * @throws DAOException when {@link IConnectionPool} throw exception
+     */
+    @Override
+    public int getFieldsCountByTo(int idTo) throws DAOException {
+        return getFieldsCount(SQL_FIELDS_COUNT + SQL_WHERE_ID_TO, idTo);
+    }
+
+    /**
      * get transactions count with sender id and payee id
      *
      * @param idFrom sender id
@@ -237,6 +318,19 @@ public class TransactionsDeliver implements ITransactionsDeliver {
     @Override
     public int getFieldsCountByFromAndTo(int idFrom, int idTo) throws DAOException {
         return getFieldsCount(SQL_FIELDS_COUNT + SQL_WHERE_ID_FROM_ID_TO, idFrom, idTo);
+    }
+
+    /**
+     *  get transactions count by organisation id where it sender or payee
+     *
+     * @param id sender or payee id
+     * @return fields count
+     * @throws DAOException when catch {@link SQLException} from {@link ResultSet} or {@link PreparedStatement}
+     * @throws DAOException when {@link IConnectionPool} throw exception
+     */
+    @Override
+    public int getFieldsCountByFromOrTo(int id) throws DAOException {
+        return getFieldsCount(SQL_FIELDS_COUNT + SQL_WHERE_ID_FROM_OR_ID_TO, id, id);
     }
 
     /**

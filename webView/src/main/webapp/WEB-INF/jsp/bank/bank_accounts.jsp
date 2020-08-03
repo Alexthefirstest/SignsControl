@@ -39,13 +39,14 @@
 <br><hr><br>
 <a href="${pageContext.request.contextPath}/show_transactions_history/1"><fmt:message key="label.show" /> <fmt:message key="label.transactions" /></a>
 <br><hr><br>
+
 <form action='${pageContext.request.contextPath}/add_bank_account' method="post">
     <input type="submit" value='<fmt:message key="label.add" /> <fmt:message key="label.bank_account" />' >
 </form>
 
 <br><hr>
 <label for="add_money_form"><h3><fmt:message key="label.add_money_to_the_bank_account" /></h3></label>
-<form action='${pageContext.request.contextPath}/add_money' method="post" id="add_money_form" >
+<form action='${pageContext.request.contextPath}/add_money/add' method="post" id="add_money_form" >
 
         <label for="addMoneyOrg"><fmt:message key="label.organisation" /> - <fmt:message key="label.payee" />:</label>
         <select name="addMoneyOrg" id='addMoneyOrg'>
@@ -60,7 +61,30 @@
 
         <label for="addMoneyValue"><fmt:message key="label.amount" /> :</label>
         <input type="text" id="addMoneyValue" name="addMoneyValue"
-               pattern="-?\d+(\.\d*)?" placeholder=". to double" required>
+               pattern="\d+(\.\d*)?" placeholder=". to double" required>
+
+ <input type="submit" value=<fmt:message key="label.transfer_money" />>
+
+
+</form>
+
+<label for="withdraw_money_form"><h3><fmt:message key="label.withdraw_money_to_the_bank_account" /></h3></label>
+<form action='${pageContext.request.contextPath}/add_money/withdraw' method="post" id="withdraw_money_form" >
+
+        <label for="withdrawMoneyOrg"><fmt:message key="label.organisation" /> - <fmt:message key="label.payee" />:</label>
+        <select name="addMoneyOrg" id='withdrawMoneyOrg'>
+
+            <c:forEach var="bank_account" items='${bank_accounts}'>
+
+                <option value='${bank_account.organisation.id}'>${bank_account.organisation.name}</option>
+
+            </c:forEach>
+
+        </select>
+
+        <label for="withdrawMoneyValue"><fmt:message key="label.amount" /> :</label>
+        <input type="text" id="withdrawMoneyValue" name="addMoneyValue"
+               pattern="\d+(\.\d*)?" placeholder=". to double" required>
 
  <input type="submit" value=<fmt:message key="label.transfer_money" />>
 

@@ -73,6 +73,23 @@ public interface IWorkersCrewControl {
      */
     WorkersCrew removeWorker(int workersCrewId, int workersId) throws DAOException;
 
+
+    /**
+     * @param id id of workers crew
+     * @return organisation of workers crew or -1 if can't find
+     * @throws DAOException when get an exception during execution
+     */
+     int getWorkersCrewOrganisation(int id) throws DAOException;
+
+
+    /**
+     * @param id id of workers crew
+     * @return remove date of workers crew or null if can't find
+     * @throws DAOException when get an exception during execution
+     */
+
+     String getWorkersCrewRemoveDate(int id) throws DAOException;
+
     /**
      * get all workers crews
      *

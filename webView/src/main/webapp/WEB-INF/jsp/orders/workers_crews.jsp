@@ -36,22 +36,16 @@
 
 <a href="${pageContext.request.contextPath}/workers_crews"><fmt:message key="label.show" /> <fmt:message key="label.all" /></a>
 <hr><br>
-<br><label for="choose_by_organisation_form" class="inline"><fmt:message key="label.show.organisation_crews" />: </label>
-<form action='${pageContext.request.contextPath}/workers_crews'  class="inline auto_center center" method="get" id='show_crews' accept-charset="UTF-8" id="choose_by_organisation_form">
 
-<label for="choose_by_organisation"><fmt:message key="label.organisation" />: </label>
-    <select name="organisationID" required id="choose_by_organisation">
+<br>
 
-        <c:forEach var="organisation" items='${organisations}'>
 
-            <option value='${organisation.id}'>${organisation.name}</option>
+<form action='${pageContext.request.contextPath}/workers_crews'  class="inline auto_center center" method="get"
+id='showEmptyForm' accept-charset="UTF-8" id="choose_by_organisation_form">
 
-        </c:forEach>
 
-    </select>
-
- <input type="checkbox" id="showEmpty" name="showEmpty">
     <label for="showEmpty"><fmt:message key="label.show" /> <fmt:message key="label.empty" /> <fmt:message key="label.workers_crews" /></label>
+ <input type="checkbox" id="showEmpty" name="showEmpty">
 
     <input type="submit" value=<fmt:message key="label.show" />>
 

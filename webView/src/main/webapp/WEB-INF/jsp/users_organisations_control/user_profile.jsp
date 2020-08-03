@@ -69,7 +69,7 @@
  <hr>
     <h3 class="fullwidthblock"><fmt:message key="label.info" />: ${user.info} </h3>
 
-
+  <c:if test="${sessionScope.userID==user.id}">
 <form action='${pageContext.request.contextPath}/change_login_password/login' method="post">
     <label for="fieldUser"><fmt:message key="label.login" />:</label><br><input type="text" id="fieldUser" name="login"  class="fullwidthblock"
                                                     pattern="\w+"
@@ -108,9 +108,11 @@
     <br><input type="reset" value=<fmt:message key="label.reset" /> class="registerbtn">
     <input type="submit" value=<fmt:message key="label.set" /> class="registerbtn">
 </form>
-
+  </c:if>
 <br> <hr>
 <br>
+
+  <c:if test="${ (user.organisation.id==4  && sessionScope.organisationRole==5 && sessionScope.userRole==2) || (user.organisation.id!=5 && ( (sessionScope.userRole==2 &&  sessionScope.organisationID==user.organisation.id) || sessionScope.organisationRole==5 ) ) }">
 
 <form action='${pageContext.request.contextPath}/change_user_form_handler' method="post" id='change_user'
       accept-charset="UTF-8" >
@@ -190,7 +192,7 @@
     <br><input type="reset" value=<fmt:message key="label.reset" /> class="registerbtn">
     <input type="submit" value=<fmt:message key="label.accept" /> class="registerbtn">
 </form>
-
+  </c:if>
 </div>
 </body>
 

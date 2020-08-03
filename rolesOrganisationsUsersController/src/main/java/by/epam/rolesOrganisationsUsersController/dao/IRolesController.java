@@ -47,6 +47,24 @@ public interface IRolesController {
     Role[] getUsersRoles() throws DAOException;
 
     /**
+     * get array of  roles with first element is role with id
+     *
+     * @param id to find
+     * @return {@link Role} array
+     * @throws DAOException when get an exception during execution
+     */
+    Role[] getUsersRole(int id) throws DAOException;
+
+    /**
+     * get array of  roles without role with id
+     *
+     * @param id to not show
+     * @return {@link Role} array
+     * @throws DAOException when get an exception during execution
+     */
+    Role[] getUsersRolesBeside(int id) throws DAOException;
+
+    /**
      * @param id   {@link by.epam.rolesOrganisationsUsersController.bean.User} role id
      * @param name new user role name
      * @return true if success, false - if no

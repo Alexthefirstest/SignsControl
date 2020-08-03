@@ -90,6 +90,20 @@ public interface IOrganisationsController {
     Organisation[] getOrganisations() throws DAOException;
 
     /**
+     * @param id to find
+     * @return organisation like first element of array with id or empty array
+     * @throws DAOException when get an exception during execution
+     */
+    Organisation[] getOrganisation(int id) throws DAOException;
+
+    /**
+     * @param id do not show
+     * @return organisations array without organisation with id param
+     * @throws DAOException when get an exception during execution
+     */
+    Organisation[] getOrganisationsBeside(int id) throws DAOException;
+
+    /**
      * @param roleID - id of role in jdbc
      * @return organisations array
      * @throws DAOException when get an exception during execution

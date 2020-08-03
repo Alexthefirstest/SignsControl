@@ -54,7 +54,6 @@
 
     <%-- контент для роли 1 - одд --%>
 
-  <%--display: inline      in css Для форму без переноса строки--%>
 
     <c:if test="${sessionScope.organisationRole==1}">
 
@@ -99,7 +98,7 @@
 
 <form>
     <input type="checkbox" id="execute_delete_order" name="execute_delete_order">
-    <label for="execute_delete_order"> <fmt:message key="label.execute" /> <fmt:message key="label.change" /> <fmt:message key="label.order" /></label>
+    <label for="execute_delete_order"> <fmt:message key="label.delete" /> <fmt:message key="label.order" /></label>
 </form>
 </td>
 <td>
@@ -238,33 +237,18 @@
     <input type="submit" value=<fmt:message key="label.add" />>
 </form>
 
-    <%--  удаляет/изменяет заказ --%>
+    <%--  удаляет заказ --%>
 <form action='${pageContext.request.contextPath}/change_delete_order' method="post" id='change_delete_order_form'
       accept-charset="UTF-8" style="display: none">
 
+  <input type="text" name="order_action" id='order_action' value='delete'
+                    hidden required>
 
-    <label for="order_id"> order:</label><select name="order_id" id='order_id'
+    <label for="order_id"> <fmt:message key="label.order" />:</label><select name="order_id" id='order_id'
                                                  required> </select>
 
-    <label for="order_action"> action:</label><select name="order_action" id='order_action'
-                                                      required>
-        <%--   <c:if test="${sessionScope.organisationRole==1}">  --%>
-
-    <option value='delete'><fmt:message key="label.delete" /></option>
-
-        <%-- </select> </c:if>  <c:if test="${sessionScope.organisationRole==3?}">  --%>
-    <option value='execute'><fmt:message key="label.execute" /></option>
-
-</select>
-
-    <label for="workers_crews"> <fmt:message key="label.workers_crew" />:</label><select name="workers_crew" id='workers_crews'
-                                                             required> </select>
-
-    <label for="execute_order_info"> <fmt:message key="label.annotation" /> :</label><input type="text" id="execute_order_info"
-                                                               name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
-        <%-- </c:if>    --%>
     <br><input type="reset" value=<fmt:message key="label.reset" />>
-    <input type="submit" value=<fmt:message key="label.change" />>
+    <input type="submit" value=<fmt:message key="label.delete" />>
 </form>
   </p>
 </div>
@@ -275,6 +259,49 @@
 <button id="showEmptyPointsButton"><fmt:message key="label.show" /> <fmt:message key="label.empty_points" /> </button>
 </p>
 
+    </c:if>
+
+
+      <%--  роль 3 --%>
+    <c:if test="${sessionScope.organisationRole==3}">
+    <div style="position: fixed;  bottom: 1px; z-index: 4">
+
+
+    <p class="center auto_center">
+
+    <form >
+        <input type="checkbox" id="execute_delete_order" name="execute_delete_order">
+        <label for="execute_delete_order"> <fmt:message key="label.execute" />  <fmt:message key="label.order" /></label>
+    </form>
+
+
+       <%--  выполняет заказ --%>
+    <form action='${pageContext.request.contextPath}/change_delete_order' method="post" id='change_delete_order_form'
+          accept-charset="UTF-8" style="display: none">
+
+     <input type="text" name="order_action" id='order_action' value='execute'
+                        hidden required>
+
+        <label for="order_id"> <fmt:message key="label.order" />:</label><select name="order_id" id='order_id'
+                                                     required> </select>
+
+        <label for="order_action"> action:</label><select name="order_action" id='order_action'
+                                                          required>
+
+        <label for="workers_crews"> <fmt:message key="label.workers_crew" />:</label><select name="workers_crew" id='workers_crews'
+                                                                 required> </select>
+
+        <label for="execute_order_info"> <fmt:message key="label.annotation" /> :</label><input type="text" id="execute_order_info"
+                                                                   name="annotation" pattern="[\wА-Яа-я\s:!.,)(-?\d]+">
+
+        <br><input type="reset" value=<fmt:message key="label.reset" />>
+        <input type="submit" value=<fmt:message key="label.execute" />>
+    </form>
+
+    </c:if>
+    </p></div>
+
+c:if test="${sessionScope.organisationRole==3 && sessionScope.organisationRole==1}">
 <p class="center">
 <button id="showOrdersButton"><fmt:message key="label.show" /> <fmt:message key="label.all" /> <fmt:message key="label.orders" /> </button>
 <button id="showOrdersExecutedButton"><fmt:message key="label.show" /> <fmt:message key="label.executed" /> <fmt:message key="label.orders" /></button>

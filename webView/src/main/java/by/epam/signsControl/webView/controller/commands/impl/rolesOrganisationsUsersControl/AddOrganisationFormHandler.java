@@ -1,13 +1,16 @@
 package by.epam.signsControl.webView.controller.commands.impl.rolesOrganisationsUsersControl;
 
+import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceValidationException;
 import by.epam.rolesOrganisationsUsersController.bean.Organisation;
-import by.epam.rolesOrganisationsUsersController.bean.User;
 import by.epam.rolesOrganisationsUsersController.service.IOrganisationsControllerService;
-import by.epam.rolesOrganisationsUsersController.service.IUsersControllerService;
 import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
 import by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory;
+import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.commands.Command;
+import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
 import by.epam.signsControl.webView.controller.commands.impl.bank.AddBankAccountFormHandler;
+import by.epam.signsControl.webView.exceptions.CommandControllerException;
+import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,27 +25,37 @@ public class AddOrganisationFormHandler implements Command {
 
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ServiceException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CommandControllerException {
 
         logger.info("inside execute");
         //qq
+        try {
 
-        IOrganisationsControllerService organisationsControllerService = ServiceFactory.getINSTANCE().getOrganisationsControllerService();
+            AccessRulesChecker.organisationRoleCheck(request, Constants.ADMINISTRATOR_ORGANISATION_ROLE);
+
+            IOrganisationsControllerService organisationsControllerService = ServiceFactory.getINSTANCE().getOrganisationsControllerService();
 
 
-        int role = Integer.parseInt(request.getParameter("role"));
-        String name = request.getParameter("name");
-        String info = request.getParameter("info");
+            int role = Integer.parseInt(request.getParameter("role"));
+            String name = request.getParameter("name");
+            String info = request.getParameter("info");
 
-        logger.info(name + " " + role);
-        logger.info(info);
+            logger.info(name + " " + role);
+            logger.info(info);
 
-        Organisation organisation = organisationsControllerService.addOrganisation(name, role);
+            Organisation organisation = organisationsControllerService.addOrganisation(name, role);
 
-        if (!info.isEmpty()) {
-            organisationsControllerService.setInfo(organisation.getId(), info);
+            if (!info.isEmpty()) {
+                organisationsControllerService.setInfo(organisation.getId(), info);
+            }
+
+            response.sendRedirect(request.getContextPath() + "/organisations");
+
+
+        } catch (ServiceValidationException e) {
+            throw new CommandControllerValidationException(e);
+        } catch (ServiceException e) {
+            throw new CommandControllerException(e);
         }
-
-        response.sendRedirect(request.getContextPath() + "/organisations");
     }
 }

@@ -170,6 +170,17 @@ public class RequestBuilder implements IRequestBuilder {
     }
 
     /**
+     * find by id
+     *
+     * @return this
+     */
+    @Override
+    public RequestBuilder findById(int id) {
+        where += " ba.id="+id+" AND";
+        return this;
+    }
+
+    /**
      * @return ready to execution {@link Request}
      * with field request
      * consist of {@link Request#getBaseRequest()} and parameters added during build

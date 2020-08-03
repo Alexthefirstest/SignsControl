@@ -1,8 +1,13 @@
 package by.epam.signsControl.webView.controller.commands.impl.signsControl;
 
 import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
+import by.epam.signsControl.service.exceptions.ServiceValidationException;
 import by.epam.signsControl.service.factory.ServiceFactory;
+import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.commands.Command;
+import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
+import by.epam.signsControl.webView.exceptions.CommandControllerException;
+import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,8 +21,9 @@ public class ChangeStandardSizeFormHandler implements Command {
     private static final Logger logger = LogManager.getLogger(ChangeStandardSize.class);
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ServiceException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CommandControllerException {
 
+        AccessRulesChecker.organisationRoleCheck(request, Constants.ODD_ORGANISATION_ROLE);
 
         int size = Integer.parseInt(request.getParameter("size"));
         int oldSize = Integer.parseInt(request.getParameter("old_size"));
@@ -32,8 +38,10 @@ public class ChangeStandardSizeFormHandler implements Command {
                         .setSize(oldSize, size);
             }
 
+        } catch (ServiceValidationException e) {
+            throw new CommandControllerValidationException(e);
         } catch (by.epam.signsControl.service.exceptions.ServiceException e) {
-            logger.warn(e);
+            throw new CommandControllerException(e);
         }
 
 

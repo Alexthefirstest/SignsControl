@@ -16,8 +16,7 @@ public class SetLocale implements Command {
     private static final Logger logger = LogManager.getLogger(SetLocale.class);
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ServiceException, by.epam.orders.service.exceptions.ServiceException {
-
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         logger.info("inside execute");
 
         String locale=RequestParser.getSecondCommandFromURI(request);

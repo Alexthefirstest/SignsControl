@@ -82,6 +82,16 @@ public class WorkersCrewControl implements IWorkersCrewControl {
     private static final String ADD_WORKER = "INSERT INTO `workers_crews` (`workers_crew_id`, worker) VALUES (?,?); ";
 
     /**
+     * sql get workers crew organisation
+     */
+    private static final String GET_WORKERS_CREW_ORGANISATION = "SELECT organisation FROM crews where id=?";
+
+    /**
+     * sql workers crew date of remove
+     */
+    private static final String GET_WORKERS_CREW_DATE_OF_REMOVE = "SELECT remove_date FROM crews where id=?";
+
+    /**
      * sql get workers
      */
     private static final String GET_WORKERS_CREWS = "SELECT u.id, u.login, u.role, ur.role, o.id, o.name, o.role, orr.role, o.is_blocked, o.info,  u.is_blocked,  " +
@@ -314,6 +324,50 @@ public class WorkersCrewControl implements IWorkersCrewControl {
 
         }
     }
+
+
+    /**
+     * @param id id of workers crew
+     * @return organisation of workers crew or -1 if can't find
+     * @throws DAOException when catch exception from {@link RequestExecutor#getInt(String, int)}
+     */
+    @Override
+    public int getWorkersCrewOrganisation(int id) throws DAOException {
+
+        try {
+
+            return RequestExecutor.getInt
+                    (GET_WORKERS_CREW_ORGANISATION, id);
+
+        } catch (SQLException ex) {
+
+
+            throw new DAOException(ex);
+
+        }
+    }
+
+    /**
+     * @param id id of workers crew
+     * @return remove date of workers crew or null if can't find
+     * @throws DAOException when catch exception from {@link RequestExecutor#getString(String, int)}
+     */
+    @Override
+    public String getWorkersCrewRemoveDate(int id) throws DAOException {
+
+        try {
+
+            return RequestExecutor.getString
+                    (GET_WORKERS_CREW_DATE_OF_REMOVE, id);
+
+        } catch (SQLException ex) {
+
+
+            throw new DAOException(ex);
+
+        }
+    }
+
 
     /**
      * get all workers crews

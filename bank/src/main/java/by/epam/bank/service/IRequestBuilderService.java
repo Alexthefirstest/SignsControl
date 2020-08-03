@@ -98,6 +98,15 @@ public interface IRequestBuilderService extends IRequestBuilder {
 
 
     /**
+     * find by id
+     *
+     * @return this
+     */
+
+     IRequestBuilderService findById(int id);
+
+
+    /**
      * @return ready to execution {@link IRequest}
      * with field request
      * consist of base request and parameters added during build

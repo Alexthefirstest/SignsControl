@@ -36,6 +36,15 @@ public interface ITransactionsDeliverService {
     Transaction[] findTransactionsByFrom(int idFrom) throws ServiceException;
 
     /**
+     * find transaction by organisation payee id order by id
+     *
+     * @param idTo payee id
+     * @return {@link Transaction} array
+     * @throws ServiceException when get ad exception during execution
+     */
+    Transaction[] findTransactionsByTo(int idTo) throws ServiceException;
+
+    /**
      * get transaction by organisation sender id and organisation payee order by id
      *
      * @param idFrom sender id
@@ -44,6 +53,15 @@ public interface ITransactionsDeliverService {
      * @throws ServiceException when get ad exception during execution
      */
     Transaction[] findTransactionsByFromAndTo(int idFrom, int idTo) throws ServiceException;
+
+    /**
+     * get transaction by organisation id where it sender or payee order by id
+     *
+     * @param id organisation id
+     * @return {@link Transaction} array
+     * @throws ServiceException when get ad exception during execution
+     */
+    Transaction[] findTransactionsByFromOrTo(int id) throws ServiceException;
 
     /**
      * get transaction by execution date between datefrom and dateto order by
@@ -78,6 +96,17 @@ public interface ITransactionsDeliverService {
     Transaction[] findTransactionsByFrom(int idFrom, int startPosition, int count) throws ServiceException;
 
     /**
+     * get transaction by organisation payee id from position param count param order by id
+     *
+     * @param idTo          payee id
+     * @param startPosition start position to show from table
+     * @param count         count to show
+     * @return {@link Transaction} array
+     * @throws ServiceException when get ad exception during execution
+     */
+    Transaction[] findTransactionsByTo(int idTo, int startPosition, int count) throws ServiceException;
+
+    /**
      * get transaction by organisation sender id and organisation payee from position param count param order by id
      *
      * @param idFrom        sender id
@@ -88,6 +117,17 @@ public interface ITransactionsDeliverService {
      * @throws ServiceException when get ad exception during execution
      */
     Transaction[] findTransactionsByFromAndTo(int idFrom, int idTo, int startPosition, int count) throws ServiceException;
+
+    /**
+     * get transaction by organisation id where it sender or payee order by id
+     *
+     * @param id            organisation id
+     * @param startPosition start position to show from table
+     * @param count         count to show
+     * @return {@link Transaction} array
+     * @throws ServiceException when get ad exception during execution
+     */
+    Transaction[] findTransactionsByFromOrTo(int id, int startPosition, int count) throws ServiceException;
 
     /**
      * show transaction with sender id and date of execution between dateFrom dateTo start from start position and get count quantity
@@ -121,7 +161,16 @@ public interface ITransactionsDeliverService {
     int getFieldsCountByFrom(int idFrom) throws ServiceException;
 
     /**
-     * * get transactions count with sender id and payee id
+     * get transactions count with payee id
+     *
+     * @param idTo payee id
+     * @return fields count
+     * @throws ServiceException when get ad exception during execution
+     */
+    int getFieldsCountByTo(int idTo) throws ServiceException;
+
+    /**
+     * get transactions count with sender id and payee id
      *
      * @param idFrom sender id
      * @param idTo   payed id
@@ -129,6 +178,15 @@ public interface ITransactionsDeliverService {
      * @throws ServiceException when get ad exception during execution
      */
     int getFieldsCountByFromAndTo(int idFrom, int idTo) throws ServiceException;
+
+    /**
+     * get transaction by organisation id where it sender or payee order by id
+     *
+     * @param id organisation id
+     * @return fields count
+     * @throws ServiceException when get ad exception during execution
+     */
+    int getFieldsCountByFromOrTo(int id) throws ServiceException;
 
     /**
      * get transactions count with sender and date of execution between dateFrom and dateTo
@@ -161,6 +219,16 @@ public interface ITransactionsDeliverService {
     int getPagesQuantityByFrom(int idFrom, int countOnPage) throws ServiceException;
 
     /**
+     * get transactions pages count with payee id
+     *
+     * @param idTo        payee id
+     * @param countOnPage count of field on page
+     * @return pages count
+     * @throws ServiceException when get ad exception during execution
+     */
+    int getPagesQuantityByTo(int idTo, int countOnPage) throws ServiceException;
+
+    /**
      * get transactions pages count with sender id and payee id
      *
      * @param idFrom      sender id
@@ -170,6 +238,16 @@ public interface ITransactionsDeliverService {
      * @throws ServiceException when get ad exception during execution
      */
     int getPagesQuantityByFromAndTo(int idFrom, int idTo, int countOnPage) throws ServiceException;
+
+    /**
+     * get transaction by organisation id where it sender or payee order by id
+     *
+     * @param id          organisation id
+     * @param countOnPage count of field on page
+     * @return pages count
+     * @throws ServiceException when get ad exception during execution
+     */
+    int getPagesQuantityByFromOrTo(int id, int countOnPage) throws ServiceException;
 
     /**
      * get transactions pages count with sender and date of execution between dateFrom and dateTo
@@ -205,6 +283,17 @@ public interface ITransactionsDeliverService {
     Transaction[] findTransactionsByFromPage(int idFrom, int countOnPage, int page) throws ServiceException;
 
     /**
+     * get page of transactions find  by organisation payee id order by id
+     *
+     * @param idTo        payee id
+     * @param countOnPage count of transaction on one page
+     * @param page        number of page to return (start from 1)
+     * @return {@link Transaction} array
+     * @throws ServiceException when get ad exception during execution
+     */
+    Transaction[] findTransactionsByToPage(int idTo, int countOnPage, int page) throws ServiceException;
+
+    /**
      * get page of transactions by organisation sender id and organisation payee order by id
      *
      * @param idFrom      sender id
@@ -215,6 +304,17 @@ public interface ITransactionsDeliverService {
      * @throws ServiceException when get ad exception during execution
      */
     Transaction[] findTransactionsByFromAndToPage(int idFrom, int idTo, int countOnPage, int page) throws ServiceException;
+
+    /**
+     * get transaction by organisation id where it sender or payee order by id
+     *
+     * @param id          organisation
+     * @param countOnPage count of transaction on one page
+     * @param page        number of page to return (start from 1)
+     * @return {@link Transaction} array
+     * @throws ServiceException when get ad exception during execution
+     */
+    Transaction[] findTransactionsByFromOrToPage(int id, int countOnPage, int page) throws ServiceException;
 
     /**
      * get page of transactions by execution date between datefrom and dateto order by

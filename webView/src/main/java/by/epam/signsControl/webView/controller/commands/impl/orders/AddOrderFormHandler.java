@@ -4,9 +4,11 @@ import by.epam.bank.service.IFinanceOperationsManagerService;
 import by.epam.orders.bean.Order;
 import by.epam.orders.service.IOrdersControlService;
 import by.epam.orders.service.factory.ServiceFactory;
-import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
+import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.commands.Command;
-import by.epam.signsControl.webView.controller.commands.impl.LoginFormHandler;
+import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
+import by.epam.signsControl.webView.exceptions.CommandControllerException;
+import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,21 +17,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * add order to data base
+ */
 public class AddOrderFormHandler implements Command {
 
     private static Logger logger = LogManager.getLogger(AddOrderFormHandler.class);
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ServiceException {
-        int role;
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CommandControllerException {
+
 
         logger.info("inside execute");
 
+        AccessRulesChecker.organisationRoleCheck(request, Constants.ODD_ORGANISATION_ROLE);
 
         IOrdersControlService ordersControlService = ServiceFactory.getINSTANCE().getOrdersControlService();
         IFinanceOperationsManagerService financeOperationsService = by.epam.bank.service.factory.ServiceFactory.getINSTANCE().getFinanceOperationsManager();
 
-        int customerID = (Integer) (request.getSession().getAttribute(LoginFormHandler.ORGANISATION_ID));
+        int customerID = (Integer) (request.getSession().getAttribute(Constants.ORGANISATION_ID));
         int signListID = Integer.parseInt(request.getParameter("sign_list"));
         int pddSignID = Integer.parseInt(request.getParameter("pdd_sign"));
         int standardSize = Integer.parseInt(request.getParameter("standard_size"));
@@ -51,7 +57,7 @@ public class AddOrderFormHandler implements Command {
                 ordersControlService.addOrder(signListID, pddSignID, standardSize, customerID, typeOfWork, annotation);
             } else if (!priceStr.isEmpty()
                     && (typeOfWorkPrice = ServiceFactory.getINSTANCE().getTypeOfWorkControlService().getTypeOfWork(typeOfWork).getPrice())
-                            == (price = Double.parseDouble(priceStr))) {
+                    == (price = Double.parseDouble(priceStr))) {
 
                 logger.info("else");
 
@@ -65,13 +71,13 @@ public class AddOrderFormHandler implements Command {
 
                 ordersControlService.setTransaction(order.getId(), financeOperationsService.transferMoney(customerID, orgTo, typeOfWorkPrice).getId());
             } else {
-                //wrong price
                 logger.warn("wrong price");
+                throw new CommandControllerValidationException("wrong price");
             }
 
 
         } catch (by.epam.orders.service.exceptions.ServiceException e) {
-            logger.warn(e);
+            throw new CommandControllerException(e);
         } catch (by.epam.bank.service.exceptions.ServiceException ex) {
 
             try {
@@ -79,8 +85,9 @@ public class AddOrderFormHandler implements Command {
             } catch (by.epam.orders.service.exceptions.ServiceException e) {
                 logger.warn(e);
                 logger.warn(ex);
+                throw new CommandControllerException(e);
             }
-            logger.warn(ex);
+            throw new CommandControllerException(ex);
         }
 
 

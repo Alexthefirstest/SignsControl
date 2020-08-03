@@ -500,6 +500,40 @@ class RequestExecutor {
 
     }
 
+
+    /**
+     * @param request request for sql select
+     * @param id      id for sql select parameter
+     * @return value of parameter with id or -1 if can't find
+     * @throws SQLException when {@link ResultSet} or {@link PreparedStatement} throw it
+     * @throws DAOException when {@link IConnectionPool} throw exception
+     */
+    static int getInt(String request, int id) throws SQLException, DAOException {
+
+        ResultSet rs = null;
+
+        Connection connection;
+
+        try {
+            connection = CONNECTION_POOL.retrieveConnection();
+        } catch (ConnectionPoolException ex) {
+            throw new DAOException(ex.getMessage());
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(request)) {
+
+            ps.setInt(1, id);
+
+            rs = ps.executeQuery();
+
+            return rs.next() ? rs.getInt(1) : -1;
+
+        } finally {
+            closeResultSetAndReturnConnection(rs, connection);
+        }
+
+    }
+
     /**
      * @param request    select request for select field
      * @param signsStaff object to set it with parameters from select request

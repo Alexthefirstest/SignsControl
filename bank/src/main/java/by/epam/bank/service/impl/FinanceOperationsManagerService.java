@@ -21,18 +21,22 @@ public class FinanceOperationsManagerService implements IFinanceOperationsManage
     private static IFinanceOperationsManager fom = DaoFactory.getINSTANCE().getFinanceOperationsManager();
 
     /**
-     *
      * transact money, create transaction to the history
      *
      * @param organisationIDFrom sender
-     * @param organisationIDTo  payee
-     * @param money summ of money to transact
+     * @param organisationIDTo   payee
+     * @param money              summ of money to transact
      * @return {@link Transaction} if success
      * @throws ServiceValidationException when {@link IFinanceOperationsManager} throw {@link DAOValidationException}
      * @throws ServiceException           ex when {@link IFinanceOperationsManager} throw {@link DAOException}
      */
     @Override
     public Transaction transferMoney(int organisationIDFrom, int organisationIDTo, double money) throws ServiceException {
+
+        if (money <= 0) {
+            throw new ServiceValidationException("negative amount");
+        }
+
         try {
             return fom.transferMoney(organisationIDFrom, organisationIDTo, money);
         } catch (DAOValidationException ex) {
@@ -43,11 +47,11 @@ public class FinanceOperationsManagerService implements IFinanceOperationsManage
     }
 
     /**
-     *  add money to account with organisation id param
+     * add money to account with organisation id param
      *
-     * @param bankID id of bank for transactions history sender - do not withdraw money from it's account
+     * @param bankID         id of bank for transactions history sender - do not withdraw money from it's account
      * @param organisationID to add money
-     * @param money sum of money to add
+     * @param money          sum of money to add
      * @return {@link Transaction} if success
      * @throws ServiceValidationException when {@link IFinanceOperationsManager} throw {@link DAOValidationException}
      * @throws ServiceException           ex when {@link IFinanceOperationsManager} throw {@link DAOException}

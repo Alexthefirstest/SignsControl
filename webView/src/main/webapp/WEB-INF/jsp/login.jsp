@@ -50,6 +50,14 @@
     <c:set var="second_form" scope="session" value="false"/>
 
 </c:if>
+
+<c:if test='${second_form_block==true}'>
+
+   <h6 style="color: red; text-align: center" ><fmt:message key="label.you_have_been_blocked" /></h6>
+
+    <c:set var="second_form_block" scope="session" value="false"/>
+
+</c:if>
 </div>
 <hr>
 

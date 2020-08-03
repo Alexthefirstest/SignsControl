@@ -1,5 +1,8 @@
 package by.epam.signsControl.webView.controller.commands;
 
+/**
+ * name of available commands for execution
+ */
 public enum CommandName {
 
     LOGIN,
@@ -46,6 +49,7 @@ public enum CommandName {
     ADD_MONEY,
     SHOW_TRANSACTIONS_HISTORY,
     EXECUTE_TRANSACTION,
+    ORGANISATION_PROFILE,
 
     //orders
     SHOW_ORDERS,

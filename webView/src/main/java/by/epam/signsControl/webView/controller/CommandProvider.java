@@ -8,6 +8,7 @@ import by.epam.signsControl.webView.controller.commands.impl.bank.AddMoney;
 import by.epam.signsControl.webView.controller.commands.impl.bank.ChangeBankAccountFormHandler;
 import by.epam.signsControl.webView.controller.commands.impl.bank.CreateBankAccount;
 import by.epam.signsControl.webView.controller.commands.impl.bank.ExecuteTransaction;
+import by.epam.signsControl.webView.controller.commands.impl.bank.OrganisationProfile;
 import by.epam.signsControl.webView.controller.commands.impl.bank.ShowBankAccounts;
 import by.epam.signsControl.webView.controller.commands.impl.bank.ShowTransactionsHistory;
 import by.epam.signsControl.webView.controller.commands.impl.orders.*;
@@ -20,7 +21,26 @@ import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * provider of {@link Command} instances
+ *
+ */
 class CommandProvider {
+
+    /*
+     *logger
+     */
+    private static final Logger logger = LogManager.getLogger(CommandProvider.class);
+
+    /**
+     * this class instance
+     */
+    private final static CommandProvider commandProvider = new CommandProvider();
+
+    /**
+     * store for commands by {@link CommandName} key
+     */
+    private final Map<CommandName, Command> commands = new HashMap<>();
 
     private CommandProvider() {
 
@@ -31,6 +51,7 @@ class CommandProvider {
         commands.put(CommandName.LOGIN_FORM, new LoginFormHandler());
         commands.put(CommandName.SET_LOCALE, new SetLocale());
 
+        //signs control
         commands.put(CommandName.GET_CURRENT_POINTS, new GetCurrentPoints());
         commands.put(CommandName.GET_POINTS_BY_DATE, new GetPointsByDate());
         commands.put(CommandName.GET_POINT_HISTORY, new GetPointHistory());
@@ -69,6 +90,7 @@ class CommandProvider {
         commands.put(CommandName.SHOW_TRANSACTIONS_HISTORY, new ShowTransactionsHistory());
         commands.put(CommandName.ADD_MONEY, new AddMoney());
         commands.put(CommandName.EXECUTE_TRANSACTION, new ExecuteTransaction());
+        commands.put(CommandName.ORGANISATION_PROFILE, new OrganisationProfile());
 
         //orders
         commands.put(CommandName.SHOW_ORDERS, new GetOrders());
@@ -100,18 +122,20 @@ class CommandProvider {
 
     }
 
-    private static final Logger logger = LogManager.getLogger(CommandProvider.class);
-
-    private final static CommandProvider commandProvider = new CommandProvider();
-
-    private final Map<CommandName, Command> commands = new HashMap<>();
-
-
-    static CommandProvider getCommandProvider() {
+    /**
+     * @return {@link CommandProvider#commandProvider}
+     */
+   public static CommandProvider getCommandProvider() {
         return commandProvider;
     }
 
-    Command getCommand(String commandName) {
+    /**
+     * return command by commandName param, if can't find command - return WRONG_COMMAND command
+     *
+     * @param commandName name to find command, upper or lower case doesn't matter
+     * @return command by name or WRONG_COMMAND if catch exception or can't find command
+     */
+  public   Command getCommand(String commandName) {
 
 
         try {

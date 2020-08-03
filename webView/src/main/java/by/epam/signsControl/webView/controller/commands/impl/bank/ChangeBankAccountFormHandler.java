@@ -2,9 +2,14 @@ package by.epam.signsControl.webView.controller.commands.impl.bank;
 
 import by.epam.bank.service.IBankAccountsManagerService;
 import by.epam.bank.service.exceptions.ServiceException;
+import by.epam.bank.service.exceptions.ServiceValidationException;
 import by.epam.bank.service.factory.ServiceFactory;
+import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.RequestParser;
 import by.epam.signsControl.webView.controller.commands.Command;
+import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
+import by.epam.signsControl.webView.exceptions.CommandControllerException;
+import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,12 +18,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * change bank account
+ */
 public class ChangeBankAccountFormHandler implements Command {
 
     private static final Logger logger = LogManager.getLogger(ChangeBankAccountFormHandler.class);
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CommandControllerException {
+
+        AccessRulesChecker.organisationRoleCheck(request, Constants.BANK_ORGANISATION_ROLE);
 
         IBankAccountsManagerService bankAccountsManagerService = ServiceFactory.getINSTANCE().getBankAccountsManager();
 
@@ -30,7 +40,7 @@ public class ChangeBankAccountFormHandler implements Command {
         try {
 
             int id = Integer.parseInt(request.getParameter("orgID"));
-logger.info("before switch");
+            logger.info("before switch");
             switch (command) {
 
                 case "set_min_balance":
@@ -59,8 +69,10 @@ logger.info("before switch");
 
             request.setAttribute("organisations", ServiceFactory.getINSTANCE().getOrganisationsDeliver().showOrganisationsWithoutBankAccounts());
 
+        } catch (ServiceValidationException e) {
+            throw new CommandControllerValidationException(e);
         } catch (ServiceException e) {
-            logger.warn(e);
+            throw new CommandControllerException(e);
         }
 
         response.sendRedirect(request.getContextPath() + "/bank_accounts");

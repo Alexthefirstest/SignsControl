@@ -92,6 +92,13 @@ public interface IRequestBuilder {
      */
     IRequestBuilder showOnlyUnblocked();
 
+    /**
+     * find by id
+     *
+     * @return this
+     */
+    IRequestBuilder findById(int id) ;
+
 
     /**
      * @return ready to execution {@link IRequest} with build result

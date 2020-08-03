@@ -42,6 +42,12 @@
 <br>
 <hr>
 <br>
+
+
+<c:choose>
+
+        <c:when test="${sessionScope.organisationRole==4}">
+
 <form action='${pageContext.request.contextPath}/show_transactions_history' method="get" id='show_form'
       accept-charset="UTF-8">
 
@@ -50,6 +56,8 @@
 
     <label for="accountsFrom"><fmt:message key="label.sender" />:</label>
     <select name="accountFrom" id='accountsFrom'>
+
+    <option value='-1'>-</option>
 
         <c:forEach var="bank_account" items='${bank_accounts}'>
 
@@ -100,6 +108,62 @@
     <input type="submit" value=<fmt:message key="label.accept" />>
 
 </form>
+
+     </c:when>
+
+            <c:otherwise>
+<br>
+
+
+
+<form action='${pageContext.request.contextPath}/show_transactions_history' method="get"
+      accept-charset="UTF-8" >
+
+
+    <input type="text" name="findBy" value="OrgId" hidden required>
+    <input type="text" name="accountTo" value="-1" hidden required>
+
+    <label for="accountsFrom1"><fmt:message key="label.sender" />:</label>
+    <select name="accountFrom" id='accountsFrom1'>
+
+        <c:forEach var="bank_account" items='${bank_accounts}'>
+        <option value='-2'><fmt:message key="label.all" /></option>
+            <option value='${bank_account.organisation.id}'>${bank_account.organisation.name}</option>
+
+        </c:forEach>
+
+    </select>
+
+  <input type="reset" value=<fmt:message key="label.reset" />>
+    <input type="submit" value=<fmt:message key="label.accept" />>
+</form>
+
+<br>
+
+<form action='${pageContext.request.contextPath}/show_transactions_history' method="get" id='show_form'
+      accept-charset="UTF-8">
+
+          <input type="text" name="findBy" value="OrgId" hidden required>
+          <input type="text" name="accountFrom" value="-1" hidden required>
+
+    <label for="accountsTo"><fmt:message key="label.payee" />: </label>
+    <select name="accountTo" id='accountsTo'>
+ <option value='-2'><fmt:message key="label.all" /></option>
+        <c:forEach var="bank_account" items='${bank_accounts}'>
+
+            <option value='${bank_account.organisation.id}'>${bank_account.organisation.name}</option>
+
+        </c:forEach>
+
+    </select>
+
+   </form>
+
+
+           </c:choose>
+
+
+
 </p>
 
 <br>

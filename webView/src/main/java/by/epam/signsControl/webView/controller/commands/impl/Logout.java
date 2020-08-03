@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * invalidate session
+ */
 public class Logout implements Command {
 
     private static final Logger logger = LogManager.getLogger(Logout.class);

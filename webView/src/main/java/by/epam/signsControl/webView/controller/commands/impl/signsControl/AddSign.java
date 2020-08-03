@@ -2,8 +2,13 @@ package by.epam.signsControl.webView.controller.commands.impl.signsControl;
 
 import by.epam.signsControl.service.exceptions.ServiceException;
 import by.epam.signsControl.service.ILocalSignsControlService;
+import by.epam.signsControl.service.exceptions.ServiceValidationException;
 import by.epam.signsControl.service.factory.ServiceFactory;
+import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.commands.Command;
+import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
+import by.epam.signsControl.webView.exceptions.CommandControllerException;
+import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,13 +22,13 @@ public class AddSign implements Command {
     private static final Logger logger = LogManager.getLogger(AddSign.class);
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CommandControllerException {
 
-        int role;
 
         logger.info("inside execute");
 
-        if (1 == (role = (Integer) request.getSession().getAttribute("role"))) {
+        AccessRulesChecker.organisationRoleCheck(request, Constants.ODD_ORGANISATION_ROLE);
+
 
             ILocalSignsControlService localSignsControlService = ServiceFactory.getINSTANCE().getLocalSignsControlService();
 
@@ -52,13 +57,13 @@ logger.info((request.getParameter("annotation")));
                 }
 
 
+            } catch (ServiceValidationException e) {
+                throw new CommandControllerValidationException(e);
             } catch (ServiceException e) {
-                logger.warn(e);
+                throw new CommandControllerException(e);
             }
 
-        } else {
-            logger.warn("wrong role " + role);
-        }
+
         response.sendRedirect(request.getContextPath() + "/");
     }
 }

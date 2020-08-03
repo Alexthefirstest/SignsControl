@@ -78,6 +78,25 @@ public class TransactionsDeliverService implements ITransactionsDeliverService {
     }
 
     /**
+     * find transaction by organisation payee id order by id
+     *
+     * @param idTo payee id
+     * @return {@link Transaction} array
+     * @throws ServiceValidationException when {@link ITransactionsDeliver} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link ITransactionsDeliver} throw {@link DAOException}
+     */
+    @Override
+    public Transaction[] findTransactionsByTo(int idTo) throws ServiceException {
+        try {
+            return td.findTransactionsByTo(idTo);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    /**
      * get transaction by organisation sender id and organisation payee order by id
      *
      * @param idFrom sender id
@@ -90,6 +109,25 @@ public class TransactionsDeliverService implements ITransactionsDeliverService {
     public Transaction[] findTransactionsByFromAndTo(int idFrom, int idTo) throws ServiceException {
         try {
             return td.findTransactionsByFromAndTo(idFrom, idTo);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    /**
+     * get transaction by organisation id where it sender or payee order by id
+     *
+     * @param id sender or payee id
+     * @return {@link Transaction} array
+     * @throws ServiceValidationException when {@link ITransactionsDeliver} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link ITransactionsDeliver} throw {@link DAOException}
+     */
+    @Override
+    public Transaction[] findTransactionsByFromOrTo(int id) throws ServiceException {
+        try {
+            return td.findTransactionsByFromOrTo(id);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -165,6 +203,27 @@ public class TransactionsDeliverService implements ITransactionsDeliverService {
     }
 
     /**
+     * get transaction by organisation payee id from position param count param order by id
+     *
+     * @param idTo          payee id
+     * @param startPosition start position to show from table
+     * @param count         count to show
+     * @return {@link Transaction} array
+     * @throws ServiceValidationException when {@link ITransactionsDeliver} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link ITransactionsDeliver} throw {@link DAOException}
+     */
+    @Override
+    public Transaction[] findTransactionsByTo(int idTo, int startPosition, int count) throws ServiceException {
+        try {
+            return td.findTransactionsByTo(idTo, startPosition, count);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    /**
      * get transaction by organisation sender id and organisation payee from position param count param order by id
      *
      * @param idFrom        sender id
@@ -179,6 +238,26 @@ public class TransactionsDeliverService implements ITransactionsDeliverService {
     public Transaction[] findTransactionsByFromAndTo(int idFrom, int idTo, int startPosition, int count) throws ServiceException {
         try {
             return td.findTransactionsByFromAndTo(idFrom, idTo, startPosition, count);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+
+    /**
+     * get transactions count by organisation id where it sender or payee
+     *
+     * @param id sander or payee id
+     * @return fields count
+     * @throws ServiceValidationException when {@link ITransactionsDeliver} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link ITransactionsDeliver} throw {@link DAOException}
+     */
+    @Override
+    public Transaction[] findTransactionsByFromOrTo(int id, int startPosition, int count) throws ServiceException {
+        try {
+            return td.findTransactionsByFromOrTo(id, startPosition, count);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -253,6 +332,26 @@ public class TransactionsDeliverService implements ITransactionsDeliverService {
         }
     }
 
+
+    /**
+     * get transactions count with payee id
+     *
+     * @param idTo payee id
+     * @return fields count
+     * @throws ServiceValidationException when {@link ITransactionsDeliver} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link ITransactionsDeliver} throw {@link DAOException}
+     */
+    @Override
+    public int getFieldsCountByTo(int idTo) throws ServiceException {
+        try {
+            return td.getFieldsCountByTo(idTo);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
     /**
      * * get transactions count with sender id and payee id
      *
@@ -266,6 +365,25 @@ public class TransactionsDeliverService implements ITransactionsDeliverService {
     public int getFieldsCountByFromAndTo(int idFrom, int idTo) throws ServiceException {
         try {
             return td.getFieldsCountByFromAndTo(idFrom, idTo);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    /**
+     * get transaction by organisation id where it sender or payee order by id
+     *
+     * @param id organisation id
+     * @return fields count
+     * @throws ServiceValidationException when {@link ITransactionsDeliver} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link ITransactionsDeliver} throw {@link DAOException}
+     */
+    @Override
+    public int getFieldsCountByFromOrTo(int id) throws ServiceException {
+        try {
+            return td.getFieldsCountByFromOrTo(id);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -342,6 +460,26 @@ public class TransactionsDeliverService implements ITransactionsDeliverService {
     }
 
     /**
+     * get transactions pages count with payee id
+     *
+     * @param idTo        payee id
+     * @param countOnPage count of field on page
+     * @return pages count
+     * @throws ServiceValidationException when {@link ITransactionsDeliver} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link ITransactionsDeliver} throw {@link DAOException}
+     */
+    @Override
+    public int getPagesQuantityByTo(int idTo, int countOnPage) throws ServiceException {
+        try {
+            return (int) Math.ceil((double) td.getFieldsCountByTo(idTo) / countOnPage);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    /**
      * get transactions pages count with sender id and payee id
      *
      * @param idFrom      sender id
@@ -355,6 +493,25 @@ public class TransactionsDeliverService implements ITransactionsDeliverService {
     public int getPagesQuantityByFromAndTo(int idFrom, int idTo, int countOnPage) throws ServiceException {
         try {
             return (int) Math.ceil((double) td.getFieldsCountByFromAndTo(idFrom, idTo) / countOnPage);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    /**
+     * get transaction by organisation id where it sender or payee order by id
+     *
+     * @param id          organisation id
+     * @param countOnPage count of field on page
+     * @return pages count
+     * @throws ServiceException when get ad exception during execution
+     */
+    @Override
+    public int getPagesQuantityByFromOrTo(int id, int countOnPage) throws ServiceException {
+        try {
+            return (int) Math.ceil((double) td.getFieldsCountByFromOrTo(id) / countOnPage);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {
@@ -434,6 +591,27 @@ public class TransactionsDeliverService implements ITransactionsDeliverService {
     }
 
     /**
+     * get page of transactions find  by organisation payee id order by id
+     *
+     * @param idTo        payee id
+     * @param countOnPage count of transaction on one page
+     * @param page        number of page to return (start from 1)
+     * @return {@link Transaction} array
+     * @throws ServiceValidationException when {@link ITransactionsDeliver} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link ITransactionsDeliver} throw {@link DAOException}
+     */
+    @Override
+    public Transaction[] findTransactionsByToPage(int idTo, int countOnPage, int page) throws ServiceException {
+        try {
+            return td.findTransactionsByTo(idTo, (page - 1) * countOnPage, countOnPage);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    /**
      * get page of transactions by organisation sender id and organisation payee order by id
      *
      * @param idFrom      sender id
@@ -448,6 +626,26 @@ public class TransactionsDeliverService implements ITransactionsDeliverService {
     public Transaction[] findTransactionsByFromAndToPage(int idFrom, int idTo, int countOnPage, int page) throws ServiceException {
         try {
             return td.findTransactionsByFromAndTo(idFrom, idTo, (page - 1) * countOnPage, countOnPage);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    /**
+     * get transaction by organisation id where it sender or payee order by id
+     *
+     * @param id          organisation
+     * @param countOnPage count of transaction on one page
+     * @param page        number of page to return (start from 1)
+     * @return {@link Transaction} array
+     * @throws ServiceException when get ad exception during execution
+     */
+    @Override
+    public Transaction[] findTransactionsByFromOrToPage(int id, int countOnPage, int page) throws ServiceException {
+        try {
+            return td.findTransactionsByFromOrTo(id, (page - 1) * countOnPage, countOnPage);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

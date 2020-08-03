@@ -1,9 +1,15 @@
 package by.epam.signsControl.webView.controller.commands.impl.orders;
 
 import by.epam.orders.service.ITypeOfWorkControlService;
+import by.epam.orders.service.exceptions.ServiceException;
+import by.epam.orders.service.exceptions.ServiceValidationException;
 import by.epam.orders.service.factory.ServiceFactory;
+import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.RequestParser;
 import by.epam.signsControl.webView.controller.commands.Command;
+import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
+import by.epam.signsControl.webView.exceptions.CommandControllerException;
+import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,10 +24,9 @@ public class ChangeTypeOfWork implements Command {
     private static Logger logger = LogManager.getLogger(ChangeDeleteOrder.class);
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CommandControllerException {
 
-        int role;
-        int workersCrewsOrganisation;
+        AccessRulesChecker.organisationRoleCheck(request, Constants.ADMINISTRATOR_ROLE);
 
         logger.info("inside execute");
 
@@ -35,30 +40,36 @@ public class ChangeTypeOfWork implements Command {
         try {
 
 
-            switch (orderAction) {
+            if (orderAction != null) {
 
-                case "set_price":
+                switch (orderAction) {
 
-                    ordersControlService.setPrice(id, Double.parseDouble(request.getParameter("price")));
-                    break;
+                    case "set_price":
 
-                case "block":
+                        ordersControlService.setPrice(id, Double.parseDouble(request.getParameter("price")));
+                        break;
 
-                    ordersControlService.setBlock(id, true);
-                    break;
+                    case "block":
 
-                case "unblock":
+                        ordersControlService.setBlock(id, true);
+                        break;
 
-                    ordersControlService.setBlock(id, false);
-                    break;
-                default:
-                    return;
+                    case "unblock":
 
+                        ordersControlService.setBlock(id, false);
+                        break;
+                    default:
+                        return;
+
+                }
+            } else {
+                logger.warn("orderAction is null");
             }
 
-
-        } catch (by.epam.orders.service.exceptions.ServiceException e) {
-            logger.warn(e);
+        } catch (ServiceValidationException e) {
+            throw new CommandControllerValidationException(e);
+        } catch (ServiceException e) {
+            throw new CommandControllerException(e);
         }
 
         response.sendRedirect(request.getContextPath() + "/types_of_work");

@@ -93,6 +93,20 @@ public interface IOrganisationsControllerService {
     Organisation[] getOrganisations() throws ServiceException;
 
     /**
+     * @param id to find
+     * @return organisation like first element of array with id or empty array
+     * @throws ServiceException when get an exception during execution
+     */
+    Organisation[] getOrganisation(int id) throws ServiceException;
+
+    /**
+     * @param id to not show
+     * @return organisations array without organisation with id param
+     * @throws ServiceException when get an exception during execution
+     */
+    Organisation[] getOrganisationsBeside(int id) throws ServiceException;
+
+    /**
      * @param roleID - id of role in jdbc
      * @return organisations array
      * @throws ServiceException when get an exception during execution

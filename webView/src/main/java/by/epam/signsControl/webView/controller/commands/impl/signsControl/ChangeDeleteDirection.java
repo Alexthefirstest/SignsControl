@@ -2,8 +2,13 @@ package by.epam.signsControl.webView.controller.commands.impl.signsControl;
 
 import by.epam.signsControl.service.exceptions.ServiceException;
 import by.epam.signsControl.service.IMapPointsControlService;
+import by.epam.signsControl.service.exceptions.ServiceValidationException;
 import by.epam.signsControl.service.factory.ServiceFactory;
+import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.commands.Command;
+import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
+import by.epam.signsControl.webView.exceptions.CommandControllerException;
+import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,9 +22,11 @@ public class ChangeDeleteDirection implements Command {
     private static final Logger logger = LogManager.getLogger(ChangeDeleteDirection.class);
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, CommandControllerException {
 
         logger.info("inside execute");
+
+        AccessRulesChecker.organisationRoleCheck(request, Constants.ODD_ORGANISATION_ROLE);
 
         IMapPointsControlService mps = ServiceFactory.getINSTANCE().getMapPointsControlService();
 
@@ -41,8 +48,10 @@ public class ChangeDeleteDirection implements Command {
             }
 
 
-        } catch (ServiceException ex) {
-            logger.warn(ex);
+        } catch (ServiceValidationException e) {
+            throw new CommandControllerValidationException(e);
+        } catch (ServiceException e) {
+            throw new CommandControllerException(e);
         }
 
 

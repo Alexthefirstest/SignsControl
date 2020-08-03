@@ -3,8 +3,13 @@ package by.epam.signsControl.webView.controller.commands.impl.rolesOrganisations
 import by.epam.rolesOrganisationsUsersController.bean.User;
 import by.epam.rolesOrganisationsUsersController.service.IUsersControllerService;
 import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
+import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceValidationException;
 import by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory;
+import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.commands.Command;
+import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
+import by.epam.signsControl.webView.exceptions.CommandControllerException;
+import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,34 +25,44 @@ public class UsersList implements Command {
 
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ServiceException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CommandControllerException {
 
-        //только для админов, для админов организации - только их  юзеры, для 1 - все+сортировка по организации
-        //только для админов, для админов организации - только их  юзеры
 
-        IUsersControllerService usersControllerService = ServiceFactory.getINSTANCE().getUsersControllerService();
-        User[] users;
+        try {
 
-        String orgId = request.getParameter("id");
+            IUsersControllerService usersControllerService = ServiceFactory.getINSTANCE().getUsersControllerService();
+            User[] users;
 
-        if (orgId == null) {
+            String orgId = request.getParameter("id");
 
-            users = usersControllerService.getUsers();
+            if (AccessRulesChecker.organisationRoleCheckBool(request, Constants.ADMINISTRATOR_ORGANISATION_ROLE)) {
 
-        } else {
-            users = usersControllerService.getUsers(Integer.parseInt(orgId));
+                if (orgId == null) {
+
+                    users = usersControllerService.getUsers();
+
+                } else {
+                    users = usersControllerService.getUsers(Integer.parseInt(orgId));
+                }
+            } else {
+                AccessRulesChecker.userRoleCheck(request, Constants.ADMINISTRATOR_ROLE);
+                users = usersControllerService.getUsers((Integer) request.getSession().getAttribute(Constants.ORGANISATION_ID));
+            }
+
+            request.setAttribute("users", users);
+            request.setAttribute("organisations", ServiceFactory.getINSTANCE().getOrganisationsControllerService().getOrganisations());
+            logger.info(Arrays.toString(ServiceFactory.getINSTANCE().getOrganisationsControllerService().getOrganisations()));
+
+
+            logger.info("inside execute");
+            //qq
+
+            request.getRequestDispatcher("/WEB-INF/jsp/users_organisations_control/users_list.jsp").forward(request, response);
+        } catch (ServiceValidationException e) {
+            throw new CommandControllerValidationException(e);
+        } catch (ServiceException e) {
+            throw new CommandControllerException(e);
         }
-
-
-        request.setAttribute("users", users);
-        request.setAttribute("organisations", ServiceFactory.getINSTANCE().getOrganisationsControllerService().getOrganisations());
-        logger.info(Arrays.toString(ServiceFactory.getINSTANCE().getOrganisationsControllerService().getOrganisations()));
-
-
-        logger.info("inside execute");
-        //qq
-
-        request.getRequestDispatcher("/WEB-INF/jsp/users_organisations_control/users_list.jsp").forward(request, response);
     }
 }
 

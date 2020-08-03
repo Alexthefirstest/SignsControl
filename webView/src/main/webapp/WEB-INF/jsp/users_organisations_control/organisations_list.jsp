@@ -34,6 +34,8 @@
 <body class="auto_center center">
 <jsp:include page="../header.jsp"/>
 <br>
+
+  <c:if test="${sessionScope.organisationRole==5}">
  <label for="add_org"><h3><fmt:message key="label.add.organisation" />:</h3></label>
 <form action='${pageContext.request.contextPath}/add_organisation_form_handler' method="post" id='add_org'
       accept-charset="UTF-8">
@@ -59,28 +61,9 @@
 <br><input type="reset" value=<fmt:message key="label.reset" />>
 <input type="submit" value='<fmt:message key="label.add.organisation" />'>
 </form>
+  </c:if>
 <br><hr>
-<br>
-  <label for="transactionForm"><h3><fmt:message key="label.execute_transaction" />:<h3></label>
-<form action='${pageContext.request.contextPath}/execute_transaction' method="post" id="transactionForm">
 
-    <label for="organisation_idtr"> <fmt:message key="label.payee" />:</label><select name="organisationID" id='organisation_idtr'
-                                                               required>
-
-    <c:forEach var="organisation" items='${organisations}'>
-
-        <option value='${organisation.id}'>${organisation.name}</option>
-
-    </c:forEach>
-</select>
-
-    <label for="priceCh">    <fmt:message key="label.amount" />: </label> <input type="text" id="priceCh" name="money" pattern="\d+(.\d*)?" required>
-
- <br><input type="reset" value="сбросить">
-    <input type="submit" value="отправить">
-
-</form>
-<br><hr><br><br>
 <a href="${pageContext.request.contextPath}/organisations"><fmt:message key="label.show" /> <fmt:message key="label.all" /> <fmt:message key="label.organisation" /></a>
 <br>
 <br><br>

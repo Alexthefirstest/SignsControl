@@ -3,9 +3,14 @@ package by.epam.signsControl.webView.controller.commands.impl.bank;
 import by.epam.bank.bean.Transaction;
 import by.epam.bank.service.ITransactionsDeliverService;
 import by.epam.bank.service.exceptions.ServiceException;
+import by.epam.bank.service.exceptions.ServiceValidationException;
 import by.epam.bank.service.factory.ServiceFactory;
+import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.RequestParser;
 import by.epam.signsControl.webView.controller.commands.Command;
+import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
+import by.epam.signsControl.webView.exceptions.CommandControllerException;
+import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,81 +20,129 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * show transactions
+ */
 public class ShowTransactionsHistory implements Command {
 
     private static final Logger logger = LogManager.getLogger(ShowTransactionsHistory.class);
 
-    private static final int COUNT_ON_PAGE = 20;
-    private static final int ADDITIONAL_PAGES_START = 2;
-    private static final int ADDITIONAL_PAGES_FINISH = 2;
-
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CommandControllerException {
 
         logger.info("inside execute");
 
+        AccessRulesChecker.notAnonymCheck(request);
+
+
         int pageCount;
+        int page;
 
         try {
 
+            Transaction[] transactions;
+
+            String findBy = request.getParameter("findBy");
+
+            int organisationRole = (Integer) (request.getAttribute(Constants.ORGANISATION_ROLE));
+
+
             ITransactionsDeliverService transactionsDeliver = ServiceFactory.getINSTANCE().getTransactionsDeliver();
 
-            int page;
             try {
                 page = Integer.parseInt(RequestParser.getSecondCommandFromURI(request));
             } catch (NullPointerException | NumberFormatException ex) {
                 page = 1;
             }
 
-            String findBy = request.getParameter("findBy");
+            int organisationID = (Integer) (request.getAttribute(Constants.ORGANISATION_ID));
 
             logger.info(findBy);
 
-            Transaction[] transactions;
+            if (findBy == null) {
 
-            if (findBy != null) {
+                if (organisationRole == Constants.BANK_ORGANISATION_ROLE) {
 
-                switch (findBy) {
-                    case "OrgId":
-                        int from = Integer.parseInt(request.getParameter("accountFrom"));
-                        int to = Integer.parseInt(request.getParameter("accountTo"));
+                    switch (findBy) {
+                        case "OrgId":
 
-                        if (to < 0) {
-                            transactions = transactionsDeliver.findTransactionsByFromPage(from, COUNT_ON_PAGE, page);
-                            pageCount = transactionsDeliver.getPagesQuantityByFrom(from, COUNT_ON_PAGE);
+                            int from = Integer.parseInt(request.getParameter("accountFrom"));
+                            int to = Integer.parseInt(request.getParameter("accountTo"));
+
+
+                            if (to < 0) {
+
+                                transactions = transactionsDeliver.findTransactionsByFromPage(from, Constants.COUNT_TRANSACTIONS_ON_PAGE, page);
+                                pageCount = transactionsDeliver.getPagesQuantityByFrom(from, Constants.COUNT_TRANSACTIONS_ON_PAGE);
+
+
+                            } else if (from < 0) {
+                                transactions = transactionsDeliver.findTransactionsByToPage(to, Constants.COUNT_TRANSACTIONS_ON_PAGE, page);
+                                pageCount = transactionsDeliver.getPagesQuantityByTo(to, Constants.COUNT_TRANSACTIONS_ON_PAGE);
+                            } else {
+
+                                AccessRulesChecker.organisationRoleCheck(request, Constants.BANK_ORGANISATION_ROLE);
+
+                                transactions = transactionsDeliver.findTransactionsByFromAndToPage(from, to, Constants.COUNT_TRANSACTIONS_ON_PAGE, page);
+                                pageCount = transactionsDeliver.getPagesQuantityByFromAndTo(from, to, Constants.COUNT_TRANSACTIONS_ON_PAGE);
+                            }
+                            break;
+
+                        case "date":
+                            int fromWithDate = Integer.parseInt(request.getParameter("accountFromDate"));
+                            String dateFrom = request.getParameter("dateFrom").replaceAll("-", ".");
+                            String dateTo = request.getParameter("dateTo").replaceAll("-", ".");
+                            logger.info("dateTo: " + dateTo);
+                            transactions = transactionsDeliver.findTransactionsByDatePage(fromWithDate, dateFrom, dateTo, Constants.COUNT_TRANSACTIONS_ON_PAGE, page);
+                            pageCount = transactionsDeliver.getPagesQuantityByDate(fromWithDate, dateFrom, dateTo, Constants.COUNT_TRANSACTIONS_ON_PAGE);
+                            break;
+                        default:
+                            transactions = transactionsDeliver.getTransactionsPage(Constants.COUNT_TRANSACTIONS_ON_PAGE, page);
+                            pageCount = transactionsDeliver.getPagesQuantity(Constants.COUNT_TRANSACTIONS_ON_PAGE);
+                            break;
+                    }
+
+                } else {
+
+
+                    int from = Integer.parseInt(request.getParameter("accountFrom"));
+                    int to = Integer.parseInt(request.getParameter("accountTo"));
+
+                    if (to < 0 && from < 0) {
+
+                        if (to == -2) {
+                            transactions = transactionsDeliver.findTransactionsByFromPage(organisationID, Constants.COUNT_TRANSACTIONS_ON_PAGE, page);
+                            pageCount = transactionsDeliver.getPagesQuantityByFrom(organisationID, Constants.COUNT_TRANSACTIONS_ON_PAGE);
                         } else {
-                            transactions = transactionsDeliver.findTransactionsByFromAndToPage(from, to, COUNT_ON_PAGE, page);
-                            pageCount = transactionsDeliver.getPagesQuantityByFromAndTo(from, to, COUNT_ON_PAGE);
+                            transactions = transactionsDeliver.findTransactionsByToPage(organisationID, Constants.COUNT_TRANSACTIONS_ON_PAGE, page);
+                            pageCount = transactionsDeliver.getPagesQuantityByTo(organisationID, Constants.COUNT_TRANSACTIONS_ON_PAGE);
                         }
-                        break;
 
-                    case "date":
-                        int fromWithDate = Integer.parseInt(request.getParameter("accountFromDate"));
-                        String dateFrom = request.getParameter("dateFrom").replaceAll("-", ".");
-                        String dateTo = request.getParameter("dateTo").replaceAll("-", ".");
-                        logger.info("dateTo: " + dateTo);
-                        transactions = transactionsDeliver.findTransactionsByDatePage(fromWithDate, dateFrom, dateTo, COUNT_ON_PAGE, page);
-                        pageCount = transactionsDeliver.getPagesQuantityByDate(fromWithDate, dateFrom, dateTo, COUNT_ON_PAGE);
-                        break;
-                    default:
-                        transactions = transactionsDeliver.getTransactionsPage(COUNT_ON_PAGE, page);
-                        pageCount = transactionsDeliver.getPagesQuantity(COUNT_ON_PAGE);
-                        break;
+                    } else if (to < 0) {
+
+                        transactions = transactionsDeliver.findTransactionsByFromAndToPage(from, organisationID, Constants.COUNT_TRANSACTIONS_ON_PAGE, page);
+                        pageCount = transactionsDeliver.getPagesQuantityByFromAndTo(from, organisationID, Constants.COUNT_TRANSACTIONS_ON_PAGE);
+
+
+                    } else {
+                        transactions = transactionsDeliver.findTransactionsByFromAndToPage(organisationID, to, Constants.COUNT_TRANSACTIONS_ON_PAGE, page);
+                        pageCount = transactionsDeliver.getPagesQuantityByFromAndTo(organisationID, to, Constants.COUNT_TRANSACTIONS_ON_PAGE);
+                    }
+
                 }
-
             } else {
-                transactions = transactionsDeliver.getTransactionsPage(COUNT_ON_PAGE, page);
-                pageCount = transactionsDeliver.getPagesQuantity(COUNT_ON_PAGE);
+
+                if (organisationRole == Constants.BANK_ORGANISATION_ROLE) {
+                    transactions = transactionsDeliver.getTransactionsPage(Constants.COUNT_TRANSACTIONS_ON_PAGE, page);
+                    pageCount = transactionsDeliver.getPagesQuantity(Constants.COUNT_TRANSACTIONS_ON_PAGE);
+                } else {
+                    transactions = transactionsDeliver.findTransactionsByFromOrToPage(organisationID, Constants.COUNT_TRANSACTIONS_ON_PAGE, page);
+                    pageCount = transactionsDeliver.getPagesQuantityByFromOrTo(organisationID, Constants.COUNT_TRANSACTIONS_ON_PAGE);
+                }
             }
 
             ArrayList<Integer> startPages = getStartPages(page);
             ArrayList<Integer> finishPages = getFinishPages(page, pageCount);
-
-            logger.info(page);
-            logger.info(startPages);
-            logger.info(finishPages);
-            logger.info(getStartPage(startPages));
-            logger.info(getFinishPage(finishPages, pageCount));
 
 
             request.setAttribute("currentPage", page);
@@ -104,8 +157,10 @@ public class ShowTransactionsHistory implements Command {
                     ServiceFactory.getINSTANCE().getRequestBuilder().withSortByOrganisationName().build()
             ));
 
+        } catch (ServiceValidationException e) {
+            throw new CommandControllerValidationException(e);
         } catch (ServiceException e) {
-            logger.warn(e);
+            throw new CommandControllerException(e);
         }
 
 
@@ -115,9 +170,9 @@ public class ShowTransactionsHistory implements Command {
     private ArrayList<Integer> getStartPages(int page) {
 
         ArrayList<Integer> pages = new ArrayList<>();
-        int iPage = page - ADDITIONAL_PAGES_START;
+        int iPage = page - Constants.ADDITIONAL_TRANSACTIONS_PAGES_START;
 
-        for (int i = 0; i < ADDITIONAL_PAGES_START; i++) {
+        for (int i = 0; i < Constants.ADDITIONAL_TRANSACTIONS_PAGES_START; i++) {
 
             if (iPage > 0) {
                 pages.add(iPage);
@@ -133,7 +188,7 @@ public class ShowTransactionsHistory implements Command {
 
         ArrayList<Integer> pages = new ArrayList<>();
 
-        for (int i = 0; i < ADDITIONAL_PAGES_FINISH; i++) {
+        for (int i = 0; i < Constants.ADDITIONA_TRANSACTIONSL_PAGES_FINISH; i++) {
 
             page++;
 

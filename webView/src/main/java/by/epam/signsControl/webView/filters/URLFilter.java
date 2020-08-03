@@ -1,6 +1,7 @@
 package by.epam.signsControl.webView.filters;
 
 
+import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.RequestParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,25 +20,29 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
-//@WebFilter(urlPatterns = "/[^.]*") didn't working
-
+/**
+ * store request uri to the session attribute like a {@link Constants#REQUIRED_URI} param
+ * <p>
+ * check is xss attack
+ * <p>
+ * direct to main or upload servlet, or to the required resources
+ */
 @WebFilter(urlPatterns = "/*")
 public class URLFilter implements Filter {
 
-    private static final String SERVLET_PATH = "/app";
-    public static final String REQUIRED_URI = "uri";
-    public static final String ROLE = "role";
+    /**
+     * logger
+     */
     private static final Logger logger = LogManager.getLogger(Filter.class);
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-
-    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
+
+        if (isXSSAttack(httpRequest.getPathInfo()) || isXSSAttack(((HttpServletRequest) request).getRequestURI())) {
+            return;
+        }
 
         if (!Pattern.matches("[^.]*", httpRequest.getRequestURI())) {
             logger.warn("if, catch: " + httpRequest.getRequestURI());
@@ -46,16 +51,11 @@ public class URLFilter implements Filter {
         }
 
 
-        if (isXSSAttack(httpRequest.getPathInfo()) || isXSSAttack(((HttpServletRequest) request).getRequestURI())) {
-            return;
-        }
-
-
         String requestURI = httpRequest.getRequestURI();
 
         logger.info("filter start URI: " + requestURI);
 
-        request.setAttribute(REQUIRED_URI, requestURI);
+        request.setAttribute(Constants.REQUIRED_URI, requestURI);
 
         logger.info("filter middle");
 
@@ -63,12 +63,13 @@ public class URLFilter implements Filter {
             chain.doFilter(request, response);
         } else {
 
-            request.getRequestDispatcher(SERVLET_PATH).forward(request, response);
+            request.getRequestDispatcher(Constants.SERVLET_PATH).forward(request, response);
         }
 
         logger.info("end of filter");
     }
 
+    /*check is xss attack*/
     private boolean isXSSAttack(String path) {
 
         if (path == null) {
@@ -87,9 +88,4 @@ public class URLFilter implements Filter {
         return false;
     }
 
-
-    @Override
-    public void destroy() {
-
-    }
 }

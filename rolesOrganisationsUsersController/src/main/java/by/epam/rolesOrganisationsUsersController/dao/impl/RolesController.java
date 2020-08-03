@@ -60,6 +60,16 @@ public class RolesController implements IRolesController {
     private static final String SQL_SELECT_USER_ALL = "SELECT * FROM `user_roles` order by role";
 
     /**
+     * sql user select role by id request
+     */
+    private static final String SQL_SELECT_USER_ROLE_BY_ID = "SELECT * FROM `user_roles` order by role where id=?";
+
+    /**
+     * sql user select roles besides role with id
+     */
+    private static final String SQL_SELECT_USER_ROLES_BESIDE = "SELECT * FROM `user_roles` order by role where id!=?";
+
+    /**
      * sql select organisation role name by id  request for {@link java.sql.PreparedStatement}
      */
     private static final String SQL_SET_NAME_ORGANISATION = "UPDATE `organisation_roles` SET `role` = ? WHERE (`id` = ?);";
@@ -183,6 +193,47 @@ public class RolesController implements IRolesController {
         try {
 
             return (Role[]) RequestExecutor.getSignsStaff(SQL_SELECT_USER_ALL, new Role());
+
+        } catch (SQLException ex) {
+
+            throw new DAOException(ex);
+
+        }
+    }
+
+    /**
+     * get users role from jdbc with id like first element of arra or empty array
+     *
+     * @param id role to find
+     * @return array of Roles or empty orray if can't find role
+     * @throws DAOException when other exception occurred
+     * @see RequestExecutor#getSignsStaff(String, FactoryType, int...)
+     */
+    @Override
+    public Role[] getUsersRole(int id) throws DAOException {
+        try {
+
+            return (Role[]) RequestExecutor.getSignsStaff(SQL_SELECT_USER_ROLE_BY_ID, new Role(), id);
+
+        } catch (SQLException ex) {
+
+            throw new DAOException(ex);
+
+        }
+    }
+
+    /**
+     * get users roles from jdbc besides id param
+     * @param id role to not show
+     * @return array of Roles or empty orray if can't find roles
+     * @throws DAOException when other exception occurred
+     * @see RequestExecutor#getSignsStaff(String, FactoryType, int...)
+     */
+    @Override
+    public Role[] getUsersRolesBeside(int id) throws DAOException {
+        try {
+
+            return (Role[]) RequestExecutor.getSignsStaff(SQL_SELECT_USER_ROLES_BESIDE, new Role(), id);
 
         } catch (SQLException ex) {
 

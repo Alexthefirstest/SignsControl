@@ -34,7 +34,7 @@
 <body class="auto_center center">
 <jsp:include page="../header.jsp"/>
 
-<a href="${pageContext.request.contextPath}/types_of_work">тип работ</a>
+<a href="${pageContext.request.contextPath}/types_of_work"><fmt:message key="label.type_of_work" /></a>
 <hr><br>
 <form action='${pageContext.request.contextPath}/orders' method="get">
     <input type="text" name="orders_option" value='all' hidden>

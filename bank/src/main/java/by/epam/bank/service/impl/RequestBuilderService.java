@@ -152,6 +152,18 @@ public class RequestBuilderService implements IRequestBuilderService {
     }
 
     /**
+     * find by id
+     *
+     * @param id id to find
+     * @return this
+     */
+    @Override
+    public IRequestBuilderService findById(int id) {
+        daoRequestBuilder.findById(id);
+        return this;
+    }
+
+    /**
      * @return ready to execution {@link IRequest}
      * with field request
      * consist of base request and parameters added during build

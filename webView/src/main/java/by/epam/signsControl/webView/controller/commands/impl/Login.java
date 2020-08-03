@@ -1,6 +1,7 @@
 package by.epam.signsControl.webView.controller.commands.impl;
 
 import by.epam.signsControl.webView.controller.commands.Command;
+import by.epam.signsControl.webView.exceptions.CommandControllerException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
+/**
+ * forvard to the login form jsp
+ */
 public class Login implements Command {
 
     private static final Logger logger = LogManager.getLogger(Login.class);

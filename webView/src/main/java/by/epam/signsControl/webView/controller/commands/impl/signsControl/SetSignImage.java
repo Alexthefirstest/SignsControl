@@ -1,8 +1,13 @@
 package by.epam.signsControl.webView.controller.commands.impl.signsControl;
 
 import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
+import by.epam.signsControl.service.exceptions.ServiceValidationException;
 import by.epam.signsControl.service.factory.ServiceFactory;
+import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.commands.Command;
+import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
+import by.epam.signsControl.webView.exceptions.CommandControllerException;
+import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +22,7 @@ public class SetSignImage implements Command {
     private static Logger logger = LogManager.getLogger(SetSignImage.class);
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ServiceException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CommandControllerException {
 
         logger.info("inside execute");
 
@@ -26,6 +31,7 @@ public class SetSignImage implements Command {
 
         logger.info(imageSize);
 
+        AccessRulesChecker.organisationRoleCheck(request, Constants.ODD_ORGANISATION_ROLE);
 
         try {
 
@@ -35,8 +41,10 @@ public class SetSignImage implements Command {
                         setPicture(Integer.parseInt(request.getParameter("sign_id")), imagePart.getInputStream(), imageSize);
             }
 
+        } catch (ServiceValidationException e) {
+            throw new CommandControllerValidationException(e);
         } catch (by.epam.signsControl.service.exceptions.ServiceException e) {
-            logger.warn(e);
+            throw new CommandControllerException(e);
         }
 
 

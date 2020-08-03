@@ -96,7 +96,14 @@
 <tr>
 
 <td>${user.id}</td>
-<td><a href="${pageContext.request.contextPath}/user_profile/${user.id}" >${user.login}</a></td>
+<td>${user.login}
+<br>
+<c:if test="${ (user.organisation.id==4  && sessionScope.organisationRole==5 && sessionScope.userRole==2) || (user.organisation.id!=5 && ( (sessionScope.userRole==2 &&  sessionScope.organisationID==user.organisation.id) || sessionScope.organisationRole==5 ) ) }">
+
+<a href="${pageContext.request.contextPath}/user_profile/${user.id}" ><fmt:message key="label.user_profile" /></a></td>
+
+</c:if>
+
 <td>${user.name}</td>
 <td>${user.surname}</td>
 <td>${user.role.role}</td>

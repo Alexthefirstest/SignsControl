@@ -58,7 +58,7 @@
 
   <c:choose>
 
-        <c:when test="${empty sessionScope.role}">
+        <c:when test="${sessionScope.userRole==1}">
 
         <a href="${pageContext.request.contextPath}/login" ><fmt:message key="label.log_in" /></a>
 
@@ -70,6 +70,11 @@
        ${sessionScope.username} <br><a href="${pageContext.request.contextPath}/logout" ><fmt:message key="label.log_out" /></a>
 <br>
     <a href="${pageContext.request.contextPath}/user_profile/${sessionScope.userID}" ><fmt:message key="label.user_profile" /></a>
+
+    <c:if test="${ sessionScope.userRole==2}">
+
+    <a href="${pageContext.request.contextPath}/organisation_profile/${sessionScope.organisationID}" ><fmt:message key="label.organisation" /></a>
+    </c:if>
 
             </c:otherwise>
 

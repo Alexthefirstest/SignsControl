@@ -81,6 +81,18 @@ public class OrganisationsController implements IOrganisationsController {
     /**
      * select request request in jdbc for {@link java.sql.PreparedStatement}
      */
+    private static final String SQL_SELECT_BY_ID = "SELECT org.id, org.name, org.role, orgR.role, is_blocked," +
+            " info FROM organisations as org join organisation_roles as orgR on org.role=orgR.id order by org.name where org.id=?";
+
+    /**
+     * select request request in jdbc for {@link java.sql.PreparedStatement}
+     */
+    private static final String SQL_SELECT_WITHOUT_ID = "SELECT org.id, org.name, org.role, orgR.role, is_blocked," +
+            " info FROM organisations as org join organisation_roles as orgR on org.role=orgR.id order by org.name where org.id!=?";
+
+    /**
+     * select request request in jdbc for {@link java.sql.PreparedStatement}
+     */
     private static final String SQL_SELECT_BY_ROLE = "SELECT org.id, org.name, org.role, orgR.role, is_blocked," +
             " info FROM organisations as org join organisation_roles as orgR on org.role=orgR.id where org.role=? order by org.name;";
 
@@ -317,6 +329,43 @@ public class OrganisationsController implements IOrganisationsController {
         try {
 
             return (Organisation[]) RequestExecutor.getSignsStaff(SQL_SELECT_ALL, new Organisation());
+
+        } catch (SQLException ex) {
+
+            throw new DAOException(ex);
+
+        }
+    }
+
+    /**
+     * * @param id to find
+     * @return organisation like first element of array with id or empty array
+     * @throws DAOException when other exceptions during process occurred
+     * @see RequestExecutor#getSignsStaff(String, FactoryType, int...)
+     */
+    @Override
+    public Organisation[] getOrganisation(int id) throws DAOException {
+        try {
+
+            return (Organisation[]) RequestExecutor.getSignsStaff(SQL_SELECT_BY_ID, new Organisation(), id);
+
+        } catch (SQLException ex) {
+
+            throw new DAOException(ex);
+
+        }
+    }
+
+    /*** @param id to not show
+     * @return organisations array without organisation with id param
+     * @throws DAOException when get an exception during execution
+     * @see RequestExecutor#getSignsStaff(String, FactoryType, int...)
+     */
+    @Override
+    public Organisation[] getOrganisationsBeside(int id) throws DAOException {
+        try {
+
+            return (Organisation[]) RequestExecutor.getSignsStaff(SQL_SELECT_WITHOUT_ID, new Organisation(), id);
 
         } catch (SQLException ex) {
 

@@ -8,6 +8,9 @@ import by.epam.orders.dao.factory.DaoFactory;
 import by.epam.orders.service.IWorkersCrewControlService;
 import by.epam.orders.service.exceptions.ServiceException;
 import by.epam.orders.service.exceptions.ServiceValidationException;
+import by.epam.rolesOrganisationsUsersController.bean.Organisation;
+import by.epam.rolesOrganisationsUsersController.bean.User;
+import by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory;
 
 /**
  * service for working with {@link WorkersCrew}, get, add, set parameters of workers crew
@@ -72,14 +75,19 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
     }
 
     /**
-     * delete crew
+     * delete crew if organisation of removing user equal crew role
      *
+     * @param id                       to delete
+     * @param deletingUserOrganisation organisation or user that delete crew
      * @return true if success
      * @throws ServiceValidationException when {@link IWorkersCrewControl} throw {@link DAOValidationException}
      * @throws ServiceException           ex when {@link IWorkersCrewControl} throw {@link DAOException}
      */
     @Override
-    public boolean removeWorkersCrew(int id) throws ServiceException {
+    public boolean removeWorkersCrew(int id, int deletingUserOrganisation) throws ServiceException {
+
+        checkOrganisation(deletingUserOrganisation, id);
+
         try {
 
             return workersCrewControl.removeWorkersCrew(id);
@@ -91,15 +99,18 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
     }
 
     /**
-     * @param workersCrewID where set
-     * @param date          to set
+     * @param workersCrewID           where set
+     * @param date                    to set
+     * @param settingUserOrganisation organisation of user that set
      * @return true if success
      * @throws ServiceValidationException when {@link IWorkersCrewControl} throw {@link DAOValidationException}
      *                                    or data invalid {@link InputValidation}
      * @throws ServiceException           ex when {@link IWorkersCrewControl} throw {@link DAOException}
      */
     @Override
-    public boolean setDateOfRemove(int workersCrewID, String date) throws ServiceException {
+    public boolean setDateOfRemove(int workersCrewID, String date, int settingUserOrganisation) throws ServiceException {
+
+        checkOrganisation(settingUserOrganisation, workersCrewID);
 
         InputValidation.nullAndDateCheck(date);
 
@@ -114,15 +125,19 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
     }
 
     /**
-     * @param workersCrewId where set
-     * @param info          to set
+     * @param workersCrewId           where set
+     * @param info                    to set
+     * @param settingUserOrganisation organisation of user that set info
      * @return true if success
      * @throws ServiceValidationException when {@link IWorkersCrewControl} throw {@link DAOValidationException}
      *                                    or data invalid {@link InputValidation}
      * @throws ServiceException           ex when {@link IWorkersCrewControl} throw {@link DAOException}
      */
     @Override
-    public boolean setInfo(int workersCrewId, String info) throws ServiceException {
+    public boolean setInfo(int workersCrewId, String info, int settingUserOrganisation) throws ServiceException {
+
+
+        checkOrganisation(settingUserOrganisation, workersCrewId);
 
         InputValidation.nullCheck(info);
 
@@ -137,22 +152,33 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
     }
 
     /**
-     * add worker to workers crew
+     * add worker to workers crew in case worker organisation = workers crew organisation
      *
      * @param workersCrewId where set
-     * @param workersId     to set
+     * @param workerId      to set
      * @return {@link WorkersCrew}
      * @throws ServiceValidationException when {@link IWorkersCrewControl} throw {@link DAOValidationException}
      * @throws ServiceException           ex when {@link IWorkersCrewControl} throw {@link DAOException}
      */
     @Override
-    public WorkersCrew addWorker(int workersCrewId, int workersId) throws ServiceException {
+    public WorkersCrew addWorker(int workersCrewId, int workerId, int addingUserOrganisation) throws ServiceException {
         try {
 
-            return workersCrewControl.addWorker(workersCrewId, workersId);
-        } catch (DAOValidationException ex) {
+            User user = ServiceFactory.getINSTANCE().getUsersControllerService().getUser(workerId);
+
+            int organisation = workersCrewControl.getWorkersCrewOrganisation(workersCrewId);
+
+            if (user == null || organisation < 0 || workersCrewControl.getWorkersCrewRemoveDate(workersCrewId) != null
+                    || user.getOrganisation().getId() != organisation || addingUserOrganisation != organisation) {
+
+                throw new ServiceValidationException("wrong user or crew");
+            }
+
+
+            return workersCrewControl.addWorker(workersCrewId, workerId);
+        } catch (DAOValidationException | by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
-        } catch (DAOException ex) {
+        } catch (DAOException | by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException ex) {
             throw new ServiceException(ex);
         }
     }
@@ -160,14 +186,17 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
     /**
      * remove worker
      *
-     * @param workersCrewId where set
-     * @param workersId     to set
+     * @param workersCrewId            where set
+     * @param workersId                to set
+     * @param deletingUserOrganisation organisation of user that delete
      * @return {@link WorkersCrew}
      * @throws ServiceValidationException when {@link IWorkersCrewControl} throw {@link DAOValidationException}
      * @throws ServiceException           ex when {@link IWorkersCrewControl} throw {@link DAOException}
      */
     @Override
-    public WorkersCrew removeWorker(int workersCrewId, int workersId) throws ServiceException {
+    public WorkersCrew removeWorker(int workersCrewId, int workersId, int deletingUserOrganisation) throws ServiceException {
+
+        checkOrganisation(deletingUserOrganisation, workersCrewId);
 
         try {
 
@@ -297,5 +326,24 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
         } catch (DAOException ex) {
             throw new ServiceException(ex);
         }
+    }
+
+
+    private void checkOrganisation(int userOrganisation, int workersCrewId) throws ServiceException {
+        try {
+
+            int organisation = workersCrewControl.getWorkersCrewOrganisation(workersCrewId);
+
+            if (organisation != userOrganisation) {
+                throw new ServiceValidationException("wrong organisation or crew");
+            }
+
+
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+
     }
 }

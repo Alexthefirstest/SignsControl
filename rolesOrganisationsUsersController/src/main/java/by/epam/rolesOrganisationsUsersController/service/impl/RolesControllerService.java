@@ -97,6 +97,50 @@ public class RolesControllerService implements IRolesControllerService {
     }
 
     /**
+     * get array of  roles with first element is role with id
+     *
+     * @param id to find
+     * @return {@link Role} array
+     * @throws ServiceValidationException when { catch {@link DAOValidationException}
+     *                                    from {@link IRolesController#getOrganisationsRoles()} ()}  }
+     * @throws ServiceException           when catch {@link DAOException}
+     *                                    from {@link IRolesController#getOrganisationsRoles()} ()}
+     */
+    @Override
+    public Role[] getUsersRole(int id) throws ServiceException {
+        try {
+
+            return rolesController.getUserRole(id);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    /**
+     * get array of  roles with first element is role with id
+     *
+     * @param id to not show
+     * @return {@link Role} array
+     * @throws ServiceValidationException when { catch {@link DAOValidationException}
+     *                                    from {@link IRolesController#getOrganisationsRoles()} ()}  }
+     * @throws ServiceException           when catch {@link DAOException}
+     *                                    from {@link IRolesController#getOrganisationsRoles()} ()}
+     */
+    @Override
+    public Role[] getUsersRolesBeside(int id) throws ServiceException {
+        try {
+
+            return rolesController.getUsersRolesBeside(id);
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    /**
      * @param id   role id
      * @param name new role name
      * @return true if success, false - if no

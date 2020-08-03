@@ -21,6 +21,25 @@ public interface IRolesControllerService {
      */
     Role[] getOrganisationsRoles() throws ServiceException;
 
+
+    /**
+     * get array of  roles with first element is role with id
+     *
+     * @param id to find
+     * @return {@link Role} array
+     * @throws ServiceException when get an exception during execution
+     */
+    Role[] getUsersRole(int id) throws ServiceException;
+
+    /**
+     * get array of  roles without role with id
+     *
+     * @param id to not show
+     * @return {@link Role} array
+     * @throws ServiceException when get an exception during execution
+     */
+    Role[] getUsersRolesBeside(int id) throws ServiceException;
+
     /**
      * get array of all {@link by.epam.rolesOrganisationsUsersController.bean.User} roles
      *

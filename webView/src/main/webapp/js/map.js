@@ -959,7 +959,7 @@ function changeOrder(coordinates) {
 let crewsSelect=document.getElementById("workers_crews");
 let ordersSelect=document.getElementById("order_id");
 
-if(workers_crews==null){
+if(crewsSelect==null){
 
  $.ajax({
 
