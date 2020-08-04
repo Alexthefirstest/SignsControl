@@ -5,7 +5,9 @@ import by.epam.signsControl.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.commands.Command;
 import by.epam.signsControl.webView.controller.commands.CommandName;
+import by.epam.signsControl.webView.exceptions.AccessException;
 import by.epam.signsControl.webView.exceptions.CommandControllerException;
+import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -93,13 +95,29 @@ public class UploadServlet extends HttpServlet {
                 commandProvider.getCommand(CommandName.SET_SIGN_IMAGE.toString()).execute(req, resp);
 
             } else {
+
                 logger.warn("wrong set image uri" + req.getAttribute(Constants.REQUIRED_URI));
+                commandProvider.getCommand(CommandName.WRONG_COMMAND.toString()).execute(req, resp);
             }
 
 
-        } catch (CommandControllerException ex) {
-            logger.warn(ex);
+        } catch (AccessException ex) {
 
+            logger.warn("wrong access", ex);
+
+            req.getRequestDispatcher("/WEB-INF/error_pages/access_forbidden.jsp").forward(req, resp);
+
+        } catch (CommandControllerValidationException ex) {
+
+            logger.warn("validation exception", ex);
+
+            req.setAttribute("message", ex.getMessage());
+
+            req.getRequestDispatcher("/WEB-INF/error_pages/validation_exception.jsp").forward(req, resp);
+
+        } catch (CommandControllerException ex) {
+            logger.warn("!SERIOUS EXCEPTION!", ex);
+            req.getRequestDispatcher("/WEB-INF/error_pages/errors.jsp").forward(req, resp);
         }
 
         logger.info("inside servlet post2");

@@ -1,4 +1,3 @@
-<%@ page isErrorPage="true" contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -27,7 +26,7 @@
 
 <head>
 
-    <title>Server error</title>
+    <title>simple problem</title>
 
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -38,26 +37,21 @@
 <body>
 <jsp:include page="header.jsp"/>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/500.css?3">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/validation_exception.css?3">
 
+<body>
 
-<div class="wrapper">
-<div class="box">
-<h1>500</h1>
-<p><fmt:message key="label.server_exception" /></p>
-<p>&#58;&#40;</p>
-</div>
-</div>
+	<div id="notfound">
+		<div class="notfound">
+			<div class="notfound-404">
+				<h1>warning</h1>
+			</div>
+			<h2><fmt:message key="label.problem_during_execution" /></h2>
+			<p>${message}</p>
 
+		</div>
+	</div>
 
-<!-- Error during ${pageContext.errorData.requestURI} request-->
-<!-- <br/><br/><br/>-->
-<!-- Status code: ${pageContext.errorData.statusCode}-->
-<!-- <br/>-->
-<!-- exception: ${pageContext.exception}-->
-<!-- <br/>-->
-<!-- message: ${pageContext.exception.message}-->
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 
-
-</body>
 </html>

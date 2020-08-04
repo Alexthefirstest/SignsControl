@@ -1,6 +1,8 @@
 package by.epam.signsControl.webView.controller;
 
+import by.epam.signsControl.webView.exceptions.AccessException;
 import by.epam.signsControl.webView.exceptions.CommandControllerException;
+import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -83,9 +85,24 @@ public class CommandController extends HttpServlet {
         try {
 
             commandProvider.getCommand(RequestParser.getCommandFromURI(req)).execute(req, resp);
-        } catch (CommandControllerException ex) {
-            logger.warn(ex);
 
+        } catch (AccessException ex) {
+
+            logger.warn("wrong access", ex);
+
+            req.getRequestDispatcher("/WEB-INF/error_pages/access_forbidden.jsp").forward(req, resp);
+
+        } catch (CommandControllerValidationException ex) {
+
+            logger.warn("validation exception", ex);
+
+            req.setAttribute("message", ex.getMessage());
+
+            req.getRequestDispatcher("/WEB-INF/error_pages/validation_exception.jsp").forward(req, resp);
+
+        } catch (CommandControllerException ex) {
+            logger.warn("!SERIOUS EXCEPTION!", ex);
+            req.getRequestDispatcher("/WEB-INF/error_pages/errors.jsp").forward(req, resp);
         }
     }
 

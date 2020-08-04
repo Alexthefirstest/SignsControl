@@ -1,4 +1,3 @@
-<%@ page isErrorPage="true" contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -27,37 +26,32 @@
 
 <head>
 
-    <title>Server error</title>
+    <title>404</title>
 
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
+
+		 <!-- <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>-->
+		<!--  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>-->
 
 </head>
 
 <body>
 <jsp:include page="header.jsp"/>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/500.css?3">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/404.css?3">
 
+	<div id="notfound">
+		<div class="notfound">
+			<div class="notfound-404"></div>
+			<h1>404</h1>
+			<h2><fmt:message key="label.page_not_found" /></h2>
+			<p><fmt:message key="label.page_never_exist" /></p>
 
-<div class="wrapper">
-<div class="box">
-<h1>500</h1>
-<p><fmt:message key="label.server_exception" /></p>
-<p>&#58;&#40;</p>
-</div>
-</div>
+		</div>
+	</div>
 
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 
-<!-- Error during ${pageContext.errorData.requestURI} request-->
-<!-- <br/><br/><br/>-->
-<!-- Status code: ${pageContext.errorData.statusCode}-->
-<!-- <br/>-->
-<!-- exception: ${pageContext.exception}-->
-<!-- <br/>-->
-<!-- message: ${pageContext.exception.message}-->
-
-
-</body>
 </html>
