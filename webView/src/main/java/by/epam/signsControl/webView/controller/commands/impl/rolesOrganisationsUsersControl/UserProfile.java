@@ -9,6 +9,7 @@ import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.RequestParser;
 import by.epam.signsControl.webView.controller.commands.Command;
 import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
+import by.epam.signsControl.webView.exceptions.AccessException;
 import by.epam.signsControl.webView.exceptions.CommandControllerException;
 import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
@@ -32,7 +33,13 @@ public class UserProfile implements Command {
 
         try {
 
-            int id = Integer.parseInt(RequestParser.getSecondCommandFromURI(request));
+            String command=RequestParser.getSecondCommandFromURI(request);
+
+            if (command==null){
+                throw new CommandControllerValidationException("request is null");
+            }
+
+            int id = Integer.parseInt(command);
             IUsersControllerService usersControllerService = ServiceFactory.getINSTANCE().getUsersControllerService();
 
             User user = usersControllerService.getUser(id);
@@ -45,14 +52,15 @@ public class UserProfile implements Command {
                             && user.getRole().getId() != Constants.ADMINISTRATOR_ROLE
                             || user.getOrganisation().getId() == Constants.ADMINISTRATORS_ORGANISATION_ID
                             && !AccessRulesChecker.userRoleCheckBool(request, Constants.ADMINISTRATOR_ROLE)) {
+
                         logger.warn("wrong action if");
-                        throw new CommandControllerValidationException("can't show this user");
+                        throw new AccessException("can't show this user");
                     }
 
                 } else {
                     AccessRulesChecker.userRoleCheck(request, Constants.ADMINISTRATOR_ROLE);
                     if (user.getOrganisation().getId() != (Integer) request.getSession().getAttribute(Constants.ORGANISATION_ID)) {
-                        throw new CommandControllerValidationException("wrong action else");
+                        throw new AccessException("wrong action else");
                     }
                 }
             }

@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * change workers crew in case crew organisation equals user organisation  session attribute
+ */
 public class ChangeWorkersCrew implements Command {
 
     private static final Logger logger = LogManager.getLogger(ChangeWorkersCrew.class);
@@ -29,44 +32,51 @@ public class ChangeWorkersCrew implements Command {
 
         logger.info("inside execute");
 
-        try{
-        AccessRulesChecker.userRoleCheck(request, Constants.ADMINISTRATOR_ROLE);
+        try {
 
-        IWorkersCrewControlService workersCrewControlService = by.epam.orders.service.factory.ServiceFactory.getINSTANCE().getWorkersCrewControlService();
+            AccessRulesChecker.organisationRoleCheck(request, Constants.PERFORMERS_ORGANISATIONS_ROLE);
+            AccessRulesChecker.userRoleCheck(request, Constants.ADMINISTRATOR_ROLE);
 
-        String command = RequestParser.getSecondCommandFromURI(request);
+            IWorkersCrewControlService workersCrewControlService = by.epam.orders.service.factory.ServiceFactory.getINSTANCE().getWorkersCrewControlService();
 
-        switch (command) {
-            case "delete":
-                logger.info("gere1");
-                workersCrewControlService.setDateOfRemove(
-                        Integer.parseInt(request.getParameter("wc")), (new SimpleDateFormat("yyyy.MM.dd").format(new Date())),
-                        (Integer) request.getSession().getAttribute(Constants.ORGANISATION_ID));
-                logger.info("gere1/");
+            String command = RequestParser.getSecondCommandFromURI(request);
 
-                break;
+            if(command==null){
+                throw new CommandControllerValidationException("wrong command");
+            }
 
-            case "set_info":
-                logger.info("gere2");
-                workersCrewControlService.
-                        setInfo(Integer.parseInt(request.getParameter("wc")), request.getParameter("info"),
-                                (Integer) request.getSession().getAttribute(Constants.ORGANISATION_ID));
-                logger.info("gere2/");
-                break;
+            switch (command) {
 
-            case "delete_worker":
-                logger.info("gere3");
-                workersCrewControlService.
-                        removeWorker(Integer.parseInt(request.getParameter("wc"))
-                                , Integer.parseInt(request.getParameter("worker")),
-                                (Integer) request.getSession().getAttribute(Constants.ORGANISATION_ID));
-                logger.info("gere3/");
-                break;
+                case "delete":
 
-        }
+                    workersCrewControlService.setDateOfRemove(
+                            Integer.parseInt(request.getParameter("wc")), (new SimpleDateFormat("yyyy.MM.dd").format(new Date())),
+                            (Integer) request.getSession().getAttribute(Constants.ORGANISATION_ID));
 
 
-        response.sendRedirect(request.getContextPath() + "/workers_crews");
+                    break;
+
+                case "set_info":
+
+                    workersCrewControlService.
+                            setInfo(Integer.parseInt(request.getParameter("wc")), request.getParameter("info"),
+                                    (Integer) request.getSession().getAttribute(Constants.ORGANISATION_ID));
+
+                    break;
+
+                case "delete_worker":
+
+                    workersCrewControlService.
+                            removeWorker(Integer.parseInt(request.getParameter("wc"))
+                                    , Integer.parseInt(request.getParameter("worker")),
+                                    (Integer) request.getSession().getAttribute(Constants.ORGANISATION_ID));
+
+                    break;
+
+            }
+
+
+            response.sendRedirect(request.getContextPath() + "/workers_crews");
 
         } catch (ServiceValidationException e) {
             throw new CommandControllerValidationException(e);

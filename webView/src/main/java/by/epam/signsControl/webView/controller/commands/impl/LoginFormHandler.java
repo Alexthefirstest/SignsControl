@@ -52,7 +52,7 @@ public class LoginFormHandler implements Command {
 
                 session.setAttribute(Constants.USER_ID, user.getId());
                 session.setAttribute(Constants.USER_ROLE, user.getRole().getId());
-                session.setAttribute(Constants.USERNAME, user.getLogin());
+                session.setAttribute(Constants.LOGIN, user.getLogin());
                 session.setAttribute(Constants.ORGANISATION_ID, user.getOrganisation().getId());
                 session.setAttribute(Constants.ORGANISATION_ROLE, user.getOrganisation().getRole().getId());
 

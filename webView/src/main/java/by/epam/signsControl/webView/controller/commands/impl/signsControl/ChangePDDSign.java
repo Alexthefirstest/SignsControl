@@ -1,6 +1,5 @@
 package by.epam.signsControl.webView.controller.commands.impl.signsControl;
 
-import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
 import by.epam.signsControl.service.IPDDSignsControlService;
 import by.epam.signsControl.service.exceptions.ServiceValidationException;
 import by.epam.signsControl.service.factory.ServiceFactory;
@@ -17,7 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * change pdd sign
+ */
 public class ChangePDDSign implements Command {
+
     private static final Logger logger = LogManager.getLogger(ChangePDDSign.class);
 
     @Override

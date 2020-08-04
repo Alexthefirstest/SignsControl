@@ -18,6 +18,7 @@ public interface Command {
      * execute command
      * @param request {@link HttpServletRequest}
      * @param response {@link HttpServletResponse}
+     * @throws CommandControllerException when catch exceptions during execution
      */
     void execute(HttpServletRequest request, HttpServletResponse response) throws CommandControllerException, ServletException, IOException;
 

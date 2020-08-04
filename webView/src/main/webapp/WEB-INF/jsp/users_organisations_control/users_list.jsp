@@ -36,6 +36,9 @@
 
 <br>
 <br>
+
+ <c:if test="${sessionScope.organisationRole==5}">
+ <p>
 <a href="${pageContext.request.contextPath}/users"><fmt:message key="label.show.all.he" /> </a>
 <br>
 <br>
@@ -43,6 +46,7 @@
 <br>
 <br>
 <hr>
+
  <label for="show_organisations"><fmt:message key="label.show.by_organisation" /></label>
 <form action='${pageContext.request.contextPath}/users' method="get" id='show_organisations' accept-charset="UTF-8" class="auto_center center">
 
@@ -62,6 +66,7 @@
 
 </form>
 </p>
+ </c:if>
 <hr>
 <br>
 <br>
@@ -98,7 +103,8 @@
 <td>${user.id}</td>
 <td>${user.login}
 <br>
-<c:if test="${ (user.organisation.id==4  && sessionScope.organisationRole==5 && sessionScope.userRole==2) || (user.organisation.id!=5 && ( (sessionScope.userRole==2 &&  sessionScope.organisationID==user.organisation.id) || sessionScope.organisationRole==5 ) ) }">
+
+<c:if test="${ (user.organisation.role.id==5  && sessionScope.organisationRole==5 && sessionScope.userRole==2) || (user.organisation.role.id!=5 && ( (sessionScope.userRole==2 &&  sessionScope.organisationID==user.organisation.id) || (sessionScope.organisationRole==5 && user.role.id==2) ) ) }">
 
 <a href="${pageContext.request.contextPath}/user_profile/${user.id}" ><fmt:message key="label.user_profile" /></a></td>
 

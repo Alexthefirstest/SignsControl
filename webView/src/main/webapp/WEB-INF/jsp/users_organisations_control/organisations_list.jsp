@@ -105,7 +105,10 @@
 <th scope="col"><fmt:message key="label.role" /></th>
 <th scope="col"><fmt:message key="label.block_condition" /></th>
 <th scope="col"><fmt:message key="label.info" /></th>
+
+  <c:if test="${sessionScope.organisationRole==5}">
 <th scope="col"><fmt:message key="label.change.organisation" /></th>
+</c:if>
 
 </tr>
 
@@ -142,6 +145,9 @@
 
 </td>
 <td>${organisation.info}</td>
+
+
+  <c:if test="${sessionScope.organisationRole==5}">
 <td>
     <form action='${pageContext.request.contextPath}/change_organisation_form_handler' method="post" id='change_organisation'
           accept-charset="UTF-8">
@@ -198,6 +204,8 @@
 
     </form>
     </td>
+
+  </c:if>
 </tr>
 </c:forEach>
 

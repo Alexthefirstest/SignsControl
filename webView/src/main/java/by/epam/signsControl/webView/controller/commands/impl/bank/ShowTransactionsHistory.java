@@ -22,6 +22,9 @@ import java.util.ArrayList;
 
 /**
  * show transactions
+ * show all transactions for bank workers
+ * <p>
+ * show only their organisation's transactions for administrators of this organisation
  */
 public class ShowTransactionsHistory implements Command {
 
@@ -32,7 +35,9 @@ public class ShowTransactionsHistory implements Command {
 
         logger.info("inside execute");
 
-        AccessRulesChecker.notAnonymCheck(request);
+        if (!AccessRulesChecker.userRoleCheckBool(request, Constants.ADMINISTRATOR_ROLE)) {
+            AccessRulesChecker.organisationRoleCheck(request, Constants.BANK_ORGANISATION_ROLE);
+        }
 
 
         int pageCount;
@@ -43,6 +48,7 @@ public class ShowTransactionsHistory implements Command {
             Transaction[] transactions;
 
             String findBy = request.getParameter("findBy");
+
 
             int organisationRole = (Integer) (request.getAttribute(Constants.ORGANISATION_ROLE));
 
@@ -59,7 +65,7 @@ public class ShowTransactionsHistory implements Command {
 
             logger.info(findBy);
 
-            if (findBy == null) {
+            if (findBy != null) {
 
                 if (organisationRole == Constants.BANK_ORGANISATION_ROLE) {
 

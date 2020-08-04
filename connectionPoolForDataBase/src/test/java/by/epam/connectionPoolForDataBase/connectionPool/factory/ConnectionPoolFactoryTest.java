@@ -19,7 +19,6 @@ public class ConnectionPoolFactoryTest {
     @Test
     public void getConnectionPoolInstance() {
         Assert.assertNotNull(connectionPoolFactory.getConnectionPoolInstance());
-        Assert.assertTrue(connectionPoolFactory instanceof IConnectionPool);
     }
 
 }

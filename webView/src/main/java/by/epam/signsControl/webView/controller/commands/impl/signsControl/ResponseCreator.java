@@ -16,20 +16,47 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * create json response
+ */
 public class ResponseCreator {
 
     private static final Logger logger = LogManager.getLogger(ResponseCreator.class);
 
+    /**
+     * yandex map json point pattern
+     */
     public static final String JSON_POINT_PATTERN = "{\"type\": \"Feature\", \"id\": , \"geometry\": {\"type\": \"Point\", \"coordinates\": []}, \"properties\": {\"balloonContent\": \"\", \"clusterCaption\" : \"\", \"hintContent\": \"\", \"pointCoordinates\": \"\"}}";
+
+    /**
+     * yandex map json point pattern only with hint parameter
+     */
     public static final String JSON_POINT_ONLY_HINT_PATTERN = "{\"type\": \"Feature\", \"id\": , \"geometry\": {\"type\": \"Point\", \"coordinates\": []}, \"properties\": {\"hintContent\": \"\", \"pointCoordinates\": \"\",\"clusterCaption\":\"\" }}";
+
+    /**
+     * yandex map json start substring
+     */
     public static final String JSON_POINTS_START_SUBSTRING = "{\"type\": \"FeatureCollection\",\"features\": [";
+
+    /**
+     * yandex map json finish substring
+     */
     public static final String JSON_POINTS_FINISH_SUBSTRING = "] }";
 
     private static final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
+    /**
+     * private constructor
+     */
     private ResponseCreator() {
     }
 
+    /**
+     * create json from array
+     *
+     * @param objects array of objects
+     * @return json string
+     */
     public static String createJSON(Object[] objects) {
 
         return gson.toJson(objects);
@@ -55,7 +82,14 @@ public class ResponseCreator {
 //        return json.toString();
 //    }
 
-
+    /**
+     * create info for add point
+     *
+     * @param directions    directions to create
+     * @param standardSizes to create
+     * @param pddSigns      to create
+     * @return json string
+     */
     static String createAddPointInfoJSON(Direction[] directions, StandardSize[] standardSizes, Sign[] pddSigns) {
 
         StringBuilder json = new StringBuilder("{");
@@ -70,6 +104,12 @@ public class ResponseCreator {
         return json.toString();
     }
 
+    /**
+     * create pdd signs arr json
+     *
+     * @param pddSigns pdd signs to create
+     * @return json string
+     */
     public static String createSignJSONArr(Sign[] pddSigns) {
 
         StringBuilder json = new StringBuilder("[");
@@ -83,7 +123,12 @@ public class ResponseCreator {
         return json.substring(0, json.length() - 1) + "]";
     }
 
-
+    /**
+     * create json string from directions
+     *
+     * @param directionsObj directions
+     * @return json string
+     */
     static String createDirectionsJSON(Direction[] directionsObj) {
         StringBuilder ids = new StringBuilder("[");
         StringBuilder directions = new StringBuilder("[");
@@ -99,6 +144,12 @@ public class ResponseCreator {
         return "{\"ids\":" + finalIDS + ",\"directions\":" + finalDirections + "}";
     }
 
+    /**
+     * create points yandex maps json from map points
+     *
+     * @param mapPoints to create
+     * @return json string in yandex map format
+     */
     static String createPointsJSON(MapPoint[] mapPoints) {
 
 
@@ -141,6 +192,13 @@ public class ResponseCreator {
 
     }
 
+    /**
+     * create point json from map point with local signs
+     *
+     * @param mapPoints to create
+     * @param allPoints boolean to add only point with date of remove is null
+     * @return json yandex map format string
+     */
     static String createPointsJSON(MapPoint$LocalSign[] mapPoints, boolean allPoints) {
 
 
@@ -162,6 +220,7 @@ public class ResponseCreator {
 
     }
 
+    /*create json from point*/
     private static String createPointJson(MapPoint$LocalSign mapPoint$LocalSign, int id, boolean allPoints) {
 
         StringBuilder jsonPoint = new StringBuilder(JSON_POINT_PATTERN);
@@ -178,6 +237,12 @@ public class ResponseCreator {
         return jsonPoint.toString();
     }
 
+    /**
+     * coordinates in mysql pattern to json pattern
+     *
+     * @param coordinates to create
+     * @return json coordinates pattern
+     */
     public static String mysqlCoordinatesToJSONCoordinates(String coordinates) {
         Pattern pattern = Pattern.compile("POINT\\((\\d+\\.?\\d*) (\\d+\\.?\\d*)\\)");
         Matcher matcher = pattern.matcher(coordinates);
@@ -190,6 +255,12 @@ public class ResponseCreator {
         return matcher.group(1) + ", " + matcher.group(2);
     }
 
+    /**
+     * create hint for yandex map point
+     *
+     * @param mapPoint map point to create hint
+     * @return hint
+     */
     public static String createHint(MapPoint mapPoint) {
 
         // String annotation;
@@ -211,7 +282,9 @@ public class ResponseCreator {
 
     }
 
-
+    /*
+     * create baloon for yandex maps
+     */
     private static String createBaloonJSON(MapPoint$LocalSign mapPoint$LocalSign, boolean allPoints) {
 
 
@@ -228,6 +301,9 @@ public class ResponseCreator {
 
     }
 
+    /*
+     * create part of baloon for one direction
+     */
     private static String createBalloonStringForDirection(ArrayList<LocalSign> localSignsWithCommonDirection, boolean allPoints) {
 
         StringBuilder sb = new StringBuilder();
@@ -259,7 +335,7 @@ public class ResponseCreator {
 
         if (sb.length() > 0 && localSignsWithCommonDirection.get(0).getDateOfAdd() != null) {
 
-            sb.insert(0, "<h3>      \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435: " + localSignsWithCommonDirection.get(0).getAngle()+"</h3>");
+            sb.insert(0, "<h3>      \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435: " + localSignsWithCommonDirection.get(0).getAngle() + "</h3>");
 //            sb.insert(0, "<h3>      direction: " + localSignsWithCommonDirection.get(0).getAngle()+"</h3>");
 
             return sb.toString();
@@ -273,7 +349,14 @@ public class ResponseCreator {
 
     }
 
-    public static String createPointHistory(LocalSign[] localSigns, String contextPath) {
+    /**
+     * create point history in json format
+     *
+     * @param localSigns  to create history
+     * @param contextPath to find image of sign
+     * @return json string
+     */
+    static String createPointHistory(LocalSign[] localSigns, String contextPath) {
 
         StringBuilder pointHistory = new StringBuilder();
 
@@ -318,9 +401,15 @@ public class ResponseCreator {
 
     }
 
-    private static final String pictureStartPattern = "<img src=\"";
-    private static final String pictureMiddlePatter = "/upload?id=";
+
+    /*finish part for add picture to html*/
     private static final String pictureFinishPattern = "\"/>";
+
+    /*middle part for add picture to html*/
+    private static final String pictureMiddlePatter = "/upload?id=";
+
+    /*start part for add picture to html*/
+    private static final String pictureStartPattern = "<img src=\"";
 
     private static String createPointHistoryField(LocalSign localSign, String contextPath) {
 
@@ -338,7 +427,7 @@ public class ResponseCreator {
         sb.append("<td>" + localSign.getStandardSize() + "</tb>");
 
         sb.append("<td>" + localSign.getDateOfAdd() + "</tb>");
-        sb.append("<td>" + (((dateOfRemove = localSign.getDateOfRemove()) != null) ? dateOfRemove  : "-") + "</tb>");
+        sb.append("<td>" + (((dateOfRemove = localSign.getDateOfRemove()) != null) ? dateOfRemove : "-") + "</tb>");
         sb.append("<td>" + localSign.getAnnotation() + "</tb>");
         sb.append("<td>" + ((localSign.getPicture() != null) ?
                 (pictureStartPattern + contextPath + pictureMiddlePatter + localSign.getId() + pictureFinishPattern)
@@ -346,11 +435,27 @@ public class ResponseCreator {
         return sb.toString();
     }
 
+    /**
+     * create full sign string from parameters
+     *
+     * @param section sign section
+     * @param sign    sign number
+     * @param kind    sign kind
+     * @return string sign
+     */
     public static String createSign(int section, int sign, int kind) {
         return (section + "." + sign + ((kind > -1) ? ("." + kind) : ""));
     }
 
-    public static String createSignWithQuotes(int section, int sign, int kind) {
+    /**
+     * create full sign string from parameters in quotes
+     *
+     * @param section sign section
+     * @param sign    sign number
+     * @param kind    sign kind
+     * @return string sign
+     */
+    private static String createSignWithQuotes(int section, int sign, int kind) {
 
         return ("\"" + section + "." + sign + ((kind > -1) ? ("." + kind) : "") + '\"');
     }

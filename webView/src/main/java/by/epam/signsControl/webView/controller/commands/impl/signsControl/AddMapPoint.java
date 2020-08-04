@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * add map point to db
+ */
 public class AddMapPoint implements Command {
 
     private static final Logger logger = LogManager.getLogger(AddMapPoint.class);
@@ -23,10 +26,10 @@ public class AddMapPoint implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CommandControllerException {
 
+        logger.info("inside execute");
 
         AccessRulesChecker.organisationRoleCheck(request, Constants.ODD_ORGANISATION_ROLE);
 
-        logger.info("inside execute");
 
 
         String coordinates = ((request.getParameter("coordinatesToSend")));

@@ -264,15 +264,17 @@
 
       <%--  роль 3 --%>
     <c:if test="${sessionScope.organisationRole==3}">
+        <p class="center auto_center">
+        <form >
+            <input type="checkbox" id="execute_delete_order" name="execute_delete_order">
+            <label for="execute_delete_order"> <fmt:message key="label.execute" />  <fmt:message key="label.order" /></label>
+        </form>
+    </p>
     <div style="position: fixed;  bottom: 1px; z-index: 4">
-
 
     <p class="center auto_center">
 
-    <form >
-        <input type="checkbox" id="execute_delete_order" name="execute_delete_order">
-        <label for="execute_delete_order"> <fmt:message key="label.execute" />  <fmt:message key="label.order" /></label>
-    </form>
+
 
 
        <%--  выполняет заказ --%>
@@ -285,8 +287,6 @@
         <label for="order_id"> <fmt:message key="label.order" />:</label><select name="order_id" id='order_id'
                                                      required> </select>
 
-        <label for="order_action"> action:</label><select name="order_action" id='order_action'
-                                                          required>
 
         <label for="workers_crews"> <fmt:message key="label.workers_crew" />:</label><select name="workers_crew" id='workers_crews'
                                                                  required> </select>
@@ -297,11 +297,11 @@
         <br><input type="reset" value=<fmt:message key="label.reset" />>
         <input type="submit" value=<fmt:message key="label.execute" />>
     </form>
-
+  </p></div>
     </c:if>
-    </p></div>
 
-c:if test="${sessionScope.organisationRole==3 && sessionScope.organisationRole==1}">
+
+<c:if test="${sessionScope.organisationRole==3 || sessionScope.organisationRole==1}">
 <p class="center">
 <button id="showOrdersButton"><fmt:message key="label.show" /> <fmt:message key="label.all" /> <fmt:message key="label.orders" /> </button>
 <button id="showOrdersExecutedButton"><fmt:message key="label.show" /> <fmt:message key="label.executed" /> <fmt:message key="label.orders" /></button>

@@ -2,7 +2,12 @@ package by.epam.signsControl.webView.controller;
 
 import by.epam.signsControl.webView.controller.commands.Command;
 import by.epam.signsControl.webView.controller.commands.CommandName;
-import by.epam.signsControl.webView.controller.commands.impl.*;
+import by.epam.signsControl.webView.controller.commands.impl.Login;
+import by.epam.signsControl.webView.controller.commands.impl.LoginFormHandler;
+import by.epam.signsControl.webView.controller.commands.impl.Logout;
+import by.epam.signsControl.webView.controller.commands.impl.MainPage;
+import by.epam.signsControl.webView.controller.commands.impl.SetLocale;
+import by.epam.signsControl.webView.controller.commands.impl.WrongCommand;
 import by.epam.signsControl.webView.controller.commands.impl.bank.AddBankAccountFormHandler;
 import by.epam.signsControl.webView.controller.commands.impl.bank.AddMoney;
 import by.epam.signsControl.webView.controller.commands.impl.bank.ChangeBankAccountFormHandler;
@@ -16,7 +21,6 @@ import by.epam.signsControl.webView.controller.commands.impl.rolesOrganisationsU
 import by.epam.signsControl.webView.controller.commands.impl.signsControl.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 
 import java.util.HashMap;
 import java.util.Map;

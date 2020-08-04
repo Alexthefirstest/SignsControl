@@ -1,6 +1,5 @@
 package by.epam.signsControl.webView.controller.commands.impl.rolesOrganisationsUsersControl;
 
-import by.epam.rolesOrganisationsUsersController.bean.Organisation;
 import by.epam.rolesOrganisationsUsersController.service.IOrganisationsControllerService;
 import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
 import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceValidationException;

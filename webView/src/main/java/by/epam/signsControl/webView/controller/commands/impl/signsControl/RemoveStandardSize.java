@@ -1,6 +1,5 @@
 package by.epam.signsControl.webView.controller.commands.impl.signsControl;
 
-import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
 import by.epam.signsControl.service.exceptions.ServiceValidationException;
 import by.epam.signsControl.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.Constants;
@@ -16,7 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * remove standard size in case it didn't used in local signs
+ */
 public class RemoveStandardSize implements Command {
+
     private static final Logger logger = LogManager.getLogger(RemoveStandardSize.class);
 
     @Override

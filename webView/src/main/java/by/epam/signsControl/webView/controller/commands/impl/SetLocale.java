@@ -1,6 +1,5 @@
 package by.epam.signsControl.webView.controller.commands.impl;
 
-import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
 import by.epam.signsControl.webView.controller.RequestParser;
 import by.epam.signsControl.webView.controller.commands.Command;
 import org.apache.logging.log4j.LogManager;

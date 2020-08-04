@@ -31,7 +31,7 @@ public interface IWorkersCrewControlService {
     WorkersCrew addWorkersCrew(String creationDate, String info, int organisationID) throws ServiceException;
 
     /**
-     * delete crew
+     * delete crew if organisation of removing user equal crew role
      *
      * @param id                       to delete
      * @param deletingUserOrganisation organisation of user that delete crew
@@ -41,6 +41,8 @@ public interface IWorkersCrewControlService {
     boolean removeWorkersCrew(int id, int deletingUserOrganisation) throws ServiceException;
 
     /**
+     * set date of remove if organisation of removing user equal crew role
+     *
      * @param workersCrewID           where set
      * @param date                    to set
      * @param settingUserOrganisation organisation of user that set date
@@ -50,6 +52,8 @@ public interface IWorkersCrewControlService {
     boolean setDateOfRemove(int workersCrewID, String date, int settingUserOrganisation) throws ServiceException;
 
     /**
+     * set info if organisation of removing user equal crew role
+     *
      * @param workersCrewId           where set
      * @param info                    to set
      * @param settingUserOrganisation organisation of user that set info
@@ -71,10 +75,10 @@ public interface IWorkersCrewControlService {
     WorkersCrew addWorker(int workersCrewId, int workerId, int addingUserOrganisation) throws ServiceException;
 
     /**
-     * remove worker
+     * remove worker from workers crew in case worker organisation = workers crew organisation
      *
-     * @param workersCrewId where set
-     * @param workersId     to set
+     * @param workersCrewId            where set
+     * @param workersId                to set
      * @param deletingUserOrganisation organisation of user that delete
      * @return {@link WorkersCrew}
      * @throws ServiceException when get an exception during execution

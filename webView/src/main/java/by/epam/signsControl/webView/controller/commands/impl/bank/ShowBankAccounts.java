@@ -1,9 +1,9 @@
 package by.epam.signsControl.webView.controller.commands.impl.bank;
 
 import by.epam.bank.service.IRequestBuilderService;
+import by.epam.bank.service.exceptions.ServiceException;
 import by.epam.bank.service.exceptions.ServiceValidationException;
 import by.epam.bank.service.factory.ServiceFactory;
-import by.epam.bank.service.exceptions.ServiceException;
 import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.commands.Command;
 import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;

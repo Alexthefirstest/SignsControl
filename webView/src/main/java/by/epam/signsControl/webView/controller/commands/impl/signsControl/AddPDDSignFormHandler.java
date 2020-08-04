@@ -14,15 +14,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.IOException;
-import java.io.InputStream;
 
-
+/**
+ * add pdd sign form handler
+ */
 public class AddPDDSignFormHandler implements Command {
+
     private static final Logger logger = LogManager.getLogger(AddPDDSignFormHandler.class);
 
     @Override
@@ -30,10 +31,10 @@ public class AddPDDSignFormHandler implements Command {
 
         try {
 
-
+            logger.info("inside execute");
             AccessRulesChecker.organisationRoleCheck(request, Constants.ODD_ORGANISATION_ROLE);
 
-            logger.info("inside execute");
+
 
 
             int section = Integer.parseInt(request.getParameter("pdd_section"));

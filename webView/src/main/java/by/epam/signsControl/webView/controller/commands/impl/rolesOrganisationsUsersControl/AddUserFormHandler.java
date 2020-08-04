@@ -8,6 +8,7 @@ import by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.commands.Command;
 import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
+import by.epam.signsControl.webView.exceptions.AccessException;
 import by.epam.signsControl.webView.exceptions.CommandControllerException;
 import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
@@ -46,13 +47,13 @@ public class AddUserFormHandler implements Command {
                         || organisation == Constants.ADMINISTRATORS_ORGANISATION_ID
                         && !AccessRulesChecker.userRoleCheckBool(request, Constants.ADMINISTRATOR_ROLE)) {
                     logger.warn("wrong actioon in");
-                    throw new CommandControllerValidationException("wrong action");
+                    throw new AccessException("wrong action");
                 }
 
             }else{
                 AccessRulesChecker.userRoleCheck(request, Constants.ADMINISTRATOR_ROLE);
                 if(organisation!=(Integer)request.getSession().getAttribute(Constants.ORGANISATION_ID)){
-                    throw new CommandControllerValidationException("wrong action");
+                    throw new AccessException("wrong action");
                 }
             }
 

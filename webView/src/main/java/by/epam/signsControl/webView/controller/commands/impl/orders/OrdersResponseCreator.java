@@ -12,13 +12,27 @@ import org.apache.logging.log4j.Logger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+/**
+ * create ajax response
+ */
 public class OrdersResponseCreator {
 
+    /**
+     * logger
+     */
     private static Logger logger = LogManager.getLogger(OrdersResponseCreator.class);
 
+    /**
+     * json builder with date format
+     */
     private static final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
-
+    /**
+     * create json from array of arrays
+     *
+     * @param objects array of objects arrays
+     * @return json string
+     */
     static String createJSON(Object[]... objects) {
 
         StringBuilder json = new StringBuilder("{");
@@ -34,6 +48,61 @@ public class OrdersResponseCreator {
         return json.substring(0, json.length() - 1) + '}';
     }
 
+    /**
+     * create json points string for yandex map
+     *
+     * @param mapPoints {@link MapPoint$Orders} array
+     * @return json string
+     */
+    static String createPointsJSON(MapPoint$Orders[] mapPoints) {
+
+
+        StringBuilder jsonString = new StringBuilder(ResponseCreator.JSON_POINTS_START_SUBSTRING);
+
+        int mapPointsLengthMinus1 = mapPoints.length - 1;
+
+        for (int i = 0; i < mapPointsLengthMinus1; i++) {
+            jsonString.append(createPointJson(mapPoints[i], i)).append(",");
+        }
+
+        jsonString.append(createPointJson(mapPoints[mapPointsLengthMinus1], mapPointsLengthMinus1));
+
+        jsonString.append(ResponseCreator.JSON_POINTS_FINISH_SUBSTRING);
+
+        logger.info(jsonString);
+
+        return jsonString.toString();
+
+    }
+
+    /*
+     * create poins json for yandex map
+     *
+     * @param mapPoint$Orders array
+     * @param id              point required id in creating json
+     */
+    private static String createPointJson(MapPoint$Orders mapPoint$Orders, int id) {
+
+        StringBuilder jsonPoint = new StringBuilder(ResponseCreator.JSON_POINT_PATTERN);
+
+        String hint = ResponseCreator.createHint(mapPoint$Orders.getMapPoint());
+
+        jsonPoint.insert(178, mapPoint$Orders.getMapPoint().getCoordinates());
+        jsonPoint.insert(154, hint);
+        jsonPoint.insert(135, hint);
+        jsonPoint.insert(112, createBalloonStringForPoint(mapPoint$Orders));
+        jsonPoint.insert(74, ResponseCreator.mysqlCoordinatesToJSONCoordinates(mapPoint$Orders.getMapPoint().getCoordinates()));
+        jsonPoint.insert(26, id);
+
+        return jsonPoint.toString();
+    }
+
+    /**
+     * create orders baloon for yandex map
+     *
+     * @param mapPoints$Orders {@link MapPoint$Orders}
+     * @return json string
+     */
     private static String createBalloonStringForPoint(MapPoint$Orders mapPoints$Orders) {
 
         StringBuilder sb = new StringBuilder();
@@ -65,7 +134,6 @@ public class OrdersResponseCreator {
 
 
         for (int i = 0; i < orders.size(); i++) {
-
 
 
             if (i == 0 || (orders.get(i).getSignList() != orders.get(i - 1).getSignList())) {
@@ -105,41 +173,5 @@ public class OrdersResponseCreator {
 
     }
 
-    static String createPointsJSON(MapPoint$Orders[] mapPoints) {
 
-
-        StringBuilder jsonString = new StringBuilder(ResponseCreator.JSON_POINTS_START_SUBSTRING);
-
-        int mapPointsLengthMinus1 = mapPoints.length - 1;
-
-        for (int i = 0; i < mapPointsLengthMinus1; i++) {
-            jsonString.append(createPointJson(mapPoints[i], i)).append(",");
-        }
-
-        jsonString.append(createPointJson(mapPoints[mapPointsLengthMinus1], mapPointsLengthMinus1));
-
-        jsonString.append(ResponseCreator.JSON_POINTS_FINISH_SUBSTRING);
-
-        logger.info(jsonString);
-
-        return jsonString.toString();
-
-    }
-
-
-    private static String createPointJson(MapPoint$Orders mapPoint$Orders, int id) {
-
-        StringBuilder jsonPoint = new StringBuilder(ResponseCreator.JSON_POINT_PATTERN);
-
-        String hint = ResponseCreator.createHint(mapPoint$Orders.getMapPoint());
-
-        jsonPoint.insert(178, mapPoint$Orders.getMapPoint().getCoordinates());
-        jsonPoint.insert(154, hint);
-        jsonPoint.insert(135, hint);
-        jsonPoint.insert(112, createBalloonStringForPoint(mapPoint$Orders));
-        jsonPoint.insert(74, ResponseCreator.mysqlCoordinatesToJSONCoordinates(mapPoint$Orders.getMapPoint().getCoordinates()));
-        jsonPoint.insert(26, id);
-
-        return jsonPoint.toString();
-    }
 }

@@ -72,7 +72,7 @@
     <a href="${pageContext.request.contextPath}/user_profile/${sessionScope.userID}" ><fmt:message key="label.user_profile" /></a>
 
     <c:if test="${ sessionScope.userRole==2}">
-
+<br>
     <a href="${pageContext.request.contextPath}/organisation_profile/${sessionScope.organisationID}" ><fmt:message key="label.organisation" /></a>
     </c:if>
 
@@ -87,8 +87,6 @@
 
 
 
-
-
 <td>
 
   <a href="${pageContext.request.contextPath}/pdd_signs" ><fmt:message key="label.pdd_signs" /></a>
@@ -96,19 +94,42 @@
       <a href="${pageContext.request.contextPath}/standard_sizes" ><fmt:message key="label.standard_sizes" /></a>
 </td>
 
+  <c:if test="${sessionScope.organisationRole==4}">
  <td>
     <a href="${pageContext.request.contextPath}/bank_accounts" ><fmt:message key="label.bank_accounts" /></a>
 </td>
+</c:if>
 
+ <c:if test="${ sessionScope.userRole!=1}">
 <td>
+
+ <c:if test="${sessionScope.organisationRole==5  && sessionScope.userRole==2}">
     <a href="${pageContext.request.contextPath}/users"  ><fmt:message key="label.users_list" /></a>
+    </c:if>
+
 <br>
+
+
+
     <a href="${pageContext.request.contextPath}/organisations" ><fmt:message key="label.organisations_list" /></a>
-</td><td>
+
+</td>
+   </c:if>
+
+
+
+<c:if test="${sessionScope.organisationRole==1  && sessionScope.organisationRole==3}">
+<td>
     <a href="${pageContext.request.contextPath}/orders"  ><fmt:message key="label.orders" /></a>
 <br>
+
+<c:if test="${ sessionScope.userRole==2  && sessionScope.organisationRole==3}">
     <a href="${pageContext.request.contextPath}/workers_crews" ><fmt:message key="label.workers_crews" /></a>
+</c:if>
+
  </td>
+
+ </c:if>
 
 <td>
 

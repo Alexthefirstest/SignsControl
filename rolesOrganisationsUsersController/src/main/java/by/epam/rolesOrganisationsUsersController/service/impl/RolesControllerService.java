@@ -110,7 +110,7 @@ public class RolesControllerService implements IRolesControllerService {
     public Role[] getUsersRole(int id) throws ServiceException {
         try {
 
-            return rolesController.getUserRole(id);
+            return rolesController.getUsersRole(id);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

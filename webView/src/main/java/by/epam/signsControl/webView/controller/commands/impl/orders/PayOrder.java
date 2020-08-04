@@ -8,7 +8,7 @@ import by.epam.orders.service.exceptions.ServiceValidationException;
 import by.epam.orders.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.commands.Command;
-import by.epam.signsControl.webView.controller.commands.impl.LoginFormHandler;
+import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
 import by.epam.signsControl.webView.exceptions.CommandControllerException;
 import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
@@ -25,10 +25,11 @@ public class PayOrder implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CommandControllerException {
-        int role;
+
 
         logger.info("inside execute");
 
+        AccessRulesChecker.organisationRoleCheck(request, Constants.ODD_ORGANISATION_ROLE);
 
         IOrdersControlService ordersControlService = ServiceFactory.getINSTANCE().getOrdersControlService();
         IFinanceOperationsManagerService financeOperationsService = by.epam.bank.service.factory.ServiceFactory.getINSTANCE().getFinanceOperationsManager();
@@ -42,8 +43,7 @@ public class PayOrder implements Command {
             order = ordersControlService.getOrder(id);
 
             if (order.getTransactionID() > 0) {
-                //attribute
-                logger.info("transaction sated");
+                throw new CommandControllerValidationException("transaction setter");
             } else {
 
                 int orgTo = Integer.parseInt(request.getParameter("organisationTo"));
@@ -52,15 +52,12 @@ public class PayOrder implements Command {
                 double typeOfWorkPrice = order.getTypeOfWork().getPrice();
 
 
-                logger.info(typeOfWorkPrice);
-                logger.info(price);
-                logger.info(typeOfWorkPrice == price);
 
                 if (typeOfWorkPrice == price) {
                     ordersControlService.setTransaction(order.getId(), financeOperationsService.transferMoney(customer, orgTo, typeOfWorkPrice).getId());
                 } else {
-                    //wrong price
                     logger.warn("wrong price");
+                    throw new CommandControllerValidationException("wrong price");
                 }
             }
 

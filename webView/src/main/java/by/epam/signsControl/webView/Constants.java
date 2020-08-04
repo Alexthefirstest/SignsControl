@@ -13,7 +13,7 @@ public final class Constants {
 
     public static final String USER_ID = "userID";
     public static final String USER_ROLE = "userRole";
-    public static final String USERNAME = "username";
+    public static final String LOGIN = "username";
     public static final String ORGANISATION_ID = "organisationID";
     public static final String ORGANISATION_ROLE = "organisationRole";
 

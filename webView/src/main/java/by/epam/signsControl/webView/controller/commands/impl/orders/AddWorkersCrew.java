@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * add workers crew to db
+ * add workers crew to db in case crew organisation equals user organisation  session attribute
  */
 public class AddWorkersCrew implements Command {
 
@@ -30,6 +30,7 @@ public class AddWorkersCrew implements Command {
 
         logger.info("inside execute");
 
+        AccessRulesChecker.organisationRoleCheck(request, Constants.PERFORMERS_ORGANISATIONS_ROLE);
         AccessRulesChecker.userRoleCheck(request, Constants.ADMINISTRATOR_ROLE);
 
         try {

@@ -1,5 +1,6 @@
 package by.epam.signsControl.webView.controller;
 
+import by.epam.signsControl.service.exceptions.ServiceException;
 import by.epam.signsControl.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.commands.Command;
@@ -62,7 +63,7 @@ public class UploadServlet extends HttpServlet {
             os.write(picture);
             os.flush();
             os.close();
-        } catch (CommandControllerException e) {
+        } catch (ServiceException e) {
             logger.warn(e);
         }
 

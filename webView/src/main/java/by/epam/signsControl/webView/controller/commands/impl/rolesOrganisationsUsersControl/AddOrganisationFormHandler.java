@@ -1,9 +1,9 @@
 package by.epam.signsControl.webView.controller.commands.impl.rolesOrganisationsUsersControl;
 
-import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceValidationException;
 import by.epam.rolesOrganisationsUsersController.bean.Organisation;
 import by.epam.rolesOrganisationsUsersController.service.IOrganisationsControllerService;
 import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
+import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceValidationException;
 import by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.commands.Command;
@@ -19,6 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * add organisation form handler
+ */
 public class AddOrganisationFormHandler implements Command {
 
     private static final Logger logger = LogManager.getLogger(AddBankAccountFormHandler.class);

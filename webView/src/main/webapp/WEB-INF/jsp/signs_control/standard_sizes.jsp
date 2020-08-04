@@ -46,7 +46,10 @@
 
 <th scope="col"><fmt:message key="label.standard_size"/></th>
 <th scope="col"><fmt:message key="label.description"/></th>
+
+  <c:if test="${sessionScope.organisationRole==1}">
 <th scope="col"><fmt:message key="label.change"/> <fmt:message key="label.standard_size"/></th>
+  </c:if>
 
 </tr>
 
@@ -61,6 +64,9 @@
 <tr>
 <td>${standard_size.size}</td>
 <td>${standard_size.info}</td>
+
+
+  <c:if test="${sessionScope.organisationRole==1}">
 <td>
 
 <form action='${pageContext.request.contextPath}/change_standard_size' method="post" >
@@ -74,7 +80,7 @@
 </form>
 
 </td>
-
+  </c:if>
 
 
 </tr>

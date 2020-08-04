@@ -99,6 +99,9 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
     }
 
     /**
+     *
+     * set date of remove if organisation of removing user equal crew role
+     *
      * @param workersCrewID           where set
      * @param date                    to set
      * @param settingUserOrganisation organisation of user that set
@@ -125,6 +128,9 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
     }
 
     /**
+     *
+     * set info if organisation of removing user equal crew role
+     *
      * @param workersCrewId           where set
      * @param info                    to set
      * @param settingUserOrganisation organisation of user that set info
@@ -184,7 +190,7 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
     }
 
     /**
-     * remove worker
+     *  remove worker from workers crew in case worker organisation = workers crew organisation
      *
      * @param workersCrewId            where set
      * @param workersId                to set

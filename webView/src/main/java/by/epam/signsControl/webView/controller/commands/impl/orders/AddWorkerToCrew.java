@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * add worker to crew if organisation
+ * add worker to crew in case crew organisation equals user organisation  session attribute
  */
 public class AddWorkerToCrew implements Command {
 
@@ -28,11 +28,14 @@ public class AddWorkerToCrew implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CommandControllerException {
         try {
+
+            AccessRulesChecker.organisationRoleCheck(request, Constants.PERFORMERS_ORGANISATIONS_ROLE);
+            AccessRulesChecker.userRoleCheck(request, Constants.ADMINISTRATOR_ROLE);
+
             logger.info("inside execute");
 
             IWorkersCrewControlService workersCrewControlService = ServiceFactory.getINSTANCE().getWorkersCrewControlService();
 
-            AccessRulesChecker.userRoleCheck(request, Constants.ADMINISTRATOR_ROLE);
 
             workersCrewControlService.addWorker(Integer.parseInt(request.getParameter("wc")),
                     Integer.parseInt(request.getParameter("userID")), (Integer) request.getSession().getAttribute(Constants.ORGANISATION_ID));

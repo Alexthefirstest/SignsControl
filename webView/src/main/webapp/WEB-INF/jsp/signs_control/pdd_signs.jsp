@@ -48,7 +48,10 @@
 <th scope="col"><fmt:message key="label.name" /></th>
 <th scope="col"><fmt:message key="label.description" /></th>
 <th scope="col"><fmt:message key="label.image" /></th>
+
+    <c:if test="${sessionScope.organisationRole==1}">
 <th scope="col"><fmt:message key="label.change" /> <fmt:message key="label.sign" /></th>
+</c:if>
 
 </tr>
 
@@ -83,6 +86,7 @@
 
 </td>
 
+  <c:if test="${sessionScope.organisationRole==1}">
  <td>
   <form action='${pageContext.request.contextPath}/upload/set_sign_image' method="post" accept-charset="UTF-8"
           enctype='multipart/form-data'>
@@ -115,6 +119,8 @@
 </form>
 
 </td>
+  </c:if>
+
 
 </tr>
 

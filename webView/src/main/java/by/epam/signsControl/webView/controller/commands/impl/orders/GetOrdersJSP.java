@@ -18,6 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * get orders
+ */
 public class GetOrdersJSP implements Command {
 
     private static final Logger logger = LogManager.getLogger(GetOrdersJSP.class);
@@ -66,7 +69,7 @@ public class GetOrdersJSP implements Command {
 
             request.setAttribute("organisations",
                     by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory.getINSTANCE().getOrganisationsControllerService()
-                            .getUnblockedOrganisations(3));
+                            .getUnblockedOrganisations(Constants.PERFORMERS_ORGANISATIONS_ROLE));
             request.setAttribute("allOrganisations",
                     by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory.getINSTANCE().getOrganisationsControllerService()
                             .getOrganisations());

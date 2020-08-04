@@ -1,6 +1,5 @@
 package by.epam.signsControl.webView.controller.commands.impl.rolesOrganisationsUsersControl;
 
-import by.epam.rolesOrganisationsUsersController.bean.User;
 import by.epam.rolesOrganisationsUsersController.service.IUsersControllerService;
 import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
 import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceValidationException;
@@ -8,7 +7,6 @@ import by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.RequestParser;
 import by.epam.signsControl.webView.controller.commands.Command;
-import by.epam.signsControl.webView.controller.commands.impl.LoginFormHandler;
 import by.epam.signsControl.webView.exceptions.CommandControllerException;
 import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;

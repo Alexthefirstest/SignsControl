@@ -1,7 +1,6 @@
 package by.epam.signsControl.webView.controller.commands.impl.signsControl;
 
 import by.epam.signsControl.service.ILocalSignsControlService;
-import by.epam.signsControl.service.IMapPointsControlService;
 import by.epam.signsControl.service.exceptions.ServiceException;
 import by.epam.signsControl.service.exceptions.ServiceValidationException;
 import by.epam.signsControl.service.factory.ServiceFactory;
@@ -17,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * change or delete local sign
+ */
 public class ChangeDeleteLocalSign implements Command {
 
     private static final Logger logger = LogManager.getLogger(ChangeDeleteLocalSign.class);

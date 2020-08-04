@@ -8,7 +8,6 @@ import by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.commands.Command;
 import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
-import by.epam.signsControl.webView.controller.commands.impl.LoginFormHandler;
 import by.epam.signsControl.webView.exceptions.CommandControllerException;
 import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * send to workers crews jsp
+ */
 public class WorkersCrews implements Command {
 
     private static final Logger logger = LogManager.getLogger(WorkersCrew.class);
@@ -38,11 +40,7 @@ public class WorkersCrews implements Command {
             int organisation = (Integer) request.getSession().getAttribute(Constants.ORGANISATION_ID);
 
 
-
-
             request.setAttribute("usersOfOrg", ServiceFactory.getINSTANCE().getUsersControllerService().getUsers(organisation));
-
-
 
 
             String showEmpty = request.getParameter("showEmpty");
@@ -52,9 +50,8 @@ public class WorkersCrews implements Command {
             IWorkersCrewControlService workersCrewControlService = by.epam.orders.service.factory.ServiceFactory.getINSTANCE().getWorkersCrewControlService();
 
 
-
-            workersCrews = (showEmpty == null ? workersCrewControlService.getWorkersCrews(organisation)
-                    : workersCrewControlService.getEmptyWorkersCrews(organisation));
+            workersCrews = (showEmpty == null) ? workersCrewControlService.getWorkersCrews(organisation)
+                    : workersCrewControlService.getEmptyWorkersCrews(organisation);
 
 
             request.setAttribute("workersCrews", workersCrews);

@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * remove type of work
+ */
 public class RemoveTypeOfWork implements Command {
 
     private static Logger logger = LogManager.getLogger(RemoveTypeOfWork.class);

@@ -6,10 +6,9 @@ import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceExcep
 import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceValidationException;
 import by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.Constants;
-import by.epam.signsControl.webView.controller.RequestParser;
 import by.epam.signsControl.webView.controller.commands.Command;
 import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
-import by.epam.signsControl.webView.controller.commands.impl.LoginFormHandler;
+import by.epam.signsControl.webView.exceptions.AccessException;
 import by.epam.signsControl.webView.exceptions.CommandControllerException;
 import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
@@ -50,6 +49,9 @@ public class ChangeUserFormHandler implements Command {
                 throw new CommandControllerValidationException("wrong user id");
             }
 
+
+
+
             if (AccessRulesChecker.organisationRoleCheckBool(request, Constants.ADMINISTRATORS_ORGANISATION_ID)) {
 
                 if (user.getOrganisation().getId() != Constants.ADMINISTRATORS_ORGANISATION_ID
@@ -57,13 +59,13 @@ public class ChangeUserFormHandler implements Command {
                         || user.getOrganisation().getId() == Constants.ADMINISTRATORS_ORGANISATION_ID
                         && !AccessRulesChecker.userRoleCheckBool(request, Constants.ADMINISTRATOR_ROLE)) {
                     logger.warn("wrong action if");
-                    throw new CommandControllerValidationException("wrong action if");
+                    throw new AccessException(" wrong role");
                 }
 
             } else {
                 AccessRulesChecker.userRoleCheck(request, Constants.ADMINISTRATOR_ROLE);
                 if (user.getOrganisation().getId() != (Integer) request.getSession().getAttribute(Constants.ORGANISATION_ID)) {
-                    throw new CommandControllerValidationException("wrong action else");
+                    throw new AccessException("wrong role");
                 }
             }
 

@@ -1,6 +1,5 @@
 package by.epam.signsControl.webView.controller.commands.impl.signsControl;
 
-import by.epam.signsControl.service.exceptions.ServiceException;
 import by.epam.signsControl.service.exceptions.ServiceValidationException;
 import by.epam.signsControl.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.controller.commands.Command;
@@ -14,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * get unused direction for map point in json format
+ */
 public class GetUnusedDirections implements Command {
 
 

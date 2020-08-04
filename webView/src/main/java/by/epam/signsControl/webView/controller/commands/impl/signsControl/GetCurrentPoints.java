@@ -2,7 +2,6 @@ package by.epam.signsControl.webView.controller.commands.impl.signsControl;
 
 
 import by.epam.signsControl.bean.MapPoint$LocalSign;
-import by.epam.signsControl.service.exceptions.ServiceException;
 import by.epam.signsControl.service.exceptions.ServiceValidationException;
 import by.epam.signsControl.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.controller.commands.Command;
@@ -16,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * get current map points with description in yandex maps json format
+ */
 public class GetCurrentPoints implements Command {
 
     private static final Logger logger = LogManager.getLogger(GetCurrentPoints.class);

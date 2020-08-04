@@ -7,6 +7,7 @@ import by.epam.orders.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.commands.Command;
 import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
+import by.epam.signsControl.webView.exceptions.AccessException;
 import by.epam.signsControl.webView.exceptions.CommandControllerException;
 import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
@@ -57,11 +58,12 @@ public class ChangeDeleteOrder implements Command {
                 ordersControlService.setWorkersCrew(orderID, workers_crews);
                 ordersControlService.setInfo(orderID, (info == null ? (newInfo) : info + " " + newInfo));
 
-                response.sendRedirect(request.getContextPath() + "/");
+
             } else{
-                throw new CommandControllerValidationException("wrong role or action");
+                throw new AccessException("wrong role or action");
             }
 
+            response.sendRedirect(request.getContextPath() + "/");
 
         } catch (ServiceValidationException e) {
             throw new CommandControllerValidationException(e);

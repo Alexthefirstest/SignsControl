@@ -8,6 +8,7 @@ import by.epam.signsControl.webView.Constants;
 import by.epam.signsControl.webView.controller.RequestParser;
 import by.epam.signsControl.webView.controller.commands.Command;
 import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
+import by.epam.signsControl.webView.exceptions.AccessException;
 import by.epam.signsControl.webView.exceptions.CommandControllerException;
 import by.epam.signsControl.webView.exceptions.CommandControllerValidationException;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
+/**
+ * organisation profile: organisation and bank account info
+ */
 public class OrganisationProfile implements Command {
 
     private static final Logger logger = LogManager.getLogger(OrganisationProfile.class);
@@ -36,9 +40,10 @@ public class OrganisationProfile implements Command {
 
             if (!Pattern.matches("\\d+",id)) {
                 request.getRequestDispatcher("/").forward(request, response);
-                return;
+               throw new CommandControllerValidationException("wrong id");
             }
 
+            assert id != null;
             int organisationID = Integer.parseInt(id);
 
             BankAccount[] bankAccounts =
@@ -50,7 +55,7 @@ public class OrganisationProfile implements Command {
             }
 
             if ((Integer) request.getAttribute(Constants.ORGANISATION_ID) != bankAccounts[0].getOrganisation().getId()) {
-                throw new CommandControllerValidationException("wrong access");
+                throw new AccessException("wrong access");
             }
 
 
