@@ -4,14 +4,11 @@ import by.epam.signsControl.bean.FactoryType;
 import by.epam.signsControl.bean.StandardSize;
 import by.epam.signsControl.dao.IStandardSizesControl;
 import by.epam.signsControl.dao.exceptions.DAOException;
-
 import by.epam.signsControl.dao.exceptions.DAOValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
 import java.sql.SQLException;
-
 import java.util.regex.Pattern;
 
 /**

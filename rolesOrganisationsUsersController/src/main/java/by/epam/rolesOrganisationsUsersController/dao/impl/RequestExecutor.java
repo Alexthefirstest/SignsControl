@@ -3,12 +3,12 @@ package by.epam.rolesOrganisationsUsersController.dao.impl;
 import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
 import by.epam.connectionPoolForDataBase.connectionPool.exceptions.ConnectionPoolException;
 import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
-import by.epam.rolesOrganisationsUsersController.dao.exceptions.DAOException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import by.epam.rolesOrganisationsUsersController.bean.FactoryType;
+import by.epam.rolesOrganisationsUsersController.dao.exceptions.DAOException;
 import by.epam.rolesOrganisationsUsersController.dao.exceptions.DAOValidationException;
 import by.epam.rolesOrganisationsUsersController.dao.impl.factory.Factory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

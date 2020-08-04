@@ -1,14 +1,14 @@
 package by.epam.rolesOrganisationsUsersController.service.impl;
 
+import by.epam.rolesOrganisationsUsersController.bean.User;
 import by.epam.rolesOrganisationsUsersController.dao.IUsersController;
+import by.epam.rolesOrganisationsUsersController.dao.exceptions.DAOException;
 import by.epam.rolesOrganisationsUsersController.dao.exceptions.DAOValidationException;
+import by.epam.rolesOrganisationsUsersController.dao.factory.DaoFactory;
+import by.epam.rolesOrganisationsUsersController.service.IUsersControllerService;
 import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
 import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceValidationException;
 import org.mindrot.jbcrypt.BCrypt;
-import by.epam.rolesOrganisationsUsersController.bean.User;
-import by.epam.rolesOrganisationsUsersController.dao.exceptions.DAOException;
-import by.epam.rolesOrganisationsUsersController.dao.factory.DaoFactory;
-import by.epam.rolesOrganisationsUsersController.service.IUsersControllerService;
 
 /**
  * Use {@link by.epam.rolesOrganisationsUsersController.dao.IUsersController} for working with dao

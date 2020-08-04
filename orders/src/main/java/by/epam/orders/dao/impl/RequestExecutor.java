@@ -3,10 +3,10 @@ package by.epam.orders.dao.impl;
 import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
 import by.epam.connectionPoolForDataBase.connectionPool.exceptions.ConnectionPoolException;
 import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
+import by.epam.orders.bean.FactoryType;
 import by.epam.orders.dao.exceptions.DAOException;
 import by.epam.orders.dao.exceptions.DAOValidationException;
 import by.epam.orders.dao.impl.factory.OrdersFactory;
-import by.epam.orders.bean.FactoryType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

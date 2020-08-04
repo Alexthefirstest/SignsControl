@@ -9,10 +9,10 @@ import by.epam.signsControl.dao.exceptions.DAOValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 /**

@@ -1,6 +1,5 @@
 package by.epam.rolesOrganisationsUsersController.dao;
 
-import by.epam.rolesOrganisationsUsersController.bean.Organisation;
 import by.epam.rolesOrganisationsUsersController.bean.User;
 import by.epam.rolesOrganisationsUsersController.dao.exceptions.DAOException;
 

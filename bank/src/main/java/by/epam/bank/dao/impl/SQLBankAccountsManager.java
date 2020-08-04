@@ -7,7 +7,6 @@ import by.epam.bank.dao.exceptions.DAOValidationException;
 import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
 import by.epam.connectionPoolForDataBase.connectionPool.exceptions.ConnectionPoolException;
 import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
-
 import by.epam.rolesOrganisationsUsersController.bean.Organisation;
 import by.epam.rolesOrganisationsUsersController.bean.Role;
 import org.apache.logging.log4j.LogManager;
@@ -18,7 +17,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
-
 import java.util.regex.Pattern;
 
 /**

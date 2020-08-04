@@ -1,9 +1,7 @@
 package by.epam.orders.bean;
 
-import by.epam.bank.bean.Transaction;
 import by.epam.rolesOrganisationsUsersController.bean.Organisation;
 import by.epam.signsControl.bean.Sign;
-import by.epam.signsControl.bean.StandardSize;
 
 import java.io.Serializable;
 import java.sql.Timestamp;

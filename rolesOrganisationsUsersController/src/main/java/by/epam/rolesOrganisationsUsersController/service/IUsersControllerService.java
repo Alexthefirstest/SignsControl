@@ -1,7 +1,7 @@
 package by.epam.rolesOrganisationsUsersController.service;
 
-import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
 import by.epam.rolesOrganisationsUsersController.bean.User;
+import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
 
 /**
  * Use {@link by.epam.rolesOrganisationsUsersController.dao.IUsersController} for working with dao

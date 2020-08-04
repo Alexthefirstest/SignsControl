@@ -3,9 +3,7 @@ package by.epam.signsControl.dao.impl;
 import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
 import by.epam.connectionPoolForDataBase.connectionPool.exceptions.ConnectionPoolException;
 import by.epam.connectionPoolForDataBase.connectionPool.factory.ConnectionPoolFactory;
-
 import by.epam.signsControl.bean.FactoryType;
-
 import by.epam.signsControl.dao.exceptions.DAOException;
 import by.epam.signsControl.dao.exceptions.DAOValidationException;
 import by.epam.signsControl.dao.impl.factory.SignsControlFactory;
@@ -13,12 +11,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.Arrays;
 
 /**
  * exequte request user {@link ResultSet} and {@link SignsControlFactory}

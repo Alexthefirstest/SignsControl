@@ -1,11 +1,11 @@
 package by.epam.signsControl.dao.impl.factory;
 
 import by.epam.signsControl.bean.Direction;
+import by.epam.signsControl.bean.FactoryType;
 import by.epam.signsControl.bean.LocalSign;
 import by.epam.signsControl.bean.MapPoint;
 import by.epam.signsControl.bean.MapPoint$LocalSign;
 import by.epam.signsControl.bean.Sign;
-import by.epam.signsControl.bean.FactoryType;
 import by.epam.signsControl.bean.StandardSize;
 import by.epam.signsControl.dao.exceptions.DAOValidationException;
 import org.apache.logging.log4j.LogManager;

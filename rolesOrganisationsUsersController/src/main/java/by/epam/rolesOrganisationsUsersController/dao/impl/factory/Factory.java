@@ -1,13 +1,13 @@
 package by.epam.rolesOrganisationsUsersController.dao.impl.factory;
 
 
+import by.epam.rolesOrganisationsUsersController.bean.FactoryType;
 import by.epam.rolesOrganisationsUsersController.bean.Organisation;
+import by.epam.rolesOrganisationsUsersController.bean.Role;
+import by.epam.rolesOrganisationsUsersController.bean.User;
 import by.epam.rolesOrganisationsUsersController.dao.exceptions.DAOValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import by.epam.rolesOrganisationsUsersController.bean.FactoryType;
-import by.epam.rolesOrganisationsUsersController.bean.Role;
-import by.epam.rolesOrganisationsUsersController.bean.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

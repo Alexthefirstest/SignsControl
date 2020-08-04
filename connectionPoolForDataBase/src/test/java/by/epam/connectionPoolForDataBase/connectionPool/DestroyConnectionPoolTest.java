@@ -2,7 +2,10 @@ package by.epam.connectionPoolForDataBase.connectionPool;
 
 import by.epam.connectionPoolForDataBase.connectionPool.exceptions.ConnectionPoolException;
 import by.epam.connectionPoolForDataBase.connectionPool.impl.ConnectionPool;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.sql.Connection;
 

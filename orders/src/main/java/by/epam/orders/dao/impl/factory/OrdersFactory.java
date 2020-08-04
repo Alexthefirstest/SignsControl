@@ -1,16 +1,15 @@
 package by.epam.orders.dao.impl.factory;
 
 
+import by.epam.orders.bean.FactoryType;
 import by.epam.orders.bean.MapPoint$Orders;
 import by.epam.orders.bean.Order;
 import by.epam.orders.bean.TypeOfWork;
 import by.epam.orders.bean.WorkersCrew;
+import by.epam.orders.dao.exceptions.DAOValidationException;
 import by.epam.rolesOrganisationsUsersController.bean.Organisation;
 import by.epam.rolesOrganisationsUsersController.bean.Role;
 import by.epam.rolesOrganisationsUsersController.bean.User;
-import by.epam.orders.bean.FactoryType;
-
-import by.epam.orders.dao.exceptions.DAOValidationException;
 import by.epam.signsControl.bean.MapPoint;
 import by.epam.signsControl.bean.Sign;
 import org.apache.logging.log4j.LogManager;

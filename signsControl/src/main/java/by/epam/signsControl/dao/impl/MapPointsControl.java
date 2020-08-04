@@ -8,7 +8,6 @@ import by.epam.signsControl.dao.exceptions.DAOValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 

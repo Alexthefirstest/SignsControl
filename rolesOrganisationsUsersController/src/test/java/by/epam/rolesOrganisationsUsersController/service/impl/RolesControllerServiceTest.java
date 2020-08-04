@@ -1,20 +1,6 @@
 package by.epam.rolesOrganisationsUsersController.service.impl;
 
-import by.epam.rolesOrganisationsUsersController.bean.Role;
 import by.epam.rolesOrganisationsUsersController.dao.IRolesController;
-import by.epam.rolesOrganisationsUsersController.dao.exceptions.DAOException;
-import by.epam.rolesOrganisationsUsersController.dao.factory.DaoFactory;
-import by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import java.util.Arrays;
-
-import static org.mockito.Mockito.*;
-
-import static org.junit.Assert.*;
 
 public class RolesControllerServiceTest {
 

@@ -1,7 +1,6 @@
 package by.epam.signsControl.service.impl;
 
 import by.epam.signsControl.service.exceptions.ServiceValidationException;
-import org.apache.logging.log4j.LogManager;
 
 import java.util.regex.Pattern;
 

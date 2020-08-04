@@ -8,7 +8,6 @@ import by.epam.orders.dao.factory.DaoFactory;
 import by.epam.orders.service.IWorkersCrewControlService;
 import by.epam.orders.service.exceptions.ServiceException;
 import by.epam.orders.service.exceptions.ServiceValidationException;
-import by.epam.rolesOrganisationsUsersController.bean.Organisation;
 import by.epam.rolesOrganisationsUsersController.bean.User;
 import by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory;
 

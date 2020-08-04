@@ -2,12 +2,9 @@ package by.epam.connectionPoolForDataBase.config;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class DBConfigurationTest {
 

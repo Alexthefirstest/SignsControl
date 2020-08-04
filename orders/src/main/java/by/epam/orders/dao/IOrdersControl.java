@@ -3,7 +3,6 @@ package by.epam.orders.dao;
 import by.epam.orders.bean.MapPoint$Orders;
 import by.epam.orders.bean.Order;
 import by.epam.orders.dao.exceptions.DAOException;
-import by.epam.signsControl.bean.MapPoint;
 
 public interface IOrdersControl {
 

@@ -1,11 +1,8 @@
 package by.epam.connectionPoolForDataBase.connectionPool.factory;
 
-import by.epam.connectionPoolForDataBase.connectionPool.IConnectionPool;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class ConnectionPoolFactoryTest {
 
