@@ -22,7 +22,23 @@ public class OrganisationsControllerService implements IOrganisationsControllerS
     /**
      * {@link IOrganisationsController} realisation
      */
-    private final IOrganisationsController organisationsController = DaoFactory.getINSTANCE().getOrganisationsController();
+    private final IOrganisationsController organisationsController;
+
+    /**
+     * constructor with basic {@link IOrganisationsController}
+     */
+    public OrganisationsControllerService() {
+        organisationsController = DaoFactory.getINSTANCE().getOrganisationsController();
+    }
+
+    /**
+     * constructor with set {@link IOrganisationsController}
+     *
+     * @param daoOrganisationsController to set
+     */
+    public OrganisationsControllerService(IOrganisationsController daoOrganisationsController) {
+        organisationsController = daoOrganisationsController;
+    }
 
     /**
      * add organisation to jdbc table

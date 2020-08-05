@@ -22,7 +22,23 @@ public class RolesControllerService implements IRolesControllerService {
     /**
      * {@link IRolesController} realisation
      */
-    private final IRolesController rolesController = DaoFactory.getINSTANCE().getRolesController();
+    private final IRolesController rolesController;
+
+    /**
+     * constructor with basic {@link IRolesController}
+     */
+    public RolesControllerService() {
+        rolesController = DaoFactory.getINSTANCE().getRolesController();
+    }
+
+    /**
+     * constructor with set {@link IRolesController}
+     *
+     * @param rolesControllerDao to set
+     */
+    RolesControllerService(IRolesController rolesControllerDao) {
+        rolesController = rolesControllerDao;
+    }
 
 //    /**
 //     * add role to jdbc table
@@ -85,6 +101,8 @@ public class RolesControllerService implements IRolesControllerService {
      */
     @Override
     public Role[] getOrganisationsRoles() throws ServiceException {
+
+
 
         try {
 

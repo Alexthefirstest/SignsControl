@@ -23,7 +23,23 @@ public class UsersControllerService implements IUsersControllerService {
     /**
      * {@link IUsersController} realisation
      */
-    private final IUsersController usersController = DaoFactory.getINSTANCE().getUsersController();
+    private final IUsersController usersController;
+
+    /**
+     * constructor with basic {@link IUsersController}
+     */
+    public UsersControllerService() {
+        usersController = DaoFactory.getINSTANCE().getUsersController();
+    }
+
+    /**
+     * constructor with set {@link IUsersController}
+     *
+     * @param usersControllerDao IUsersController to set
+     */
+    UsersControllerService(IUsersController usersControllerDao) {
+        usersController = usersControllerDao;
+    }
 
     /**
      * add user to jdbc table
@@ -46,8 +62,8 @@ public class UsersControllerService implements IUsersControllerService {
 
         InputValidation.nullAndSymbolsCheck(login);
         InputValidation.nullAndSymbolsCheck(password);
-        InputValidation.nullAndSymbolsCheck(name);
-        InputValidation.nullAndSymbolsCheck(surname);
+        InputValidation.nullCheck(name);
+        InputValidation.nullCheck(surname);
 
 
         try {
@@ -369,7 +385,7 @@ public class UsersControllerService implements IUsersControllerService {
     @Override
     public boolean setName(int id, String name) throws ServiceException {
 
-        InputValidation.nullAndSymbolsCheckWithRus(name);
+        InputValidation.nullCheck(name);
 
         try {
 
@@ -396,7 +412,7 @@ public class UsersControllerService implements IUsersControllerService {
     @Override
     public boolean setSurname(int id, String surname) throws ServiceException {
 
-        InputValidation.nullAndSymbolsCheckWithRus(surname);
+        InputValidation.nullCheck(surname);
 
         try {
 
