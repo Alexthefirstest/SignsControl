@@ -11,6 +11,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -89,7 +91,7 @@ public class TransactionsDeliverServiceTest {
 
         int countOnPage = 20;
 
-        when(tdsDaoMock.getFieldsCountByDate(1, "1999.21.07", "2020.08.05"))
+        when(tdsDaoMock.getFieldsCountByDate(Mockito.anyInt(),Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(19);
 
 

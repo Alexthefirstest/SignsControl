@@ -84,7 +84,7 @@ public class WorkersCrewControl implements IWorkersCrewControl {
     /**
      * sql get workers crew organisation
      */
-    private static final String GET_WORKERS_CREW_ORGANISATION = "SELECT organisation FROM crews where id=?";
+    private static final String GET_WORKERS_CREW_ORGANISATION_ID = "SELECT organisation FROM crews where id=?";
 
     /**
      * sql workers crew date of remove
@@ -332,12 +332,12 @@ public class WorkersCrewControl implements IWorkersCrewControl {
      * @throws DAOException when catch exception from {@link RequestExecutor#getInt(String, int)}
      */
     @Override
-    public int getWorkersCrewOrganisation(int id) throws DAOException {
+    public int getWorkersCrewOrganisationID(int id) throws DAOException {
 
         try {
 
             return RequestExecutor.getInt
-                    (GET_WORKERS_CREW_ORGANISATION, id);
+                    (GET_WORKERS_CREW_ORGANISATION_ID, id);
 
         } catch (SQLException ex) {
 

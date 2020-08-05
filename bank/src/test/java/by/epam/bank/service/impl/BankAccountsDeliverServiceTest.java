@@ -27,7 +27,7 @@ public class BankAccountsDeliverServiceTest {
         bankAccountsDeliverService = null;
     }
 
-    @Test(timeout = 20000)
+    @Test(timeout = 20_000)
     public void executeRequestSQLValidationTest() throws ServiceException {
 
         System.out.println("executeRequestTest");

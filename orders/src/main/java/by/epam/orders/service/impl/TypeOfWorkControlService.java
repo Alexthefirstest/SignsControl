@@ -17,7 +17,24 @@ public class TypeOfWorkControlService implements ITypeOfWorkControlService {
     /**
      * {@link ITypeOfWorkControl} instance
      */
-    private static final ITypeOfWorkControl typeOfWorkControl = DaoFactory.getINSTANCE().getTypeOfWorkControl();
+    private final ITypeOfWorkControl typeOfWorkControl;
+
+
+    /**
+     * empty constructor
+     */
+    public TypeOfWorkControlService() {
+        typeOfWorkControl = DaoFactory.getINSTANCE().getTypeOfWorkControl();
+    }
+
+    /**
+     * constructor with set dao for working
+     *
+     * @param typeOfWorkControlDao {@link ITypeOfWorkControl}
+     */
+    TypeOfWorkControlService(ITypeOfWorkControl typeOfWorkControlDao) {
+        typeOfWorkControl = typeOfWorkControlDao;
+    }
 
     /**
      * add type of work

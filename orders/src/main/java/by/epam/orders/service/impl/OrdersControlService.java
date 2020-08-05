@@ -18,8 +18,23 @@ public class OrdersControlService implements IOrdersControlService {
     /**
      * {@link IOrdersControl} instance
      */
-    private static final IOrdersControl ordersControl = DaoFactory.getINSTANCE().getOrdersControl();
+    private final IOrdersControl ordersControl;
 
+    /**
+     * empty constructor
+     */
+    public OrdersControlService() {
+        ordersControl = DaoFactory.getINSTANCE().getOrdersControl();
+    }
+
+    /**
+     * constructor with set dao for working
+     *
+     * @param ordersControlDao {@link IOrdersControl}
+     */
+    OrdersControlService(IOrdersControl ordersControlDao) {
+        ordersControl = ordersControlDao;
+    }
 
     /**
      * add order

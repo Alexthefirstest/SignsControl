@@ -79,7 +79,7 @@ public interface IWorkersCrewControl {
      * @return organisation of workers crew or -1 if can't find
      * @throws DAOException when get an exception during execution
      */
-     int getWorkersCrewOrganisation(int id) throws DAOException;
+     int getWorkersCrewOrganisationID(int id) throws DAOException;
 
 
     /**

@@ -9,6 +9,7 @@ import by.epam.orders.service.IWorkersCrewControlService;
 import by.epam.orders.service.exceptions.ServiceException;
 import by.epam.orders.service.exceptions.ServiceValidationException;
 import by.epam.rolesOrganisationsUsersController.bean.User;
+import by.epam.rolesOrganisationsUsersController.service.IUsersControllerService;
 import by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory;
 
 /**
@@ -19,7 +20,49 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
     /**
      * {@link IWorkersCrewControl} instance
      */
-    private static final IWorkersCrewControl workersCrewControl = DaoFactory.getINSTANCE().getWorkersCrewControl();
+    private final IWorkersCrewControl workersCrewControl;
+
+    /**
+     * {@link IUsersControllerService} instance
+     */
+    private final IUsersControllerService usersControllerService;
+
+
+    /**
+     * empty constructor
+     */
+    public WorkersCrewControlService() {
+        workersCrewControl = DaoFactory.getINSTANCE().getWorkersCrewControl();
+        usersControllerService = ServiceFactory.getINSTANCE().getUsersControllerService();
+    }
+
+    /**
+     * constructor with set dao for working
+     *
+     * @param workersCrewControlDao {@link IWorkersCrewControl}
+     */
+    WorkersCrewControlService(IWorkersCrewControl workersCrewControlDao) {
+        usersControllerService = ServiceFactory.getINSTANCE().getUsersControllerService();
+        workersCrewControl = workersCrewControlDao;
+    }
+
+    /**
+     * @param usersControllerServiceDao {@link IUsersControllerService}
+     */
+    WorkersCrewControlService(IUsersControllerService usersControllerServiceDao) {
+        usersControllerService = usersControllerServiceDao;
+        workersCrewControl = DaoFactory.getINSTANCE().getWorkersCrewControl();
+    }
+
+
+    /**
+     * @param usersControllerServiceDao {@link IUsersControllerService}
+     * @param workersCrewControlDao     {@link IWorkersCrewControl}
+     */
+    WorkersCrewControlService(IWorkersCrewControl workersCrewControlDao, IUsersControllerService usersControllerServiceDao) {
+        usersControllerService = usersControllerServiceDao;
+        workersCrewControl = workersCrewControlDao;
+    }
 
     /**
      * add workers crew
@@ -98,7 +141,6 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
     }
 
     /**
-     *
      * set date of remove if organisation of removing user equal crew role
      *
      * @param workersCrewID           where set
@@ -127,7 +169,6 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
     }
 
     /**
-     *
      * set info if organisation of removing user equal crew role
      *
      * @param workersCrewId           where set
@@ -169,16 +210,18 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
     public WorkersCrew addWorker(int workersCrewId, int workerId, int addingUserOrganisation) throws ServiceException {
         try {
 
-            User user = ServiceFactory.getINSTANCE().getUsersControllerService().getUser(workerId);
+            checkOrganisation(addingUserOrganisation, workersCrewId);
 
-            int organisation = workersCrewControl.getWorkersCrewOrganisation(workersCrewId);
+            User user = usersControllerService.getUser(workerId);
 
-            if (user == null || organisation < 0 || workersCrewControl.getWorkersCrewRemoveDate(workersCrewId) != null
-                    || user.getOrganisation().getId() != organisation || addingUserOrganisation != organisation) {
+
+            if (user == null || workersCrewControl.getWorkersCrewRemoveDate(workersCrewId) != null) {
+
 
                 throw new ServiceValidationException("wrong user or crew");
             }
 
+            checkOrganisation(user.getOrganisation().getId(), workersCrewId);
 
             return workersCrewControl.addWorker(workersCrewId, workerId);
         } catch (DAOValidationException | by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceValidationException ex) {
@@ -189,7 +232,7 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
     }
 
     /**
-     *  remove worker from workers crew in case worker organisation = workers crew organisation
+     * remove worker from workers crew in case worker organisation = workers crew organisation
      *
      * @param workersCrewId            where set
      * @param workersId                to set
@@ -334,10 +377,13 @@ public class WorkersCrewControlService implements IWorkersCrewControlService {
     }
 
 
+    /*
+     * throw exception in case userOrganisation != found by id organisation
+     */
     private void checkOrganisation(int userOrganisation, int workersCrewId) throws ServiceException {
         try {
 
-            int organisation = workersCrewControl.getWorkersCrewOrganisation(workersCrewId);
+            int organisation = workersCrewControl.getWorkersCrewOrganisationID(workersCrewId);
 
             if (organisation != userOrganisation) {
                 throw new ServiceValidationException("wrong organisation or crew");
