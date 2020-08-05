@@ -1,5 +1,6 @@
 package by.epam.bank.service.impl;
 
+import by.epam.bank.dao.IOrganisationsDeliver;
 import by.epam.bank.dao.exceptions.DAOException;
 import by.epam.bank.dao.exceptions.DAOValidationException;
 import by.epam.bank.dao.factory.DaoFactory;
@@ -7,11 +8,29 @@ import by.epam.bank.service.IOrganisationsDeliverService;
 import by.epam.bank.service.exceptions.ServiceException;
 import by.epam.bank.service.exceptions.ServiceValidationException;
 import by.epam.rolesOrganisationsUsersController.bean.Organisation;
+import by.epam.rolesOrganisationsUsersController.service.IOrganisationsControllerService;
 
 /**
  * service to supply {@link Organisation}
  */
 public class OrganisationsDeliverService implements IOrganisationsDeliverService {
+
+    private final IOrganisationsDeliver organisationsDeliver;
+
+    /**
+     * empty constructor
+     */
+    public OrganisationsDeliverService() {
+
+        organisationsDeliver = DaoFactory.getINSTANCE().getOrganisationsDeliver();
+    }
+
+    /**
+     * @param organisationsDeliverDao {@link IOrganisationsDeliver}
+     */
+    OrganisationsDeliverService(IOrganisationsDeliver organisationsDeliverDao) {
+        organisationsDeliver = organisationsDeliverDao;
+    }
 
     /**
      * get organisations with no bank accounts
@@ -23,7 +42,7 @@ public class OrganisationsDeliverService implements IOrganisationsDeliverService
     @Override
     public Organisation[] showOrganisationsWithoutBankAccounts() throws ServiceException {
         try {
-            return DaoFactory.getINSTANCE().getOrganisationsDeliver().showOrganisationsWithoutBankAccounts();
+            return organisationsDeliver.showOrganisationsWithoutBankAccounts();
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

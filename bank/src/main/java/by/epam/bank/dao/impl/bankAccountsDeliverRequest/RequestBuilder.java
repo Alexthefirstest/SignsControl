@@ -176,7 +176,7 @@ public class RequestBuilder implements IRequestBuilder {
      */
     @Override
     public RequestBuilder findById(int id) {
-        where += " ba.id="+id+" AND";
+        where += " ba.organisation_id="+id+" AND";
         return this;
     }
 

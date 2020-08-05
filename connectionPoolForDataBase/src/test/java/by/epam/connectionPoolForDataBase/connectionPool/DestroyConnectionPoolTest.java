@@ -9,10 +9,9 @@ import org.junit.Test;
 
 import java.sql.Connection;
 
-@Ignore
 public class DestroyConnectionPoolTest {
 
-    public static ConnectionPool connectionPool;
+    private static ConnectionPool connectionPool;
 
 
     @BeforeClass

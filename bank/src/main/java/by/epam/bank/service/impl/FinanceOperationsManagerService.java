@@ -18,7 +18,23 @@ public class FinanceOperationsManagerService implements IFinanceOperationsManage
     /**
      * {@link IFinanceOperationsManager}
      */
-    private static IFinanceOperationsManager fom = DaoFactory.getINSTANCE().getFinanceOperationsManager();
+    private final IFinanceOperationsManager fom ;
+
+    /**
+     * empty constructor
+     */
+    public FinanceOperationsManagerService() {
+
+        fom = DaoFactory.getINSTANCE().getFinanceOperationsManager();
+    }
+
+    /**
+     * @param financeOperationsManagerDao {@link IFinanceOperationsManager}
+     */
+    FinanceOperationsManagerService(IFinanceOperationsManager financeOperationsManagerDao) {
+        fom = financeOperationsManagerDao;
+    }
+
 
     /**
      * transact money, create transaction to the history
@@ -34,7 +50,11 @@ public class FinanceOperationsManagerService implements IFinanceOperationsManage
     public Transaction transferMoney(int organisationIDFrom, int organisationIDTo, double money) throws ServiceException {
 
         if (money <= 0) {
-            throw new ServiceValidationException("negative amount");
+            throw new ServiceValidationException("negative or zero amount");
+        }
+
+        if (organisationIDFrom==organisationIDTo) {
+            throw new ServiceValidationException("can't send transaction to himself");
         }
 
         try {

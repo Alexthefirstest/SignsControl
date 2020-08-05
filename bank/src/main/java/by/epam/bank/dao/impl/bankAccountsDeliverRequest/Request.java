@@ -45,6 +45,21 @@ public class Request implements IRequest {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Request request1 = (Request) o;
+
+        return request != null ? request.equals(request1.request) : request1.request == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return request != null ? request.hashCode() : 0;
+    }
+
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Request{");
         sb.append("request='").append(request).append('\'');

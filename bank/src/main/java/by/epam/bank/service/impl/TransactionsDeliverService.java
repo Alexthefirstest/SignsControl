@@ -5,9 +5,11 @@ import by.epam.bank.dao.ITransactionsDeliver;
 import by.epam.bank.dao.exceptions.DAOException;
 import by.epam.bank.dao.exceptions.DAOValidationException;
 import by.epam.bank.dao.factory.DaoFactory;
+import by.epam.bank.dao.impl.TransactionsDeliver;
 import by.epam.bank.service.ITransactionsDeliverService;
 import by.epam.bank.service.exceptions.ServiceException;
 import by.epam.bank.service.exceptions.ServiceValidationException;
+import by.epam.bank.service.factory.ServiceFactory;
 
 /**
  * service to supply {@link Transaction} with data validate
@@ -17,7 +19,21 @@ public class TransactionsDeliverService implements ITransactionsDeliverService {
     /**
      * {@link ITransactionsDeliver instance}
      */
-    private static ITransactionsDeliver td = DaoFactory.getINSTANCE().getTransactionsDeliver();
+    private final ITransactionsDeliver td;
+
+    /**
+     * empty constructor
+     */
+    public TransactionsDeliverService() {
+        td = DaoFactory.getINSTANCE().getTransactionsDeliver();
+    }
+
+    /**
+     * @param transactionsDeliverDao {@link ITransactionsDeliver}
+     */
+    TransactionsDeliverService(ITransactionsDeliver transactionsDeliverDao) {
+        td = transactionsDeliverDao;
+    }
 
 
     /**

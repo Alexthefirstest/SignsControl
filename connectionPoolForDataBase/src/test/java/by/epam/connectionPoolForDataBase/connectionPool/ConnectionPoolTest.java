@@ -112,7 +112,6 @@ public class ConnectionPoolTest {
 
     }
 
-    @Ignore
     @Test(timeout = 60_000)
     public void connectionPoolSizeTest() throws ConnectionPoolException {
 

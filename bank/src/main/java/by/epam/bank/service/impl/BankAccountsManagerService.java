@@ -18,7 +18,23 @@ public class BankAccountsManagerService implements IBankAccountsManagerService {
     /**
      * {@link IBankAccountsManager} instance
      */
-    private static IBankAccountsManager bam = DaoFactory.getINSTANCE().getBankAccountsManager();
+    private final IBankAccountsManager bam;
+
+    /**
+     * empty constructor
+     */
+    public BankAccountsManagerService() {
+
+        bam = DaoFactory.getINSTANCE().getBankAccountsManager();
+    }
+
+    /**
+     * @param bankAccountsManagerDao {@link IBankAccountsManager}
+     */
+    BankAccountsManagerService(IBankAccountsManager bankAccountsManagerDao) {
+        bam = bankAccountsManagerDao;
+    }
+
 
     /**
      * @param organisationID to create account
