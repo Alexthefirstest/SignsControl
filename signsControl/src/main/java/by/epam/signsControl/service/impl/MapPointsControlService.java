@@ -14,7 +14,21 @@ public class MapPointsControlService implements IMapPointsControlService {
     /**
      * {@link IMapPointsControl} instance
      */
-    private final IMapPointsControl mapPointsControl = DaoFactory.getINSTANCE().getMapPointsControl();
+    private final IMapPointsControl mapPointsControl;
+
+    /**
+     * empty constructor
+     */
+    public MapPointsControlService() {
+        mapPointsControl = DaoFactory.getINSTANCE().getMapPointsControl();
+    }
+
+    /**
+     * @param mapPointsControlDao {@link IMapPointsControl}
+     */
+    MapPointsControlService(IMapPointsControl mapPointsControlDao) {
+        mapPointsControl = mapPointsControlDao;
+    }
 
     /**
      * get map point by coordinates

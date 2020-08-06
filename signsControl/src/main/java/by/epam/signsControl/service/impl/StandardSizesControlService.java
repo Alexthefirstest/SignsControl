@@ -17,7 +17,22 @@ public class StandardSizesControlService implements IStandardSizesControlService
     /**
      * {@link IStandardSizesControl} instance
      */
-    private final IStandardSizesControl standardSizesControl = DaoFactory.getINSTANCE().getStandardSizesControl();
+    private final IStandardSizesControl standardSizesControl;
+
+
+    /**
+     * empty constructor
+     */
+    public StandardSizesControlService() {
+        standardSizesControl = DaoFactory.getINSTANCE().getStandardSizesControl();
+    }
+
+    /**
+     * @param standardSizesControlDao {@link IStandardSizesControl}
+     */
+    StandardSizesControlService(IStandardSizesControl standardSizesControlDao) {
+        standardSizesControl = standardSizesControlDao;
+    }
 
     /**
      * sql add standard size to sql table

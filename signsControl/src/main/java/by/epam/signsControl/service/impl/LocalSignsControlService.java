@@ -20,7 +20,22 @@ public class LocalSignsControlService implements ILocalSignsControlService {
     /**
      * {@link ILocalSignsControl} instance
      */
-    private final ILocalSignsControl localSignsControl = DaoFactory.getINSTANCE().getLocalSignsControl();
+    private final ILocalSignsControl localSignsControl;
+
+
+    /**
+     * empty constructor
+     */
+    public LocalSignsControlService() {
+        localSignsControl = DaoFactory.getINSTANCE().getLocalSignsControl();
+    }
+
+    /**
+     * @param localSignsControlDao {@link ILocalSignsControl}
+     */
+    LocalSignsControlService(ILocalSignsControl localSignsControlDao) {
+        localSignsControl = localSignsControlDao;
+    }
 
     /**
      * @param signListId   sign list to set local sign

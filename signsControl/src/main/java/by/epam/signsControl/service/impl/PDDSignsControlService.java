@@ -19,7 +19,22 @@ public class PDDSignsControlService implements IPDDSignsControlService {
     /**
      * {@link IPDDSignsControl} instance
      */
-    private final IPDDSignsControl pddSignsControl = DaoFactory.getINSTANCE().getPddSignsControl();
+    private final IPDDSignsControl pddSignsControl;
+
+
+    /**
+     * empty constructor
+     */
+    public PDDSignsControlService() {
+        pddSignsControl = DaoFactory.getINSTANCE().getPddSignsControl();
+    }
+
+    /**
+     * @param pddSignsControlDao {@link IPDDSignsControl}
+     */
+    PDDSignsControlService(IPDDSignsControl pddSignsControlDao) {
+        pddSignsControl = pddSignsControlDao;
+    }
 
     /**
      * add sign to table

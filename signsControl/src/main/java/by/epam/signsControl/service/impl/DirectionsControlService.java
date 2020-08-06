@@ -24,7 +24,21 @@ public class DirectionsControlService implements IDirectionsControlService {
     /**
      * {@link IDirectionsControl} instance
      */
-    private final IDirectionsControl directionsControl = DaoFactory.getINSTANCE().getDirectionsControl();
+    private final IDirectionsControl directionsControl;
+
+    /**
+     * empty constructor
+     */
+    public DirectionsControlService() {
+        directionsControl = DaoFactory.getINSTANCE().getDirectionsControl();
+    }
+
+    /**
+     * @param directionsControlDao {@link IDirectionsControl}
+     */
+    DirectionsControlService(IDirectionsControl directionsControlDao) {
+        directionsControl = directionsControlDao;
+    }
 
     /**
      * get directions
