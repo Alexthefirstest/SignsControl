@@ -36,16 +36,17 @@
 </head>
 
 <body>
-<jsp:include page="header.jsp"/>
+<jsp:include page="../jsp/header.jsp"/>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/500.css?3">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/500.css?10">
 
 
 <div class="wrapper">
 <div class="box">
-<h1>500</h1>
-<p><fmt:message key="label.server_exception" /></p>
-<p>&#58;&#40;</p>
+<br><br><br>
+<h1 id="err500">500</h1>
+<p class="ex"><fmt:message key="label.server_exception" /></p>
+
 </div>
 </div>
 

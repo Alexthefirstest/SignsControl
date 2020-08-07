@@ -34,12 +34,18 @@ public class AccessRulesChecker {
      */
     public static void organisationRoleCheck(HttpServletRequest request, int... requiredRoles) throws AccessException {
 
-        int organisationRole = (Integer) (request.getAttribute(Constants.ORGANISATION_ROLE));
+        Object organisationRoleObj = (request.getAttribute(Constants.ORGANISATION_ROLE));
 
-        for (int i = 0; i < requiredRoles.length; i++) {
-            if (requiredRoles[i] == organisationRole) {
-               return;
+        if (organisationRoleObj != null) {
+
+            int organisationRole = (Integer) organisationRoleObj;
+
+            for (int requiredRole : requiredRoles) {
+                if (requiredRole == organisationRole) {
+                    return;
+                }
             }
+
         }
         logger.warn("wrong organisation role");
         throw new AccessException("wrong organisation role access");
@@ -54,14 +60,20 @@ public class AccessRulesChecker {
      */
     public static void userRoleCheck(HttpServletRequest request, int... requiredRoles) throws AccessException {
 
-        int userRole = (Integer) (request.getAttribute(Constants.USER_ROLE));
+        Object userRoleObj = (request.getAttribute(Constants.USER_ROLE));
 
-        for (int requiredRole : requiredRoles) {
-            if (requiredRole == userRole) {
-                return;
+        if (userRoleObj != null) {
+
+
+            int userRole = (Integer) userRoleObj;
+
+            for (int requiredRole : requiredRoles) {
+                if (requiredRole == userRole) {
+                    return;
+                }
             }
-        }
 
+        }
         logger.warn("wrong  user role");
         throw new AccessException("wrong user role access");
     }
@@ -74,9 +86,9 @@ public class AccessRulesChecker {
      */
     public static void notAnonymCheck(HttpServletRequest request) throws AccessException {
 
-        int userRole = (Integer) (request.getAttribute(Constants.USER_ROLE));
+        Object userRoleObj = (request.getAttribute(Constants.USER_ROLE));
 
-        if (userRole != Constants.USER_ANONYM_ROLE) {
+        if (userRoleObj != null && (Integer) userRoleObj != Constants.USER_ANONYM_ROLE) {
             return;
         }
 //send to the wrong role page
@@ -92,17 +104,22 @@ public class AccessRulesChecker {
      * @param requiredRoles roles to check
      * @return true if request role is one of the required roles or false in other case
      */
-    public static boolean organisationRoleCheckBool(HttpServletRequest request, int... requiredRoles)  {
+    public static boolean organisationRoleCheckBool(HttpServletRequest request, int... requiredRoles) {
 
-        int organisationRole = (Integer) (request.getAttribute(Constants.ORGANISATION_ROLE));
 
-        for (int i = 0; i < requiredRoles.length; i++) {
-            if (requiredRoles[i] == organisationRole) {
-                return true;
+        Object organisationRoleObj = (request.getAttribute(Constants.ORGANISATION_ROLE));
+
+        if (organisationRoleObj != null) {
+
+            int organisationRole = (Integer) organisationRoleObj;
+
+            for (int requiredRole : requiredRoles) {
+                if (requiredRole == organisationRole) {
+                    return true;
+                }
             }
         }
-
-       return false;
+        return false;
     }
 
     /**
@@ -114,14 +131,19 @@ public class AccessRulesChecker {
      */
     public static boolean userRoleCheckBool(HttpServletRequest request, int... requiredRoles) {
 
-        int userRole = (Integer) (request.getAttribute(Constants.USER_ROLE));
+        Object userRoleObj = (request.getAttribute(Constants.USER_ROLE));
 
-        for (int i = 0; i < requiredRoles.length; i++) {
-            if (requiredRoles[i] == userRole) {
-                return true;
+        if (userRoleObj != null) {
+
+            int userRole = (Integer) userRoleObj;
+
+            for (int requiredRole : requiredRoles) {
+                if (requiredRole == userRole) {
+                    return true;
+                }
             }
-        }
 
+        }
         logger.warn("wrong  user role");
         return false;
     }

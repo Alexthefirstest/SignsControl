@@ -38,9 +38,9 @@
 </head>
 
 <body>
-<jsp:include page="header.jsp"/>
+<jsp:include page="../jsp/header.jsp"/>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/404.css?3">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/404.css?4">
 
 	<div id="notfound">
 		<div class="notfound">

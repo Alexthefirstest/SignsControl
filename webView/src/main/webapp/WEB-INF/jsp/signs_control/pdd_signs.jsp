@@ -34,7 +34,9 @@
 <body>
 <jsp:include page="../header.jsp"/>
 
+  <c:if test="${sessionScope.organisationRole==1}">
 <p><a href="${pageContext.request.contextPath}/add_pdd_sign"><fmt:message key="label.add" /> <fmt:message key="label.sign" /></a>
+</c:if>
 <br>
 
 <table>

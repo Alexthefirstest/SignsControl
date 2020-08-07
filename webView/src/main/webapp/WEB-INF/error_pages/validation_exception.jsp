@@ -35,23 +35,22 @@
 </head>
 
 <body>
-<jsp:include page="header.jsp"/>
+<jsp:include page="../jsp/header.jsp"/>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/validation_exception.css?3">
-
-<body>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/validation_exception.css?5">
 
 	<div id="notfound">
 		<div class="notfound">
 			<div class="notfound-404">
-				<h1>warning</h1>
+				<h1><fmt:message key="label.error" /></h1>
 			</div>
-			<h2><fmt:message key="label.problem_during_execution" /></h2>
+			<h2><fmt:message key="label.problem_during_execution" />:</h2>
+			<br>
 			<p>${message}</p>
 
 		</div>
 	</div>
 
-</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</body> <%--  This templates was made by Colorlib (https://colorlib.com)--%>
 
 </html>

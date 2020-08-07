@@ -33,8 +33,10 @@
 
 <body>
 <jsp:include page="../header.jsp"/>
-<p><a href="${pageContext.request.contextPath}/add_standard_size"><fmt:message key="label.add"/> <fmt:message key="label.standard_size"/> </a>
 
+<c:if test="${sessionScope.organisationRole==1}">
+<p><a href="${pageContext.request.contextPath}/add_standard_size"><fmt:message key="label.add"/> <fmt:message key="label.standard_size"/> </a>
+  </c:if>
 
 <table class="auto_center center">
 

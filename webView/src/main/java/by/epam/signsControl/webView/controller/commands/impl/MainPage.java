@@ -32,14 +32,21 @@ public class MainPage implements Command {
 
             if (AccessRulesChecker.organisationRoleCheckBool(request, Constants.ODD_ORGANISATION_ROLE)) {
 
+                logger.info("inside execute ");
+
                 request.setAttribute("types_of_work", ServiceFactory.getINSTANCE().getTypeOfWorkControlService().getUnblockedTypesOfWork());
 
             } else if (AccessRulesChecker.organisationRoleCheckBool(request, Constants.PERFORMERS_ORGANISATIONS_ROLE)) {
+
+
 
                 request.setAttribute("organisations",
                         by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory.getINSTANCE().getOrganisationsControllerService()
                                 .getUnblockedOrganisations(Constants.PERFORMERS_ORGANISATIONS_ROLE));
             }
+
+
+
 
             request.getRequestDispatcher("/").forward(request, response);
 

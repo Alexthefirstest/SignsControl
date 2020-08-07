@@ -1,16 +1,7 @@
-html { box-sizing: border-box; }
 
-*,
-*::before,
-*::after { box-sizing: inherit; }
-
-body * {
-  margin: 0;
-  padding: 0;
-}
 
 body {
-  font: normal 100%/1.15 "Merriweather", serif;
+
   background-color: #7ed0f2;
   color: #fff;
 }
@@ -34,27 +25,27 @@ body {
               transparent  url('../images/desktop-pc.png') no-repeat top 13em center/128px 128px;
 }
 
-h1, p:not(:last-of-type) { text-shadow: 0 0 6px #216f79; }
+#err500, .ex:not(:last-of-type) { text-shadow: 0 0 6px #216f79; }
 
-h1 {
+#err500 {
   margin: 0 0 1rem 0;
   font-size: 8em;
 }
 
-p {
+.ex {
   margin-bottom: 0.5em;
   font-size: 3em;
 }
 
-p:first-of-type { margin-top: 4em; }
+.ex:first-of-type { margin-top: 4em; }
 
-p > a {
+.ex > a {
   border-bottom: 1px dashed #216f79;
   font-style: italic;
   text-decoration: none;
   color: #216f79;
 }
 
-p > a:hover { text-shadow: 0 0 6px #216f79; }
+.ex > a:hover { text-shadow: 0 0 6px #216f79; }
 
-p img { vertical-align: bottom; }
+.ex img { vertical-align: bottom; }

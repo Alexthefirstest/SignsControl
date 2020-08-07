@@ -79,12 +79,16 @@ public class CommandController extends HttpServlet {
      */
     private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+
+
         resp.setCharacterEncoding("UTF-8");
         req.setCharacterEncoding("UTF-8");
+
 
         try {
 
             commandProvider.getCommand(RequestParser.getCommandFromURI(req)).execute(req, resp);
+
 
         } catch (AccessException ex) {
 
@@ -103,6 +107,10 @@ public class CommandController extends HttpServlet {
         } catch (CommandControllerException ex) {
             logger.warn("!SERIOUS EXCEPTION!", ex);
             req.getRequestDispatcher("/WEB-INF/error_pages/errors.jsp").forward(req, resp);
+        } catch (Exception ex){
+            logger.warn("another exception: ",ex);
+
+            throw ex;
         }
     }
 

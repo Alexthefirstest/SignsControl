@@ -147,6 +147,11 @@ public class ShowTransactionsHistory implements Command {
                 }
             }
 
+            if(page>pageCount){
+                request.getRequestDispatcher("/WEB-INF/jsp/wrong_request.jsp").forward(request, response);
+                return;
+            }
+
             ArrayList<Integer> startPages = getStartPages(page);
             ArrayList<Integer> finishPages = getFinishPages(page, pageCount);
 

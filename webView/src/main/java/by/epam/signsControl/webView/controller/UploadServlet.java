@@ -118,6 +118,10 @@ public class UploadServlet extends HttpServlet {
         } catch (CommandControllerException ex) {
             logger.warn("!SERIOUS EXCEPTION!", ex);
             req.getRequestDispatcher("/WEB-INF/error_pages/errors.jsp").forward(req, resp);
+        }catch (Exception ex){
+            logger.warn("another exception: ",ex);
+
+            throw ex;
         }
 
         logger.info("inside servlet post2");

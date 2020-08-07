@@ -34,13 +34,14 @@
 
 </head>
 
-<body>
-<jsp:include page="header.jsp"/>
+<body id="accbody">
+<jsp:include page="../jsp/header.jsp"/>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/403.css?3">
-
-<h1 class="text"><span>403</span></h1>
-<h3><fmt:message key="label.access_forbidden" /></h3>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/403.css?10">
+<br><br><br><br><br><br>
+<h1 id="exp403"><span>403</span></h1>
+<br>
+<h2 class="text center"><fmt:message key="label.access_forbidden" /></h2>
 
 
 </body>
