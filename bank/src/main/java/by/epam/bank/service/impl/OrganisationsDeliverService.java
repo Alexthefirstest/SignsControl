@@ -1,5 +1,6 @@
 package by.epam.bank.service.impl;
 
+import by.epam.bank.bean.BankAccount;
 import by.epam.bank.dao.IOrganisationsDeliver;
 import by.epam.bank.dao.exceptions.DAOException;
 import by.epam.bank.dao.exceptions.DAOValidationException;
@@ -43,6 +44,26 @@ public class OrganisationsDeliverService implements IOrganisationsDeliverService
     public Organisation[] showOrganisationsWithoutBankAccounts() throws ServiceException {
         try {
             return organisationsDeliver.showOrganisationsWithoutBankAccounts();
+        } catch (DAOValidationException ex) {
+            throw new ServiceValidationException(ex.getMessage());
+        } catch (DAOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    /**
+     * get organisation with bank account or without in case account don't exist by id
+     *
+     * @param id organisation id
+     * @return {@link Organisation} or null if organisation do not exist
+     * @throws ServiceValidationException when {@link by.epam.bank.dao.IOrganisationsDeliver} throw {@link DAOValidationException}
+     * @throws ServiceException           ex when {@link by.epam.bank.dao.IOrganisationsDeliver} throw {@link DAOException}
+     */
+    @Override
+    public BankAccount findOrganisationByID(int id) throws ServiceException {
+
+        try {
+            return organisationsDeliver.findOrganisationByID(id);
         } catch (DAOValidationException ex) {
             throw new ServiceValidationException(ex.getMessage());
         } catch (DAOException ex) {

@@ -142,7 +142,6 @@ ${bank_account.info}
 
 </tr>
 
-</c:forEach>
 
 </tbody>
 </table>

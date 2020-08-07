@@ -38,28 +38,27 @@ public class OrganisationProfile implements Command {
 
             String id = RequestParser.getSecondCommandFromURI(request);
 
-            if (!Pattern.matches("\\d+",id)) {
+            if (!Pattern.matches("\\d+", id)) {
                 request.getRequestDispatcher("/").forward(request, response);
-               throw new CommandControllerValidationException("wrong id");
+                throw new CommandControllerValidationException("wrong id");
             }
 
             assert id != null;
             int organisationID = Integer.parseInt(id);
 
-            BankAccount[] bankAccounts =
-                    ServiceFactory.getINSTANCE().getBankAccountsDeliver()
-                            .executeRequest(ServiceFactory.getINSTANCE().getRequestBuilder().findById(organisationID).build());
+            BankAccount bankAccount =
+                    ServiceFactory.getINSTANCE().getOrganisationsDeliver().findOrganisationByID(organisationID);
 
-            if (bankAccounts.length < 1) {
+            if (bankAccount == null) {
                 throw new CommandControllerValidationException("this organisation do not exist");
             }
 
-            if ((Integer) request.getAttribute(Constants.ORGANISATION_ID) != bankAccounts[0].getOrganisation().getId()) {
+            if ((Integer) request.getSession().getAttribute(Constants.ORGANISATION_ID) != bankAccount.getOrganisation().getId()) {
                 throw new AccessException("wrong access");
             }
 
 
-            request.setAttribute("bank_account", bankAccounts[0]);
+            request.setAttribute("bank_account", bankAccount);
             request.setAttribute("organisations", by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory.getINSTANCE().getOrganisationsControllerService().getOrganisations());
 
             request.getRequestDispatcher("/WEB-INF/jsp/bank/organisation_profile.jsp").forward(request, response);

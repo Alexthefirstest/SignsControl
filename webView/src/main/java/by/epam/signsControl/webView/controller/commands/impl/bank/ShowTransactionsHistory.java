@@ -50,7 +50,7 @@ public class ShowTransactionsHistory implements Command {
             String findBy = request.getParameter("findBy");
 
 
-            int organisationRole = (Integer) (request.getAttribute(Constants.ORGANISATION_ROLE));
+            int organisationRole = (Integer) (request.getSession().getAttribute(Constants.ORGANISATION_ROLE));
 
 
             ITransactionsDeliverService transactionsDeliver = ServiceFactory.getINSTANCE().getTransactionsDeliver();
@@ -61,7 +61,7 @@ public class ShowTransactionsHistory implements Command {
                 page = 1;
             }
 
-            int organisationID = (Integer) (request.getAttribute(Constants.ORGANISATION_ID));
+            int organisationID = (Integer) (request.getSession().getAttribute(Constants.ORGANISATION_ID));
 
             logger.info(findBy);
 
@@ -147,8 +147,17 @@ public class ShowTransactionsHistory implements Command {
                 }
             }
 
-            if(page>pageCount){
-                request.getRequestDispatcher("/WEB-INF/jsp/wrong_request.jsp").forward(request, response);
+            if (page > pageCount) {
+
+                if(pageCount==0){
+
+                    request.setAttribute("transactionsNotFind", "true");
+
+                    request.getRequestDispatcher("/WEB-INF/jsp/bank/transactions.jsp").forward(request, response);
+                }
+
+                logger.info("wrong page page/pages quantity" + page + " / " + pageCount);
+                request.getRequestDispatcher("/WEB-INF/error_pages/wrong_request.jsp").forward(request, response);
                 return;
             }
 

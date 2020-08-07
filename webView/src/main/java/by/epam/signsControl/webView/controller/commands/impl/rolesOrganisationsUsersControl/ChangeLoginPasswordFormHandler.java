@@ -52,7 +52,7 @@ public class ChangeLoginPasswordFormHandler implements Command {
                     }
             }
 
-            response.sendRedirect(request.getContextPath() + "/user_profile");
+            response.sendRedirect(request.getContextPath() + "/user_profile/" + id);
         } catch (ServiceValidationException e) {
             throw new CommandControllerValidationException(e);
         } catch (ServiceException e) {

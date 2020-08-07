@@ -36,7 +36,7 @@ public class UserProfile implements Command {
             String command=RequestParser.getSecondCommandFromURI(request);
 
             if (command==null){
-                throw new CommandControllerValidationException("request is null");
+                throw new CommandControllerValidationException("wrong user");
             }
 
             int id = Integer.parseInt(command);

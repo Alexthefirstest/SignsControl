@@ -34,13 +34,18 @@ public class AccessRulesChecker {
      */
     public static void organisationRoleCheck(HttpServletRequest request, int... requiredRoles) throws AccessException {
 
-        Object organisationRoleObj = (request.getAttribute(Constants.ORGANISATION_ROLE));
+        Object organisationRoleObj = (request.getSession().getAttribute(Constants.ORGANISATION_ROLE));
+
+        logger.info("org role check: " + organisationRoleObj);
 
         if (organisationRoleObj != null) {
 
             int organisationRole = (Integer) organisationRoleObj;
 
             for (int requiredRole : requiredRoles) {
+
+                logger.info(requiredRole);
+
                 if (requiredRole == organisationRole) {
                     return;
                 }
@@ -60,14 +65,17 @@ public class AccessRulesChecker {
      */
     public static void userRoleCheck(HttpServletRequest request, int... requiredRoles) throws AccessException {
 
-        Object userRoleObj = (request.getAttribute(Constants.USER_ROLE));
+        Object userRoleObj = (request.getSession().getAttribute(Constants.USER_ROLE));
+        logger.info("user role check: " + userRoleObj);
 
         if (userRoleObj != null) {
-
 
             int userRole = (Integer) userRoleObj;
 
             for (int requiredRole : requiredRoles) {
+
+                logger.info(requiredRole);
+
                 if (requiredRole == userRole) {
                     return;
                 }
@@ -86,13 +94,16 @@ public class AccessRulesChecker {
      */
     public static void notAnonymCheck(HttpServletRequest request) throws AccessException {
 
-        Object userRoleObj = (request.getAttribute(Constants.USER_ROLE));
+        Object userRoleObj = (request.getSession().getAttribute(Constants.USER_ROLE));
+
+        logger.info("anonym check: " + userRoleObj);
 
         if (userRoleObj != null && (Integer) userRoleObj != Constants.USER_ANONYM_ROLE) {
             return;
         }
 //send to the wrong role page
         logger.warn("anonym  user role");
+
         throw new AccessException("user is anonym");
     }
 
@@ -107,13 +118,18 @@ public class AccessRulesChecker {
     public static boolean organisationRoleCheckBool(HttpServletRequest request, int... requiredRoles) {
 
 
-        Object organisationRoleObj = (request.getAttribute(Constants.ORGANISATION_ROLE));
+        Object organisationRoleObj = (request.getSession().getAttribute(Constants.ORGANISATION_ROLE));
+
+        logger.info("org role check bool: " + organisationRoleObj);
 
         if (organisationRoleObj != null) {
 
             int organisationRole = (Integer) organisationRoleObj;
 
             for (int requiredRole : requiredRoles) {
+
+                logger.info(requiredRole);
+
                 if (requiredRole == organisationRole) {
                     return true;
                 }
@@ -131,20 +147,27 @@ public class AccessRulesChecker {
      */
     public static boolean userRoleCheckBool(HttpServletRequest request, int... requiredRoles) {
 
-        Object userRoleObj = (request.getAttribute(Constants.USER_ROLE));
+        Object userRoleObj = (request.getSession().getAttribute(Constants.USER_ROLE));
+
+        logger.info("user role check bool: " + userRoleObj);
 
         if (userRoleObj != null) {
 
             int userRole = (Integer) userRoleObj;
 
             for (int requiredRole : requiredRoles) {
+
+                logger.info(requiredRole);
+
                 if (requiredRole == userRole) {
                     return true;
                 }
             }
 
         }
+
         logger.warn("wrong  user role");
+
         return false;
     }
 

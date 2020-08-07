@@ -49,25 +49,27 @@ public class ChangeUserFormHandler implements Command {
                 throw new CommandControllerValidationException("wrong user id");
             }
 
-
-
-
-            if (AccessRulesChecker.organisationRoleCheckBool(request, Constants.ADMINISTRATORS_ORGANISATION_ID)) {
-
-                if (user.getOrganisation().getId() != Constants.ADMINISTRATORS_ORGANISATION_ID
-                        && user.getRole().getId() != Constants.ADMINISTRATOR_ROLE
-                        || user.getOrganisation().getId() == Constants.ADMINISTRATORS_ORGANISATION_ID
-                        && !AccessRulesChecker.userRoleCheckBool(request, Constants.ADMINISTRATOR_ROLE)) {
-                    logger.warn("wrong action if");
-                    throw new AccessException(" wrong role");
-                }
-
-            } else {
-                AccessRulesChecker.userRoleCheck(request, Constants.ADMINISTRATOR_ROLE);
-                if (user.getOrganisation().getId() != (Integer) request.getSession().getAttribute(Constants.ORGANISATION_ID)) {
-                    throw new AccessException("wrong role");
-                }
+            if ((Integer) request.getSession().getAttribute(Constants.USER_ID) == user.getId()){
+                throw new AccessException("can't change your own account");
             }
+
+
+                if (AccessRulesChecker.organisationRoleCheckBool(request, Constants.ADMINISTRATORS_ORGANISATION_ID)) {
+
+                    if (user.getOrganisation().getId() != Constants.ADMINISTRATORS_ORGANISATION_ID
+                            && user.getRole().getId() != Constants.ADMINISTRATOR_ROLE
+                            || user.getOrganisation().getId() == Constants.ADMINISTRATORS_ORGANISATION_ID
+                            && !AccessRulesChecker.userRoleCheckBool(request, Constants.ADMINISTRATOR_ROLE)) {
+                        logger.warn("wrong action if");
+                        throw new AccessException(" wrong role");
+                    }
+
+                } else {
+                    AccessRulesChecker.userRoleCheck(request, Constants.ADMINISTRATOR_ROLE);
+                    if (user.getOrganisation().getId() != (Integer) request.getSession().getAttribute(Constants.ORGANISATION_ID)) {
+                        throw new AccessException("wrong role");
+                    }
+                }
 
 
             if (request.getParameter("setName") != null) {

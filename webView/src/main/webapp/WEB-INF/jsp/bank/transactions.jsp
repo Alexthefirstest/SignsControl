@@ -166,6 +166,10 @@
 
 </p>
 
+<c:if test='${transactionsNotFind==true}'>
+<h2 class="auto_center center"> <fmt:message key="label.transactions_not_find" /> </h2>
+</c:if>
+
 <br>
 <hr>
 <br>

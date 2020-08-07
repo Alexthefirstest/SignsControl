@@ -112,7 +112,7 @@
 <br> <hr>
 <br>
 
- <c:if test="${ (user.organisation.role.id==5  && sessionScope.organisationRole==5 && sessionScope.userRole==2) || (user.organisation.role.id!=5 && ( (sessionScope.userRole==2 &&  sessionScope.organisationID==user.organisation.id) || (sessionScope.organisationRole==5 && user.role.id==2) ) ) }">
+ <c:if test="${ sessionScope.userID!= user.id &&((user.organisation.role.id==5  && sessionScope.organisationRole==5 && sessionScope.userRole==2) || (user.organisation.role.id!=5 && ( (sessionScope.userRole==2 &&  sessionScope.organisationID==user.organisation.id) || (sessionScope.organisationRole==5 && user.role.id==2) ) ) )}">
 
 <form action='${pageContext.request.contextPath}/change_user_form_handler' method="post" id='change_user'
       accept-charset="UTF-8" >
