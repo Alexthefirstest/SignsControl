@@ -34,6 +34,13 @@
 <body>
 <jsp:include page="../header.jsp"/>
 
+<c:if test='${param.success==true}'>
+   <h4 class="auto_center center" style="color: green"><fmt:message key="label.success" /></h4>
+</c:if>
+<c:if test='${param.success==false}'>
+   <h4 class="auto_center center" style="color: red"><fmt:message key="label.fail.wrong_login_or_password" /></h4>
+
+</c:if>
 
 <div class="auto_center center">
 
@@ -153,23 +160,24 @@
                                            value='${user.surname}' required>
 
 <br>
-<br>
-    <label for="setOrganisation"><fmt:message key="label.change.organisation" /> </label>
-    <input type="checkbox" id="setOrganisation" name="setOrganisation">
+
+ <%--<br>--%>
+    <%-- <label for="setOrganisation"><fmt:message key="label.change.organisation" /> </label>--%>
+     <%--<input type="checkbox" id="setOrganisation" name="setOrganisation">--%>
 
 
-    <label for="organisationSelect"><fmt:message key="label.organisation" />: </label>
-    <select name="organisation" required id="organisationSelect">
+    <%-- <label for="organisationSelect"><fmt:message key="label.organisation" />: </label>--%>
+    <%-- <select name="organisation" required id="organisationSelect">--%>
 
-        <c:forEach var="organisation" items='${organisations}'>
+       <%--  <c:forEach var="organisation" items='${organisations}'>--%>
 
-            <option value='${organisation.id}'>${organisation.name}</option>
+          <%--   <option value='${organisation.id}'>${organisation.name}</option>--%>
 
-        </c:forEach>
+        <%-- </c:forEach> --%>
 
-    </select>
+    <%-- </select>   --%>
 
-<br>
+ <%-- <br>    --%>
 <br>
     <label for="setInfo"><fmt:message key="label.change.info" /></label>
     <input type="checkbox" id="setInfo" name="setInfo">

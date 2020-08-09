@@ -34,6 +34,8 @@ public class OrganisationProfile implements Command {
 
         try {
 
+            ServiceFactory serviceFactory = ServiceFactory.getINSTANCE();
+
             AccessRulesChecker.userRoleCheck(request, Constants.ADMINISTRATOR_ROLE);
 
             String id = RequestParser.getSecondCommandFromURI(request);
@@ -57,17 +59,23 @@ public class OrganisationProfile implements Command {
                 throw new AccessException("wrong access");
             }
 
+            logger.info("AAAAAAAAAAAAAAAa: ");
+            logger.info("INFO: "+bankAccount.getInfo());
+            logger.info("INFO: "+(bankAccount.getInfo()==null));
 
             request.setAttribute("bank_account", bankAccount);
-            request.setAttribute("organisations", by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory.getINSTANCE().getOrganisationsControllerService().getOrganisations());
+            request.setAttribute("bank_account_organisations",
+                    serviceFactory.getBankAccountsDeliver().executeRequest(
+                            serviceFactory.getRequestBuilder().withSortByOrganisationName().build()
+                    ));
 
             request.getRequestDispatcher("/WEB-INF/jsp/bank/organisation_profile.jsp").forward(request, response);
 
         } catch (
-                ServiceValidationException | by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceValidationException e) {
+                ServiceValidationException e) {
             throw new CommandControllerValidationException(e);
         } catch (
-                ServiceException | by.epam.rolesOrganisationsUsersController.service.exceptions.ServiceException e) {
+                ServiceException  e) {
             throw new CommandControllerException(e);
         }
     }

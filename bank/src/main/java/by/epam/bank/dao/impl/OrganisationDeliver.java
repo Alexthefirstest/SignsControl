@@ -37,7 +37,7 @@ public class OrganisationDeliver implements IOrganisationsDeliver {
     /**
      * get organisation by id with or without bank account
      */
-    private static final String GET_ALL_ORGANISATIONS = " SELECT ba.balance, ba.min_allowed_balance, ba.is_blocked, ba.info, o.id, o.name, o.role, orr.role, o.is_blocked, o.info FROM bank_accounts as ba right join organisations as o on id=organisation_id join organisation_roles as orr on o.role=orr.id where o.id=? ";
+    private static final String GET_ORGANISATION_WITH_BANK_ACCOUNT_BY_ID = " SELECT ba.balance, ba.min_allowed_balance, ba.is_blocked, ba.info, o.id, o.name, o.role, orr.role, o.is_blocked, o.info FROM bank_accounts as ba right join organisations as o on id=organisation_id join organisation_roles as orr on o.role=orr.id where o.id=? ";
 
     /**
      * {@link IConnectionPool} instance
@@ -120,12 +120,11 @@ public class OrganisationDeliver implements IOrganisationsDeliver {
         }
 
 
-        try (PreparedStatement ps = connection.prepareStatement(GET_ALL_ORGANISATIONS)) {
+        try (PreparedStatement ps = connection.prepareStatement(GET_ORGANISATION_WITH_BANK_ACCOUNT_BY_ID)) {
 
             ps.setInt(1, id);
 
             rs = ps.executeQuery();
-
 
             return rs.next() ? new BankAccount(
                     new Organisation(rs.getInt(5), rs.getString(6), new Role(rs.getInt(7),

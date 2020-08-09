@@ -41,12 +41,12 @@ public class AddUserFormHandler implements Command {
             String info = request.getParameter("info");
 
 
-            if (AccessRulesChecker.organisationRoleCheckBool(request, Constants.ADMINISTRATORS_ORGANISATION_ID)) {
+            if (AccessRulesChecker.organisationRoleCheckBool(request, Constants.ADMINISTRATOR_ORGANISATION_ROLE)) {
 
                 if (organisation != Constants.ADMINISTRATORS_ORGANISATION_ID && role != Constants.ADMINISTRATOR_ROLE
                         || organisation == Constants.ADMINISTRATORS_ORGANISATION_ID
                         && !AccessRulesChecker.userRoleCheckBool(request, Constants.ADMINISTRATOR_ROLE)) {
-                    logger.warn("wrong actioon in");
+                    logger.warn("wrong action if");
                     throw new AccessException("wrong action");
                 }
 

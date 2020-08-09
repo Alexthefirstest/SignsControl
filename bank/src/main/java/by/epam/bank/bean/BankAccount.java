@@ -123,7 +123,7 @@ public class BankAccount implements Serializable {
      * @return {@link BankAccount#info}
      */
     public String getInfo() {
-        return info == null ? "" : info;
+        return info;
     }
 
     /**

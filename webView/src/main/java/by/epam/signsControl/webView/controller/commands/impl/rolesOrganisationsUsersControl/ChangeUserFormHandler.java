@@ -38,7 +38,7 @@ public class ChangeUserFormHandler implements Command {
             int role = Integer.parseInt(request.getParameter("role"));
             String name = request.getParameter("name");
             String surname = request.getParameter("surname");
-            int organisation = Integer.parseInt(request.getParameter("organisation"));
+//            int organisation = Integer.parseInt(request.getParameter("organisation"));
             String info = request.getParameter("info");
             String blockStr = request.getParameter("block");
 
@@ -54,7 +54,7 @@ public class ChangeUserFormHandler implements Command {
             }
 
 
-                if (AccessRulesChecker.organisationRoleCheckBool(request, Constants.ADMINISTRATORS_ORGANISATION_ID)) {
+                if (AccessRulesChecker.organisationRoleCheckBool(request, Constants.ADMINISTRATOR_ORGANISATION_ROLE)) {
 
                     if (user.getOrganisation().getId() != Constants.ADMINISTRATORS_ORGANISATION_ID
                             && user.getRole().getId() != Constants.ADMINISTRATOR_ROLE
@@ -99,10 +99,10 @@ public class ChangeUserFormHandler implements Command {
                 usersControllerService.setInfo(id, info);
 
             }
-            if (request.getParameter("setOrganisation") != null) {
-                logger.info("org" + organisation);
-                usersControllerService.setOrganisation(id, organisation);
-            }
+//            if (request.getParameter("setOrganisation") != null) {
+//                logger.info("org" + organisation);
+//                usersControllerService.setOrganisation(id, organisation);
+//            }
             if (request.getParameter("setRole") != null) {
                 logger.info("rol" + role);
                 usersControllerService.setRole(id, role);

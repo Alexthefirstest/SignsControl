@@ -46,7 +46,7 @@ public class UserProfile implements Command {
 
             if (id != (Integer) request.getSession().getAttribute(Constants.USER_ID)) {
 
-                if (AccessRulesChecker.organisationRoleCheckBool(request, Constants.ADMINISTRATORS_ORGANISATION_ID)) {
+                if (AccessRulesChecker.organisationRoleCheckBool(request, Constants.ADMINISTRATOR_ORGANISATION_ROLE)) {
 
                     if (user.getOrganisation().getId() != Constants.ADMINISTRATORS_ORGANISATION_ID
                             && user.getRole().getId() != Constants.ADMINISTRATOR_ROLE
@@ -66,7 +66,7 @@ public class UserProfile implements Command {
             }
             request.setAttribute("user", user);
             request.setAttribute("roles", ServiceFactory.getINSTANCE().getRolesControllerService().getUsersRoles());
-            request.setAttribute("organisations", ServiceFactory.getINSTANCE().getOrganisationsControllerService().getOrganisations());
+//            request.setAttribute("organisations", ServiceFactory.getINSTANCE().getOrganisationsControllerService().getOrganisations());
 
 
             //qq

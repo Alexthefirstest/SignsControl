@@ -4,6 +4,7 @@ import by.epam.bank.service.exceptions.ServiceException;
 import by.epam.bank.service.exceptions.ServiceValidationException;
 import by.epam.bank.service.factory.ServiceFactory;
 import by.epam.signsControl.webView.Constants;
+import by.epam.signsControl.webView.controller.RequestParser;
 import by.epam.signsControl.webView.controller.commands.Command;
 import by.epam.signsControl.webView.controller.commands.impl.AccessRulesChecker;
 import by.epam.signsControl.webView.exceptions.CommandControllerException;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- *add money to the bank account, do not windrow money from sender
+ * add money to the bank account, do not windrow money from sender
  */
 public class AddMoney implements Command {
 
@@ -35,8 +36,17 @@ public class AddMoney implements Command {
             double money = Double.parseDouble(request.getParameter("addMoneyValue"));
             logger.info(organisation);
             logger.info(money);
+            String command = RequestParser.getSecondCommandFromURI(request);
 
-            ServiceFactory.getINSTANCE().getFinanceOperationsManager().addMoney(Constants.BANK_ID, organisation, money);
+            if ("add".equals(command)) {
+
+                ServiceFactory.getINSTANCE().getFinanceOperationsManager().addMoney(Constants.BANK_ID, organisation, money);
+
+            } else if ("withdraw".equals(command)) {
+
+                ServiceFactory.getINSTANCE().getFinanceOperationsManager().addMoney(Constants.BANK_ID, organisation, -money);
+
+            }
 
         } catch (ServiceValidationException e) {
             throw new CommandControllerValidationException(e);

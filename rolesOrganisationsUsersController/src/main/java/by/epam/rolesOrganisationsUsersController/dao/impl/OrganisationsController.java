@@ -82,13 +82,13 @@ public class OrganisationsController implements IOrganisationsController {
      * select request request in jdbc for {@link java.sql.PreparedStatement}
      */
     private static final String SQL_SELECT_BY_ID = "SELECT org.id, org.name, org.role, orgR.role, is_blocked," +
-            " info FROM organisations as org join organisation_roles as orgR on org.role=orgR.id order by org.name where org.id=?";
+            " info FROM organisations as org join organisation_roles as orgR on org.role=orgR.id  where org.id=? order by org.name";
 
     /**
      * select request request in jdbc for {@link java.sql.PreparedStatement}
      */
     private static final String SQL_SELECT_WITHOUT_ID = "SELECT org.id, org.name, org.role, orgR.role, is_blocked," +
-            " info FROM organisations as org join organisation_roles as orgR on org.role=orgR.id order by org.name where org.id!=?";
+            " info FROM organisations as org join organisation_roles as orgR on org.role=orgR.id where org.id!=? order by org.name ";
 
     /**
      * select request request in jdbc for {@link java.sql.PreparedStatement}

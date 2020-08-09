@@ -36,9 +36,13 @@
 <body class="auto_center center">
 <jsp:include page="../header.jsp"/>
 
+
+<c:if test='${bank_account.info!=null}'>
 <br><hr><br>
 <a href="${pageContext.request.contextPath}/show_transactions_history/1"><fmt:message key="label.show" /> <fmt:message key="label.transactions" /></a>
 <br><hr><br>
+
+
 
 <br>
   <label for="transactionForm"><h3><fmt:message key="label.execute_transaction" />:<h3></label>
@@ -47,9 +51,9 @@
     <label for="organisation_idtr"> <fmt:message key="label.payee" />:</label><select name="organisationID" id='organisation_idtr'
                                                                required>
 
-    <c:forEach var="organisation" items='${organisations}'>
+    <c:forEach var="bank_account_organisation" items='${bank_account_organisations}'>
 
-        <option value='${organisation.id}'>${organisation.name}</option>
+        <option value='${bank_account_organisation.organisation.id}'>${bank_account_organisation.organisation.name}</option>
 
     </c:forEach>
 </select>
@@ -60,7 +64,12 @@
     <input type="submit" value="отправить">
 
 </form>
-<br><hr><br><br>
+<br><hr>
+
+</c:if>
+
+
+<br><br>
 
 <br><hr>
 <br>
@@ -74,10 +83,16 @@
 <th scope="col"><fmt:message key="label.organisation_name" /></th>
 <th scope="col"><fmt:message key="label.organisation.block_condition" /></th>
 <th scope="col"><fmt:message key="label.organisation.info" /></th>
+
+
+<c:if test='${bank_account.info!=null}'>
+
 <th scope="col"><fmt:message key="label.balance" /></th>
 <th scope="col"><fmt:message key="label.min_balance" /></th>
 <th scope="col"><fmt:message key="label.bank_account.block_condition" /></th>
 <th scope="col"><fmt:message key="label.bank_account.info" /></th>
+
+</c:if>
 
 </tr>
 
@@ -106,6 +121,10 @@
    </c:choose>
 
   <td>${bank_account.organisation.info}</td>
+
+
+  <c:if test='${bank_account.info!=null}'>
+
   <td>${bank_account.balance}</td>
   <td>
 ${bank_account.minAllowedBalance}
@@ -139,6 +158,8 @@ ${bank_account.minAllowedBalance}
 ${bank_account.info}
 
 </td>
+
+</c:if>
 
 </tr>
 

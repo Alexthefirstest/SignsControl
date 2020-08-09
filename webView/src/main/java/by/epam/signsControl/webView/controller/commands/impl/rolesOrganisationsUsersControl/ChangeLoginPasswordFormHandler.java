@@ -36,23 +36,31 @@ public class ChangeLoginPasswordFormHandler implements Command {
             String password = request.getParameter("password");
             String action = RequestParser.getSecondCommandFromURI(request);
 
+            boolean success=false;
+
+            if(action==null){
+                throw new CommandControllerValidationException("wrong action");
+            }
+
             switch (action) {
 
                 case "login":
                     String newLogin = request.getParameter("newLogin");
                     if (!newLogin.isEmpty()) {
-                        usersControllerService.setLogin(id, login, password, newLogin);
+                        success=usersControllerService.setLogin(id, login, password, newLogin);
                     }
                     break;
 
                 case "password":
+
                     String newPassword = request.getParameter("newPassword");
                     if (!newPassword.isEmpty()) {
-                        usersControllerService.setPassword(id, login, password, newPassword);
+                      success=usersControllerService.setPassword(id, login, password, newPassword);
                     }
+                    break;
             }
 
-            response.sendRedirect(request.getContextPath() + "/user_profile/" + id);
+            response.sendRedirect(request.getContextPath() + "/user_profile/" + id+"?success="+success);
         } catch (ServiceValidationException e) {
             throw new CommandControllerValidationException(e);
         } catch (ServiceException e) {

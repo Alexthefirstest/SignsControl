@@ -154,6 +154,8 @@ public class ShowTransactionsHistory implements Command {
                     request.setAttribute("transactionsNotFind", "true");
 
                     request.getRequestDispatcher("/WEB-INF/jsp/bank/transactions.jsp").forward(request, response);
+
+                    return;
                 }
 
                 logger.info("wrong page page/pages quantity" + page + " / " + pageCount);

@@ -100,7 +100,7 @@ public class SQLFinanceOperationsManager implements IFinanceOperationsManager {
 
             if (psFrom.executeUpdate() == 0) {
                 logger.info("wrong organisation from: " + organisationIDFrom);
-                throw new DAOValidationException("organisation from do not exist");
+                throw new DAOValidationException("organisation sender has not bank account");
             }
 
             psTo.setDouble(1, money);
@@ -108,7 +108,7 @@ public class SQLFinanceOperationsManager implements IFinanceOperationsManager {
 
             if (psTo.executeUpdate() == 0) {
                 logger.info("wrong organisation to " + organisationIDTo);
-                throw new DAOValidationException("organisation to do not exist");
+                throw new DAOValidationException("organisation payee has not bank account");
             }
 
             addTransaction.setInt(1, organisationIDFrom);

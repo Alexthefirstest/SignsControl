@@ -46,7 +46,7 @@ public class ExecuteTransaction implements Command {
             throw new CommandControllerException(e);
         }
 
-        response.sendRedirect(request.getContextPath() + "/organisations");
+        response.sendRedirect(request.getContextPath() + "/show_transactions_history/1");
 
     }
 }

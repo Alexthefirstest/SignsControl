@@ -33,15 +33,17 @@ public class AddUser implements Command {
             IRolesControllerService rolesControllerService = ServiceFactory.getINSTANCE().getRolesControllerService();
             IOrganisationsControllerService organisationsControllerService = ServiceFactory.getINSTANCE().getOrganisationsControllerService();
 
-            if (AccessRulesChecker.organisationRoleCheckBool(request, Constants.ADMINISTRATORS_ORGANISATION_ID)) {
+            if (AccessRulesChecker.organisationRoleCheckBool(request, Constants.ADMINISTRATOR_ORGANISATION_ROLE)) {
 
                 if (AccessRulesChecker.userRoleCheckBool(request, Constants.ADMINISTRATOR_ROLE)) {
+
+                    logger.info("if 1");
 
                     request.setAttribute("roles", rolesControllerService.getUsersRolesBeside(Constants.USER_ANONYM_ROLE));
                     request.setAttribute("organisations", organisationsControllerService.getOrganisations());
 
                 } else {
-
+                    logger.info("if 2");
                     request.setAttribute("roles", rolesControllerService.getUsersRole(Constants.ADMINISTRATOR_ROLE));
                     request.setAttribute("organisations", organisationsControllerService.getOrganisationsBeside(Constants.ADMINISTRATORS_ORGANISATION_ID));
 
@@ -49,8 +51,9 @@ public class AddUser implements Command {
 
 
             } else {
-                AccessRulesChecker.userRoleCheck(request, Constants.ADMINISTRATOR_ROLE);
+                logger.info("if 3");
 
+                AccessRulesChecker.userRoleCheck(request, Constants.ADMINISTRATOR_ROLE);
 
                 request.setAttribute("roles", rolesControllerService.getUsersRolesBeside(Constants.USER_ANONYM_ROLE));
                 request.setAttribute("organisations",

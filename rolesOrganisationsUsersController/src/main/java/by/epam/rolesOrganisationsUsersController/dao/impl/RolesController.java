@@ -62,12 +62,12 @@ public class RolesController implements IRolesController {
     /**
      * sql user select role by id request
      */
-    private static final String SQL_SELECT_USER_ROLE_BY_ID = "SELECT * FROM `user_roles` order by role where id=?";
+    private static final String SQL_SELECT_USER_ROLE_BY_ID = "SELECT * FROM `user_roles` where id=? order by role";
 
     /**
      * sql user select roles besides role with id
      */
-    private static final String SQL_SELECT_USER_ROLES_BESIDE = "SELECT * FROM `user_roles` order by role where id!=?";
+    private static final String SQL_SELECT_USER_ROLES_BESIDE = "SELECT * FROM `user_roles` where id!=? order by role";
 
     /**
      * sql select organisation role name by id  request for {@link java.sql.PreparedStatement}
