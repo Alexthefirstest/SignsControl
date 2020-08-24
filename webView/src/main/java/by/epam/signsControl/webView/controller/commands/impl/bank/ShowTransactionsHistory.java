@@ -45,6 +45,7 @@ public class ShowTransactionsHistory implements Command {
 
         try {
 
+
             Transaction[] transactions;
 
             String findBy = request.getParameter("findBy");
@@ -65,11 +66,18 @@ public class ShowTransactionsHistory implements Command {
 
             logger.info(findBy);
 
-            if (findBy != null) {
+
+            request.setAttribute("bank_accounts", ServiceFactory.getINSTANCE().getBankAccountsDeliver().executeRequest(
+                    ServiceFactory.getINSTANCE().getRequestBuilder().withSortByOrganisationName().withoutID(organisationID).build()
+            ));
+
+
+            if (findBy != null && !findBy.isEmpty()) {
 
                 if (organisationRole == Constants.BANK_ORGANISATION_ROLE) {
 
                     switch (findBy) {
+
                         case "OrgId":
 
                             int from = Integer.parseInt(request.getParameter("accountFrom"));
@@ -114,6 +122,9 @@ public class ShowTransactionsHistory implements Command {
                     int from = Integer.parseInt(request.getParameter("accountFrom"));
                     int to = Integer.parseInt(request.getParameter("accountTo"));
 
+                    logger.info("from : " + from);
+                    logger.info("to: " + to);
+
                     if (to < 0 && from < 0) {
 
                         if (to == -2) {
@@ -136,7 +147,9 @@ public class ShowTransactionsHistory implements Command {
                     }
 
                 }
-            } else {
+
+
+            } else { //find by
 
                 if (organisationRole == Constants.BANK_ORGANISATION_ROLE) {
                     transactions = transactionsDeliver.getTransactionsPage(Constants.COUNT_TRANSACTIONS_ON_PAGE, page);
@@ -149,7 +162,8 @@ public class ShowTransactionsHistory implements Command {
 
             if (page > pageCount) {
 
-                if(pageCount==0){
+                if (pageCount == 0) {
+
 
                     request.setAttribute("transactionsNotFind", "true");
 
@@ -174,10 +188,6 @@ public class ShowTransactionsHistory implements Command {
             request.setAttribute("finishPage", getFinishPage(finishPages, pageCount));
 
             request.setAttribute("transactions", transactions);
-
-            request.setAttribute("bank_accounts", ServiceFactory.getINSTANCE().getBankAccountsDeliver().executeRequest(
-                    ServiceFactory.getINSTANCE().getRequestBuilder().withSortByOrganisationName().build()
-            ));
 
         } catch (ServiceValidationException e) {
             throw new CommandControllerValidationException(e);

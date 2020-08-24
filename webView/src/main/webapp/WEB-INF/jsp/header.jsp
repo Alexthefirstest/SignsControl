@@ -103,7 +103,7 @@
  <c:if test="${ sessionScope.userRole!=1}">
 <td>
 
- <c:if test="${sessionScope.organisationRole==5  && sessionScope.userRole==2}">
+ <c:if test="${sessionScope.organisationRole==5  || sessionScope.userRole==2}">
     <a href="${pageContext.request.contextPath}/users"  ><fmt:message key="label.users_list" /></a>
     </c:if>
 
@@ -118,7 +118,7 @@
 
 
 
-<c:if test="${sessionScope.organisationRole==1  && sessionScope.organisationRole==3}">
+<c:if test="${sessionScope.organisationRole==1 || sessionScope.organisationRole==3}">
 <td>
     <a href="${pageContext.request.contextPath}/orders"  ><fmt:message key="label.orders" /></a>
 <br>

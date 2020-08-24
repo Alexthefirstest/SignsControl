@@ -191,7 +191,7 @@ public class TypeOfWorkControl implements ITypeOfWorkControl {
 
         try {
 
-            return (TypeOfWork) RequestExecutor.getOneSignsStaff(SQL_SELECT_BY_ID, new TypeOfWork(), id);
+            return (TypeOfWork) RequestExecutor.getOneSignsStaff(SQL_SELECT_BY_ID + id, new TypeOfWork());
 
         } catch (SQLException ex) {
 

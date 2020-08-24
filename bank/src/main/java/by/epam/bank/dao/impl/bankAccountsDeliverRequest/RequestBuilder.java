@@ -181,6 +181,17 @@ public class RequestBuilder implements IRequestBuilder {
     }
 
     /**
+     * except bank account with id from list
+     *
+     * @return this
+     */
+    @Override
+    public RequestBuilder withoutID(int id) {
+        where += " ba.organisation_id!="+id+" AND";
+        return this;
+    }
+
+    /**
      * @return ready to execution {@link Request}
      * with field request
      * consist of {@link Request#getBaseRequest()} and parameters added during build

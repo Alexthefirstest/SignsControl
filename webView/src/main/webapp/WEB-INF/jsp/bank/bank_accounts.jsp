@@ -144,7 +144,7 @@
 <br>
         <label for="balanceSort"><fmt:message key="label.sort.by_balance" /></label>
         <select name="balanceSort" id="balanceSort">
-            <option value=null><fmt:message key="label.no" />нет</option>
+            <option value=null><fmt:message key="label.no" /></option>
             <option value='min'><fmt:message key="label.at_first.minimum" /></option>
             <option value='max'><fmt:message key="label.at_first.maximum" /></option>
         </select>

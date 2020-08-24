@@ -35,15 +35,19 @@
 <jsp:include page="../header.jsp"/>
 
 <br>
+
+<c:if test="${sessionScope.organisationRole==5 || sessionScope.userRole==2}">
+<br>
+<a href="${pageContext.request.contextPath}/add_user"><fmt:message key="label.add.user" /></a>
+<br>
+</c:if>
 <br>
 
  <c:if test="${sessionScope.organisationRole==5}">
  <p>
 <a href="${pageContext.request.contextPath}/users"><fmt:message key="label.show.all.he" /> </a>
 <br>
-<br>
-<a href="${pageContext.request.contextPath}/add_user"><fmt:message key="label.add.user" /></a>
-<br>
+
 <br>
 <hr>
 

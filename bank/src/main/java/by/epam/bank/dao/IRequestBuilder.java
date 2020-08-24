@@ -99,6 +99,13 @@ public interface IRequestBuilder {
      */
     IRequestBuilder findById(int id) ;
 
+    /**
+     * except bank account with id from list
+     *
+     * @return this
+     */
+    IRequestBuilder withoutID(int id) ;
+
 
     /**
      * @return ready to execution {@link IRequest} with build result

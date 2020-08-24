@@ -55,7 +55,7 @@ public class OrdersFactory {
 
         if (!rs.next()) {
             logger.info("rs.next = false");
-            throw new DAOValidationException("cant find new object or it's wasn't created");
+            throw new DAOValidationException("can't find new object or it's wasn't created");
         }
 
         if (signsStaff instanceof WorkersCrew) {

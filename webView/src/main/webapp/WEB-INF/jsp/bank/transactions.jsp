@@ -72,6 +72,7 @@
     <select name="accountTo" id='accountsTo'>
 
         <option value='-1'>-</option>
+
         <c:forEach var="bank_account" items='${bank_accounts}'>
 
             <option value='${bank_account.organisation.id}'>${bank_account.organisation.name}</option>
@@ -126,15 +127,16 @@
     <label for="accountsFrom1"><fmt:message key="label.sender" />:</label>
     <select name="accountFrom" id='accountsFrom1'>
 
+  <option value='-2'><fmt:message key="label.all" /></option>
+
         <c:forEach var="bank_account" items='${bank_accounts}'>
-        <option value='-2'><fmt:message key="label.all" /></option>
+
             <option value='${bank_account.organisation.id}'>${bank_account.organisation.name}</option>
 
         </c:forEach>
 
     </select>
 
-  <input type="reset" value=<fmt:message key="label.reset" />>
     <input type="submit" value=<fmt:message key="label.accept" />>
 </form>
 
@@ -148,7 +150,9 @@
 
     <label for="accountsTo"><fmt:message key="label.payee" />: </label>
     <select name="accountTo" id='accountsTo'>
+
  <option value='-2'><fmt:message key="label.all" /></option>
+
         <c:forEach var="bank_account" items='${bank_accounts}'>
 
             <option value='${bank_account.organisation.id}'>${bank_account.organisation.name}</option>
@@ -156,6 +160,8 @@
         </c:forEach>
 
     </select>
+
+    <input type="submit" value=<fmt:message key="label.accept" />>
 
    </form>
 

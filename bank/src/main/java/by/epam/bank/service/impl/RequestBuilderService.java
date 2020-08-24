@@ -164,6 +164,18 @@ public class RequestBuilderService implements IRequestBuilderService {
     }
 
     /**
+     * except bank account with id from list
+     *
+     * @param id
+     * @return this
+     */
+    @Override
+    public IRequestBuilderService withoutID(int id) {
+        daoRequestBuilder.withoutID(id);
+        return this;
+    }
+
+    /**
      * @return ready to execution {@link IRequest}
      * with field request
      * consist of base request and parameters added during build

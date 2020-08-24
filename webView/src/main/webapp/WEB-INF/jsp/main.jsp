@@ -39,7 +39,7 @@
 
     <script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
 
-    <script src='${pageContext.request.contextPath}/js/map.js?50' type="text/javascript" charset="UTF-8"></script>
+    <script src='${pageContext.request.contextPath}/js/map.js?52' type="text/javascript" charset="UTF-8"></script>
 
 
 
@@ -50,14 +50,18 @@
 
 <jsp:include page="header.jsp"/>
 
+<br>
+<br>
+<a href="${pageContext.request.contextPath}/types_of_work"><fmt:message key="label.type_of_work" /></a>
+<br>
+<br>
+
 <%-- контент с учетом роли --%>
 
     <%-- контент для роли 1 - одд --%>
 
 
     <c:if test="${sessionScope.organisationRole==1}">
-
-
 
 
 <table class="auto_center chTable">
@@ -208,7 +212,7 @@
 
     <c:forEach var="type_of_work" items='${types_of_work}'>
 
-        <option value='${type_of_work.id}'>${type_of_work.typeOfWork} ${type_of_work.price}</option>
+        <option value='${type_of_work.id}'>${type_of_work.typeOfWork} - ${type_of_work.price}</option>
 
     </c:forEach>
 

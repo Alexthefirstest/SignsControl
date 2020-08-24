@@ -58,7 +58,7 @@
     </c:forEach>
 </select>
 
-    <label for="priceCh">    <fmt:message key="label.amount" />: </label> <input type="text" id="priceCh" name="money" pattern="\d+(.\d*)?" required>
+    <label for="priceCh">    <fmt:message key="label.amount" />: </label> <input type="text" id="priceCh" name="money" pattern="\d+(\.\d*)?" required>
 
  <br><input type="reset" value="сбросить">
     <input type="submit" value="отправить">

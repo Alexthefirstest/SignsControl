@@ -106,6 +106,14 @@ public interface IRequestBuilderService extends IRequestBuilder {
      IRequestBuilderService findById(int id);
 
 
+
+    /**
+     * except bank account with id from list
+     *
+     * @return this
+     */
+    IRequestBuilderService withoutID(int id) ;
+
     /**
      * @return ready to execution {@link IRequest}
      * with field request

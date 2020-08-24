@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * return ajax orders change info
@@ -41,6 +42,14 @@ public class GetOrdersChangeInfo implements Command {
 
         String coordinates = request.getParameter("pointCoordinates");
 
+        Object userID = request.getSession().getAttribute(Constants.USER_ID);
+
+        logger.info("coordinates: " + coordinates);
+
+        logger.info("command: " + command);
+
+        logger.info("userID: " + userID);
+
         String result;
 
 
@@ -52,10 +61,16 @@ public class GetOrdersChangeInfo implements Command {
                 case "remove":
                     result = ResponseCreator.createJSON(sf.getOrdersControlService().getUnExecutedOrders(coordinates));
                     break;
+
                 case "execute":
 
+//                    logger.info("____________________");
+//                    logger.info("____________________1");
+//                    logger.info(Arrays.toString( sf.getWorkersCrewControlService().getWorkersCrewsByUser((Integer) userID)));
+//                    logger.info("____________________2");
+//                    logger.info(Arrays.toString(  sf.getOrdersControlService().getUnExecutedOrders(coordinates))  );
 
-                    result = OrdersResponseCreator.createJSON(sf.getWorkersCrewControlService().getWorkersCrewsByUser(102),
+                    result = OrdersResponseCreator.createJSON(sf.getWorkersCrewControlService().getWorkersCrewsByUser((Integer) userID),
                             sf.getOrdersControlService().getUnExecutedOrders(coordinates));
                     break;
 

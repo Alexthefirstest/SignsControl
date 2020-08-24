@@ -394,8 +394,12 @@ public class OrdersControl implements IOrdersControl {
     public boolean removeOrder(int orderID) throws DAOException {
         try {
 
-            return  RequestExecutor.createField
+            return RequestExecutor.createField
                     (REMOVE_ORDER, GET_ORDERS_BY_ID + orderID, new Order(), orderID) == null;
+
+        } catch (DAOValidationException ex) {
+
+            return true;
 
         } catch (SQLException ex) {
 

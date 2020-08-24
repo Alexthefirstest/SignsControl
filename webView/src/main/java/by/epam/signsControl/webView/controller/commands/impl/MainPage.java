@@ -36,14 +36,20 @@ public class MainPage implements Command {
 
                 request.setAttribute("types_of_work", ServiceFactory.getINSTANCE().getTypeOfWorkControlService().getUnblockedTypesOfWork());
 
-            } else if (AccessRulesChecker.organisationRoleCheckBool(request, Constants.PERFORMERS_ORGANISATIONS_ROLE)) {
-
-
 
                 request.setAttribute("organisations",
                         by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory.getINSTANCE().getOrganisationsControllerService()
                                 .getUnblockedOrganisations(Constants.PERFORMERS_ORGANISATIONS_ROLE));
+
             }
+//            else if (AccessRulesChecker.organisationRoleCheckBool(request, Constants.PERFORMERS_ORGANISATIONS_ROLE)) {
+//
+//
+//
+//                request.setAttribute("organisations",
+//                        by.epam.rolesOrganisationsUsersController.service.factory.ServiceFactory.getINSTANCE().getOrganisationsControllerService()
+//                                .getUnblockedOrganisations(Constants.PERFORMERS_ORGANISATIONS_ROLE));
+//            }
 
 
 

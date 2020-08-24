@@ -465,6 +465,44 @@ window.onload = function () {
 // ----------------------- локализация - конец
 
 
+      //Заказы
+        $(document).on("click", "#showOrdersButton", function () {
+
+
+objectManagerEP.removeAll();
+
+  objectManagerEP.objects.options.set('preset', 'islands#orangeDotIcon'); //размеры сюда
+    objectManagerEP.clusters.options.set('preset', 'islands#invertedDarkOrangeClusterIcons');
+
+         showOrders("all");
+
+        });
+
+        $(document).on("click", "#showOrdersExecutedButton", function () {
+
+objectManagerEP.removeAll();
+
+  objectManagerEP.objects.options.set('preset', 'islands#darkGreenDotIcon'); //размеры сюда
+    objectManagerEP.clusters.options.set('preset', 'islands#invertedDarkGreenClusterIcons');
+
+         showOrders("executed");
+
+        });
+
+        $(document).on("click", "#showOrdersUnExecutedButton", function () {
+
+objectManagerEP.removeAll();
+
+  objectManagerEP.objects.options.set('preset', 'islands#redDotIcon'); //размеры сюда
+     objectManagerEP.clusters.options.set('preset', 'islands#invertedRedClusterIcons');
+
+
+         showOrders("unexecuted");
+
+        });
+        //заказы/
+
+
     //add point
     if (document.getElementById("addPointButton") != null) {
 
@@ -518,43 +556,6 @@ window.onload = function () {
             });
 
         });
-
-        //Заказы
-        $(document).on("click", "#showOrdersButton", function () {
-
-
-objectManagerEP.removeAll();
-
-  objectManagerEP.objects.options.set('preset', 'islands#orangeDotIcon'); //размеры сюда
-    objectManagerEP.clusters.options.set('preset', 'islands#invertedDarkOrangeClusterIcons');
-
-         showOrders("all");
-
-        });
-
-        $(document).on("click", "#showOrdersExecutedButton", function () {
-
-objectManagerEP.removeAll();
-
-  objectManagerEP.objects.options.set('preset', 'islands#darkGreenDotIcon'); //размеры сюда
-    objectManagerEP.clusters.options.set('preset', 'islands#invertedDarkGreenClusterIcons');
-
-         showOrders("executed");
-
-        });
-
-        $(document).on("click", "#showOrdersUnExecutedButton", function () {
-
-objectManagerEP.removeAll();
-
-  objectManagerEP.objects.options.set('preset', 'islands#redDotIcon'); //размеры сюда
-     objectManagerEP.clusters.options.set('preset', 'islands#invertedRedClusterIcons');
-
-
-         showOrders("unexecuted");
-
-        });
-        //заказы/
 
 
         //редактирование направления
@@ -789,7 +790,7 @@ function updateSignChangeForm(coordinates) {
 
                 let signNumber = signToString(data[i].section,data[i].sign, data[i].kind);
 
-                selectedSign.append(new Option((signNumber + " : " + data[i].dateOfAdd + " : " + (data[i].dateOfRemove == null ? " - " : data[i].dateOfRemove)), data[i].localSignId));
+                selectedSign.append(new Option((data[i].angle+" : "+signNumber + " : " + data[i].dateOfAdd + " : " + (data[i].dateOfRemove == null ? " - " : data[i].dateOfRemove)), data[i].localSignId));
             }
 
             let signAnnotation = document.getElementById("sign_annotation_change");

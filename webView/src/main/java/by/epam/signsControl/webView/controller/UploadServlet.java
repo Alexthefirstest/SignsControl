@@ -90,15 +90,7 @@ public class UploadServlet extends HttpServlet {
 
         try {
 
-            if (CommandName.valueOf(RequestParser.getSecondCommandFromURI(req)) == CommandName.SET_SIGN_IMAGE) {
-
-                commandProvider.getCommand(CommandName.SET_SIGN_IMAGE.toString()).execute(req, resp);
-
-            } else {
-
-                logger.warn("wrong set image uri" + req.getAttribute(Constants.REQUIRED_URI));
-                commandProvider.getCommand(CommandName.WRONG_COMMAND.toString()).execute(req, resp);
-            }
+            commandProvider.getCommand(RequestParser.getSecondCommandFromURI(req)).execute(req, resp);
 
 
         } catch (AccessException ex) {

@@ -51,6 +51,7 @@ public class AddOrderFormHandler implements Command {
 
             double typeOfWorkPrice;
 
+            logger.info("before if");
 
             if (orgTo == 0) {
                 logger.info("if");

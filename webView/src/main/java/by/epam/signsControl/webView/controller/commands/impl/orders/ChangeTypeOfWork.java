@@ -26,7 +26,7 @@ public class ChangeTypeOfWork implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CommandControllerException {
 
-        AccessRulesChecker.organisationRoleCheck(request, Constants.ADMINISTRATOR_ROLE);
+        AccessRulesChecker.organisationRoleCheck(request, Constants.ADMINISTRATOR_ORGANISATION_ROLE);
 
         logger.info("inside execute");
 

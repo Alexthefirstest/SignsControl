@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * create ajax response
@@ -118,7 +119,8 @@ public class OrdersResponseCreator {
         sb.append("<table>")
                 .append("<thead>").append("<tr>");
 
-        sb.append("<th>id</th>")
+        sb.append("<th>dir</th>")
+                .append("<th>id</th>")
                 .append("<th>sign</th>")
                 .append("<th>size</th>")
                 .append("<th>type of work</th>")
@@ -132,17 +134,20 @@ public class OrdersResponseCreator {
 
         sb.append("<tbody>");
 
+        char angle = 0;
 
         for (int i = 0; i < orders.size(); i++) {
 
 
             if (i == 0 || (orders.get(i).getSignList() != orders.get(i - 1).getSignList())) {
 
-                sb.append("<tr><th><h4>      direction: " + mapPoints$Orders.getMapPoint().getAngles().get(j) + "<h4></th></tr>");
+                angle = mapPoints$Orders.getMapPoint().getAngles().get(j);
 
                 j++;
             }
             sb.append("<tr>");
+
+            sb.append("<td>" + angle + "</tb>");
             sb.append("<td>" + orders.get(i).getId() + "</tb>");
             sb.append("<td>" + (ResponseCreator.createSign(orders.get(i).getSign().getSection(),
                     orders.get(i).getSign().getSign(),
@@ -162,7 +167,7 @@ public class OrdersResponseCreator {
 
             sb.append("<td>" + (orders.get(i).getInfo()) + "</tb>");
 
-            sb.append("/tr");
+            sb.append("</tr>");
         }
 
         sb.append("</tbody>")

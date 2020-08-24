@@ -18,7 +18,7 @@ public class WrongCommand implements Command {
 
         logger.info("inside execute");
 
-        request.getRequestDispatcher("/WEB-INF/jsp/wrong_request.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/error_pages/wrong_request.jsp").forward(request, response);
     }
 
 }
